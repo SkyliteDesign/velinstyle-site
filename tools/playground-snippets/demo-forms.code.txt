@@ -1,0 +1,7 @@
+<div class="velin-input-group">
+  <label class="velin-input-group__label" for="email">Email</label>
+  <input class="velin-input" type="email" id="email">
+  <span class="velin-field-hint">Hint text</span>
+</div>
+<input class="velin-input" aria-invalid="true">
+<span class="velin-field-error">Error message</span>

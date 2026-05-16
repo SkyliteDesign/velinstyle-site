@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en" data-velin-theme="light">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CLI · VelinStyle</title>
+  <meta name="description" content="VelinStyle CLI — build custom CSS, manage icons, and scan for security and accessibility issues from the command line.">
+  <link rel="stylesheet" href="../../dist/velinstyle.min.css">
+  <link rel="stylesheet" href="../docs.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.min.css">
+  <link rel="icon" href="../../favicon.ico" type="image/x-icon">
+  <link rel="icon" href="../../assets/img/velinstyle-logo.svg" type="image/svg+xml">
+</head>
+<body>
+  <a href="#main-content" class="velin-doc-skip">Skip to main content</a>
+  <header class="velin-doc-header"><button class="velin-doc-hamburger" aria-label="Toggle sidebar" id="sidebarToggle"><velin-icon name="menu" size="20"></velin-icon></button><a href="../getting-started/introduction.html" class="velin-doc-header__brand"><img src="../../assets/img/velinstyle-logo.svg" alt="" width="28" height="28"> VelinStyle <span class="velin-doc-header__version">v0.7.0</span></a><div class="velin-doc-header__search"><input type="search" placeholder="Search docs…" aria-label="Search documentation" id="docSearch" autocomplete="off" data-search-index="../search-index.json"></div><div class="velin-doc-header__actions">
+      <a href="../../index.html" aria-label="Home" title="Home" style="display:inline-flex;align-items:center;gap:4px;font-weight:500;text-decoration:none;color:inherit">&#8962; Home</a>
+      <button id="themeToggle" aria-label="Toggle dark mode" title="Toggle theme"><velin-icon name="moon" size="18"></velin-icon></button><a href="https://github.com/SkyliteDesign/velinstyle" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub"><velin-icon name="github" size="18"></velin-icon></a></div></header>
+  <div class="velin-doc-overlay" id="sidebarOverlay"></div>
+  <div class="velin-doc-wrapper">
+        <nav class="velin-doc-sidebar" id="sidebar" aria-label="Documentation navigation">
+<div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Getting Started <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../getting-started/introduction.html">Introduction</a></li><li><a href="../getting-started/download.html">Download</a></li><li><a href="../getting-started/contents.html">Contents</a></li><li><a href="../getting-started/editor-setup.html">Editor setup</a></li><li><a href="../getting-started/browser-compatibility.html">Compatibility</a></li><li><a href="../getting-started/upgrading.html">Upgrading</a></li><li><a href="../getting-started/states-and-variants.html">States &amp; variants</a></li><li><a href="../getting-started/accessibility.html">Accessibility</a></li><li><a href="../getting-started/rtl.html">RTL</a></li><li><a href="../getting-started/a11y-patterns.html">A11y patterns</a></li><li><a href="../getting-started/a11y-dashboard.html">A11y Dashboard</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Customize <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../customize/overview.html">Overview</a></li><li><a href="../customize/color.html">Color</a></li><li><a href="../customize/color-modes.html">Color Modes</a></li><li><a href="../customize/css-variables.html">CSS Variables</a></li><li><a href="../customize/components.html">Components</a></li><li><a href="../customize/optimize.html">Optimize</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Layout <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../layout/breakpoints.html">Breakpoints</a></li><li><a href="../layout/containers.html">Containers</a></li><li><a href="../layout/grid.html">Grid</a></li><li><a href="../layout/patterns.html">Patterns</a></li><li><a href="../layout/columns.html">Columns</a></li><li><a href="../layout/gutters.html">Gutters</a></li><li><a href="../layout/utilities.html">Utilities</a></li><li><a href="../layout/z-index.html">Z-index</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Content <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../content/reboot.html">Reboot</a></li><li><a href="../content/typography.html">Typography</a></li><li><a href="../content/images.html">Images</a></li><li><a href="../content/tables.html">Tables</a></li><li><a href="../content/figures.html">Figures</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Forms <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../forms/overview.html">Overview</a></li><li><a href="../forms/form-control.html">Form Control</a></li><li><a href="../forms/select.html">Select</a></li><li><a href="../forms/checks-radios.html">Checks &amp; Radios</a></li><li><a href="../forms/range.html">Range</a></li><li><a href="../forms/input-group.html">Input Group</a></li><li><a href="../forms/floating-labels.html">Floating Labels</a></li><li><a href="../forms/layout.html">Layout</a></li><li><a href="../forms/validation.html">Validation</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Components <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../components/accordion.html">Accordion</a></li><li><a href="../components/alerts.html">Alerts</a></li><li><a href="../components/avatar.html">Avatar</a></li><li><a href="../components/badge.html">Badge</a></li><li><a href="../components/breadcrumb.html">Breadcrumb</a></li><li><a href="../components/buttons.html">Buttons</a></li><li><a href="../components/button-group.html">Button Group</a></li><li><a href="../components/card.html">Card</a></li><li><a href="../components/carousel.html">Carousel</a></li><li><a href="../components/chip.html">Chip</a></li><li><a href="../components/close-button.html">Close Button</a></li><li><a href="../components/collapse.html">Collapse</a></li><li><a href="../components/dialog.html">Dialog</a></li><li><a href="../components/divider.html">Divider</a></li><li><a href="../components/drawer.html">Drawer</a></li><li><a href="../components/dropdown.html">Dropdown</a></li><li><a href="../components/lightbox.html">Lightbox</a></li><li><a href="../components/list-group.html">List Group</a></li><li><a href="../components/modal.html">Modal</a></li><li><a href="../components/navbar.html">Navbar</a></li><li><a href="../components/navs-tabs.html">Navs &amp; Tabs</a></li><li><a href="../components/pagination.html">Pagination</a></li><li><a href="../components/popover.html">Popover</a></li><li><a href="../components/progress.html">Progress</a></li><li><a href="../components/progress-ring.html">Progress Ring</a></li><li><a href="../components/scrollspy.html">Scrollspy</a></li><li><a href="../components/spinners.html">Spinners</a></li><li><a href="../components/stat.html">Stat</a></li><li><a href="../components/stepper.html">Stepper</a></li><li><a href="../components/timeline.html">Timeline</a></li><li><a href="../components/toasts.html">Toasts</a></li><li><a href="../components/tooltips.html">Tooltips</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Helpers <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../helpers/clearfix.html">Clearfix</a></li><li><a href="../helpers/colored-links.html">Colored Links</a></li><li><a href="../helpers/focus-ring.html">Focus Ring</a></li><li><a href="../helpers/icon-link.html">Icon Link</a></li><li><a href="../helpers/ratios.html">Ratios</a></li><li><a href="../helpers/stacks.html">Stacks</a></li><li><a href="../helpers/stretched-link.html">Stretched Link</a></li><li><a href="../helpers/text-truncation.html">Text Truncation</a></li><li><a href="../helpers/vertical-rule.html">Vertical Rule</a></li><li><a href="../helpers/visually-hidden.html">Visually Hidden</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Utilities <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../utilities/api.html">API</a></li><li><a href="../utilities/background.html">Background</a></li><li><a href="../utilities/borders.html">Borders</a></li><li><a href="../utilities/colors.html">Colors</a></li><li><a href="../utilities/color-mix.html">Color Mix</a></li><li><a href="../utilities/display.html">Display</a></li><li><a href="../utilities/divide.html">Divide</a></li><li><a href="../utilities/flex.html">Flex</a></li><li><a href="../utilities/float.html">Float</a></li><li><a href="../utilities/filters.html">Filters</a></li><li><a href="../utilities/interactions.html">Interactions</a></li><li><a href="../utilities/object-fit.html">Object Fit</a></li><li><a href="../utilities/opacity.html">Opacity</a></li><li><a href="../utilities/overflow.html">Overflow</a></li><li><a href="../utilities/position.html">Position</a></li><li><a href="../utilities/print.html">Print</a></li><li><a href="../utilities/scroll.html">Scroll</a></li><li><a href="../utilities/shadows.html">Shadows</a></li><li><a href="../utilities/sizing.html">Sizing</a></li><li><a href="../utilities/spacing.html">Spacing</a></li><li><a href="../utilities/text.html">Text</a></li><li><a href="../utilities/transitions.html">Transitions</a></li><li><a href="../utilities/transforms.html">Transforms</a></li><li><a href="../utilities/vertical-align.html">Vertical Align</a></li><li><a href="../utilities/visibility.html">Visibility</a></li><li><a href="../utilities/z-index.html">Z-index</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Animations <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../animations/overview.html">Overview</a></li><li><a href="../animations/entrance.html">Entrance</a></li><li><a href="../animations/attention.html">Attention</a></li><li><a href="../animations/exit.html">Exit</a></li><li><a href="../animations/scroll-driven.html">Scroll-driven</a></li><li><a href="../animations/view-transitions.html">View Transitions</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Extend <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../extend/approach.html">Approach</a></li><li><a href="../extend/utility-coverage.html">Utility coverage</a></li><li><a href="../extend/icons.html">Icons</a></li><li><a href="../extend/cli.html" class="active">CLI</a></li><li><a href="../extend/security.html">Security</a></li><li><a href="../extend/repo-tools.html">Repo tools</a></li><li><a href="../extend/web-components.html">Web Components</a></li><li><a href="../extend/javascript-api.html">JavaScript API</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Guides <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../guides/index.html">Overview</a></li><li><a href="../guides/existing-project.html">Existing project</a></li><li><a href="../guides/react-vite-starter.html">Vite &amp; React</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">About <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../about/overview.html">Overview</a></li><li><a href="../about/brand.html">Brand</a></li><li><a href="../about/license.html">License</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Migration <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../migration.html">Migration Guide</a></li></ul></div>    </nav>
+
+    <main class="velin-doc-main" id="main-content">
+      <ol class="velin-doc-breadcrumb"><li><a href="../getting-started/introduction.html">Docs</a></li><li><a href="../extend/approach.html">Extend</a></li><li>CLI</li></ol>
+      <h1>CLI</h1>
+      <p class="lead">Build custom CSS, manage icons, print HTML blueprints, compile design tokens, and scan your project for security and accessibility issues — all from the command line.</p>
+
+      <h2 id="installation">Installation</h2>
+      <p>Install VelinStyle globally or run it on-demand with <code>npx</code>:</p>
+      <div class="velin-doc-example"><div class="velin-doc-example__tabs"><button class="velin-doc-example__tab active" data-tab="code">Shell</button></div><div class="velin-doc-example__panel active" data-panel="code"><div class="velin-doc-example__code"><button class="velin-doc-copy-btn" aria-label="Copy code"><velin-icon name="copy" size="14"></velin-icon> Copy</button><pre><code class="language-bash"># Install globally
+npm install -g velinstyle
+
+# Or run without installing
+npx velinstyle</code></pre></div></div></div>
+
+      <h2 id="commands">Commands Overview</h2>
+      <p>All available commands at a glance:</p>
+      <table class="velin-table">
+        <thead><tr><th>Command</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>velinstyle init</code></td><td>Create a <code>velinstyle.config.js</code> configuration file</td></tr>
+          <tr><td><code>velinstyle build</code></td><td>Build custom CSS with selected layers</td></tr>
+          <tr><td><code>velinstyle themes</code></td><td>List available themes</td></tr>
+          <tr><td><code>velinstyle add &lt;name&gt;</code></td><td>Add a single component CSS file</td></tr>
+          <tr><td><code>velinstyle icons &lt;subcommand&gt;</code></td><td>Manage icon providers</td></tr>
+          <tr><td><code>velinstyle scan [path]</code></td><td>Security and accessibility scanner</td></tr>
+          <tr><td><code>velinstyle blueprint [name]</code></td><td>Print a documented HTML blueprint (e.g. modal, login form, dashboard shell)</td></tr>
+          <tr><td><code>velinstyle tokens build</code></td><td>Generate <code>:root</code> CSS variables from a <code>tokens.json</code> file</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="init">Init</h2>
+      <p>Creates a <code>velinstyle.config.js</code> file in the current directory. The interactive prompt lets you select which CSS layers to include:</p>
+      <div class="velin-doc-example"><div class="velin-doc-example__tabs"><button class="velin-doc-example__tab active" data-tab="code">Shell</button></div><div class="velin-doc-example__panel active" data-panel="code"><div class="velin-doc-example__code"><button class="velin-doc-copy-btn" aria-label="Copy code"><velin-icon name="copy" size="14"></velin-icon> Copy</button><pre><code class="language-bash">velinstyle init</code></pre></div></div></div>
+      <p>This generates a config file with your chosen layers, theme, output path, and scan settings.</p>
+
+      <h2 id="build">Build</h2>
+      <p>Builds a custom CSS bundle based on the layers defined in your config file.</p>
+      <div class="velin-doc-example"><div class="velin-doc-example__tabs"><button class="velin-doc-example__tab active" data-tab="code">Shell</button></div><div class="velin-doc-example__panel active" data-panel="code"><div class="velin-doc-example__code"><button class="velin-doc-copy-btn" aria-label="Copy code"><velin-icon name="copy" size="14"></velin-icon> Copy</button><pre><code class="language-bash"># Build using velinstyle.config.js
+velinstyle build
+
+# Specify output file
+velinstyle build --output dist/styles.css
+velinstyle build -o dist/styles.css
+
+# Minify the output
+velinstyle build --minify</code></pre></div></div></div>
+      <table class="velin-table">
+        <thead><tr><th>Option</th><th>Alias</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>--output</code></td><td><code>-o</code></td><td>Output file path (default: <code>./velinstyle-custom.css</code>)</td></tr>
+          <tr><td><code>--minify</code></td><td></td><td>Minify the generated CSS</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="icons">Icons</h2>
+      <p>Manage icon providers and generate optimized icon bundles.</p>
+
+      <h3>Subcommands</h3>
+      <div class="velin-doc-example"><div class="velin-doc-example__tabs"><button class="velin-doc-example__tab active" data-tab="code">Shell</button></div><div class="velin-doc-example__panel active" data-panel="code"><div class="velin-doc-example__code"><button class="velin-doc-copy-btn" aria-label="Copy code"><velin-icon name="copy" size="14"></velin-icon> Copy</button><pre><code class="language-bash"># List all available icon providers
+velinstyle icons list
+
+# Add icons from several providers (downloads into icons/svg/ in the package)
+velinstyle icons add lucide --icons menu,search,check
+velinstyle icons add heroicons --icons arrow-left --variant outline
+
+# Rebuild the combined sprite used by the framework
+velinstyle icons build
+
+# Remove every SVG that was downloaded from one provider, then rebuild
+velinstyle icons remove heroicons
+velinstyle icons build</code></pre></div></div></div>
+      <p class="velin-text-sm" style="color:var(--velin-color-text-muted)">Run these commands from the root of a <strong>VelinStyle clone</strong> (or ensure <code>icons/svg/</code> resolves to your project). After <code>icons build</code>, referenced sprites are updated for local development.</p>
+      <table class="velin-table">
+        <thead><tr><th>Subcommand</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>list</code></td><td>List all available icon providers</td></tr>
+          <tr><td><code>add &lt;provider&gt;</code></td><td>Add icons from a provider (<code>--icons</code> names, <code>--variant</code> style)</td></tr>
+          <tr><td><code>remove &lt;provider&gt;</code></td><td>Remove a previously added provider</td></tr>
+          <tr><td><code>build</code></td><td>Build the final icon bundle from all added providers</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="blueprint">Blueprint</h2>
+      <p>Print copy-paste HTML wired for VelinStyle classes and tokens. Run <code>velinstyle blueprint list</code> for the machine-readable list, then emit one fragment with <code>blueprint &lt;id&gt;</code> (stdout or <code>-o</code>).</p>
+      <div class="velin-doc-example"><div class="velin-doc-example__tabs"><button class="velin-doc-example__tab active" data-tab="code">Shell</button></div><div class="velin-doc-example__panel active" data-panel="code"><div class="velin-doc-example__code"><button class="velin-doc-copy-btn" aria-label="Copy code"><velin-icon name="copy" size="14"></velin-icon> Copy</button><pre><code class="language-bash">velinstyle blueprint list
+# Example output shape (IDs only — exact order may vary):
+#   alert-stack
+#   breadcrumb-bar
+#   card-grid
+#   footer-simple
+#   form-contact
+#   form-login
+#   hero-section
+#   layout-dashboard
+#   modal
+#   navbar-header
+#   pagination-bar
+#   search-field
+#   sidebar-layout
+#   table-responsive
+
+velinstyle blueprint hero-section -o snippets/hero.html
+velinstyle blueprint sidebar-layout -o snippets/sidebar.html</code></pre></div></div></div>
+
+      <h2 id="tokens-build">Tokens build</h2>
+      <p>Reads JSON with a <code>tokens</code> map (keys become <code>--kebab-case</code> custom properties) and prints CSS or writes <code>--output</code>.</p>
+      <div class="velin-doc-example"><div class="velin-doc-example__tabs"><button class="velin-doc-example__tab active" data-tab="code">Shell</button></div><div class="velin-doc-example__panel active" data-panel="code"><div class="velin-doc-example__code"><button class="velin-doc-copy-btn" aria-label="Copy code"><velin-icon name="copy" size="14"></velin-icon> Copy</button><pre><code class="language-bash">velinstyle tokens build --input tokens.json --output src/tokens-from-json.css</code></pre></div></div></div>
+      <div class="velin-alert velin-alert--info" role="note" style="margin-bottom:1.25rem"><div class="velin-alert__content"><strong>Note:</strong> Default input path is <code>tokens.json</code> in the current working directory if <code>--input</code> is omitted.</div></div>
+
+      <h3 id="blueprint-catalog">Blueprint catalog</h3>
+      <p>Run <code>velinstyle blueprint list</code> for the authoritative list. Each id prints a static HTML fragment you can paste into a page or Storybook.</p>
+      <table class="velin-table">
+        <thead><tr><th>ID</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>modal</code></td><td>Accessible modal shell (<code>role="dialog"</code>, header, footer actions)</td></tr>
+          <tr><td><code>form-login</code></td><td>Login form with Velin field classes and validation hooks</td></tr>
+          <tr><td><code>layout-dashboard</code></td><td>Dashboard shell: header, aside, main regions</td></tr>
+          <tr><td><code>alert-stack</code></td><td>Stack of status alerts (info / success / warning)</td></tr>
+          <tr><td><code>breadcrumb-bar</code></td><td>Horizontal breadcrumb trail</td></tr>
+          <tr><td><code>card-grid</code></td><td>Responsive card grid (auto-fit)</td></tr>
+          <tr><td><code>footer-simple</code></td><td>Simple footer with links and copyright</td></tr>
+          <tr><td><code>form-contact</code></td><td>Contact form (name, email, message)</td></tr>
+          <tr><td><code>hero-section</code></td><td>Hero block with heading, lead text, CTAs</td></tr>
+          <tr><td><code>navbar-header</code></td><td>Top navigation bar with brand and links</td></tr>
+          <tr><td><code>pagination-bar</code></td><td>Pagination control strip</td></tr>
+          <tr><td><code>search-field</code></td><td>Search input with button</td></tr>
+          <tr><td><code>sidebar-layout</code></td><td>Two-column layout: sidebar + content</td></tr>
+          <tr><td><code>table-responsive</code></td><td>Wrapped responsive table</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="scan">Scan</h2>
+      <p>A built-in scanner that walks HTML, CSS, and JavaScript for security, accessibility, and CSS hygiene. Use <code>--severity</code> to set the <em>minimum</em> level shown (errors always fail CI when present). <code>--fix</code> applies a small set of safe transforms; <code>--fix-dry-run</code> lists candidate files without writing.</p>
+      <p>In the framework repository, <code>npm run test:contrast</code> verifies OKLCH token pairs (4.5:1 / 7:1) — complementary to <code>velinstyle scan</code>.</p>
+      <div class="velin-alert velin-alert--info" role="note" style="margin-bottom:1rem"><div class="velin-alert__content"><strong>Trusted Types &amp; XSS:</strong> The scanner flags common XSS footguns (<code>javascript:</code> URLs, <code>eval</code>, raw <code>innerHTML</code>, inline handlers, unsafe <code>target="_blank"</code>). It does <em>not</em> parse CSP or Trusted Types policies — use HTTP headers plus the guidance in <a href="../extend/security.html">Security</a> and <code>getTrustedPolicy()</code> for runtime hardening.</div></div>
+      <div class="velin-doc-example"><div class="velin-doc-example__tabs"><button class="velin-doc-example__tab active" data-tab="code">Shell</button></div><div class="velin-doc-example__panel active" data-panel="code"><div class="velin-doc-example__code"><button class="velin-doc-copy-btn" aria-label="Copy code"><velin-icon name="copy" size="14"></velin-icon> Copy</button><pre><code class="language-bash"># Scan current directory
+velinstyle scan
+
+# Scan a specific path
+velinstyle scan ./src
+
+# Output as JSON (useful for CI/CD)
+velinstyle scan --format json
+
+# Auto-fix issues where possible
+velinstyle scan --fix
+
+# Filter by severity
+velinstyle scan --severity error
+
+# Preview auto-fix targets without writing
+velinstyle scan --fix-dry-run
+
+# Default lang when fixing missing &lt;html lang&gt; (BCP 47)
+velinstyle scan --fix --fix-lang en</code></pre></div></div></div>
+      <table class="velin-table">
+        <thead><tr><th>Option</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>--format json</code></td><td>Output results as JSON (for CI ingestion)</td></tr>
+          <tr><td><code>--fix</code></td><td>Automatically fix issues where the scanner can do so safely (writes files)</td></tr>
+          <tr><td><code>--fix-dry-run</code></td><td>List files that would be modified by <code>--fix</code>; no writes</td></tr>
+          <tr><td><code>--fix-lang &lt;code&gt;</code></td><td>Default language tag for the HTML <code>lang</code> auto-fix (default <code>de</code>)</td></tr>
+          <tr><td><code>--severity</code></td><td>Filter by level: <code>error</code>, <code>warning</code>, or <code>info</code></td></tr>
+        </tbody>
+      </table>
+      <div class="velin-alert velin-alert--warning" role="note" style="margin-bottom:1rem"><div class="velin-alert__content"><strong>CI exit code:</strong> <code>scan</code> exits with code <strong>1</strong> when findings at or above the configured severity include errors. Review auto-fix output in a branch before relying on <code>--fix</code> on main.</div></div>
+
+      <h3 id="scanner-rules">Scanner rules</h3>
+      <p>Severities are how findings are labelled in text/JSON output. The <code>--severity</code> flag sets the minimum level <em>included</em> in the report (e.g. <code>warning</code> hides <code>info</code> only).</p>
+      <table class="velin-table">
+        <thead><tr><th>Rule ID</th><th>Category</th><th>Severity</th><th>Fixable (<code>--fix</code>)</th></tr></thead>
+        <tbody>
+          <tr><td><code>security/safe-external-link</code></td><td>Security</td><td>Warning</td><td>yes — adds <code>rel="noopener noreferrer"</code> to unsafe <code>target="_blank"</code> links</td></tr>
+          <tr><td><code>security/no-javascript-url</code></td><td>Security</td><td>Error</td><td>no</td></tr>
+          <tr><td><code>security/no-inline-handler</code></td><td>Security</td><td>Warning</td><td>no — replace with <code>addEventListener</code></td></tr>
+          <tr><td><code>security/no-raw-innerhtml</code></td><td>Security</td><td>Warning</td><td>no — use <code>escapeHTML()</code> / <code>textContent</code></td></tr>
+          <tr><td><code>security/no-document-write</code></td><td>Security</td><td>Error</td><td>no</td></tr>
+          <tr><td><code>security/no-eval</code></td><td>Security</td><td>Error</td><td>no</td></tr>
+          <tr><td><code>security/no-function-constructor</code></td><td>Security</td><td>Error</td><td>no</td></tr>
+          <tr><td><code>security/csp-meta</code></td><td>Security</td><td>Info</td><td>no — informational when no CSP <code>&lt;meta&gt;</code> detected</td></tr>
+          <tr><td><code>a11y/html-lang</code></td><td>Accessibility</td><td>Error</td><td>yes — sets <code>lang</code> on <code>&lt;html&gt;</code> (see <code>--fix-lang</code>)</td></tr>
+          <tr><td><code>a11y/img-alt</code></td><td>Accessibility</td><td>Error</td><td>no — add <code>alt</code> or <code>alt=""</code></td></tr>
+          <tr><td><code>a11y/button-label</code></td><td>Accessibility</td><td>Warning</td><td>no — add visible text or <code>aria-label</code></td></tr>
+          <tr><td><code>a11y/input-label</code></td><td>Accessibility</td><td>Warning</td><td>no — pair with <code>&lt;label for&gt;</code> or <code>aria-label</code></td></tr>
+          <tr><td><code>a11y/skip-link</code></td><td>Accessibility</td><td>Warning</td><td>yes — inserts skip link when <code>id="main"</code> exists</td></tr>
+          <tr><td><code>a11y/heading-order</code></td><td>Accessibility</td><td>Warning</td><td>no — fix skipped heading levels (h1→h3)</td></tr>
+          <tr><td><code>a11y/landmark-main</code></td><td>Accessibility</td><td>Warning</td><td>no — add <code>&lt;main&gt;</code> or <code>id="main"</code></td></tr>
+          <tr><td><code>a11y/interactive-aria-hidden</code></td><td>Accessibility</td><td>Error</td><td>no — remove <code>aria-hidden</code> from controls</td></tr>
+          <tr><td><code>a11y/iframe-title</code></td><td>Accessibility</td><td>Error</td><td>no — add <code>title</code> on <code>&lt;iframe&gt;</code></td></tr>
+          <tr><td><code>css/z-index-token</code></td><td>CSS</td><td>Warning</td><td>yes — maps raw integers toward <code>--velin-z-*</code> tokens</td></tr>
+          <tr><td><code>css/var-fallback</code></td><td>CSS</td><td>Info</td><td>no</td></tr>
+          <tr><td><code>css/no-important</code></td><td>CSS</td><td>Info</td><td>no — allowlist skips a few safe cases</td></tr>
+          <tr><td><code>css/vendor-prefix</code></td><td>CSS</td><td>Info</td><td>no</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="configuration">Configuration</h2>
+      <p>The <code>velinstyle.config.js</code> file controls all CLI behaviour. Here is the full structure:</p>
+      <div class="velin-doc-example"><div class="velin-doc-example__tabs"><button class="velin-doc-example__tab active" data-tab="code">JavaScript</button></div><div class="velin-doc-example__panel active" data-panel="code"><div class="velin-doc-example__code"><button class="velin-doc-copy-btn" aria-label="Copy code"><velin-icon name="copy" size="14"></velin-icon> Copy</button><pre><code class="language-javascript">export default {
+  layers: ['tokens', 'reset', 'base', 'a11y', 'layout', 'components', 'utilities', 'security', 'helpers'],
+  theme: null,
+  output: './velinstyle-custom.css',
+  minify: true,
+  scan: {
+    enabled: true,
+    severity: 'warning',
+    fix: false,
+    ignore: ['node_modules', 'dist'],
+  },
+};</code></pre></div></div></div>
+      <table class="velin-table">
+        <thead><tr><th>Key</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>layers</code></td><td><code>string[]</code></td><td><em>all layers</em></td><td>CSS layers to include in the build</td></tr>
+          <tr><td><code>theme</code></td><td><code>string | null</code></td><td><code>null</code></td><td>Theme name to apply (e.g. <code>'neon'</code>, <code>'ocean'</code>)</td></tr>
+          <tr><td><code>output</code></td><td><code>string</code></td><td><code>'./velinstyle-custom.css'</code></td><td>Output file path</td></tr>
+          <tr><td><code>minify</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Whether to minify the output CSS</td></tr>
+          <tr><td><code>scan.enabled</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Enable the scanner</td></tr>
+          <tr><td><code>scan.severity</code></td><td><code>string</code></td><td><code>'warning'</code></td><td>Minimum severity: <code>error</code>, <code>warning</code>, or <code>info</code></td></tr>
+          <tr><td><code>scan.fix</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Auto-fix issues when possible</td></tr>
+          <tr><td><code>scan.ignore</code></td><td><code>string[]</code></td><td><code>['node_modules', 'dist']</code></td><td>Directories to skip during scanning</td></tr>
+        </tbody>
+      </table>
+
+      <nav class="velin-doc-prevnext" aria-label="Page navigation">
+        <a href="../extend/icons.html" class="prev"><span class="velin-doc-prevnext__label">Previous</span><span class="velin-doc-prevnext__title">Icons</span></a>
+        <a href="../extend/security.html" class="next"><span class="velin-doc-prevnext__label">Next</span><span class="velin-doc-prevnext__title">Security</span></a>
+      </nav>
+    </main>
+
+    <aside class="velin-doc-toc" aria-label="On this page"><div class="velin-doc-toc__title">On this page</div><ul class="velin-doc-toc__list"><li><a href="#installation">Installation</a></li><li><a href="#commands">Commands</a></li><li><a href="#init">Init</a></li><li><a href="#build">Build</a></li><li><a href="#icons">Icons</a></li><li><a href="#blueprint">Blueprint</a></li><li><a href="#blueprint-catalog">Blueprint catalog</a></li><li><a href="#tokens-build">Tokens build</a></li><li><a href="#scan">Scan</a></li><li><a href="#scanner-rules">Scanner rules</a></li><li><a href="#configuration">Configuration</a></li></ul></aside>
+  </div>
+  <script src="../../dist/velinstyle-components.iife.js"></script><script src="../doc-search.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script><script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-markup.min.js"></script><script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-css.min.js"></script><script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-javascript.min.js"></script>
+  <script>const sidebar=document.getElementById('sidebar'),overlay=document.getElementById('sidebarOverlay'),hamburger=document.getElementById('sidebarToggle');function openSidebar(){sidebar.classList.add('open');overlay.classList.add('show')}function closeSidebar(){sidebar.classList.remove('open');overlay.classList.remove('show')}hamburger.addEventListener('click',()=>{sidebar.classList.contains('open')?closeSidebar():openSidebar()});overlay.addEventListener('click',closeSidebar);document.querySelectorAll('.velin-doc-sidebar__category-header').forEach(b=>{b.addEventListener('click',()=>{const c=b.closest('.velin-doc-sidebar__category');c.classList.toggle('collapsed');b.setAttribute('aria-expanded',!c.classList.contains('collapsed'))})});const themeToggle=document.getElementById('themeToggle');function applyTheme(t){document.documentElement.setAttribute('data-velin-theme',t);localStorage.setItem('velin-theme',t)}themeToggle.addEventListener('click',()=>{applyTheme(document.documentElement.getAttribute('data-velin-theme')==='dark'?'light':'dark')});const saved=localStorage.getItem('velin-theme');if(saved)applyTheme(saved);else if(window.matchMedia('(prefers-color-scheme:dark)').matches)applyTheme('dark');document.querySelectorAll('.velin-doc-example').forEach(ex=>{const tabs=ex.querySelectorAll('.velin-doc-example__tab'),panels=ex.querySelectorAll('.velin-doc-example__panel');tabs.forEach(tab=>{tab.addEventListener('click',()=>{tabs.forEach(t=>t.classList.remove('active'));panels.forEach(p=>p.classList.remove('active'));tab.classList.add('active');ex.querySelector('[data-panel="'+tab.getAttribute('data-tab')+'"]').classList.add('active')})})});document.querySelectorAll('.velin-doc-copy-btn').forEach(btn=>{btn.addEventListener('click',()=>{const code=btn.closest('.velin-doc-example__code').querySelector('code');navigator.clipboard.writeText(code.textContent).then(()=>{btn.classList.add('copied');btn.innerHTML='<velin-icon name="check" size="14"></velin-icon> Copied!';setTimeout(()=>{btn.classList.remove('copied');btn.innerHTML='<velin-icon name="copy" size="14"></velin-icon> Copy'},2000)})})});const tocLinks=document.querySelectorAll('.velin-doc-toc__list a'),headings=Array.from(tocLinks).map(a=>document.querySelector(a.getAttribute('href')));function updateToc(){const s=window.scrollY+100;let c=null;headings.forEach(h=>{if(h&&h.offsetTop<=s)c=h});tocLinks.forEach(a=>{a.classList.toggle('active',c&&a.getAttribute('href')==='#'+c.id)})}window.addEventListener('scroll',updateToc,{passive:true});updateToc();</script>
+<footer style="text-align:center;padding:2rem 1rem;border-top:1px solid var(--velin-color-border,#e5e5e5);margin-top:3rem;color:var(--velin-color-text-muted,#888);font-size:0.875rem;">
+  <p>&copy; 2026 VelinStyle &middot; <a href="https://github.com/SkyliteDesign/velinstyle" style="color:inherit">GitHub</a> &middot; <a href="https://www.npmjs.com/package/@birdapi/velinstyle" style="color:inherit">npm</a> &middot; MIT License</p>
+</footer>
+<!-- Theme Picker Widget -->
+<div class="velin-theme-picker" id="themePicker">
+  <div class="velin-theme-picker__panel" id="themePanel">
+    <p>Theme wählen</p>
+    <div class="velin-theme-picker__grid">
+      <button class="velin-theme-picker__btn active" data-set-theme="">Default</button>
+      <button class="velin-theme-picker__btn" data-set-theme="sharp">Sharp</button>
+      <button class="velin-theme-picker__btn" data-set-theme="soft">Soft</button>
+      <button class="velin-theme-picker__btn" data-set-theme="brutalist">Brutalist</button>
+      <button class="velin-theme-picker__btn" data-set-theme="neon">Neon</button>
+      <button class="velin-theme-picker__btn" data-set-theme="earth">Earth</button>
+      <button class="velin-theme-picker__btn" data-set-theme="ocean">Ocean</button>
+      <button class="velin-theme-picker__btn" data-set-theme="sunset">Sunset</button>
+      <button class="velin-theme-picker__btn" data-set-theme="nordic">Nordic</button>
+      <button class="velin-theme-picker__btn" data-set-theme="retro">Retro</button>
+      <button class="velin-theme-picker__btn" data-set-theme="corporate">Corporate</button>
+      <button class="velin-theme-picker__btn" data-set-theme="pastel">Pastel</button>
+      <button class="velin-theme-picker__btn" data-set-theme="midnight">Midnight</button>
+      <button class="velin-theme-picker__btn" data-set-theme="forest">Forest</button>
+      <button class="velin-theme-picker__btn" data-set-theme="dark">Dark</button>
+    </div>
+  </div>
+  <button class="velin-theme-picker__toggle" id="themePickerToggle" aria-label="Theme wählen">
+    &#127912; Theme
+  </button>
+</div>
+<script>
+(function(){
+  const themes=['sharp','soft','brutalist','neon','earth','ocean','sunset','nordic','retro','corporate','pastel','midnight','forest'];
+  const base='../../dist/themes/';
+  themes.forEach(t=>{const l=document.createElement('link');l.rel='stylesheet';l.href=base+t+'.min.css';document.head.appendChild(l);});
+  const panel=document.getElementById('themePanel');
+  const toggle=document.getElementById('themePickerToggle');
+  toggle.addEventListener('click',()=>panel.classList.toggle('open'));
+  document.addEventListener('click',e=>{if(!document.getElementById('themePicker').contains(e.target))panel.classList.remove('open');});
+  panel.querySelectorAll('[data-set-theme]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const t=btn.dataset.setTheme;
+      if(t){document.documentElement.setAttribute('data-velin-theme',t);localStorage.setItem('velin-doc-theme',t);}
+      else{document.documentElement.removeAttribute('data-velin-theme');localStorage.removeItem('velin-doc-theme');}
+      panel.querySelectorAll('.velin-theme-picker__btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+  const saved=localStorage.getItem('velin-doc-theme');
+  if(saved){document.documentElement.setAttribute('data-velin-theme',saved);const a=panel.querySelector('[data-set-theme="'+saved+'"]');if(a){panel.querySelectorAll('.velin-theme-picker__btn').forEach(b=>b.classList.remove('active'));a.classList.add('active');}}
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+                  <form class="playground-demo playground-demo--forms" onsubmit="return false">
+                    <div class="playground-demo__section">
+                      <p class="playground-demo__label">Default fields</p>
+                      <div class="velin-input-group velin-mbe-3">
+                        <label class="velin-input-group__label" for="demo-email">Email</label>
+                        <input class="velin-input" type="email" id="demo-email" placeholder="you@example.com" autocomplete="off">
+                        <span class="velin-field-hint">We never share your email.</span>
+                      </div>
+                      <div class="velin-input-group velin-mbe-3">
+                        <label class="velin-input-group__label" for="demo-pw">Password</label>
+                        <input class="velin-input" type="password" id="demo-pw" placeholder="Enter password" autocomplete="off">
+                      </div>
+                      <div class="velin-input-group velin-mbe-3">
+                        <label class="velin-input-group__label" for="demo-bio">Bio</label>
+                        <textarea class="velin-textarea" id="demo-bio" rows="3" placeholder="Short introduction"></textarea>
+                      </div>
+                      <div class="velin-input-group velin-mbe-3">
+                        <label class="velin-input-group__label" for="demo-plan">Plan</label>
+                        <select class="velin-select" id="demo-plan">
+                          <option>Starter</option>
+                          <option selected>Pro</option>
+                          <option>Enterprise</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="playground-demo__section">
+                      <p class="playground-demo__label">Validation</p>
+                      <div class="velin-input-group velin-mbe-3">
+                        <label class="velin-input-group__label" for="demo-err">Username</label>
+                        <input class="velin-input" type="text" id="demo-err" value="ab" aria-invalid="true">
+                        <span class="velin-field-error">At least 3 characters required.</span>
+                      </div>
+                      <div class="velin-input-group velin-mbe-3">
+                        <label class="velin-input-group__label" for="demo-ok">Coupon</label>
+                        <input class="velin-input" type="text" id="demo-ok" value="SAVE20" aria-invalid="false">
+                        <span class="velin-field-valid">Code applied.</span>
+                      </div>
+                    </div>
+                    <button type="button" class="velin-btn velin-btn--primary velin-btn--block">Sign in</button>
+                  </form>

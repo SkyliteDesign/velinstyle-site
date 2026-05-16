@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en" data-velin-theme="ocean">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SaaS landing showcase — VelinStyle</title>
+  <meta name="description" content="Marketing-style landing page: hero, social proof, features, pricing teaser, built with VelinStyle layout utilities.">
+  <link rel="stylesheet" href="../dist/velinstyle.min.css">
+  <link rel="stylesheet" href="../dist/themes/ocean.min.css">
+  <style>
+    body { margin: 0; background: var(--velin-color-surface); }
+    .demo-bar {
+      background: oklch(from var(--velin-color-surface-bright) l c h / 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--velin-color-border);
+      padding: var(--velin-space-3) var(--velin-space-6);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .demo-bar__inner {
+      max-width: 72rem;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--velin-space-3);
+    }
+    .demo-bar nav { display: flex; gap: var(--velin-space-5); align-items: center; flex-wrap: wrap; }
+    .demo-bar a { font-size: var(--velin-text-sm); font-weight: var(--velin-weight-medium); color: var(--velin-color-text-muted); text-decoration: none; }
+    .demo-bar a:hover { color: var(--velin-color-primary); }
+    .hero {
+      padding: var(--velin-space-16) var(--velin-space-4) var(--velin-space-12);
+      background: linear-gradient(180deg, var(--velin-color-primary-subtle) 0%, var(--velin-color-surface) 55%);
+      text-align: center;
+    }
+    .hero__inner { max-width: 44rem; margin: 0 auto; }
+    .hero__eyebrow {
+      display: inline-block;
+      font-size: var(--velin-text-xs);
+      font-weight: var(--velin-weight-bold);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--velin-color-primary);
+      margin-bottom: var(--velin-space-3);
+    }
+    .hero h1 {
+      font-size: clamp(var(--velin-text-3xl), 5vw, var(--velin-text-5xl));
+      font-weight: var(--velin-weight-extrabold);
+      letter-spacing: var(--velin-tracking-tight);
+      margin: 0 0 var(--velin-space-4);
+      line-height: var(--velin-leading-tight);
+    }
+    .hero p { font-size: var(--velin-text-lg); color: var(--velin-color-text-muted); margin: 0 0 var(--velin-space-8); }
+    .hero__actions { display: flex; gap: var(--velin-space-3); justify-content: center; flex-wrap: wrap; }
+    .logos {
+      padding: var(--velin-space-8) var(--velin-space-4);
+      border-block: 1px solid var(--velin-color-border);
+      background: var(--velin-color-surface-dim);
+    }
+    .logos__row {
+      max-width: 56rem;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: var(--velin-space-8);
+      align-items: center;
+      font-weight: var(--velin-weight-semibold);
+      color: var(--velin-color-text-muted);
+      font-size: var(--velin-text-sm);
+    }
+    .section { padding: var(--velin-space-12) var(--velin-space-4); max-width: 72rem; margin: 0 auto; }
+    .section__head { text-align: center; max-width: 40rem; margin: 0 auto var(--velin-space-10); }
+    .section__head h2 { font-size: var(--velin-text-3xl); margin: 0 0 var(--velin-space-2); }
+    .section__head p { margin: 0; color: var(--velin-color-text-muted); }
+    .feat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+      gap: var(--velin-space-6);
+    }
+    .feat {
+      padding: var(--velin-space-6);
+      border-radius: var(--velin-radius-lg);
+      border: 1px solid var(--velin-color-border);
+      background: var(--velin-color-surface-bright);
+    }
+    .feat h3 { font-size: var(--velin-text-lg); margin: 0 0 var(--velin-space-2); }
+    .feat p { margin: 0; font-size: var(--velin-text-sm); color: var(--velin-color-text-muted); }
+    .quote {
+      max-width: 48rem;
+      margin: 0 auto;
+      padding: var(--velin-space-10) var(--velin-space-6);
+      text-align: center;
+      font-size: var(--velin-text-xl);
+      font-weight: var(--velin-weight-medium);
+      line-height: var(--velin-leading-relaxed);
+    }
+    .quote footer { margin-top: var(--velin-space-4); font-size: var(--velin-text-sm); color: var(--velin-color-text-muted); font-weight: var(--velin-weight-normal); }
+    .pricing-teaser {
+      margin: var(--velin-space-12) auto;
+      max-width: 28rem;
+      padding: var(--velin-space-8);
+      border-radius: var(--velin-radius-xl);
+      border: 2px solid var(--velin-color-primary);
+      background: var(--velin-color-surface-bright);
+      text-align: center;
+    }
+    .pricing-teaser .price { font-size: var(--velin-text-4xl); font-weight: var(--velin-weight-extrabold); }
+    .site-footer {
+      padding: var(--velin-space-10) var(--velin-space-4);
+      border-top: 1px solid var(--velin-color-border);
+      text-align: center;
+      color: var(--velin-color-text-muted);
+      font-size: var(--velin-text-sm);
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="velin-skip-link">Skip to main content</a>
+  <header class="demo-bar">
+    <div class="demo-bar__inner">
+      <nav aria-label="Demo navigation">
+        <a href="../index.html">Home</a>
+        <a href="index.html">Demos</a>
+      </nav>
+      <velin-theme-toggle></velin-theme-toggle>
+    </div>
+  </header>
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero__inner">
+        <span class="hero__eyebrow">VelinStyle + Ocean theme</span>
+        <h1 id="hero-title">Ship accessible interfaces without the framework tax.</h1>
+        <p>OKLCH tokens, container-aware layout, and components that respect focus and screen readers—demo page only, but the stack is real.</p>
+        <div class="hero__actions">
+          <a class="velin-btn velin-btn--primary velin-btn--lg" href="../docs/getting-started/introduction.html">Read the docs</a>
+          <a class="velin-btn velin-btn--outline velin-btn--lg" href="showcase-dashboard.html">See app UI</a>
+        </div>
+      </div>
+    </section>
+    <section class="logos" aria-label="Trusted by teams">
+      <div class="logos__row">
+        <span>Northwind</span>
+        <span>Acme Cloud</span>
+        <span>Studio 42</span>
+        <span>Blue Harbor</span>
+      </div>
+    </section>
+    <section class="section" aria-labelledby="features-title">
+      <div class="section__head">
+        <h2 id="features-title">Everything in one layer stack</h2>
+        <p>Utilities stay predictable because cascade layers keep themes and components separated.</p>
+      </div>
+      <div class="feat-grid">
+        <article class="feat">
+          <h3>WCAG-first patterns</h3>
+          <p>Skip links, focus rings, and overlay behavior that default to inclusive defaults.</p>
+        </article>
+        <article class="feat">
+          <h3>13 theme presets</h3>
+          <p>This page uses Ocean—swap <code>data-velin-theme</code> or load another preset CSS.</p>
+        </article>
+        <article class="feat">
+          <h3>Web Components</h3>
+          <p>Interactive widgets complement plain CSS components when you need behavior.</p>
+        </article>
+      </div>
+    </section>
+    <section class="section" style="border-block: 1px solid var(--velin-color-border); background: var(--velin-color-surface-dim);">
+      <blockquote class="quote">
+        “We replaced three micro-libraries with VelinStyle tokens and one bundle. Our Lighthouse accessibility score jumped on the first pass.”
+        <footer>— Lead frontend, fictional quote for demo purposes</footer>
+      </blockquote>
+    </section>
+    <section class="section" aria-labelledby="pricing-title">
+      <div class="pricing-teaser">
+        <h2 id="pricing-title" class="velin-h4" style="margin-top:0">Team plan</h2>
+        <p class="price">$24<span style="font-size:var(--velin-text-base);font-weight:500">/seat</span></p>
+        <p style="color:var(--velin-color-text-muted);font-size:var(--velin-text-sm)">Includes CLI scanner, theme packs, and priority examples.</p>
+        <div style="margin-top:var(--velin-space-6)">
+          <button type="button" class="velin-btn velin-btn--primary velin-btn--block">Start trial</button>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer">
+    <p>VelinStyle SaaS demo · <a href="index.html">More demos</a> · MIT License</p>
+  </footer>
+  <script src="../dist/velinstyle-components.iife.js"></script>
+</body>
+</html>

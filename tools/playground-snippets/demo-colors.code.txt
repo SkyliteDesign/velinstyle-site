@@ -1,0 +1,2 @@
+<span class="velin-bg-primary/20 velin-text-primary">Tinted</span>
+<div class="velin-bg-success/10">Wash</div>

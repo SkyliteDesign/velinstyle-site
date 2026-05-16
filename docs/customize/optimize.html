@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en" data-velin-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Optimize · VelinStyle</title>
+  <meta name="description" content="Optimize your VelinStyle build — tree-shake unused CSS, import only what you need, and follow performance best practices.">
+
+  <!-- VelinStyle core -->
+  <link rel="stylesheet" href="../../dist/velinstyle.min.css">
+  <!-- Documentation styles -->
+  <link rel="stylesheet" href="../docs.css">
+  <!-- Prism.js syntax highlighting -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.min.css">
+
+  <link rel="icon" href="../../favicon.ico" type="image/x-icon">
+  <link rel="icon" href="../../assets/img/velinstyle-logo.svg" type="image/svg+xml">
+</head>
+<body>
+
+  <a href="#main-content" class="velin-doc-skip">Skip to main content</a>
+
+  <!-- ============================================================
+       HEADER
+       ============================================================ -->
+  <header class="velin-doc-header">
+    <button class="velin-doc-hamburger" aria-label="Toggle sidebar" id="sidebarToggle">
+      <velin-icon name="menu" size="20"></velin-icon>
+    </button>
+    <a href="../getting-started/introduction.html" class="velin-doc-header__brand">
+      <img src="../../assets/img/velinstyle-logo.svg" alt="" width="28" height="28">
+      VelinStyle
+      <span class="velin-doc-header__version">v0.7.0</span>
+    </a>
+    <div class="velin-doc-header__search">
+      <input type="search" placeholder="Search docs…" aria-label="Search documentation" id="docSearch" autocomplete="off" data-search-index="../search-index.json">
+    </div>
+    <div class="velin-doc-header__actions">
+      <a href="../../index.html" aria-label="Home" title="Home" style="display:inline-flex;align-items:center;gap:4px;font-weight:500;text-decoration:none;color:inherit">&#8962; Home</a>
+      
+      <button id="themeToggle" aria-label="Toggle dark mode" title="Toggle theme">
+        <velin-icon name="moon" size="18"></velin-icon>
+      </button>
+      <a href="https://github.com/SkyliteDesign/velinstyle" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub">
+        <velin-icon name="github" size="18"></velin-icon>
+      </a>
+    </div>
+  </header>
+
+  <div class="velin-doc-overlay" id="sidebarOverlay"></div>
+
+  <!-- ============================================================
+       3-COLUMN LAYOUT
+       ============================================================ -->
+  <div class="velin-doc-wrapper">
+
+    <!-- ========================================================
+         SIDEBAR
+         ======================================================== -->
+        <nav class="velin-doc-sidebar" id="sidebar" aria-label="Documentation navigation">
+<div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Getting Started <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../getting-started/introduction.html">Introduction</a></li><li><a href="../getting-started/download.html">Download</a></li><li><a href="../getting-started/contents.html">Contents</a></li><li><a href="../getting-started/editor-setup.html">Editor setup</a></li><li><a href="../getting-started/browser-compatibility.html">Compatibility</a></li><li><a href="../getting-started/upgrading.html">Upgrading</a></li><li><a href="../getting-started/states-and-variants.html">States &amp; variants</a></li><li><a href="../getting-started/accessibility.html">Accessibility</a></li><li><a href="../getting-started/rtl.html">RTL</a></li><li><a href="../getting-started/a11y-patterns.html">A11y patterns</a></li><li><a href="../getting-started/a11y-dashboard.html">A11y Dashboard</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Customize <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../customize/overview.html">Overview</a></li><li><a href="../customize/color.html">Color</a></li><li><a href="../customize/color-modes.html">Color Modes</a></li><li><a href="../customize/css-variables.html">CSS Variables</a></li><li><a href="../customize/components.html">Components</a></li><li><a href="../customize/optimize.html" class="active">Optimize</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Layout <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../layout/breakpoints.html">Breakpoints</a></li><li><a href="../layout/containers.html">Containers</a></li><li><a href="../layout/grid.html">Grid</a></li><li><a href="../layout/patterns.html">Patterns</a></li><li><a href="../layout/columns.html">Columns</a></li><li><a href="../layout/gutters.html">Gutters</a></li><li><a href="../layout/utilities.html">Utilities</a></li><li><a href="../layout/z-index.html">Z-index</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Content <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../content/reboot.html">Reboot</a></li><li><a href="../content/typography.html">Typography</a></li><li><a href="../content/images.html">Images</a></li><li><a href="../content/tables.html">Tables</a></li><li><a href="../content/figures.html">Figures</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Forms <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../forms/overview.html">Overview</a></li><li><a href="../forms/form-control.html">Form Control</a></li><li><a href="../forms/select.html">Select</a></li><li><a href="../forms/checks-radios.html">Checks &amp; Radios</a></li><li><a href="../forms/range.html">Range</a></li><li><a href="../forms/input-group.html">Input Group</a></li><li><a href="../forms/floating-labels.html">Floating Labels</a></li><li><a href="../forms/layout.html">Layout</a></li><li><a href="../forms/validation.html">Validation</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Components <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../components/accordion.html">Accordion</a></li><li><a href="../components/alerts.html">Alerts</a></li><li><a href="../components/avatar.html">Avatar</a></li><li><a href="../components/badge.html">Badge</a></li><li><a href="../components/breadcrumb.html">Breadcrumb</a></li><li><a href="../components/buttons.html">Buttons</a></li><li><a href="../components/button-group.html">Button Group</a></li><li><a href="../components/card.html">Card</a></li><li><a href="../components/carousel.html">Carousel</a></li><li><a href="../components/chip.html">Chip</a></li><li><a href="../components/close-button.html">Close Button</a></li><li><a href="../components/collapse.html">Collapse</a></li><li><a href="../components/dialog.html">Dialog</a></li><li><a href="../components/divider.html">Divider</a></li><li><a href="../components/drawer.html">Drawer</a></li><li><a href="../components/dropdown.html">Dropdown</a></li><li><a href="../components/lightbox.html">Lightbox</a></li><li><a href="../components/list-group.html">List Group</a></li><li><a href="../components/modal.html">Modal</a></li><li><a href="../components/navbar.html">Navbar</a></li><li><a href="../components/navs-tabs.html">Navs &amp; Tabs</a></li><li><a href="../components/pagination.html">Pagination</a></li><li><a href="../components/popover.html">Popover</a></li><li><a href="../components/progress.html">Progress</a></li><li><a href="../components/progress-ring.html">Progress Ring</a></li><li><a href="../components/scrollspy.html">Scrollspy</a></li><li><a href="../components/spinners.html">Spinners</a></li><li><a href="../components/stat.html">Stat</a></li><li><a href="../components/stepper.html">Stepper</a></li><li><a href="../components/timeline.html">Timeline</a></li><li><a href="../components/toasts.html">Toasts</a></li><li><a href="../components/tooltips.html">Tooltips</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Helpers <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../helpers/clearfix.html">Clearfix</a></li><li><a href="../helpers/colored-links.html">Colored Links</a></li><li><a href="../helpers/focus-ring.html">Focus Ring</a></li><li><a href="../helpers/icon-link.html">Icon Link</a></li><li><a href="../helpers/ratios.html">Ratios</a></li><li><a href="../helpers/stacks.html">Stacks</a></li><li><a href="../helpers/stretched-link.html">Stretched Link</a></li><li><a href="../helpers/text-truncation.html">Text Truncation</a></li><li><a href="../helpers/vertical-rule.html">Vertical Rule</a></li><li><a href="../helpers/visually-hidden.html">Visually Hidden</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Utilities <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../utilities/api.html">API</a></li><li><a href="../utilities/background.html">Background</a></li><li><a href="../utilities/borders.html">Borders</a></li><li><a href="../utilities/colors.html">Colors</a></li><li><a href="../utilities/color-mix.html">Color Mix</a></li><li><a href="../utilities/display.html">Display</a></li><li><a href="../utilities/divide.html">Divide</a></li><li><a href="../utilities/flex.html">Flex</a></li><li><a href="../utilities/float.html">Float</a></li><li><a href="../utilities/filters.html">Filters</a></li><li><a href="../utilities/interactions.html">Interactions</a></li><li><a href="../utilities/object-fit.html">Object Fit</a></li><li><a href="../utilities/opacity.html">Opacity</a></li><li><a href="../utilities/overflow.html">Overflow</a></li><li><a href="../utilities/position.html">Position</a></li><li><a href="../utilities/print.html">Print</a></li><li><a href="../utilities/scroll.html">Scroll</a></li><li><a href="../utilities/shadows.html">Shadows</a></li><li><a href="../utilities/sizing.html">Sizing</a></li><li><a href="../utilities/spacing.html">Spacing</a></li><li><a href="../utilities/text.html">Text</a></li><li><a href="../utilities/transitions.html">Transitions</a></li><li><a href="../utilities/transforms.html">Transforms</a></li><li><a href="../utilities/vertical-align.html">Vertical Align</a></li><li><a href="../utilities/visibility.html">Visibility</a></li><li><a href="../utilities/z-index.html">Z-index</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Animations <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../animations/overview.html">Overview</a></li><li><a href="../animations/entrance.html">Entrance</a></li><li><a href="../animations/attention.html">Attention</a></li><li><a href="../animations/exit.html">Exit</a></li><li><a href="../animations/scroll-driven.html">Scroll-driven</a></li><li><a href="../animations/view-transitions.html">View Transitions</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Extend <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../extend/approach.html">Approach</a></li><li><a href="../extend/utility-coverage.html">Utility coverage</a></li><li><a href="../extend/icons.html">Icons</a></li><li><a href="../extend/cli.html">CLI</a></li><li><a href="../extend/security.html">Security</a></li><li><a href="../extend/repo-tools.html">Repo tools</a></li><li><a href="../extend/web-components.html">Web Components</a></li><li><a href="../extend/javascript-api.html">JavaScript API</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Guides <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../guides/index.html">Overview</a></li><li><a href="../guides/existing-project.html">Existing project</a></li><li><a href="../guides/react-vite-starter.html">Vite &amp; React</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">About <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../about/overview.html">Overview</a></li><li><a href="../about/brand.html">Brand</a></li><li><a href="../about/license.html">License</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Migration <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../migration.html">Migration Guide</a></li></ul></div>    </nav>
+
+    <!-- ========================================================
+         MAIN CONTENT
+         ======================================================== -->
+    <main class="velin-doc-main" id="main-content">
+
+      <ol class="velin-doc-breadcrumb">
+        <li><a href="../getting-started/introduction.html">Docs</a></li>
+        <li><a href="../customize/overview.html">Customize</a></li>
+        <li>Optimize</li>
+      </ol>
+
+      <h1>Optimize</h1>
+      <p class="lead">
+        Reduce your CSS bundle size by tree-shaking unused styles, importing only the modules
+        you need, and following performance best practices.
+      </p>
+
+      <!-- ---- Selective Imports ---- -->
+      <h2 id="selective-imports">Selective Imports</h2>
+      <p>
+        Use the VelinStyle CLI to build a smaller CSS file with only the layers your project
+        needs (no Sass required):
+      </p>
+
+      <div class="velin-doc-example">
+        <div class="velin-doc-example__tabs">
+          <button class="velin-doc-example__tab active" data-tab="code">CLI</button>
+        </div>
+        <div class="velin-doc-example__panel active" data-panel="code">
+          <div class="velin-doc-example__code">
+            <button class="velin-doc-copy-btn" aria-label="Copy code">
+              <velin-icon name="copy" size="14"></velin-icon> Copy
+            </button>
+            <pre><code class="language-bash">npx velinstyle init
+npx velinstyle build --include tokens,reset,grid,button,card,utilities</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- ---- Standalone Builds ---- -->
+      <h2 id="standalone-builds">Standalone Builds</h2>
+      <p>
+        For CDN users, VelinStyle provides pre-built subsets you can use instead of the full bundle:
+      </p>
+
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Build</th>
+            <th>Includes</th>
+            <th>Size (gzip)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>velinstyle.min.css</code></td>
+            <td>Everything</td>
+            <td>~38 KB</td>
+          </tr>
+          <tr>
+            <td><code>dist/themes/*.min.css</code></td>
+            <td>Theme presets (load alongside core CSS)</td>
+            <td>~1–2 KB each</td>
+          </tr>
+          <tr>
+            <td><code>npx velinstyle build</code></td>
+            <td>Custom subset via <code>velinstyle.config.js</code> (CLI)</td>
+            <td>varies</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="velin-doc-example">
+        <div class="velin-doc-example__tabs">
+          <button class="velin-doc-example__tab active" data-tab="code">HTML</button>
+        </div>
+        <div class="velin-doc-example__panel active" data-panel="code">
+          <div class="velin-doc-example__code">
+            <button class="velin-doc-copy-btn" aria-label="Copy code">
+              <velin-icon name="copy" size="14"></velin-icon> Copy
+            </button>
+            <pre><code class="language-html">&lt;!-- Smaller bundle: configure layers, then build locally --&gt;
+&lt;!-- npx velinstyle init && npx velinstyle build -o dist/my-velin.css --minify --&gt;
+&lt;link rel="stylesheet" href="/dist/my-velin.min.css"&gt;
+
+&lt;!-- Or pin the full published bundle from npm/CDN --&gt;
+&lt;link rel="stylesheet"
+      href="https://unpkg.com/@birdapi/velinstyle@0.7.0/dist/velinstyle.min.css"&gt;</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- ---- PurgeCSS ---- -->
+      <h2 id="purgecss">PurgeCSS Integration</h2>
+      <p>
+        Use <a href="https://purgecss.com" target="_blank" rel="noopener">PurgeCSS</a> to
+        automatically remove unused CSS classes from your production build. Here's a typical
+        configuration:
+      </p>
+
+      <div class="velin-doc-example">
+        <div class="velin-doc-example__tabs">
+          <button class="velin-doc-example__tab active" data-tab="code">JavaScript</button>
+        </div>
+        <div class="velin-doc-example__panel active" data-panel="code">
+          <div class="velin-doc-example__code">
+            <button class="velin-doc-copy-btn" aria-label="Copy code">
+              <velin-icon name="copy" size="14"></velin-icon> Copy
+            </button>
+            <pre><code class="language-javascript">// purgecss.config.js
+module.exports = {
+  content: [
+    './src/**/*.html',
+    './src/**/*.js',
+    './src/**/*.jsx',
+    './src/**/*.vue',
+  ],
+  css: ['./node_modules/@birdapi/velinstyle/dist/velinstyle.min.css'],
+  safelist: [
+    /^modal/,
+    /^tooltip/,
+    /^popover/,
+    /^offcanvas/,
+    /^data-velin-theme/,
+  ],
+};</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- ---- Vite Integration ---- -->
+      <h2 id="vite">Vite &amp; PostCSS</h2>
+      <p>
+        When using Vite with a subset build or PurgeCSS on your HTML, you can shrink CSS further. For additional
+        optimization, add <code>cssnano</code> to your PostCSS pipeline:
+      </p>
+
+      <div class="velin-doc-example">
+        <div class="velin-doc-example__tabs">
+          <button class="velin-doc-example__tab active" data-tab="code">JavaScript</button>
+        </div>
+        <div class="velin-doc-example__panel active" data-panel="code">
+          <div class="velin-doc-example__code">
+            <button class="velin-doc-copy-btn" aria-label="Copy code">
+              <velin-icon name="copy" size="14"></velin-icon> Copy
+            </button>
+            <pre><code class="language-javascript">// postcss.config.js
+module.exports = {
+  plugins: [
+    require('autoprefixer'),
+    require('cssnano')({
+      preset: ['default', {
+        discardComments: { removeAll: true },
+      }],
+    }),
+  ],
+};</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- ---- Performance Tips ---- -->
+      <h2 id="performance-tips">Performance Tips</h2>
+      <ul>
+        <li>
+          <strong>Preload the stylesheet</strong> — Add <code>&lt;link rel="preload"&gt;</code>
+          to start downloading CSS before the parser reaches it:
+        </li>
+      </ul>
+
+      <div class="velin-doc-example">
+        <div class="velin-doc-example__tabs">
+          <button class="velin-doc-example__tab active" data-tab="code">HTML</button>
+        </div>
+        <div class="velin-doc-example__panel active" data-panel="code">
+          <div class="velin-doc-example__code">
+            <pre><code class="language-html">&lt;link rel="preload" href="/css/velinstyle.min.css" as="style"&gt;
+&lt;link rel="stylesheet" href="/css/velinstyle.min.css"&gt;</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <ul>
+        <li>
+          <strong>Self-host for production</strong> — Download and serve VelinStyle from your own
+          domain to eliminate third-party DNS lookups and benefit from HTTP/2 multiplexing.
+        </li>
+        <li>
+          <strong>Enable Brotli/Gzip</strong> — Ensure your server compresses CSS responses.
+          VelinStyle's full build compresses from ~160 KB to ~38 KB with gzip.
+        </li>
+        <li>
+          <strong>Use <code>content-visibility</code></strong> — For long pages, apply
+          <code>content-visibility: auto</code> on off-screen sections to defer rendering.
+        </li>
+        <li>
+          <strong>Lazy-load Web Components</strong> — Only import the JS bundle on pages that
+          use custom elements like <code>&lt;velin-icon&gt;</code> or <code>&lt;velin-dialog&gt;</code>.
+        </li>
+      </ul>
+
+      <!-- ---- Prev / Next ---- -->
+      <nav class="velin-doc-prevnext" aria-label="Page navigation">
+        <a href="../customize/components.html" class="prev">
+          <span class="velin-doc-prevnext__label">Previous</span>
+          <span class="velin-doc-prevnext__title">Components</span>
+        </a>
+        <a href="../layout/breakpoints.html" class="next">
+          <span class="velin-doc-prevnext__label">Next</span>
+          <span class="velin-doc-prevnext__title">Breakpoints</span>
+        </a>
+      </nav>
+
+    </main>
+
+    <!-- ========================================================
+         RIGHT TOC
+         ======================================================== -->
+    <aside class="velin-doc-toc" aria-label="On this page">
+      <div class="velin-doc-toc__title">On this page</div>
+      <ul class="velin-doc-toc__list">
+        <li><a href="#selective-imports">Selective Imports</a></li>
+        <li><a href="#standalone-builds">Standalone Builds</a></li>
+        <li><a href="#purgecss">PurgeCSS Integration</a></li>
+        <li><a href="#vite">Vite &amp; PostCSS</a></li>
+        <li><a href="#performance-tips">Performance Tips</a></li>
+      </ul>
+    </aside>
+
+  </div><!-- /.velin-doc-wrapper -->
+
+  <!-- ============================================================
+       SCRIPTS
+       ============================================================ -->
+  <script src="../../dist/velinstyle-components.iife.js"></script>
+  <script src="../doc-search.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-markup.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-css.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-javascript.min.js"></script>
+
+  <script>
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    const hamburger = document.getElementById('sidebarToggle');
+
+    function openSidebar()  { sidebar.classList.add('open');  overlay.classList.add('show'); }
+    function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('show'); }
+
+    hamburger.addEventListener('click', () => {
+      sidebar.classList.contains('open') ? closeSidebar() : openSidebar();
+    });
+    overlay.addEventListener('click', closeSidebar);
+
+    document.querySelectorAll('.velin-doc-sidebar__category-header').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const cat = btn.closest('.velin-doc-sidebar__category');
+        cat.classList.toggle('collapsed');
+        btn.setAttribute('aria-expanded', !cat.classList.contains('collapsed'));
+      });
+    });
+
+    const themeToggle = document.getElementById('themeToggle');
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-velin-theme', theme);
+      localStorage.setItem('velin-theme', theme);
+    }
+    themeToggle.addEventListener('click', () => {
+      const next = document.documentElement.getAttribute('data-velin-theme') === 'dark' ? 'light' : 'dark';
+      applyTheme(next);
+    });
+    const saved = localStorage.getItem('velin-theme');
+    if (saved) applyTheme(saved);
+    else if (window.matchMedia('(prefers-color-scheme: dark)').matches) applyTheme('dark');
+
+    document.querySelectorAll('.velin-doc-example').forEach(example => {
+      const tabs = example.querySelectorAll('.velin-doc-example__tab');
+      const panels = example.querySelectorAll('.velin-doc-example__panel');
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          tabs.forEach(t => t.classList.remove('active'));
+          panels.forEach(p => p.classList.remove('active'));
+          tab.classList.add('active');
+          const target = tab.getAttribute('data-tab');
+          example.querySelector(`[data-panel="${target}"]`).classList.add('active');
+        });
+      });
+    });
+
+    document.querySelectorAll('.velin-doc-copy-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const code = btn.closest('.velin-doc-example__code').querySelector('code');
+        navigator.clipboard.writeText(code.textContent).then(() => {
+          btn.classList.add('copied');
+          btn.innerHTML = '<velin-icon name="check" size="14"></velin-icon> Copied!';
+          setTimeout(() => {
+            btn.classList.remove('copied');
+            btn.innerHTML = '<velin-icon name="copy" size="14"></velin-icon> Copy';
+          }, 2000);
+        });
+      });
+    });
+
+    const tocLinks = document.querySelectorAll('.velin-doc-toc__list a');
+    const headings = Array.from(tocLinks).map(a => document.querySelector(a.getAttribute('href')));
+
+    function updateToc() {
+      const scrollY = window.scrollY + 100;
+      let current = null;
+      headings.forEach(h => { if (h && h.offsetTop <= scrollY) current = h; });
+      tocLinks.forEach(a => {
+        a.classList.toggle('active', current && a.getAttribute('href') === '#' + current.id);
+      });
+    }
+    window.addEventListener('scroll', updateToc, { passive: true });
+    updateToc();
+  </script>
+
+<footer style="text-align:center;padding:2rem 1rem;border-top:1px solid var(--velin-color-border,#e5e5e5);margin-top:3rem;color:var(--velin-color-text-muted,#888);font-size:0.875rem;">
+  <p>&copy; 2026 VelinStyle &middot; <a href="https://github.com/SkyliteDesign/velinstyle" style="color:inherit">GitHub</a> &middot; <a href="https://www.npmjs.com/package/@birdapi/velinstyle" style="color:inherit">npm</a> &middot; MIT License</p>
+</footer>
+<!-- Theme Picker Widget -->
+<div class="velin-theme-picker" id="themePicker">
+  <div class="velin-theme-picker__panel" id="themePanel">
+    <p>Theme wählen</p>
+    <div class="velin-theme-picker__grid">
+      <button class="velin-theme-picker__btn active" data-set-theme="">Default</button>
+      <button class="velin-theme-picker__btn" data-set-theme="sharp">Sharp</button>
+      <button class="velin-theme-picker__btn" data-set-theme="soft">Soft</button>
+      <button class="velin-theme-picker__btn" data-set-theme="brutalist">Brutalist</button>
+      <button class="velin-theme-picker__btn" data-set-theme="neon">Neon</button>
+      <button class="velin-theme-picker__btn" data-set-theme="earth">Earth</button>
+      <button class="velin-theme-picker__btn" data-set-theme="ocean">Ocean</button>
+      <button class="velin-theme-picker__btn" data-set-theme="sunset">Sunset</button>
+      <button class="velin-theme-picker__btn" data-set-theme="nordic">Nordic</button>
+      <button class="velin-theme-picker__btn" data-set-theme="retro">Retro</button>
+      <button class="velin-theme-picker__btn" data-set-theme="corporate">Corporate</button>
+      <button class="velin-theme-picker__btn" data-set-theme="pastel">Pastel</button>
+      <button class="velin-theme-picker__btn" data-set-theme="midnight">Midnight</button>
+      <button class="velin-theme-picker__btn" data-set-theme="forest">Forest</button>
+      <button class="velin-theme-picker__btn" data-set-theme="dark">Dark</button>
+    </div>
+  </div>
+  <button class="velin-theme-picker__toggle" id="themePickerToggle" aria-label="Theme wählen">
+    &#127912; Theme
+  </button>
+</div>
+<script>
+(function(){
+  const themes=['sharp','soft','brutalist','neon','earth','ocean','sunset','nordic','retro','corporate','pastel','midnight','forest'];
+  const base='../../dist/themes/';
+  themes.forEach(t=>{const l=document.createElement('link');l.rel='stylesheet';l.href=base+t+'.min.css';document.head.appendChild(l);});
+  const panel=document.getElementById('themePanel');
+  const toggle=document.getElementById('themePickerToggle');
+  toggle.addEventListener('click',()=>panel.classList.toggle('open'));
+  document.addEventListener('click',e=>{if(!document.getElementById('themePicker').contains(e.target))panel.classList.remove('open');});
+  panel.querySelectorAll('[data-set-theme]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const t=btn.dataset.setTheme;
+      if(t){document.documentElement.setAttribute('data-velin-theme',t);localStorage.setItem('velin-doc-theme',t);}
+      else{document.documentElement.removeAttribute('data-velin-theme');localStorage.removeItem('velin-doc-theme');}
+      panel.querySelectorAll('.velin-theme-picker__btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+  const saved=localStorage.getItem('velin-doc-theme');
+  if(saved){document.documentElement.setAttribute('data-velin-theme',saved);const a=panel.querySelector('[data-set-theme="'+saved+'"]');if(a){panel.querySelectorAll('.velin-theme-picker__btn').forEach(b=>b.classList.remove('active'));a.classList.add('active');}}
+})();
+</script>
+</body>
+</html>

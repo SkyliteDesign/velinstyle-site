@@ -1,0 +1,5 @@
+:root {
+  --velin-color-primary: oklch(55% 0.2 264);
+  --velin-space-6: 1.5rem;
+  --velin-radius-lg: 0.75rem;
+}

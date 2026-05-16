@@ -1,0 +1,4 @@
+<velin-modal id="my-modal" title="Hello">...</velin-modal>
+<velin-drawer id="nav" title="Menu" side="start">...</velin-drawer>
+<velin-toast id="toast"></velin-toast>
+<velin-tabs>...</velin-tabs>

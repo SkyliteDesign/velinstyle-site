@@ -1,0 +1,6 @@
+<button class="velin-btn velin-btn--primary">Primary</button>
+<button class="velin-btn velin-btn--success">Success</button>
+<button class="velin-btn velin-btn--outline">Outline</button>
+<button class="velin-btn velin-btn--primary velin-btn--sm">Small</button>
+<button class="velin-btn velin-btn--primary velin-btn--loading">Loading</button>
+<button class="velin-btn velin-btn--primary velin-btn--block">Block</button>

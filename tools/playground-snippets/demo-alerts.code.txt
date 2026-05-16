@@ -1,0 +1,4 @@
+<div class="velin-alert velin-alert--success" role="alert">...</div>
+<div class="velin-alert velin-alert--info" role="alert">...</div>
+<div class="velin-alert velin-alert--warning" role="alert">...</div>
+<div class="velin-alert velin-alert--danger" role="alert">...</div>

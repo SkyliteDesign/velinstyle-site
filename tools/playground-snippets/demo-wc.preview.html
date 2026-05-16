@@ -1,0 +1,35 @@
+                  <div class="playground-demo">
+                    <div class="playground-demo__section">
+                      <p class="playground-demo__label">Overlays</p>
+                      <div class="velin-flex velin-gap-3 velin-flex--wrap">
+                        <button type="button" class="velin-btn velin-btn--primary" onclick="document.getElementById('site-modal').open()">Open modal</button>
+                        <button type="button" class="velin-btn velin-btn--outline" onclick="document.getElementById('site-drawer').open()">Open drawer</button>
+                        <button type="button" class="velin-btn" onclick="document.getElementById('site-toast').show({message:'Hello from VelinStyle!',type:'success'})">Show toast</button>
+                        <button type="button" class="velin-btn velin-btn--danger" onclick="document.getElementById('site-dialog').confirm('Native dialog.',{title:'VelinStyle'})">Dialog</button>
+                      </div>
+                    </div>
+                    <div class="playground-demo__section">
+                      <p class="playground-demo__label">Tabs</p>
+                      <velin-tabs>
+                        <button slot="tab" aria-selected="true">Overview</button>
+                        <button slot="tab">Features</button>
+                        <button slot="tab">API</button>
+                        <div slot="panel"><p>22 Web Components with keyboard support, ARIA, and focus trapping.</p></div>
+                        <div slot="panel"><p>Works with React, Vue, Angular, or plain HTML.</p></div>
+                        <div slot="panel"><p>Methods, events, and CSS parts for full customization.</p></div>
+                      </velin-tabs>
+                    </div>
+                    <velin-modal id="site-modal" title="VelinStyle Modal">
+                      <p>Focus trapping, Escape to close, overlay click to dismiss.</p>
+                      <div slot="footer"><button type="button" class="velin-btn velin-btn--primary" onclick="document.getElementById('site-modal').close()">Got it</button></div>
+                    </velin-modal>
+                    <velin-drawer id="site-drawer" title="Navigation" side="start">
+                      <ul class="playground-drawer-list">
+                        <li><a href="#">Dashboard</a></li>
+                        <li><a href="#">Settings</a></li>
+                        <li><a href="#">Profile</a></li>
+                      </ul>
+                    </velin-drawer>
+                    <velin-toast id="site-toast"></velin-toast>
+                    <velin-dialog id="site-dialog"></velin-dialog>
+                  </div>

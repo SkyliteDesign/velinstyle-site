@@ -1,0 +1,4 @@
+<section id="preview" data-velin-theme="ocean">
+  <button class="theme-swatch" data-velin-theme="neon">Neon</button>
+  ...
+</section>

@@ -1,0 +1,11 @@
+{
+  "name": "velinstyle-site",
+  "version": "1.0.0",
+  "description": "Official marketing website for VelinStyle CSS framework",
+  "private": true,
+  "scripts": {
+    "dev": "npx serve . -l 4000"
+  },
+  "author": "SkyliteDesign",
+  "license": "MIT"
+}

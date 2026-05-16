@@ -1,0 +1,4 @@
+<velin-icon name="check"></velin-icon>
+<velin-icon name="heart" provider="lucide"></velin-icon>
+<velin-icon name="star-fill" provider="bootstrap"></velin-icon>
+velinstyle icons add lucide --icons heart,star,zap

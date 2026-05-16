@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en" data-velin-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Accessibility Dashboard · VelinStyle</title>
+  <meta name="description" content="Interactive accessibility dashboard — inspect ARIA attributes, visualize keyboard navigation, check contrast ratios, preview screen reader output, and simulate user preferences.">
+
+  <!-- VelinStyle core -->
+  <link rel="stylesheet" href="../../dist/velinstyle.min.css">
+  <!-- Documentation styles -->
+  <link rel="stylesheet" href="../docs.css">
+  <!-- Prism.js syntax highlighting -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.min.css">
+
+  <link rel="icon" href="../../favicon.ico" type="image/x-icon">
+  <link rel="icon" href="../../assets/img/velinstyle-logo.svg" type="image/svg+xml">
+
+  <style>
+    /* ---- Dashboard-specific styles ---- */
+    .a11y-section { margin-bottom: 3rem; }
+    .a11y-section h2 { scroll-margin-top: 5rem; }
+
+    /* ARIA Inspector */
+    .aria-inspector-zone {
+      display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: flex-start;
+    }
+    .aria-inspector-target {
+      flex: 1 1 320px; padding: 1.5rem; border: 2px dashed var(--velin-border-color, #dee2e6);
+      border-radius: .5rem; display: flex; flex-wrap: wrap; gap: .75rem; align-items: center;
+      min-height: 160px;
+    }
+    .aria-inspector-panel {
+      flex: 1 1 280px; position: sticky; top: 5rem;
+      background: var(--velin-body-bg, #fff); border: 1px solid var(--velin-border-color, #dee2e6);
+      border-radius: .5rem; padding: 1rem 1.25rem; font-family: monospace; font-size: .85rem;
+      max-height: 340px; overflow-y: auto;
+    }
+    .aria-inspector-panel .aria-row { display: flex; gap: .5rem; padding: .25rem 0; border-bottom: 1px solid var(--velin-border-color, #dee2e6); flex-wrap: wrap; }
+    .aria-inspector-panel .aria-key { font-weight: 700; min-width: 110px; color: var(--velin-primary, #6366f1); }
+    .aria-inspector-panel .aria-val { word-break: break-all; }
+    .aria-inspector-panel .aria-empty { color: var(--velin-secondary, #6c757d); font-style: italic; }
+
+    /* Keyboard nav visualizer */
+    .kbd-nav-container {
+      position: relative; padding: 1.5rem; border: 2px solid var(--velin-border-color, #dee2e6);
+      border-radius: .5rem;
+    }
+    .kbd-nav-container .focus-step-badge {
+      position: absolute; width: 22px; height: 22px; border-radius: 50%;
+      background: var(--velin-primary, #6366f1); color: #fff; font-size: .7rem;
+      display: flex; align-items: center; justify-content: center; font-weight: 700;
+      pointer-events: none; z-index: 10; transform: translate(-50%, -110%);
+      opacity: 0; transition: opacity .2s;
+    }
+    .kbd-nav-container .focus-step-badge.visible { opacity: 1; }
+    .kbd-nav-container [data-focus-step].is-current-step {
+      outline: 3px solid var(--velin-primary, #6366f1);
+      outline-offset: 3px;
+    }
+
+    /* Contrast checker */
+    .contrast-inputs { display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: flex-end; }
+    .contrast-inputs label { display: flex; flex-direction: column; gap: .35rem; font-weight: 600; font-size: .875rem; }
+    .contrast-inputs input[type="color"] {
+      width: 56px; height: 40px; border: 1px solid var(--velin-border-color, #dee2e6);
+      border-radius: .375rem; cursor: pointer; padding: 2px;
+    }
+    .contrast-inputs input[type="text"] { width: 100px; font-family: monospace; }
+    .contrast-result {
+      margin-top: 1rem; padding: 1.25rem; border-radius: .5rem;
+      border: 1px solid var(--velin-border-color, #dee2e6);
+    }
+    .contrast-preview {
+      padding: 1rem 1.5rem; border-radius: .375rem; font-size: 1.125rem;
+      font-weight: 600; text-align: center; margin-bottom: 1rem;
+    }
+    .contrast-ratio-value { font-size: 2rem; font-weight: 800; }
+    .contrast-badges { display: flex; gap: .75rem; flex-wrap: wrap; margin-top: .75rem; }
+    .contrast-badge {
+      padding: .35rem .75rem; border-radius: .375rem; font-weight: 700; font-size: .875rem;
+    }
+    .contrast-pass { background: #16a34a; color: #fff; }
+    .contrast-fail { background: #dc2626; color: #fff; }
+
+    /* Screen reader table */
+    .sr-preview-table { width: 100%; }
+    .sr-preview-table th { white-space: nowrap; }
+    .sr-preview-table code { font-size: .8rem; }
+
+    /* User preferences demo */
+    .prefs-controls { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .prefs-controls label { display: flex; align-items: center; gap: .5rem; font-weight: 600; cursor: pointer; font-size: .875rem; }
+    .prefs-demo-box {
+      padding: 1.5rem; border: 2px solid var(--velin-border-color, #dee2e6);
+      border-radius: .5rem; transition: all .3s ease;
+    }
+    .prefs-demo-box .demo-animated {
+      width: 80px; height: 80px; border-radius: .5rem;
+      background: linear-gradient(135deg, var(--velin-primary, #6366f1), #a855f7);
+      animation: prefsDemoBounce 1.5s ease-in-out infinite;
+    }
+    .prefs-demo-box .demo-transparent {
+      background: rgba(99,102,241,.15); padding: 1rem; border-radius: .375rem; margin-top: 1rem;
+    }
+    @keyframes prefsDemoBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-18px); }
+    }
+
+    /* Reduced motion simulation */
+    .sim-reduced-motion .demo-animated { animation: none !important; }
+    /* High contrast simulation */
+    .sim-high-contrast {
+      filter: contrast(1.5); border-color: #000 !important;
+    }
+    .sim-high-contrast .demo-transparent {
+      background: rgba(99,102,241,.35);
+    }
+    /* Reduced transparency simulation */
+    .sim-reduced-transparency .demo-transparent {
+      background: rgba(99,102,241,.85);
+    }
+  </style>
+</head>
+<body>
+
+  <a href="#main-content" class="velin-doc-skip">Skip to main content</a>
+
+  <!-- ============================================================
+       HEADER
+       ============================================================ -->
+  <header class="velin-doc-header">
+    <button class="velin-doc-hamburger" aria-label="Toggle sidebar" id="sidebarToggle">
+      <velin-icon name="menu" size="20"></velin-icon>
+    </button>
+    <a href="../getting-started/introduction.html" class="velin-doc-header__brand">
+      <img src="../../assets/img/velinstyle-logo.svg" alt="" width="28" height="28">
+      VelinStyle
+      <span class="velin-doc-header__version">v0.7.0</span>
+    </a>
+    <div class="velin-doc-header__search">
+      <input type="search" placeholder="Search docs…" aria-label="Search documentation" id="docSearch" autocomplete="off" data-search-index="../search-index.json">
+    </div>
+    <div class="velin-doc-header__actions">
+      <button id="themeToggle" aria-label="Toggle dark mode" title="Toggle theme">
+        <velin-icon name="moon" size="18"></velin-icon>
+      </button>
+      <a href="https://github.com/SkyliteDesign/velinstyle" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub">
+        <velin-icon name="github" size="18"></velin-icon>
+      </a>
+    </div>
+  </header>
+
+  <div class="velin-doc-overlay" id="sidebarOverlay"></div>
+
+  <!-- ============================================================
+       3-COLUMN LAYOUT
+       ============================================================ -->
+  <div class="velin-doc-wrapper">
+
+    <!-- ========================================================
+         SIDEBAR
+         ======================================================== -->
+        <nav class="velin-doc-sidebar" id="sidebar" aria-label="Documentation navigation">
+<div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Getting Started <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../getting-started/introduction.html">Introduction</a></li><li><a href="../getting-started/download.html">Download</a></li><li><a href="../getting-started/contents.html">Contents</a></li><li><a href="../getting-started/editor-setup.html">Editor setup</a></li><li><a href="../getting-started/browser-compatibility.html">Compatibility</a></li><li><a href="../getting-started/upgrading.html">Upgrading</a></li><li><a href="../getting-started/states-and-variants.html">States &amp; variants</a></li><li><a href="../getting-started/accessibility.html">Accessibility</a></li><li><a href="../getting-started/rtl.html">RTL</a></li><li><a href="../getting-started/a11y-patterns.html">A11y patterns</a></li><li><a href="../getting-started/a11y-dashboard.html" class="active">A11y Dashboard</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Customize <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../customize/overview.html">Overview</a></li><li><a href="../customize/color.html">Color</a></li><li><a href="../customize/color-modes.html">Color Modes</a></li><li><a href="../customize/css-variables.html">CSS Variables</a></li><li><a href="../customize/components.html">Components</a></li><li><a href="../customize/optimize.html">Optimize</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Layout <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../layout/breakpoints.html">Breakpoints</a></li><li><a href="../layout/containers.html">Containers</a></li><li><a href="../layout/grid.html">Grid</a></li><li><a href="../layout/patterns.html">Patterns</a></li><li><a href="../layout/columns.html">Columns</a></li><li><a href="../layout/gutters.html">Gutters</a></li><li><a href="../layout/utilities.html">Utilities</a></li><li><a href="../layout/z-index.html">Z-index</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Content <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../content/reboot.html">Reboot</a></li><li><a href="../content/typography.html">Typography</a></li><li><a href="../content/images.html">Images</a></li><li><a href="../content/tables.html">Tables</a></li><li><a href="../content/figures.html">Figures</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Forms <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../forms/overview.html">Overview</a></li><li><a href="../forms/form-control.html">Form Control</a></li><li><a href="../forms/select.html">Select</a></li><li><a href="../forms/checks-radios.html">Checks &amp; Radios</a></li><li><a href="../forms/range.html">Range</a></li><li><a href="../forms/input-group.html">Input Group</a></li><li><a href="../forms/floating-labels.html">Floating Labels</a></li><li><a href="../forms/layout.html">Layout</a></li><li><a href="../forms/validation.html">Validation</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Components <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../components/accordion.html">Accordion</a></li><li><a href="../components/alerts.html">Alerts</a></li><li><a href="../components/avatar.html">Avatar</a></li><li><a href="../components/badge.html">Badge</a></li><li><a href="../components/breadcrumb.html">Breadcrumb</a></li><li><a href="../components/buttons.html">Buttons</a></li><li><a href="../components/button-group.html">Button Group</a></li><li><a href="../components/card.html">Card</a></li><li><a href="../components/carousel.html">Carousel</a></li><li><a href="../components/chip.html">Chip</a></li><li><a href="../components/close-button.html">Close Button</a></li><li><a href="../components/collapse.html">Collapse</a></li><li><a href="../components/dialog.html">Dialog</a></li><li><a href="../components/divider.html">Divider</a></li><li><a href="../components/drawer.html">Drawer</a></li><li><a href="../components/dropdown.html">Dropdown</a></li><li><a href="../components/lightbox.html">Lightbox</a></li><li><a href="../components/list-group.html">List Group</a></li><li><a href="../components/modal.html">Modal</a></li><li><a href="../components/navbar.html">Navbar</a></li><li><a href="../components/navs-tabs.html">Navs &amp; Tabs</a></li><li><a href="../components/pagination.html">Pagination</a></li><li><a href="../components/popover.html">Popover</a></li><li><a href="../components/progress.html">Progress</a></li><li><a href="../components/progress-ring.html">Progress Ring</a></li><li><a href="../components/scrollspy.html">Scrollspy</a></li><li><a href="../components/spinners.html">Spinners</a></li><li><a href="../components/stat.html">Stat</a></li><li><a href="../components/stepper.html">Stepper</a></li><li><a href="../components/timeline.html">Timeline</a></li><li><a href="../components/toasts.html">Toasts</a></li><li><a href="../components/tooltips.html">Tooltips</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Helpers <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../helpers/clearfix.html">Clearfix</a></li><li><a href="../helpers/colored-links.html">Colored Links</a></li><li><a href="../helpers/focus-ring.html">Focus Ring</a></li><li><a href="../helpers/icon-link.html">Icon Link</a></li><li><a href="../helpers/ratios.html">Ratios</a></li><li><a href="../helpers/stacks.html">Stacks</a></li><li><a href="../helpers/stretched-link.html">Stretched Link</a></li><li><a href="../helpers/text-truncation.html">Text Truncation</a></li><li><a href="../helpers/vertical-rule.html">Vertical Rule</a></li><li><a href="../helpers/visually-hidden.html">Visually Hidden</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Utilities <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../utilities/api.html">API</a></li><li><a href="../utilities/background.html">Background</a></li><li><a href="../utilities/borders.html">Borders</a></li><li><a href="../utilities/colors.html">Colors</a></li><li><a href="../utilities/color-mix.html">Color Mix</a></li><li><a href="../utilities/display.html">Display</a></li><li><a href="../utilities/divide.html">Divide</a></li><li><a href="../utilities/flex.html">Flex</a></li><li><a href="../utilities/float.html">Float</a></li><li><a href="../utilities/filters.html">Filters</a></li><li><a href="../utilities/interactions.html">Interactions</a></li><li><a href="../utilities/object-fit.html">Object Fit</a></li><li><a href="../utilities/opacity.html">Opacity</a></li><li><a href="../utilities/overflow.html">Overflow</a></li><li><a href="../utilities/position.html">Position</a></li><li><a href="../utilities/print.html">Print</a></li><li><a href="../utilities/scroll.html">Scroll</a></li><li><a href="../utilities/shadows.html">Shadows</a></li><li><a href="../utilities/sizing.html">Sizing</a></li><li><a href="../utilities/spacing.html">Spacing</a></li><li><a href="../utilities/text.html">Text</a></li><li><a href="../utilities/transitions.html">Transitions</a></li><li><a href="../utilities/transforms.html">Transforms</a></li><li><a href="../utilities/vertical-align.html">Vertical Align</a></li><li><a href="../utilities/visibility.html">Visibility</a></li><li><a href="../utilities/z-index.html">Z-index</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Animations <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../animations/overview.html">Overview</a></li><li><a href="../animations/entrance.html">Entrance</a></li><li><a href="../animations/attention.html">Attention</a></li><li><a href="../animations/exit.html">Exit</a></li><li><a href="../animations/scroll-driven.html">Scroll-driven</a></li><li><a href="../animations/view-transitions.html">View Transitions</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Extend <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../extend/approach.html">Approach</a></li><li><a href="../extend/utility-coverage.html">Utility coverage</a></li><li><a href="../extend/icons.html">Icons</a></li><li><a href="../extend/cli.html">CLI</a></li><li><a href="../extend/security.html">Security</a></li><li><a href="../extend/repo-tools.html">Repo tools</a></li><li><a href="../extend/web-components.html">Web Components</a></li><li><a href="../extend/javascript-api.html">JavaScript API</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Guides <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../guides/index.html">Overview</a></li><li><a href="../guides/existing-project.html">Existing project</a></li><li><a href="../guides/react-vite-starter.html">Vite &amp; React</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">About <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../about/overview.html">Overview</a></li><li><a href="../about/brand.html">Brand</a></li><li><a href="../about/license.html">License</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Migration <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../migration.html">Migration Guide</a></li></ul></div>    </nav>
+
+    <!-- ========================================================
+         MAIN CONTENT
+         ======================================================== -->
+    <main class="velin-doc-main" id="main-content">
+
+      <ol class="velin-doc-breadcrumb">
+        <li><a href="../getting-started/introduction.html">Docs</a></li>
+        <li><a href="../getting-started/introduction.html">Getting Started</a></li>
+        <li>A11y Dashboard</li>
+      </ol>
+
+      <h1>Accessibility Dashboard</h1>
+      <p class="lead">
+        An interactive playground to inspect ARIA attributes, visualize keyboard navigation,
+        check contrast ratios, preview screen reader announcements, and simulate user preference media queries.
+      </p>
+
+      <!-- ================================================================
+           1. ARIA INSPECTOR
+           ================================================================ -->
+      <section class="a11y-section" id="aria-inspector">
+        <h2>ARIA Inspector</h2>
+        <p>
+          Hover over or focus any element in the left panel. The right panel displays its tag name,
+          ARIA role, all <code>aria-*</code> attributes, <code>tabindex</code>, and accessible name in real time.
+        </p>
+
+        <div class="aria-inspector-zone">
+          <div class="aria-inspector-target" id="ariaTarget">
+            <button class="btn btn-primary" aria-label="Save document" role="button">Save</button>
+            <button class="btn btn-outline-danger" aria-disabled="true" disabled>Delete</button>
+            <a href="#" role="link" aria-describedby="linkHelp">Help Link</a>
+            <span id="linkHelp" class="sr-only">Opens help documentation</span>
+            <input type="text" class="form-control" placeholder="Your name" aria-required="true" style="max-width:180px">
+            <select class="form-select" aria-label="Choose color" style="max-width:140px">
+              <option>Red</option><option>Blue</option><option>Green</option>
+            </select>
+            <div role="alert" aria-live="assertive" style="padding:.5rem .75rem;border-radius:.375rem;background:var(--velin-warning-bg-subtle,#fff3cd);font-size:.85rem;">
+              ⚠ Alert region
+            </div>
+            <nav aria-label="Pagination example">
+              <ul style="display:flex;gap:.25rem;list-style:none;padding:0;margin:0;">
+                <li><a href="#" aria-label="Page 1" aria-current="page" style="padding:.25rem .5rem;border-radius:.25rem;background:var(--velin-primary,#6366f1);color:#fff;text-decoration:none;font-size:.85rem;">1</a></li>
+                <li><a href="#" aria-label="Page 2" style="padding:.25rem .5rem;font-size:.85rem;">2</a></li>
+                <li><a href="#" aria-label="Page 3" style="padding:.25rem .5rem;font-size:.85rem;">3</a></li>
+              </ul>
+            </nav>
+          </div>
+
+          <div class="aria-inspector-panel" id="ariaPanel" aria-live="polite" aria-atomic="true">
+            <p class="aria-empty">Hover or focus an element on the left to inspect it.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           2. KEYBOARD NAVIGATION VISUALIZER
+           ================================================================ -->
+      <section class="a11y-section" id="keyboard-nav">
+        <h2>Keyboard Navigation Visualizer</h2>
+        <p>
+          Click <strong>Start Tour</strong>, then press <kbd>Tab</kbd> to step through the
+          interactive components below. Each focusable element is numbered to show the tab order.
+        </p>
+
+        <button class="btn btn-primary mb-3" id="kbdStartTour">Start Tour</button>
+        <button class="btn btn-outline-secondary mb-3" id="kbdReset" style="display:none;">Reset</button>
+        <span id="kbdStatus" class="ms-2" style="font-size:.875rem;color:var(--velin-secondary,#6c757d)"></span>
+
+        <div class="kbd-nav-container" id="kbdContainer">
+          <!-- Button -->
+          <div style="margin-bottom:1rem;">
+            <strong style="display:block;margin-bottom:.5rem;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;color:var(--velin-secondary,#6c757d);">Button</strong>
+            <button class="btn btn-primary" data-focus-step="1">Primary Action</button>
+            <button class="btn btn-outline-secondary" data-focus-step="2">Secondary</button>
+          </div>
+
+          <!-- Dropdown -->
+          <div style="margin-bottom:1rem;">
+            <strong style="display:block;margin-bottom:.5rem;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;color:var(--velin-secondary,#6c757d);">Dropdown</strong>
+            <div style="position:relative;display:inline-block;">
+              <button class="btn btn-outline-primary" data-focus-step="3" aria-haspopup="true" aria-expanded="false" id="demoDropdownBtn">
+                Options ▾
+              </button>
+              <ul id="demoDropdownMenu" role="menu" style="display:none;position:absolute;top:100%;left:0;background:var(--velin-body-bg,#fff);border:1px solid var(--velin-border-color,#dee2e6);border-radius:.375rem;padding:.25rem 0;min-width:140px;z-index:20;box-shadow:0 4px 12px rgba(0,0,0,.1);">
+                <li role="none"><a href="#" role="menuitem" data-focus-step="4" style="display:block;padding:.375rem .75rem;text-decoration:none;">Edit</a></li>
+                <li role="none"><a href="#" role="menuitem" data-focus-step="5" style="display:block;padding:.375rem .75rem;text-decoration:none;">Duplicate</a></li>
+                <li role="none"><a href="#" role="menuitem" data-focus-step="6" style="display:block;padding:.375rem .75rem;text-decoration:none;">Archive</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Tabs -->
+          <div style="margin-bottom:1rem;">
+            <strong style="display:block;margin-bottom:.5rem;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;color:var(--velin-secondary,#6c757d);">Tabs</strong>
+            <div role="tablist" aria-label="Demo tabs" style="display:flex;gap:0;border-bottom:2px solid var(--velin-border-color,#dee2e6);">
+              <button role="tab" aria-selected="true" data-focus-step="7" class="btn btn-link" style="border-bottom:2px solid var(--velin-primary,#6366f1);border-radius:0;margin-bottom:-2px;">Tab 1</button>
+              <button role="tab" aria-selected="false" data-focus-step="8" class="btn btn-link" style="border-radius:0;margin-bottom:-2px;">Tab 2</button>
+              <button role="tab" aria-selected="false" data-focus-step="9" class="btn btn-link" style="border-radius:0;margin-bottom:-2px;">Tab 3</button>
+            </div>
+          </div>
+
+          <!-- Accordion -->
+          <div style="margin-bottom:.5rem;">
+            <strong style="display:block;margin-bottom:.5rem;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;color:var(--velin-secondary,#6c757d);">Accordion</strong>
+            <div style="border:1px solid var(--velin-border-color,#dee2e6);border-radius:.375rem;overflow:hidden;">
+              <button data-focus-step="10" aria-expanded="false" style="display:block;width:100%;text-align:left;padding:.625rem .75rem;background:transparent;border:none;border-bottom:1px solid var(--velin-border-color,#dee2e6);font-weight:600;cursor:pointer;">Section A ▸</button>
+              <button data-focus-step="11" aria-expanded="false" style="display:block;width:100%;text-align:left;padding:.625rem .75rem;background:transparent;border:none;border-bottom:1px solid var(--velin-border-color,#dee2e6);font-weight:600;cursor:pointer;">Section B ▸</button>
+              <button data-focus-step="12" aria-expanded="false" style="display:block;width:100%;text-align:left;padding:.625rem .75rem;background:transparent;border:none;font-weight:600;cursor:pointer;">Section C ▸</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           3. CONTRAST CHECKER
+           ================================================================ -->
+      <section class="a11y-section" id="contrast-checker">
+        <h2>Contrast Checker</h2>
+        <p>
+          Pick a foreground and background color to calculate the WCAG contrast ratio.
+          Results show pass/fail for AA and AAA at normal and large text sizes.
+        </p>
+
+        <div class="contrast-inputs">
+          <label>
+            Foreground
+            <div style="display:flex;gap:.5rem;align-items:center;">
+              <input type="color" id="contrastFg" value="#1e293b">
+              <input type="text" class="form-control form-control-sm" id="contrastFgHex" value="#1e293b" maxlength="7">
+            </div>
+          </label>
+          <label>
+            Background
+            <div style="display:flex;gap:.5rem;align-items:center;">
+              <input type="color" id="contrastBg" value="#f8fafc">
+              <input type="text" class="form-control form-control-sm" id="contrastBgHex" value="#f8fafc" maxlength="7">
+            </div>
+          </label>
+          <button class="btn btn-outline-secondary btn-sm" id="contrastSwap" style="align-self:flex-end;" aria-label="Swap colors">⇄ Swap</button>
+        </div>
+
+        <div class="contrast-result" id="contrastResult">
+          <div class="contrast-preview" id="contrastPreview" style="color:#1e293b;background:#f8fafc;">
+            The quick brown fox jumps over the lazy dog
+          </div>
+          <div style="display:flex;align-items:baseline;gap:.75rem;flex-wrap:wrap;">
+            <span>Contrast ratio:</span>
+            <span class="contrast-ratio-value" id="contrastRatioValue">—</span>
+            <span>: 1</span>
+          </div>
+          <div class="contrast-badges" id="contrastBadges">
+            <span class="contrast-badge" id="badgeAANormal">AA Normal: —</span>
+            <span class="contrast-badge" id="badgeAALarge">AA Large: —</span>
+            <span class="contrast-badge" id="badgeAAANormal">AAA Normal: —</span>
+            <span class="contrast-badge" id="badgeAAALarge">AAA Large: —</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           4. SCREEN READER PREVIEW
+           ================================================================ -->
+      <section class="a11y-section" id="screen-reader-preview">
+        <h2>Screen Reader Preview</h2>
+        <p>
+          A reference of how VelinStyle components are announced by screen readers,
+          including their ARIA roles and expected keyboard shortcuts.
+        </p>
+
+        <div style="overflow-x:auto;">
+          <table class="table table-striped table-hover sr-preview-table">
+            <thead>
+              <tr>
+                <th scope="col">Component</th>
+                <th scope="col">ARIA Role</th>
+                <th scope="col">Announced As</th>
+                <th scope="col">Keyboard Shortcut</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>btn btn-primary</code></td>
+                <td><code>button</code></td>
+                <td>"Save, button"</td>
+                <td><kbd>Enter</kbd> / <kbd>Space</kbd></td>
+              </tr>
+              <tr>
+                <td><code>btn btn-link</code></td>
+                <td><code>link</code> (when <code>&lt;a&gt;</code>)</td>
+                <td>"Learn more, link"</td>
+                <td><kbd>Enter</kbd></td>
+              </tr>
+              <tr>
+                <td><code>form-control</code></td>
+                <td><code>textbox</code></td>
+                <td>"Email, edit text, required"</td>
+                <td>Type to input</td>
+              </tr>
+              <tr>
+                <td><code>form-select</code></td>
+                <td><code>combobox / listbox</code></td>
+                <td>"Country, combo box, collapsed"</td>
+                <td><kbd>Alt+↓</kbd> to open, <kbd>↑↓</kbd> to navigate</td>
+              </tr>
+              <tr>
+                <td><code>form-check-input</code></td>
+                <td><code>checkbox</code></td>
+                <td>"Accept terms, checkbox, not checked"</td>
+                <td><kbd>Space</kbd> to toggle</td>
+              </tr>
+              <tr>
+                <td><code>accordion-button</code></td>
+                <td><code>button</code> with <code>aria-expanded</code></td>
+                <td>"Section 1, collapsed, button"</td>
+                <td><kbd>Enter</kbd> / <kbd>Space</kbd></td>
+              </tr>
+              <tr>
+                <td><code>nav-link</code> (tab)</td>
+                <td><code>tab</code></td>
+                <td>"Settings, tab, selected, 2 of 4"</td>
+                <td><kbd>←→</kbd> between tabs, <kbd>Enter</kbd> to activate</td>
+              </tr>
+              <tr>
+                <td><code>dropdown-toggle</code></td>
+                <td><code>button</code> with <code>aria-haspopup</code></td>
+                <td>"Actions, menu button, collapsed"</td>
+                <td><kbd>Enter</kbd> / <kbd>Space</kbd> / <kbd>↓</kbd> to open</td>
+              </tr>
+              <tr>
+                <td><code>dropdown-item</code></td>
+                <td><code>menuitem</code></td>
+                <td>"Edit, menu item"</td>
+                <td><kbd>↑↓</kbd> to navigate, <kbd>Enter</kbd> to select</td>
+              </tr>
+              <tr>
+                <td><code>modal</code></td>
+                <td><code>dialog</code></td>
+                <td>"Confirm delete, dialog"</td>
+                <td><kbd>Esc</kbd> to close, <kbd>Tab</kbd> trapped inside</td>
+              </tr>
+              <tr>
+                <td><code>alert</code></td>
+                <td><code>alert</code></td>
+                <td>"Success! File saved, alert"</td>
+                <td>Announced automatically</td>
+              </tr>
+              <tr>
+                <td><code>progress</code></td>
+                <td><code>progressbar</code></td>
+                <td>"Progress, 65%"</td>
+                <td>N/A (read-only)</td>
+              </tr>
+              <tr>
+                <td><code>toast</code></td>
+                <td><code>status</code> / <code>alert</code></td>
+                <td>"Notification: item added, status"</td>
+                <td>Announced via live region</td>
+              </tr>
+              <tr>
+                <td><code>breadcrumb</code></td>
+                <td><code>navigation</code> (<code>aria-label="Breadcrumb"</code>)</td>
+                <td>"Breadcrumb, navigation"</td>
+                <td>Standard link navigation</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           5. USER PREFERENCES DEMO
+           ================================================================ -->
+      <section class="a11y-section" id="user-preferences">
+        <h2>User Preferences Demo</h2>
+        <p>
+          Toggle the switches below to simulate CSS media-query-based user preferences.
+          The demo container updates in real time to show how VelinStyle components respond.
+        </p>
+
+        <div class="prefs-controls">
+          <label>
+            <input type="checkbox" class="form-check-input" id="prefReducedMotion">
+            <code>prefers-reduced-motion</code>
+          </label>
+          <label>
+            <input type="checkbox" class="form-check-input" id="prefHighContrast">
+            <code>prefers-contrast: more</code>
+          </label>
+          <label>
+            <input type="checkbox" class="form-check-input" id="prefReducedTransparency">
+            <code>prefers-reduced-transparency</code>
+          </label>
+        </div>
+
+        <div class="prefs-demo-box" id="prefsDemoBox">
+          <div style="display:flex;gap:1.5rem;align-items:flex-start;flex-wrap:wrap;">
+            <div>
+              <p style="font-size:.8rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--velin-secondary,#6c757d);margin-bottom:.5rem;">Animation</p>
+              <div class="demo-animated"></div>
+            </div>
+            <div style="flex:1;min-width:200px;">
+              <p style="font-size:.8rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--velin-secondary,#6c757d);margin-bottom:.5rem;">Transparency</p>
+              <div class="demo-transparent">
+                <p style="margin:0;">This panel uses a semi-transparent background. Enabling <em>reduced transparency</em> increases opacity for readability.</p>
+              </div>
+              <div style="margin-top:1rem;">
+                <p style="font-size:.8rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--velin-secondary,#6c757d);margin-bottom:.5rem;">Components</p>
+                <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+                  <button class="btn btn-primary btn-sm">Button</button>
+                  <button class="btn btn-outline-secondary btn-sm">Outline</button>
+                  <span class="badge bg-primary">Badge</span>
+                  <span class="badge bg-warning text-dark">Warning</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="prefsStatus" role="status" aria-live="polite" style="margin-top:1rem;font-size:.85rem;color:var(--velin-secondary,#6c757d);min-height:1.25em;"></div>
+        </div>
+      </section>
+
+      <!-- ---- Prev / Next ---- -->
+      <nav class="velin-doc-prevnext" aria-label="Page navigation">
+        <a href="../getting-started/accessibility.html" class="prev">
+          <span class="velin-doc-prevnext__label">Previous</span>
+          <span class="velin-doc-prevnext__title">Accessibility</span>
+        </a>
+        <a href="../getting-started/rtl.html" class="next">
+          <span class="velin-doc-prevnext__label">Next</span>
+          <span class="velin-doc-prevnext__title">RTL</span>
+        </a>
+      </nav>
+
+    </main>
+
+    <!-- ========================================================
+         RIGHT TOC
+         ======================================================== -->
+    <aside class="velin-doc-toc" aria-label="On this page">
+      <div class="velin-doc-toc__title">On this page</div>
+      <ul class="velin-doc-toc__list">
+        <li><a href="#aria-inspector">ARIA Inspector</a></li>
+        <li><a href="#keyboard-nav">Keyboard Navigation</a></li>
+        <li><a href="#contrast-checker">Contrast Checker</a></li>
+        <li><a href="#screen-reader-preview">Screen Reader Preview</a></li>
+        <li><a href="#user-preferences">User Preferences</a></li>
+      </ul>
+    </aside>
+
+  </div><!-- /.velin-doc-wrapper -->
+
+  <!-- ============================================================
+       SCRIPTS
+       ============================================================ -->
+  <script src="../../dist/velinstyle-components.iife.js"></script>
+  <script src="../doc-search.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-markup.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-css.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-javascript.min.js"></script>
+
+  <script>
+    /* ---- Sidebar toggle (mobile) ---- */
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    const hamburger = document.getElementById('sidebarToggle');
+
+    function openSidebar()  { sidebar.classList.add('open');  overlay.classList.add('show'); }
+    function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('show'); }
+
+    hamburger.addEventListener('click', () => {
+      sidebar.classList.contains('open') ? closeSidebar() : openSidebar();
+    });
+    overlay.addEventListener('click', closeSidebar);
+
+    /* ---- Category collapse ---- */
+    document.querySelectorAll('.velin-doc-sidebar__category-header').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const cat = btn.closest('.velin-doc-sidebar__category');
+        cat.classList.toggle('collapsed');
+        btn.setAttribute('aria-expanded', !cat.classList.contains('collapsed'));
+      });
+    });
+
+    /* ---- Theme toggle ---- */
+    const themeToggle = document.getElementById('themeToggle');
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-velin-theme', theme);
+      localStorage.setItem('velin-theme', theme);
+    }
+    themeToggle.addEventListener('click', () => {
+      const next = document.documentElement.getAttribute('data-velin-theme') === 'dark' ? 'light' : 'dark';
+      applyTheme(next);
+    });
+    const saved = localStorage.getItem('velin-theme');
+    if (saved) applyTheme(saved);
+    else if (window.matchMedia('(prefers-color-scheme: dark)').matches) applyTheme('dark');
+
+    /* ---- Active TOC highlight on scroll ---- */
+    const tocLinks = document.querySelectorAll('.velin-doc-toc__list a');
+    const headings = Array.from(tocLinks).map(a => document.querySelector(a.getAttribute('href')));
+
+    function updateToc() {
+      const scrollY = window.scrollY + 100;
+      let current = null;
+      headings.forEach(h => { if (h && h.offsetTop <= scrollY) current = h; });
+      tocLinks.forEach(a => {
+        a.classList.toggle('active', current && a.getAttribute('href') === '#' + current.id);
+      });
+    }
+    window.addEventListener('scroll', updateToc, { passive: true });
+    updateToc();
+
+    /* ================================================================
+       1. ARIA INSPECTOR
+       ================================================================ */
+    (function() {
+      const target = document.getElementById('ariaTarget');
+      const panel  = document.getElementById('ariaPanel');
+
+      function inspect(el) {
+        if (!el || el === target) {
+          panel.innerHTML = '<p class="aria-empty">Hover or focus an element on the left to inspect it.</p>';
+          return;
+        }
+        const attrs = [];
+        attrs.push({ key: 'Tag', val: el.tagName.toLowerCase() });
+
+        const role = el.getAttribute('role') || el.closest('[role]')?.getAttribute('role');
+        attrs.push({ key: 'Role', val: role || '(implicit)' });
+
+        const name = el.getAttribute('aria-label')
+                  || el.getAttribute('aria-labelledby')
+                  || el.getAttribute('title')
+                  || el.textContent?.trim().slice(0, 60);
+        attrs.push({ key: 'Accessible name', val: name || '(none)' });
+
+        for (const a of el.attributes) {
+          if (a.name.startsWith('aria-')) {
+            attrs.push({ key: a.name, val: a.value });
+          }
+        }
+
+        const ti = el.getAttribute('tabindex');
+        attrs.push({ key: 'tabindex', val: ti !== null ? ti : '(default)' });
+        attrs.push({ key: 'Focusable', val: el.tabIndex >= 0 ? 'yes' : 'no' });
+        attrs.push({ key: 'Disabled', val: el.disabled ? 'yes' : 'no' });
+
+        panel.innerHTML = attrs.map(a =>
+          `<div class="aria-row"><span class="aria-key">${a.key}</span><span class="aria-val">${a.val}</span></div>`
+        ).join('');
+      }
+
+      target.addEventListener('mouseover', e => inspect(e.target));
+      target.addEventListener('focusin',   e => inspect(e.target));
+      target.addEventListener('mouseleave', () => inspect(null));
+    })();
+
+    /* ================================================================
+       2. KEYBOARD NAVIGATION VISUALIZER
+       ================================================================ */
+    (function() {
+      const container  = document.getElementById('kbdContainer');
+      const startBtn   = document.getElementById('kbdStartTour');
+      const resetBtn   = document.getElementById('kbdReset');
+      const statusEl   = document.getElementById('kbdStatus');
+      const steps      = container.querySelectorAll('[data-focus-step]');
+      const badges     = [];
+      let tourActive   = false;
+      let currentStep  = 0;
+
+      steps.forEach((el, i) => {
+        const badge = document.createElement('div');
+        badge.className = 'focus-step-badge';
+        badge.textContent = i + 1;
+        container.appendChild(badge);
+        badges.push(badge);
+      });
+
+      function positionBadges() {
+        steps.forEach((el, i) => {
+          const rect = el.getBoundingClientRect();
+          const containerRect = container.getBoundingClientRect();
+          badges[i].style.left = (rect.left - containerRect.left + rect.width / 2) + 'px';
+          badges[i].style.top  = (rect.top  - containerRect.top) + 'px';
+        });
+      }
+
+      function showBadges() {
+        positionBadges();
+        badges.forEach(b => b.classList.add('visible'));
+      }
+      function hideBadges() {
+        badges.forEach(b => b.classList.remove('visible'));
+      }
+      function clearHighlights() {
+        steps.forEach(el => el.classList.remove('is-current-step'));
+      }
+
+      function updateStatus() {
+        if (!tourActive) { statusEl.textContent = ''; return; }
+        statusEl.textContent = currentStep === 0
+          ? 'Press Tab to begin stepping through elements.'
+          : `Step ${currentStep} of ${steps.length}`;
+      }
+
+      startBtn.addEventListener('click', () => {
+        tourActive = true;
+        currentStep = 0;
+        startBtn.style.display = 'none';
+        resetBtn.style.display = '';
+        const menu = document.getElementById('demoDropdownMenu');
+        menu.style.display = 'block';
+        document.getElementById('demoDropdownBtn').setAttribute('aria-expanded', 'true');
+        showBadges();
+        clearHighlights();
+        updateStatus();
+        steps[0].focus();
+      });
+
+      resetBtn.addEventListener('click', () => {
+        tourActive = false;
+        currentStep = 0;
+        startBtn.style.display = '';
+        resetBtn.style.display = 'none';
+        const menu = document.getElementById('demoDropdownMenu');
+        menu.style.display = 'none';
+        document.getElementById('demoDropdownBtn').setAttribute('aria-expanded', 'false');
+        hideBadges();
+        clearHighlights();
+        updateStatus();
+      });
+
+      container.addEventListener('focusin', e => {
+        if (!tourActive) return;
+        const step = e.target.getAttribute('data-focus-step');
+        if (step) {
+          currentStep = parseInt(step, 10);
+          clearHighlights();
+          e.target.classList.add('is-current-step');
+          updateStatus();
+        }
+      });
+
+      window.addEventListener('resize', () => { if (tourActive) positionBadges(); });
+    })();
+
+    /* ================================================================
+       3. CONTRAST CHECKER
+       ================================================================ */
+    (function() {
+      const fgPicker  = document.getElementById('contrastFg');
+      const bgPicker  = document.getElementById('contrastBg');
+      const fgHex     = document.getElementById('contrastFgHex');
+      const bgHex     = document.getElementById('contrastBgHex');
+      const preview   = document.getElementById('contrastPreview');
+      const ratioEl   = document.getElementById('contrastRatioValue');
+      const swapBtn   = document.getElementById('contrastSwap');
+      const badgeAAN  = document.getElementById('badgeAANormal');
+      const badgeAAL  = document.getElementById('badgeAALarge');
+      const badgeAAAN = document.getElementById('badgeAAANormal');
+      const badgeAAAL = document.getElementById('badgeAAALarge');
+
+      function hexToSrgb(hex) {
+        hex = hex.replace('#', '');
+        if (hex.length === 3) hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+        return [
+          parseInt(hex.substring(0,2), 16) / 255,
+          parseInt(hex.substring(2,4), 16) / 255,
+          parseInt(hex.substring(4,6), 16) / 255
+        ];
+      }
+
+      function srgbToLinear(c) {
+        return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+      }
+
+      function relativeLuminance(hex) {
+        const [r, g, b] = hexToSrgb(hex).map(srgbToLinear);
+        return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+      }
+
+      function contrastRatio(hex1, hex2) {
+        const l1 = relativeLuminance(hex1);
+        const l2 = relativeLuminance(hex2);
+        const lighter = Math.max(l1, l2);
+        const darker  = Math.min(l1, l2);
+        return (lighter + 0.05) / (darker + 0.05);
+      }
+
+      function setBadge(el, label, pass) {
+        el.textContent = label + (pass ? ' Pass' : ' Fail');
+        el.className = 'contrast-badge ' + (pass ? 'contrast-pass' : 'contrast-fail');
+      }
+
+      function update() {
+        const fg = fgPicker.value;
+        const bg = bgPicker.value;
+        fgHex.value = fg;
+        bgHex.value = bg;
+        preview.style.color = fg;
+        preview.style.background = bg;
+        const ratio = contrastRatio(fg, bg);
+        ratioEl.textContent = ratio.toFixed(2);
+        setBadge(badgeAAN,  'AA Normal:', ratio >= 4.5);
+        setBadge(badgeAAL,  'AA Large:',  ratio >= 3);
+        setBadge(badgeAAAN, 'AAA Normal:', ratio >= 7);
+        setBadge(badgeAAAL, 'AAA Large:', ratio >= 4.5);
+      }
+
+      function syncFromHex(hexInput, picker) {
+        let v = hexInput.value.trim();
+        if (/^#?[0-9a-f]{3,6}$/i.test(v)) {
+          if (!v.startsWith('#')) v = '#' + v;
+          if (v.length === 4) v = '#' + v[1]+v[1]+v[2]+v[2]+v[3]+v[3];
+          picker.value = v;
+          update();
+        }
+      }
+
+      fgPicker.addEventListener('input', update);
+      bgPicker.addEventListener('input', update);
+      fgHex.addEventListener('input', () => syncFromHex(fgHex, fgPicker));
+      bgHex.addEventListener('input', () => syncFromHex(bgHex, bgPicker));
+      swapBtn.addEventListener('click', () => {
+        const tmp = fgPicker.value;
+        fgPicker.value = bgPicker.value;
+        bgPicker.value = tmp;
+        update();
+      });
+
+      update();
+    })();
+
+    /* ================================================================
+       5. USER PREFERENCES DEMO
+       ================================================================ */
+    (function() {
+      const box    = document.getElementById('prefsDemoBox');
+      const status = document.getElementById('prefsStatus');
+
+      const prefs = [
+        { id: 'prefReducedMotion',       cls: 'sim-reduced-motion',       label: 'prefers-reduced-motion' },
+        { id: 'prefHighContrast',        cls: 'sim-high-contrast',        label: 'prefers-contrast: more' },
+        { id: 'prefReducedTransparency', cls: 'sim-reduced-transparency', label: 'prefers-reduced-transparency' },
+      ];
+
+      prefs.forEach(p => {
+        const cb = document.getElementById(p.id);
+        cb.addEventListener('change', () => {
+          box.classList.toggle(p.cls, cb.checked);
+          const active = prefs.filter(x => document.getElementById(x.id).checked).map(x => x.label);
+          status.textContent = active.length
+            ? 'Active: ' + active.join(', ')
+            : 'No preferences simulated.';
+        });
+      });
+    })();
+  </script>
+
+<!-- Theme Picker Widget -->
+<div class="velin-theme-picker" id="themePicker">
+  <div class="velin-theme-picker__panel" id="themePanel">
+    <p>Theme wählen</p>
+    <div class="velin-theme-picker__grid">
+      <button class="velin-theme-picker__btn active" data-set-theme="">Default</button>
+      <button class="velin-theme-picker__btn" data-set-theme="sharp">Sharp</button>
+      <button class="velin-theme-picker__btn" data-set-theme="soft">Soft</button>
+      <button class="velin-theme-picker__btn" data-set-theme="brutalist">Brutalist</button>
+      <button class="velin-theme-picker__btn" data-set-theme="neon">Neon</button>
+      <button class="velin-theme-picker__btn" data-set-theme="earth">Earth</button>
+      <button class="velin-theme-picker__btn" data-set-theme="ocean">Ocean</button>
+      <button class="velin-theme-picker__btn" data-set-theme="sunset">Sunset</button>
+      <button class="velin-theme-picker__btn" data-set-theme="nordic">Nordic</button>
+      <button class="velin-theme-picker__btn" data-set-theme="retro">Retro</button>
+      <button class="velin-theme-picker__btn" data-set-theme="corporate">Corporate</button>
+      <button class="velin-theme-picker__btn" data-set-theme="pastel">Pastel</button>
+      <button class="velin-theme-picker__btn" data-set-theme="midnight">Midnight</button>
+      <button class="velin-theme-picker__btn" data-set-theme="forest">Forest</button>
+      <button class="velin-theme-picker__btn" data-set-theme="dark">Dark</button>
+    </div>
+  </div>
+  <button class="velin-theme-picker__toggle" id="themePickerToggle" aria-label="Theme wählen">
+    &#127912; Theme
+  </button>
+</div>
+<script>
+(function(){
+  const themes=['sharp','soft','brutalist','neon','earth','ocean','sunset','nordic','retro','corporate','pastel','midnight','forest'];
+  const base='../../dist/themes/';
+  themes.forEach(t=>{const l=document.createElement('link');l.rel='stylesheet';l.href=base+t+'.min.css';document.head.appendChild(l);});
+  const panel=document.getElementById('themePanel');
+  const toggle=document.getElementById('themePickerToggle');
+  toggle.addEventListener('click',()=>panel.classList.toggle('open'));
+  document.addEventListener('click',e=>{if(!document.getElementById('themePicker').contains(e.target))panel.classList.remove('open');});
+  panel.querySelectorAll('[data-set-theme]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const t=btn.dataset.setTheme;
+      if(t){document.documentElement.setAttribute('data-velin-theme',t);localStorage.setItem('velin-doc-theme',t);}
+      else{document.documentElement.removeAttribute('data-velin-theme');localStorage.removeItem('velin-doc-theme');}
+      panel.querySelectorAll('.velin-theme-picker__btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+  const saved=localStorage.getItem('velin-doc-theme');
+  if(saved){document.documentElement.setAttribute('data-velin-theme',saved);const a=panel.querySelector('[data-set-theme="'+saved+'"]');if(a){panel.querySelectorAll('.velin-theme-picker__btn').forEach(b=>b.classList.remove('active'));a.classList.add('active');}}
+})();
+</script>
+</body>
+</html>

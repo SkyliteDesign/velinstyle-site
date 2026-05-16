@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" data-velin-theme="light">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Opacity · VelinStyle</title>
+  <meta name="description" content="Opacity utility classes for controlling element transparency.">
+  <link rel="stylesheet" href="../../dist/velinstyle.min.css">
+  <link rel="stylesheet" href="../docs.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.min.css">
+  <link rel="icon" href="../../favicon.ico" type="image/x-icon">
+  <link rel="icon" href="../../assets/img/velinstyle-logo.svg" type="image/svg+xml">
+</head>
+<body>
+  <a href="#main-content" class="velin-doc-skip">Skip to main content</a>
+  <header class="velin-doc-header"><button class="velin-doc-hamburger" aria-label="Toggle sidebar" id="sidebarToggle"><velin-icon name="menu" size="20"></velin-icon></button><a href="../getting-started/introduction.html" class="velin-doc-header__brand"><img src="../../assets/img/velinstyle-logo.svg" alt="" width="28" height="28"> VelinStyle <span class="velin-doc-header__version">v0.7.0</span></a><div class="velin-doc-header__search"><input type="search" placeholder="Search docs…" aria-label="Search documentation" id="docSearch" autocomplete="off" data-search-index="../search-index.json"></div><div class="velin-doc-header__actions">
+      <a href="../../index.html" aria-label="Home" title="Home" style="display:inline-flex;align-items:center;gap:4px;font-weight:500;text-decoration:none;color:inherit">&#8962; Home</a>
+      <button id="themeToggle" aria-label="Toggle dark mode" title="Toggle theme"><velin-icon name="moon" size="18"></velin-icon></button><a href="https://github.com/SkyliteDesign/velinstyle" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub"><velin-icon name="github" size="18"></velin-icon></a></div></header>
+  <div class="velin-doc-overlay" id="sidebarOverlay"></div>
+  <div class="velin-doc-wrapper">
+        <nav class="velin-doc-sidebar" id="sidebar" aria-label="Documentation navigation">
+<div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Getting Started <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../getting-started/introduction.html">Introduction</a></li><li><a href="../getting-started/download.html">Download</a></li><li><a href="../getting-started/contents.html">Contents</a></li><li><a href="../getting-started/editor-setup.html">Editor setup</a></li><li><a href="../getting-started/browser-compatibility.html">Compatibility</a></li><li><a href="../getting-started/upgrading.html">Upgrading</a></li><li><a href="../getting-started/states-and-variants.html">States &amp; variants</a></li><li><a href="../getting-started/accessibility.html">Accessibility</a></li><li><a href="../getting-started/rtl.html">RTL</a></li><li><a href="../getting-started/a11y-patterns.html">A11y patterns</a></li><li><a href="../getting-started/a11y-dashboard.html">A11y Dashboard</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Customize <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../customize/overview.html">Overview</a></li><li><a href="../customize/color.html">Color</a></li><li><a href="../customize/color-modes.html">Color Modes</a></li><li><a href="../customize/css-variables.html">CSS Variables</a></li><li><a href="../customize/components.html">Components</a></li><li><a href="../customize/optimize.html">Optimize</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Layout <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../layout/breakpoints.html">Breakpoints</a></li><li><a href="../layout/containers.html">Containers</a></li><li><a href="../layout/grid.html">Grid</a></li><li><a href="../layout/patterns.html">Patterns</a></li><li><a href="../layout/columns.html">Columns</a></li><li><a href="../layout/gutters.html">Gutters</a></li><li><a href="../layout/utilities.html">Utilities</a></li><li><a href="../layout/z-index.html">Z-index</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Content <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../content/reboot.html">Reboot</a></li><li><a href="../content/typography.html">Typography</a></li><li><a href="../content/images.html">Images</a></li><li><a href="../content/tables.html">Tables</a></li><li><a href="../content/figures.html">Figures</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Forms <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../forms/overview.html">Overview</a></li><li><a href="../forms/form-control.html">Form Control</a></li><li><a href="../forms/select.html">Select</a></li><li><a href="../forms/checks-radios.html">Checks &amp; Radios</a></li><li><a href="../forms/range.html">Range</a></li><li><a href="../forms/input-group.html">Input Group</a></li><li><a href="../forms/floating-labels.html">Floating Labels</a></li><li><a href="../forms/layout.html">Layout</a></li><li><a href="../forms/validation.html">Validation</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Components <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../components/accordion.html">Accordion</a></li><li><a href="../components/alerts.html">Alerts</a></li><li><a href="../components/avatar.html">Avatar</a></li><li><a href="../components/badge.html">Badge</a></li><li><a href="../components/breadcrumb.html">Breadcrumb</a></li><li><a href="../components/buttons.html">Buttons</a></li><li><a href="../components/button-group.html">Button Group</a></li><li><a href="../components/card.html">Card</a></li><li><a href="../components/carousel.html">Carousel</a></li><li><a href="../components/chip.html">Chip</a></li><li><a href="../components/close-button.html">Close Button</a></li><li><a href="../components/collapse.html">Collapse</a></li><li><a href="../components/dialog.html">Dialog</a></li><li><a href="../components/divider.html">Divider</a></li><li><a href="../components/drawer.html">Drawer</a></li><li><a href="../components/dropdown.html">Dropdown</a></li><li><a href="../components/lightbox.html">Lightbox</a></li><li><a href="../components/list-group.html">List Group</a></li><li><a href="../components/modal.html">Modal</a></li><li><a href="../components/navbar.html">Navbar</a></li><li><a href="../components/navs-tabs.html">Navs &amp; Tabs</a></li><li><a href="../components/pagination.html">Pagination</a></li><li><a href="../components/popover.html">Popover</a></li><li><a href="../components/progress.html">Progress</a></li><li><a href="../components/progress-ring.html">Progress Ring</a></li><li><a href="../components/scrollspy.html">Scrollspy</a></li><li><a href="../components/spinners.html">Spinners</a></li><li><a href="../components/stat.html">Stat</a></li><li><a href="../components/stepper.html">Stepper</a></li><li><a href="../components/timeline.html">Timeline</a></li><li><a href="../components/toasts.html">Toasts</a></li><li><a href="../components/tooltips.html">Tooltips</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Helpers <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../helpers/clearfix.html">Clearfix</a></li><li><a href="../helpers/colored-links.html">Colored Links</a></li><li><a href="../helpers/focus-ring.html">Focus Ring</a></li><li><a href="../helpers/icon-link.html">Icon Link</a></li><li><a href="../helpers/ratios.html">Ratios</a></li><li><a href="../helpers/stacks.html">Stacks</a></li><li><a href="../helpers/stretched-link.html">Stretched Link</a></li><li><a href="../helpers/text-truncation.html">Text Truncation</a></li><li><a href="../helpers/vertical-rule.html">Vertical Rule</a></li><li><a href="../helpers/visually-hidden.html">Visually Hidden</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Utilities <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../utilities/api.html">API</a></li><li><a href="../utilities/background.html">Background</a></li><li><a href="../utilities/borders.html">Borders</a></li><li><a href="../utilities/colors.html">Colors</a></li><li><a href="../utilities/color-mix.html">Color Mix</a></li><li><a href="../utilities/display.html">Display</a></li><li><a href="../utilities/divide.html">Divide</a></li><li><a href="../utilities/flex.html">Flex</a></li><li><a href="../utilities/float.html">Float</a></li><li><a href="../utilities/filters.html">Filters</a></li><li><a href="../utilities/interactions.html">Interactions</a></li><li><a href="../utilities/object-fit.html">Object Fit</a></li><li><a href="../utilities/opacity.html" class="active">Opacity</a></li><li><a href="../utilities/overflow.html">Overflow</a></li><li><a href="../utilities/position.html">Position</a></li><li><a href="../utilities/print.html">Print</a></li><li><a href="../utilities/scroll.html">Scroll</a></li><li><a href="../utilities/shadows.html">Shadows</a></li><li><a href="../utilities/sizing.html">Sizing</a></li><li><a href="../utilities/spacing.html">Spacing</a></li><li><a href="../utilities/text.html">Text</a></li><li><a href="../utilities/transitions.html">Transitions</a></li><li><a href="../utilities/transforms.html">Transforms</a></li><li><a href="../utilities/vertical-align.html">Vertical Align</a></li><li><a href="../utilities/visibility.html">Visibility</a></li><li><a href="../utilities/z-index.html">Z-index</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Animations <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../animations/overview.html">Overview</a></li><li><a href="../animations/entrance.html">Entrance</a></li><li><a href="../animations/attention.html">Attention</a></li><li><a href="../animations/exit.html">Exit</a></li><li><a href="../animations/scroll-driven.html">Scroll-driven</a></li><li><a href="../animations/view-transitions.html">View Transitions</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Extend <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../extend/approach.html">Approach</a></li><li><a href="../extend/utility-coverage.html">Utility coverage</a></li><li><a href="../extend/icons.html">Icons</a></li><li><a href="../extend/cli.html">CLI</a></li><li><a href="../extend/security.html">Security</a></li><li><a href="../extend/repo-tools.html">Repo tools</a></li><li><a href="../extend/web-components.html">Web Components</a></li><li><a href="../extend/javascript-api.html">JavaScript API</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Guides <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../guides/index.html">Overview</a></li><li><a href="../guides/existing-project.html">Existing project</a></li><li><a href="../guides/react-vite-starter.html">Vite &amp; React</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">About <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../about/overview.html">Overview</a></li><li><a href="../about/brand.html">Brand</a></li><li><a href="../about/license.html">License</a></li></ul></div><div class="velin-doc-sidebar__category"><button class="velin-doc-sidebar__category-header" aria-expanded="true">Migration <span class="chevron">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../migration.html">Migration Guide</a></li></ul></div>    </nav>
+
+    <main class="velin-doc-main" id="main-content">
+      <ol class="velin-doc-breadcrumb"><li><a href="../getting-started/introduction.html">Docs</a></li><li><a href="../utilities/api.html">Utilities</a></li><li>Opacity</li></ol>
+      <h1>Opacity</h1>
+      <p class="lead">Set the opacity of an element using <code>.velin-opacity-*</code> utilities.</p>
+
+      <h2 id="classes">Available Classes</h2>
+      <table class="velin-table">
+        <thead><tr><th>Class</th><th>CSS</th></tr></thead>
+        <tbody>
+          <tr><td><code>.velin-opacity-0</code></td><td><code>opacity: 0</code></td></tr>
+          <tr><td><code>.velin-opacity-25</code></td><td><code>opacity: 0.25</code></td></tr>
+          <tr><td><code>.velin-opacity-50</code></td><td><code>opacity: 0.5</code></td></tr>
+          <tr><td><code>.velin-opacity-75</code></td><td><code>opacity: 0.75</code></td></tr>
+          <tr><td><code>.velin-opacity-100</code></td><td><code>opacity: 1</code></td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="example">Example</h2>
+      <div class="velin-doc-example">
+        <div class="velin-doc-example__tabs"><button class="velin-doc-example__tab active" data-tab="preview">Preview</button><button class="velin-doc-example__tab" data-tab="code">HTML</button></div>
+        <div class="velin-doc-example__panel active" data-panel="preview"><div class="velin-doc-example__preview">
+          <div class="velin-d-flex velin-gap-3">
+            <div class="velin-bg-primary velin-text-white velin-p-3 velin-rounded velin-opacity-100">100%</div>
+            <div class="velin-bg-primary velin-text-white velin-p-3 velin-rounded velin-opacity-75">75%</div>
+            <div class="velin-bg-primary velin-text-white velin-p-3 velin-rounded velin-opacity-50">50%</div>
+            <div class="velin-bg-primary velin-text-white velin-p-3 velin-rounded velin-opacity-25">25%</div>
+            <div class="velin-bg-primary velin-text-white velin-p-3 velin-rounded velin-opacity-0">0%</div>
+          </div>
+        </div></div>
+        <div class="velin-doc-example__panel" data-panel="code"><div class="velin-doc-example__code"><button class="velin-doc-copy-btn" aria-label="Copy code"><velin-icon name="copy" size="14"></velin-icon> Copy</button><pre><code class="language-html">&lt;div class="velin-opacity-100"&gt;100%&lt;/div&gt;
+&lt;div class="velin-opacity-75"&gt;75%&lt;/div&gt;
+&lt;div class="velin-opacity-50"&gt;50%&lt;/div&gt;
+&lt;div class="velin-opacity-25"&gt;25%&lt;/div&gt;
+&lt;div class="velin-opacity-0"&gt;0%&lt;/div&gt;</code></pre></div></div>
+      </div>
+
+      <nav class="velin-doc-prevnext" aria-label="Page navigation">
+        <a href="../utilities/object-fit.html" class="prev"><span class="velin-doc-prevnext__label">Previous</span><span class="velin-doc-prevnext__title">Object Fit</span></a>
+        <a href="../utilities/overflow.html" class="next"><span class="velin-doc-prevnext__label">Next</span><span class="velin-doc-prevnext__title">Overflow</span></a>
+      </nav>
+    </main>
+    <aside class="velin-doc-toc" aria-label="On this page"><div class="velin-doc-toc__title">On this page</div><ul class="velin-doc-toc__list"><li><a href="#classes">Available Classes</a></li><li><a href="#example">Example</a></li></ul></aside>
+  </div>
+  <script src="../../dist/velinstyle-components.iife.js"></script><script src="../doc-search.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script><script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-markup.min.js"></script><script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-css.min.js"></script><script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-javascript.min.js"></script>
+  <script>const sidebar=document.getElementById('sidebar'),overlay=document.getElementById('sidebarOverlay'),hamburger=document.getElementById('sidebarToggle');function openSidebar(){sidebar.classList.add('open');overlay.classList.add('show')}function closeSidebar(){sidebar.classList.remove('open');overlay.classList.remove('show')}hamburger.addEventListener('click',()=>{sidebar.classList.contains('open')?closeSidebar():openSidebar()});overlay.addEventListener('click',closeSidebar);document.querySelectorAll('.velin-doc-sidebar__category-header').forEach(b=>{b.addEventListener('click',()=>{const c=b.closest('.velin-doc-sidebar__category');c.classList.toggle('collapsed');b.setAttribute('aria-expanded',!c.classList.contains('collapsed'))})});const themeToggle=document.getElementById('themeToggle');function applyTheme(t){document.documentElement.setAttribute('data-velin-theme',t);localStorage.setItem('velin-theme',t)}themeToggle.addEventListener('click',()=>{applyTheme(document.documentElement.getAttribute('data-velin-theme')==='dark'?'light':'dark')});const saved=localStorage.getItem('velin-theme');if(saved)applyTheme(saved);else if(window.matchMedia('(prefers-color-scheme:dark)').matches)applyTheme('dark');document.querySelectorAll('.velin-doc-example').forEach(ex=>{const tabs=ex.querySelectorAll('.velin-doc-example__tab'),panels=ex.querySelectorAll('.velin-doc-example__panel');tabs.forEach(tab=>{tab.addEventListener('click',()=>{tabs.forEach(t=>t.classList.remove('active'));panels.forEach(p=>p.classList.remove('active'));tab.classList.add('active');ex.querySelector(`[data-panel="${tab.getAttribute('data-tab')}"]`).classList.add('active')})})});document.querySelectorAll('.velin-doc-copy-btn').forEach(btn=>{btn.addEventListener('click',()=>{const code=btn.closest('.velin-doc-example__code').querySelector('code');navigator.clipboard.writeText(code.textContent).then(()=>{btn.classList.add('copied');btn.innerHTML='<velin-icon name="check" size="14"></velin-icon> Copied!';setTimeout(()=>{btn.classList.remove('copied');btn.innerHTML='<velin-icon name="copy" size="14"></velin-icon> Copy'},2000)})})});const tocLinks=document.querySelectorAll('.velin-doc-toc__list a'),headings=Array.from(tocLinks).map(a=>document.querySelector(a.getAttribute('href')));function updateToc(){const s=window.scrollY+100;let c=null;headings.forEach(h=>{if(h&&h.offsetTop<=s)c=h});tocLinks.forEach(a=>{a.classList.toggle('active',c&&a.getAttribute('href')==='#'+c.id)})}window.addEventListener('scroll',updateToc,{passive:true});updateToc();</script>
+<footer style="text-align:center;padding:2rem 1rem;border-top:1px solid var(--velin-color-border,#e5e5e5);margin-top:3rem;color:var(--velin-color-text-muted,#888);font-size:0.875rem;">
+  <p>&copy; 2026 VelinStyle &middot; <a href="https://github.com/SkyliteDesign/velinstyle" style="color:inherit">GitHub</a> &middot; <a href="https://www.npmjs.com/package/@birdapi/velinstyle" style="color:inherit">npm</a> &middot; MIT License</p>
+</footer>
+<!-- Theme Picker Widget -->
+<div class="velin-theme-picker" id="themePicker">
+  <div class="velin-theme-picker__panel" id="themePanel">
+    <p>Theme wählen</p>
+    <div class="velin-theme-picker__grid">
+      <button class="velin-theme-picker__btn active" data-set-theme="">Default</button>
+      <button class="velin-theme-picker__btn" data-set-theme="sharp">Sharp</button>
+      <button class="velin-theme-picker__btn" data-set-theme="soft">Soft</button>
+      <button class="velin-theme-picker__btn" data-set-theme="brutalist">Brutalist</button>
+      <button class="velin-theme-picker__btn" data-set-theme="neon">Neon</button>
+      <button class="velin-theme-picker__btn" data-set-theme="earth">Earth</button>
+      <button class="velin-theme-picker__btn" data-set-theme="ocean">Ocean</button>
+      <button class="velin-theme-picker__btn" data-set-theme="sunset">Sunset</button>
+      <button class="velin-theme-picker__btn" data-set-theme="nordic">Nordic</button>
+      <button class="velin-theme-picker__btn" data-set-theme="retro">Retro</button>
+      <button class="velin-theme-picker__btn" data-set-theme="corporate">Corporate</button>
+      <button class="velin-theme-picker__btn" data-set-theme="pastel">Pastel</button>
+      <button class="velin-theme-picker__btn" data-set-theme="midnight">Midnight</button>
+      <button class="velin-theme-picker__btn" data-set-theme="forest">Forest</button>
+      <button class="velin-theme-picker__btn" data-set-theme="dark">Dark</button>
+    </div>
+  </div>
+  <button class="velin-theme-picker__toggle" id="themePickerToggle" aria-label="Theme wählen">
+    &#127912; Theme
+  </button>
+</div>
+<script>
+(function(){
+  const themes=['sharp','soft','brutalist','neon','earth','ocean','sunset','nordic','retro','corporate','pastel','midnight','forest'];
+  const base='../../dist/themes/';
+  themes.forEach(t=>{const l=document.createElement('link');l.rel='stylesheet';l.href=base+t+'.min.css';document.head.appendChild(l);});
+  const panel=document.getElementById('themePanel');
+  const toggle=document.getElementById('themePickerToggle');
+  toggle.addEventListener('click',()=>panel.classList.toggle('open'));
+  document.addEventListener('click',e=>{if(!document.getElementById('themePicker').contains(e.target))panel.classList.remove('open');});
+  panel.querySelectorAll('[data-set-theme]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const t=btn.dataset.setTheme;
+      if(t){document.documentElement.setAttribute('data-velin-theme',t);localStorage.setItem('velin-doc-theme',t);}
+      else{document.documentElement.removeAttribute('data-velin-theme');localStorage.removeItem('velin-doc-theme');}
+      panel.querySelectorAll('.velin-theme-picker__btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+  const saved=localStorage.getItem('velin-doc-theme');
+  if(saved){document.documentElement.setAttribute('data-velin-theme',saved);const a=panel.querySelector('[data-set-theme="'+saved+'"]');if(a){panel.querySelectorAll('.velin-theme-picker__btn').forEach(b=>b.classList.remove('active'));a.classList.add('active');}}
+})();
+</script>
+</body>
+</html>

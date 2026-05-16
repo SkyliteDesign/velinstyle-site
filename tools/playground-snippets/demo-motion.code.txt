@@ -1,0 +1,3 @@
+<span class="velin-animate-fade-in">Enter</span>
+<span class="velin-animate-pulse velin-animate--infinite">Live</span>
+<span class="velin-animate-bounce velin-animate--infinite">Attention</span>

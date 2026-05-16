@@ -1,0 +1,4 @@
+<article class="velin-card velin-animate-flip">...</article>
+<article class="velin-card velin-animate-swing">...</article>
+<article class="velin-card velin-animate-drop-in">...</article>
+<article class="velin-card velin-animate-tada">...</article>

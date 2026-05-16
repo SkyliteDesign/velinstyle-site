@@ -1,0 +1,770 @@
+[
+  {
+    "title": "Brand",
+    "section": "About",
+    "url": "about/brand.html",
+    "keywords": "Brand VelinStyle brand guidelines — logo, colors, and usage. about brand.html"
+  },
+  {
+    "title": "License",
+    "section": "About",
+    "url": "about/license.html",
+    "keywords": "License VelinStyle MIT License. about license.html"
+  },
+  {
+    "title": "About VelinStyle",
+    "section": "About",
+    "url": "about/overview.html",
+    "keywords": "About VelinStyle About VelinStyle — team, mission, and project history. about overview.html"
+  },
+  {
+    "title": "Attention Animations",
+    "section": "Animations",
+    "url": "animations/attention.html",
+    "keywords": "Attention Animations Attention-seeking animations — bounce, pulse, shake, wiggle, spin, and more. animations attention.html"
+  },
+  {
+    "title": "Entrance Animations",
+    "section": "Animations",
+    "url": "animations/entrance.html",
+    "keywords": "Entrance Animations Entrance animations — fade-in, slide, scale-in, zoom-in, flip, and drop-in. animations entrance.html"
+  },
+  {
+    "title": "Exit Animations",
+    "section": "Animations",
+    "url": "animations/exit.html",
+    "keywords": "Exit Animations Exit animations — fade-out and scale-out effects. animations exit.html"
+  },
+  {
+    "title": "Animations Overview",
+    "section": "Animations",
+    "url": "animations/overview.html",
+    "keywords": "Animations Overview Overview of VelinStyle animation system — modifiers, reduced motion, and composability. animations overview.html"
+  },
+  {
+    "title": "Scroll-driven Animations",
+    "section": "Animations",
+    "url": "animations/scroll-driven.html",
+    "keywords": "Scroll-driven Animations Scroll-driven animations, scroll-progress bars, and parallax effects. animations scroll-driven.html"
+  },
+  {
+    "title": "View Transitions",
+    "section": "Animations",
+    "url": "animations/view-transitions.html",
+    "keywords": "View Transitions View Transitions API integration for page and component morphing. animations view-transitions.html"
+  },
+  {
+    "title": "Accordion",
+    "section": "Components",
+    "url": "components/accordion.html",
+    "keywords": "Accordion VelinStyle Accordion — a collapsible content panel Web Component with exclusive mode and keyboard navigation. components accordion.html"
+  },
+  {
+    "title": "Alerts",
+    "section": "Components",
+    "url": "components/alerts.html",
+    "keywords": "Alerts VelinStyle Alerts — contextual feedback messages with info, success, warning, and danger variants. components alerts.html"
+  },
+  {
+    "title": "Avatar",
+    "section": "Components",
+    "url": "components/avatar.html",
+    "keywords": "Avatar VelinStyle Avatar — circular user images with sizes, initials fallback, status indicator, and avatar groups. components avatar.html"
+  },
+  {
+    "title": "Badge",
+    "section": "Components",
+    "url": "components/badge.html",
+    "keywords": "Badge VelinStyle Badge — small labels for counts, statuses, and categories with color variants, outline, and dot styles. components badge.html"
+  },
+  {
+    "title": "Breadcrumb",
+    "section": "Components",
+    "url": "components/breadcrumb.html",
+    "keywords": "Breadcrumb VelinStyle Breadcrumb — navigation trail with custom separators and proper ARIA landmarks. components breadcrumb.html"
+  },
+  {
+    "title": "Button Group",
+    "section": "Components",
+    "url": "components/button-group.html",
+    "keywords": "Button Group VelinStyle Button Group — group related buttons together with .velin-btn-group and .velin-btn-toolbar. components button-group.html"
+  },
+  {
+    "title": "Buttons",
+    "section": "Components",
+    "url": "components/buttons.html",
+    "keywords": "Buttons VelinStyle Buttons — primary, secondary, outline, ghost, danger, and success variants with sizes, states, icons, and loading. components buttons.html"
+  },
+  {
+    "title": "Card",
+    "section": "Components",
+    "url": "components/card.html",
+    "keywords": "Card VelinStyle Card — flexible content container with header, body, footer, image, flat, clickable, and horizontal layouts. components card.html"
+  },
+  {
+    "title": "Carousel",
+    "section": "Components",
+    "url": "components/carousel.html",
+    "keywords": "Carousel VelinStyle Carousel — a Web Component slideshow with autoplay, dot indicators, touch swipe, and accessibility. components carousel.html"
+  },
+  {
+    "title": "Chip",
+    "section": "Components",
+    "url": "components/chip.html",
+    "keywords": "Chip VelinStyle Chip — compact element for tags, filters, and selections with color variants, closable, avatar, and group. components chip.html"
+  },
+  {
+    "title": "Close Button",
+    "section": "Components",
+    "url": "components/close-button.html",
+    "keywords": "Close Button VelinStyle Close Button — a generic dismiss button with .velin-btn--close. components close-button.html"
+  },
+  {
+    "title": "Collapse",
+    "section": "Components",
+    "url": "components/collapse.html",
+    "keywords": "Collapse VelinStyle Collapse — a Web Component for toggling content visibility with smooth CSS grid animation. components collapse.html"
+  },
+  {
+    "title": "Dialog",
+    "section": "Components",
+    "url": "components/dialog.html",
+    "keywords": "Dialog VelinStyle Dialog — a Web Component wrapping the native dialog element with alert, confirm, and prompt APIs. components dialog.html"
+  },
+  {
+    "title": "Divider",
+    "section": "Components",
+    "url": "components/divider.html",
+    "keywords": "Divider VelinStyle Divider — horizontal and vertical separators with optional text, sizes, and colour variants. components divider.html"
+  },
+  {
+    "title": "Drawer",
+    "section": "Components",
+    "url": "components/drawer.html",
+    "keywords": "Drawer VelinStyle Drawer — a Web Component off-canvas panel from any side with overlay and focus trap. components drawer.html"
+  },
+  {
+    "title": "Dropdown",
+    "section": "Components",
+    "url": "components/dropdown.html",
+    "keywords": "Dropdown VelinStyle Dropdown — a Web Component toggle menu with start/end alignment and keyboard navigation. components dropdown.html"
+  },
+  {
+    "title": "Lightbox",
+    "section": "Components",
+    "url": "components/lightbox.html",
+    "keywords": "Lightbox VelinStyle lightbox component — fullscreen image/video gallery with keyboard navigation and touch support. components lightbox.html"
+  },
+  {
+    "title": "List Group",
+    "section": "Components",
+    "url": "components/list-group.html",
+    "keywords": "List Group VelinStyle list group component — flexible lists with active states, badges, flush variant, and contextual colors. components list-group.html"
+  },
+  {
+    "title": "Modal",
+    "section": "Components",
+    "url": "components/modal.html",
+    "keywords": "Modal VelinStyle modal component — accessible dialog overlays with size variants, focus trap, and scroll lock. components modal.html"
+  },
+  {
+    "title": "Navbar",
+    "section": "Components",
+    "url": "components/navbar.html",
+    "keywords": "Navbar VelinStyle navbar component — responsive navigation bar with brand, toggle, mobile collapse, and mega-menu support. components navbar.html"
+  },
+  {
+    "title": "Navs &amp; Tabs",
+    "section": "Components",
+    "url": "components/navs-tabs.html",
+    "keywords": "Navs &amp; Tabs VelinStyle tabs component — accessible tabbed interfaces with roving tabindex and animated panels. components navs-tabs.html"
+  },
+  {
+    "title": "Pagination",
+    "section": "Components",
+    "url": "components/pagination.html",
+    "keywords": "Pagination VelinStyle pagination component — page navigation with active states, disabled links, and size variants. components pagination.html"
+  },
+  {
+    "title": "Popover",
+    "section": "Components",
+    "url": "components/popover.html",
+    "keywords": "Popover VelinStyle popover component — floating content panels with placement options, triggers, and title support. components popover.html"
+  },
+  {
+    "title": "Progress Ring",
+    "section": "Components",
+    "url": "components/progress-ring.html",
+    "keywords": "Progress Ring VelinStyle progress ring — circular SVG progress indicator with value, size, color, and label attributes. components progress-ring.html"
+  },
+  {
+    "title": "Progress",
+    "section": "Components",
+    "url": "components/progress.html",
+    "keywords": "Progress VelinStyle progress bar component — sizes, colors, striped, animated, and indeterminate variants. components progress.html"
+  },
+  {
+    "title": "Scrollspy",
+    "section": "Components",
+    "url": "components/scrollspy.html",
+    "keywords": "Scrollspy VelinStyle scrollspy component — automatically update navigation highlighting based on scroll position using IntersectionObserver. components scrollspy.html"
+  },
+  {
+    "title": "Spinners",
+    "section": "Components",
+    "url": "components/spinners.html",
+    "keywords": "Spinners VelinStyle spinner component — loading indicators in multiple sizes, colors, and a dots variant. components spinners.html"
+  },
+  {
+    "title": "Stat",
+    "section": "Components",
+    "url": "components/stat.html",
+    "keywords": "Stat VelinStyle stat component — display key metrics with label, value, change indicator, horizontal and compact layouts. components stat.html"
+  },
+  {
+    "title": "Stepper",
+    "section": "Components",
+    "url": "components/stepper.html",
+    "keywords": "Stepper VelinStyle stepper component — multi-step indicators with active/completed states and vertical layout. components stepper.html"
+  },
+  {
+    "title": "Timeline",
+    "section": "Components",
+    "url": "components/timeline.html",
+    "keywords": "Timeline VelinStyle timeline component — vertical event lists with markers, contextual colors, and centered layout. components timeline.html"
+  },
+  {
+    "title": "Toasts",
+    "section": "Components",
+    "url": "components/toasts.html",
+    "keywords": "Toasts VelinStyle toast component — lightweight notifications with types, auto-dismiss, and stacking support. components toasts.html"
+  },
+  {
+    "title": "Tooltips",
+    "section": "Components",
+    "url": "components/tooltips.html",
+    "keywords": "Tooltips VelinStyle tooltip component — lightweight hover hints with placements, flip behaviour, and CSS/WC variants. components tooltips.html"
+  },
+  {
+    "title": "Figures",
+    "section": "Content",
+    "url": "content/figures.html",
+    "keywords": "Figures VelinStyle figures — display images with optional captions using .velin-figure, .velin-figure__img, and .velin-figure__caption. content figures.html"
+  },
+  {
+    "title": "Images",
+    "section": "Content",
+    "url": "content/images.html",
+    "keywords": "Images VelinStyle image classes — responsive fluid images, thumbnails, and rounded image utilities. content images.html"
+  },
+  {
+    "title": "Reboot",
+    "section": "Content",
+    "url": "content/reboot.html",
+    "keywords": "Reboot VelinStyle Reboot — a modern CSS reset that normalizes browser defaults for consistent cross-browser rendering. content reboot.html"
+  },
+  {
+    "title": "Tables",
+    "section": "Content",
+    "url": "content/tables.html",
+    "keywords": "Tables VelinStyle tables — striped, hover, bordered, compact, responsive wrappers, and contextual row colors. content tables.html"
+  },
+  {
+    "title": "Typography",
+    "section": "Content",
+    "url": "content/typography.html",
+    "keywords": "Typography VelinStyle typography — headings, display sizes, lead text, blockquotes, and list styles. content typography.html"
+  },
+  {
+    "title": "Color Modes",
+    "section": "Customize",
+    "url": "customize/color-modes.html",
+    "keywords": "Color Modes Implement dark mode and custom color schemes with VelinStyle's data-velin-theme attribute and prefers-color-scheme support. customize color-modes.html"
+  },
+  {
+    "title": "Color",
+    "section": "Customize",
+    "url": "customize/color.html",
+    "keywords": "Color Explore VelinStyle's OKLCH-based color system — semantic tokens, palette generation, and accessible contrast. customize color.html"
+  },
+  {
+    "title": "Components",
+    "section": "Customize",
+    "url": "customize/components.html",
+    "keywords": "Components Learn how VelinStyle components use design tokens and how to customize them via CSS custom properties. customize components.html"
+  },
+  {
+    "title": "CSS Variables",
+    "section": "Customize",
+    "url": "customize/css-variables.html",
+    "keywords": "CSS Variables Complete reference of all CSS custom properties (variables) available in VelinStyle. customize css-variables.html"
+  },
+  {
+    "title": "Optimize",
+    "section": "Customize",
+    "url": "customize/optimize.html",
+    "keywords": "Optimize Optimize your VelinStyle build — tree-shake unused CSS, import only what you need, and follow performance best practices. customize optimize.html"
+  },
+  {
+    "title": "Customize Overview",
+    "section": "Customize",
+    "url": "customize/overview.html",
+    "keywords": "Customize Overview Learn how to customize VelinStyle using design tokens, CSS custom properties, themes, and CSS layers. customize overview.html"
+  },
+  {
+    "title": "Approach",
+    "section": "Extend",
+    "url": "extend/approach.html",
+    "keywords": "Approach VelinStyle design philosophy — CSS layers, mobile-first, utility-first architecture. extend approach.html"
+  },
+  {
+    "title": "CLI",
+    "section": "Extend",
+    "url": "extend/cli.html",
+    "keywords": "CLI VelinStyle CLI — build custom CSS, manage icons, and scan for security and accessibility issues from the command line. extend cli.html"
+  },
+  {
+    "title": "Icons",
+    "section": "Extend",
+    "url": "extend/icons.html",
+    "keywords": "Icons VelinStyle icon system — velin-icon component, SVG sprite, and available icons. extend icons.html"
+  },
+  {
+    "title": "JavaScript API",
+    "section": "Extend",
+    "url": "extend/javascript-api.html",
+    "keywords": "JavaScript API Complete JavaScript API reference for VelinStyle — web component methods, events, focus management, haptic feedback, and sanitization utilities. extend javascript-api.html"
+  },
+  {
+    "title": "Repo tools",
+    "section": "Extend",
+    "url": "extend/repo-tools.html",
+    "keywords": "Repo tools Theme Builder and Playground — static tools shipped in the VelinStyle repository; open locally from a clone. extend repo-tools.html"
+  },
+  {
+    "title": "Security",
+    "section": "Extend",
+    "url": "extend/security.html",
+    "keywords": "Security VelinStyle security features — XSS protection, CSP compatibility, CSS security utilities, form persistence hardening. extend security.html"
+  },
+  {
+    "title": "Utility coverage",
+    "section": "Extend",
+    "url": "extend/utility-coverage.html",
+    "keywords": "Utility coverage What VelinStyle utilities include compared to Tailwind, and what is intentionally not supported. extend utility-coverage.html"
+  },
+  {
+    "title": "Web Components",
+    "section": "Extend",
+    "url": "extend/web-components.html",
+    "keywords": "Web Components Overview of VelinStyle Web Components — custom elements, focus management, TypeScript. extend web-components.html"
+  },
+  {
+    "title": "Checks &amp; Radios",
+    "section": "Forms",
+    "url": "forms/checks-radios.html",
+    "keywords": "Checks &amp; Radios VelinStyle .velin-check — custom checkboxes, radios, inline layout, and toggle switches. forms checks-radios.html"
+  },
+  {
+    "title": "Floating Labels",
+    "section": "Forms",
+    "url": "forms/floating-labels.html",
+    "keywords": "Floating Labels VelinStyle .velin-float-label — animated floating label inputs for elegant form design. forms floating-labels.html"
+  },
+  {
+    "title": "Form Control",
+    "section": "Forms",
+    "url": "forms/form-control.html",
+    "keywords": "Form Control VelinStyle text inputs and textareas - sizing, disabled, readonly, and plaintext states. forms form-control.html"
+  },
+  {
+    "title": "Input Group",
+    "section": "Forms",
+    "url": "forms/input-group.html",
+    "keywords": "Input Group VelinStyle .velin-input-group — prepend and append text, icons, or buttons to form controls. forms input-group.html"
+  },
+  {
+    "title": "Form Layout",
+    "section": "Forms",
+    "url": "forms/layout.html",
+    "keywords": "Form Layout VelinStyle form layout patterns — grid-based forms, inline forms, and horizontal alignment. forms layout.html"
+  },
+  {
+    "title": "Forms Overview",
+    "section": "Forms",
+    "url": "forms/overview.html",
+    "keywords": "Forms Overview Overview of VelinStyle form controls — .velin-input, .velin-label, .velin-field and more. forms overview.html"
+  },
+  {
+    "title": "Range",
+    "section": "Forms",
+    "url": "forms/range.html",
+    "keywords": "Range VelinStyle .velin-range — custom styled range slider inputs with min, max, and step support. forms range.html"
+  },
+  {
+    "title": "Select",
+    "section": "Forms",
+    "url": "forms/select.html",
+    "keywords": "Select VelinStyle .velin-select — custom styled native select menus with sizing and multi-select support. forms select.html"
+  },
+  {
+    "title": "Validation",
+    "section": "Forms",
+    "url": "forms/validation.html",
+    "keywords": "Validation VelinStyle form validation — .velin-form--validated, :valid/:invalid pseudo-classes, and error messages. forms validation.html"
+  },
+  {
+    "title": "Accessibility Dashboard",
+    "section": "Getting Started",
+    "url": "getting-started/a11y-dashboard.html",
+    "keywords": "Accessibility Dashboard Interactive accessibility dashboard — inspect ARIA attributes, visualize keyboard navigation, check contrast ratios, preview screen reader output, and simulate user preferences. getting-started a11y-dashboard.html"
+  },
+  {
+    "title": "Accessibility patterns",
+    "section": "Getting Started",
+    "url": "getting-started/a11y-patterns.html",
+    "keywords": "Accessibility patterns Copy-first HTML patterns for skip links, live regions, dialogs, tabs, landmarks, and accessible forms — aligned with VelinStyle components. getting-started a11y-patterns.html"
+  },
+  {
+    "title": "Accessibility",
+    "section": "Getting Started",
+    "url": "getting-started/accessibility.html",
+    "keywords": "Accessibility Learn about VelinStyle's built-in accessibility features — visually hidden helpers, skip links, focus management, reduced motion, and forced colors. getting-started accessibility.html"
+  },
+  {
+    "title": "Browser compatibility",
+    "section": "Getting Started",
+    "url": "getting-started/browser-compatibility.html",
+    "keywords": "Browser compatibility Supported browsers and progressive enhancement for VelinStyle features. getting-started browser-compatibility.html"
+  },
+  {
+    "title": "Contents",
+    "section": "Getting Started",
+    "url": "getting-started/contents.html",
+    "keywords": "Contents Explore everything included in VelinStyle v0.6.x — compiled CSS, JavaScript components, themes, icons, CLI, samples, and the src/ CSS layout. getting-started contents.html"
+  },
+  {
+    "title": "Download",
+    "section": "Getting Started",
+    "url": "getting-started/download.html",
+    "keywords": "Download Download VelinStyle via CDN, npm, or as compiled files. Get up and running in seconds. getting-started download.html"
+  },
+  {
+    "title": "Editor setup",
+    "section": "Getting Started",
+    "url": "getting-started/editor-setup.html",
+    "keywords": "Editor setup VS Code and editor configuration for VelinStyle HTML and CSS classes. getting-started editor-setup.html"
+  },
+  {
+    "title": "Introduction",
+    "section": "Getting Started",
+    "url": "getting-started/introduction.html",
+    "keywords": "Introduction Get started with VelinStyle — a modern, utility-first CSS framework with built-in components and animations. getting-started introduction.html"
+  },
+  {
+    "title": "RTL (Right-to-Left)",
+    "section": "Getting Started",
+    "url": "getting-started/rtl.html",
+    "keywords": "RTL (Right-to-Left) Enable right-to-left support in VelinStyle using logical properties and the dir attribute. getting-started rtl.html"
+  },
+  {
+    "title": "States &amp; variants",
+    "section": "Getting Started",
+    "url": "getting-started/states-and-variants.html",
+    "keywords": "States &amp; variants How VelinStyle handles hover, focus, responsive, and dark mode without Tailwind-style prefixes. getting-started states-and-variants.html"
+  },
+  {
+    "title": "Upgrading VelinStyle",
+    "section": "Getting Started",
+    "url": "getting-started/upgrading.html",
+    "keywords": "Upgrading VelinStyle How to upgrade between VelinStyle semver releases. getting-started upgrading.html"
+  },
+  {
+    "title": "VelinStyle in an existing project",
+    "section": "Guides",
+    "url": "guides/existing-project.html",
+    "keywords": "VelinStyle in an existing project Add VelinStyle to Vite, Webpack, or plain HTML: npm imports, CDN links, Web Components, themes, and optional CLI. guides existing-project.html"
+  },
+  {
+    "title": "Guides",
+    "section": "Guides",
+    "url": "guides/index.html",
+    "keywords": "Guides Practical guides: integrate VelinStyle into an existing project, and use the Vite starter with optional React wrappers. guides index.html"
+  },
+  {
+    "title": "Vite starter &amp; React",
+    "section": "Guides",
+    "url": "guides/react-vite-starter.html",
+    "keywords": "Vite starter &amp; React Vite starter template and @velinstyle/react — clone, run, and wire thin Web Component wrappers in React. guides react-vite-starter.html"
+  },
+  {
+    "title": "Clearfix",
+    "section": "Helpers",
+    "url": "helpers/clearfix.html",
+    "keywords": "Clearfix VelinStyle .velin-clearfix — quickly clear floated content within a container. helpers clearfix.html"
+  },
+  {
+    "title": "Colored Links",
+    "section": "Helpers",
+    "url": "helpers/colored-links.html",
+    "keywords": "Colored Links VelinStyle colored link helpers — .velin-link-primary, .velin-link-success, .velin-link-danger and more. helpers colored-links.html"
+  },
+  {
+    "title": "Focus Ring",
+    "section": "Helpers",
+    "url": "helpers/focus-ring.html",
+    "keywords": "Focus Ring VelinStyle .velin-focus-ring — customizable focus ring helper with CSS variable support. helpers focus-ring.html"
+  },
+  {
+    "title": "Icon Link",
+    "section": "Helpers",
+    "url": "helpers/icon-link.html",
+    "keywords": "Icon Link VelinStyle .velin-icon-link — combine links with velin-icon for consistently aligned icon+text links. helpers icon-link.html"
+  },
+  {
+    "title": "Ratios",
+    "section": "Helpers",
+    "url": "helpers/ratios.html",
+    "keywords": "Ratios VelinStyle .velin-ratio — responsive aspect ratio containers for video, iframes, and embeds. helpers ratios.html"
+  },
+  {
+    "title": "Stacks",
+    "section": "Helpers",
+    "url": "helpers/stacks.html",
+    "keywords": "Stacks VelinStyle .velin-stack-v and .velin-stack-h — vertical and horizontal stack layout helpers. helpers stacks.html"
+  },
+  {
+    "title": "Stretched Link",
+    "section": "Helpers",
+    "url": "helpers/stretched-link.html",
+    "keywords": "Stretched Link VelinStyle .velin-stretched-link — make an entire containing block clickable via a stretched anchor. helpers stretched-link.html"
+  },
+  {
+    "title": "Text Truncation",
+    "section": "Helpers",
+    "url": "helpers/text-truncation.html",
+    "keywords": "Text Truncation VelinStyle .velin-truncate and line-clamp helpers for text overflow control. helpers text-truncation.html"
+  },
+  {
+    "title": "Vertical Rule",
+    "section": "Helpers",
+    "url": "helpers/vertical-rule.html",
+    "keywords": "Vertical Rule VelinStyle .velin-vr — create vertical dividers for horizontal layouts like navbars, toolbars, and stacks. helpers vertical-rule.html"
+  },
+  {
+    "title": "Visually Hidden",
+    "section": "Helpers",
+    "url": "helpers/visually-hidden.html",
+    "keywords": "Visually Hidden VelinStyle .velin-sr-only — hide content visually while keeping it accessible to screen readers. helpers visually-hidden.html"
+  },
+  {
+    "title": "Breakpoints",
+    "section": "Layout",
+    "url": "layout/breakpoints.html",
+    "keywords": "Breakpoints VelinStyle breakpoint system — 5 responsive tiers using CSS custom properties and min-width media queries. layout breakpoints.html"
+  },
+  {
+    "title": "Columns",
+    "section": "Layout",
+    "url": "layout/columns.html",
+    "keywords": "Columns VelinStyle flexbox column system — .velin-row, .velin-col-1 to -12, responsive columns, and auto columns. layout columns.html"
+  },
+  {
+    "title": "Containers",
+    "section": "Layout",
+    "url": "layout/containers.html",
+    "keywords": "Containers VelinStyle containers — responsive, fluid, narrow, and wide wrappers with container query support. layout containers.html"
+  },
+  {
+    "title": "Grid",
+    "section": "Layout",
+    "url": "layout/grid.html",
+    "keywords": "Grid VelinStyle CSS Grid system — .velin-grid with cols-1 to cols-12, auto-fit, and auto-fill layouts. layout grid.html"
+  },
+  {
+    "title": "Gutters",
+    "section": "Layout",
+    "url": "layout/gutters.html",
+    "keywords": "Gutters VelinStyle gutters — control horizontal, vertical, and combined spacing between columns with .velin-g-*, .velin-gx-*, and .velin-gy-* classes. layout gutters.html"
+  },
+  {
+    "title": "Layout patterns",
+    "section": "Layout",
+    "url": "layout/patterns.html",
+    "keywords": "Layout patterns VelinStyle layout shells (.velin-layout-*) and optional grid template helpers (.velin-grid--areas-app, .velin-grid--flow-dense). layout patterns.html"
+  },
+  {
+    "title": "Layout Utilities",
+    "section": "Layout",
+    "url": "layout/utilities.html",
+    "keywords": "Layout Utilities VelinStyle layout utilities — display, flexbox, and position helpers for building responsive layouts. layout utilities.html"
+  },
+  {
+    "title": "Z-index",
+    "section": "Layout",
+    "url": "layout/z-index.html",
+    "keywords": "Z-index VelinStyle z-index token system — organized stacking layers via CSS custom properties and utility classes. layout z-index.html"
+  },
+  {
+    "title": "Migration Guide",
+    "section": "Docs",
+    "url": "migration.html",
+    "keywords": "Migration Guide Migrate from Bootstrap or Tailwind: utility tables, component mapping, 5-minute examples, layout &amp; theme links, checklist. migration.html"
+  },
+  {
+    "title": "Utility API",
+    "section": "Utilities",
+    "url": "utilities/api.html",
+    "keywords": "Utility API Learn how VelinStyle's utility class system works — naming conventions, responsive modifiers, and customization. utilities api.html"
+  },
+  {
+    "title": "Background",
+    "section": "Utilities",
+    "url": "utilities/background.html",
+    "keywords": "Background Background color utilities including color-mix variants for tints and shades. utilities background.html"
+  },
+  {
+    "title": "Borders",
+    "section": "Utilities",
+    "url": "utilities/borders.html",
+    "keywords": "Borders Border width, color, radius, and shadow utilities for VelinStyle. utilities borders.html"
+  },
+  {
+    "title": "Color Mix",
+    "section": "Utilities",
+    "url": "utilities/color-mix.html",
+    "keywords": "Color Mix VelinStyle's unique color-mix() utilities for dynamic tints, shades, and blending. utilities color-mix.html"
+  },
+  {
+    "title": "Colors",
+    "section": "Utilities",
+    "url": "utilities/colors.html",
+    "keywords": "Colors Text color utilities using VelinStyle's semantic color tokens. utilities colors.html"
+  },
+  {
+    "title": "Display",
+    "section": "Utilities",
+    "url": "utilities/display.html",
+    "keywords": "Display Display, visibility, and opacity utility classes with responsive breakpoint support. utilities display.html"
+  },
+  {
+    "title": "Divide",
+    "section": "Utilities",
+    "url": "utilities/divide.html",
+    "keywords": "Divide Divide borders between stacked or horizontal children. utilities divide.html"
+  },
+  {
+    "title": "Filters",
+    "section": "Utilities",
+    "url": "utilities/filters.html",
+    "keywords": "Filters Blur, brightness, grayscale, and backdrop-filter utilities. utilities filters.html"
+  },
+  {
+    "title": "Flex",
+    "section": "Utilities",
+    "url": "utilities/flex.html",
+    "keywords": "Flex Flexbox utilities — direction, wrap, justify, align, grow, shrink, basis, order, and gap. utilities flex.html"
+  },
+  {
+    "title": "Float",
+    "section": "Utilities",
+    "url": "utilities/float.html",
+    "keywords": "Float Float and clearfix utilities for positioning elements. utilities float.html"
+  },
+  {
+    "title": "Interactions",
+    "section": "Utilities",
+    "url": "utilities/interactions.html",
+    "keywords": "Interactions Cursor, pointer-events, user-select, and touch-action utilities. utilities interactions.html"
+  },
+  {
+    "title": "Object Fit",
+    "section": "Utilities",
+    "url": "utilities/object-fit.html",
+    "keywords": "Object Fit Object-fit and object-position utilities for controlling replaced element sizing. utilities object-fit.html"
+  },
+  {
+    "title": "Opacity",
+    "section": "Utilities",
+    "url": "utilities/opacity.html",
+    "keywords": "Opacity Opacity utility classes for controlling element transparency. utilities opacity.html"
+  },
+  {
+    "title": "Overflow",
+    "section": "Utilities",
+    "url": "utilities/overflow.html",
+    "keywords": "Overflow Overflow utility classes for controlling content overflow behavior. utilities overflow.html"
+  },
+  {
+    "title": "Position",
+    "section": "Utilities",
+    "url": "utilities/position.html",
+    "keywords": "Position Position, inset, z-index, and centering utilities. utilities position.html"
+  },
+  {
+    "title": "Print",
+    "section": "Utilities",
+    "url": "utilities/print.html",
+    "keywords": "Print Print-only and no-print utilities for documents. utilities print.html"
+  },
+  {
+    "title": "Scroll",
+    "section": "Utilities",
+    "url": "utilities/scroll.html",
+    "keywords": "Scroll Scroll behavior, snap, padding, and overscroll utilities. utilities scroll.html"
+  },
+  {
+    "title": "Shadows",
+    "section": "Utilities",
+    "url": "utilities/shadows.html",
+    "keywords": "Shadows Box shadow and ring utility classes. utilities shadows.html"
+  },
+  {
+    "title": "Sizing",
+    "section": "Utilities",
+    "url": "utilities/sizing.html",
+    "keywords": "Sizing Width, max-width, height, and aspect-ratio utilities. utilities sizing.html"
+  },
+  {
+    "title": "Spacing",
+    "section": "Utilities",
+    "url": "utilities/spacing.html",
+    "keywords": "Spacing Margin, padding, and gap utilities with responsive variants. utilities spacing.html"
+  },
+  {
+    "title": "Text",
+    "section": "Utilities",
+    "url": "utilities/text.html",
+    "keywords": "Text Font size, weight, family, alignment, decoration, transform, wrap, and truncation utilities. utilities text.html"
+  },
+  {
+    "title": "Transforms",
+    "section": "Utilities",
+    "url": "utilities/transforms.html",
+    "keywords": "Transforms Rotate, scale, and translate utilities. utilities transforms.html"
+  },
+  {
+    "title": "Transitions",
+    "section": "Utilities",
+    "url": "utilities/transitions.html",
+    "keywords": "Transitions Transition utilities for colors, opacity, transform, and shadow. utilities transitions.html"
+  },
+  {
+    "title": "Vertical Align",
+    "section": "Utilities",
+    "url": "utilities/vertical-align.html",
+    "keywords": "Vertical Align Vertical alignment utilities for inline and table elements. utilities vertical-align.html"
+  },
+  {
+    "title": "Visibility",
+    "section": "Utilities",
+    "url": "utilities/visibility.html",
+    "keywords": "Visibility Visibility utilities to show or hide elements without affecting layout. utilities visibility.html"
+  },
+  {
+    "title": "Z-index",
+    "section": "Utilities",
+    "url": "utilities/z-index.html",
+    "keywords": "Z-index Token-based z-index utilities for layering management. utilities z-index.html"
+  }
+]

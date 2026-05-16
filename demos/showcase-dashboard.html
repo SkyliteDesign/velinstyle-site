@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en" data-velin-theme="sharp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard showcase — VelinStyle</title>
+  <meta name="description" content="Application shell with sidebar, KPI cards, and data table using VelinStyle components.">
+  <link rel="stylesheet" href="../dist/velinstyle.min.css">
+  <link rel="stylesheet" href="../dist/themes/sharp.min.css">
+  <style>
+    body { margin: 0; background: var(--velin-color-surface-dim); min-height: 100vh; }
+    .shell {
+      display: grid;
+      grid-template-columns: 15rem 1fr;
+      min-height: 100vh;
+    }
+    @media (max-width: 56rem) {
+      .shell { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+    }
+    .sidebar {
+      background: var(--velin-color-surface);
+      border-inline-end: 1px solid var(--velin-color-border);
+      padding: var(--velin-space-6);
+      display: flex;
+      flex-direction: column;
+      gap: var(--velin-space-1);
+    }
+    .sidebar__brand {
+      font-size: var(--velin-text-lg);
+      font-weight: var(--velin-weight-extrabold);
+      text-decoration: none;
+      color: var(--velin-color-text);
+      margin-bottom: var(--velin-space-6);
+    }
+    .sidebar__link {
+      display: flex;
+      align-items: center;
+      gap: var(--velin-space-2);
+      padding: var(--velin-space-2) var(--velin-space-3);
+      border-radius: var(--velin-radius-sm);
+      text-decoration: none;
+      color: var(--velin-color-text-muted);
+      font-size: var(--velin-text-sm);
+      font-weight: var(--velin-weight-medium);
+    }
+    .sidebar__link:hover,
+    .sidebar__link[aria-current="page"] {
+      background: var(--velin-color-primary-subtle);
+      color: var(--velin-color-primary);
+    }
+    .main { padding: var(--velin-space-6); min-width: 0; }
+    .topbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--velin-space-4);
+      margin-bottom: var(--velin-space-8);
+    }
+    .topbar h1 { font-size: var(--velin-text-2xl); margin: 0; }
+    .topbar__actions { display: flex; align-items: center; gap: var(--velin-space-2); }
+    @media (min-width: 56.01rem) {
+      .topbar__menu { display: none; }
+    }
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+      gap: var(--velin-space-4);
+      margin-bottom: var(--velin-space-8);
+    }
+    .kpi {
+      background: var(--velin-color-surface-bright);
+      border: 1px solid var(--velin-color-border);
+      border-radius: var(--velin-radius-md);
+      padding: var(--velin-space-5);
+    }
+    .kpi__label { font-size: var(--velin-text-xs); color: var(--velin-color-text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+    .kpi__value { font-size: var(--velin-text-2xl); font-weight: var(--velin-weight-bold); margin-top: var(--velin-space-1); }
+    .chart {
+      background: var(--velin-color-surface-bright);
+      border: 1px solid var(--velin-color-border);
+      border-radius: var(--velin-radius-md);
+      padding: var(--velin-space-6);
+      margin-bottom: var(--velin-space-8);
+      min-height: 10rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--velin-color-text-muted);
+      font-size: var(--velin-text-sm);
+    }
+    .table-card {
+      background: var(--velin-color-surface-bright);
+      border: 1px solid var(--velin-color-border);
+      border-radius: var(--velin-radius-md);
+      overflow: hidden;
+    }
+    .table-card__head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--velin-space-4) var(--velin-space-5);
+      border-bottom: 1px solid var(--velin-color-border);
+    }
+    .demo-bar-mini {
+      display: flex;
+      justify-content: flex-end;
+      padding: var(--velin-space-2) var(--velin-space-4);
+      background: var(--velin-color-surface);
+      border-bottom: 1px solid var(--velin-color-border);
+      gap: var(--velin-space-3);
+      align-items: center;
+    }
+    .demo-bar-mini a { font-size: var(--velin-text-xs); color: var(--velin-color-text-muted); text-decoration: none; }
+    .demo-bar-mini a:hover { color: var(--velin-color-primary); }
+  </style>
+</head>
+<body>
+  <a href="#main" class="velin-skip-link">Skip to main content</a>
+  <div class="demo-bar-mini">
+    <a href="../index.html">Home</a>
+    <a href="index.html">Demos</a>
+    <velin-theme-toggle></velin-theme-toggle>
+  </div>
+  <velin-drawer title="Navigation" id="dashDrawer" side="start">
+    <nav aria-label="Mobile navigation" class="velin-stack" style="gap: var(--velin-space-1);">
+      <a href="#" class="velin-btn velin-btn--ghost" style="justify-content: flex-start;">Overview</a>
+      <a href="#" class="velin-btn velin-btn--ghost" style="justify-content: flex-start;">Orders</a>
+      <a href="#" class="velin-btn velin-btn--ghost" style="justify-content: flex-start;">Customers</a>
+      <a href="#" class="velin-btn velin-btn--ghost" style="justify-content: flex-start;">Settings</a>
+    </nav>
+    <button type="button" class="velin-btn velin-btn--primary velin-btn--sm velin-mbs-4" onclick="document.getElementById('dashDrawer').close()">Close</button>
+  </velin-drawer>
+  <div class="shell">
+    <aside class="sidebar" aria-label="Sidebar">
+      <a class="sidebar__brand" href="index.html">VelinDash</a>
+      <a class="sidebar__link" href="#" aria-current="page"><velin-icon name="home" size="18"></velin-icon> Overview</a>
+      <a class="sidebar__link" href="#"><velin-icon name="calendar" size="18"></velin-icon> Orders</a>
+      <a class="sidebar__link" href="#"><velin-icon name="users" size="18"></velin-icon> Customers</a>
+      <a class="sidebar__link" href="#"><velin-icon name="settings" size="18"></velin-icon> Settings</a>
+    </aside>
+    <div class="main" id="main">
+      <header class="topbar">
+        <div style="display:flex;align-items:center;gap:var(--velin-space-3);">
+          <button type="button" class="velin-btn velin-btn--outline velin-btn--icon topbar__menu" aria-label="Open menu" onclick="document.getElementById('dashDrawer').open()">
+            <velin-icon name="menu" size="20"></velin-icon>
+          </button>
+          <h1>Overview</h1>
+        </div>
+        <div class="topbar__actions">
+          <button type="button" class="velin-btn velin-btn--ghost velin-btn--sm">Export</button>
+          <button type="button" class="velin-btn velin-btn--primary velin-btn--sm">New order</button>
+        </div>
+      </header>
+      <div class="kpi-grid">
+        <div class="kpi">
+          <div class="kpi__label">Revenue</div>
+          <div class="kpi__value">€48.2k</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi__label">Active users</div>
+          <div class="kpi__value">1,284</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi__label">Churn</div>
+          <div class="kpi__value">1.2%</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi__label">NPS</div>
+          <div class="kpi__value">62</div>
+        </div>
+      </div>
+      <div class="chart" aria-hidden="true">Chart placeholder — swap for your analytics embed.</div>
+      <section class="table-card" aria-labelledby="orders-heading">
+        <div class="table-card__head">
+          <h2 id="orders-heading" style="margin:0;font-size:var(--velin-text-lg);">Recent orders</h2>
+          <button type="button" class="velin-btn velin-btn--ghost velin-btn--sm">View all</button>
+        </div>
+        <div class="velin-table-wrapper">
+          <table class="velin-table velin-table--striped velin-table--hover">
+            <thead>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Customer</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>#9102</td>
+                <td>M. Chen</td>
+                <td>€320.00</td>
+                <td><span class="velin-badge velin-badge--success">Paid</span></td>
+              </tr>
+              <tr>
+                <td>#9101</td>
+                <td>A. Rossi</td>
+                <td>€89.50</td>
+                <td><span class="velin-badge velin-badge--warning">Pending</span></td>
+              </tr>
+              <tr>
+                <td>#9100</td>
+                <td>J. Okonkwo</td>
+                <td>€1,204.00</td>
+                <td><span class="velin-badge velin-badge--info">Shipped</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </div>
+  <script src="../dist/velinstyle-components.iife.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('velin-icon').forEach((icon) => {
+        if (!icon.getAttribute('sprite')) icon.setAttribute('sprite', '../dist/velin-icons.svg');
+      });
+    });
+  </script>
+</body>
+</html>

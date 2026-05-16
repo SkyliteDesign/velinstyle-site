@@ -1,0 +1,3 @@
+<div class="velin-grid velin-grid--cols-2 velin-grid--md-cols-4 velin-grid--gap-4">...</div>
+<div class="velin-grid velin-grid--auto-fit" style="--velin-grid-min:12rem">...</div>
+<div class="velin-grid velin-grid--cols-3"><div class="velin-col-2">...</div></div>
