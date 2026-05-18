@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""Replace sidebar nav and inject doc-search in all docs/*.html pages."""
+"""Replace sidebar nav (icons, pinned, guides) and inject doc scripts."""
+from __future__ import annotations
+
 import re
 from pathlib import Path
 
@@ -11,10 +13,67 @@ SIDEBAR_RE = re.compile(
     re.DOTALL,
 )
 SEARCH_TAG_RE = re.compile(r'<script src="[^"]*doc-search\.js"[^>]*></script>\s*')
+NAV_TAG_RE = re.compile(r'<script src="[^"]*doc-nav\.js"[^>]*></script>\s*')
 SEARCH_ATTR_RE = re.compile(
     r'(<input[^>]*id="docSearch"[^>]*)(/?>)',
     re.IGNORECASE,
 )
+
+FA = 'provider="fontawesome" variant="solid"'
+
+COMPONENT_SLUGS = [
+    "accordion", "alerts", "avatar", "badge", "breadcrumb", "buttons", "button-group",
+    "card", "carousel", "chip", "close-button", "collapse",
+    "announcer", "bottom-nav", "combobox", "command", "menubar", "rating",
+    "segmented-control", "sheet",
+    "dialog", "divider", "drawer", "dropdown", "lightbox", "list-group", "modal",
+    "navbar", "navs-tabs", "pagination", "popover", "progress", "progress-ring",
+    "scrollspy", "spinners", "stat", "stepper", "timeline", "toasts", "tooltips",
+    "sparkline", "counter", "live-dot",
+]
+
+COMPONENT_LABELS = {
+    "announcer": "Announcer", "bottom-nav": "Bottom nav", "combobox": "Combobox",
+    "command": "Command palette", "menubar": "Menubar", "rating": "Rating",
+    "segmented-control": "Segmented control", "sheet": "Sheet",
+    "navs-tabs": "Navs &amp; Tabs", "button-group": "Button Group",
+    "close-button": "Close Button", "list-group": "List Group",
+    "progress-ring": "Progress Ring",
+    "sparkline": "Sparkline", "counter": "Counter", "live-dot": "Live dot",
+}
+
+COMPONENT_ICONS = {
+    "accordion": "bars-staggered", "alerts": "triangle-exclamation", "avatar": "circle-user",
+    "badge": "certificate", "breadcrumb": "ellipsis", "buttons": "square",
+    "button-group": "object-group", "card": "id-card", "carousel": "images", "chip": "tags",
+    "close-button": "xmark", "collapse": "compress", "announcer": "bullhorn",
+    "bottom-nav": "bars", "combobox": "list", "command": "terminal",
+    "menubar": "bars-progress", "rating": "star", "segmented-control": "table-cells-large",
+    "sheet": "sheet-plastic", "dialog": "comment-dots", "divider": "minus", "drawer": "bars",
+    "dropdown": "caret-down", "lightbox": "expand", "list-group": "list-ul",
+    "modal": "window-maximize", "navbar": "bars", "navs-tabs": "folder",
+    "pagination": "ellipsis", "popover": "comment", "progress": "bars-progress",
+    "progress-ring": "circle-notch", "scrollspy": "binoculars", "spinners": "spinner",
+    "stat": "chart-simple", "stepper": "shoe-prints", "timeline": "timeline",
+    "toasts": "bell", "tooltips": "circle-info",
+    "sparkline": "chart-line", "counter": "stopwatch", "live-dot": "broadcast-tower",
+}
+
+PINNED_QUICK = [
+    ("migration.html", "Migration Guide", "right-left", "migration"),
+    ("getting-started/upgrading.html", "Upgrading to 0.8.0", "arrow-up", "getting-started"),
+]
+
+PINNED_GUIDES = [
+    ("guides/index.html", "Guides overview", "map", "guides"),
+    ("guides/existing-project.html", "Existing project", "folder-open", "guides"),
+    ("guides/react-vite-starter.html", "Vite &amp; React", "code-branch", "guides"),
+    ("guides/prompt-scaffolding.html", "Prompt scaffolding", "wand-magic-sparkles", "guides"),
+    ("guides/responsive-layout.html", "Responsive layout", "mobile-screen", "guides"),
+    ("extend/cli.html", "CLI reference", "terminal", "extend"),
+    ("layout/patterns.html", "Layout patterns", "table-columns", "layout"),
+    ("getting-started/introduction.html", "Introduction", "house", "getting-started"),
+]
 
 
 def rel_prefix(doc_file: Path) -> str:
@@ -22,165 +81,199 @@ def rel_prefix(doc_file: Path) -> str:
     return "../" * depth if depth else ""
 
 
-def sidebar_html(rel: str, active_href: str) -> str:
-    def link(href: str, label: str) -> str:
-        cls = ' class="active"' if href == active_href else ""
-        return f'<li><a href="{rel}{href}"{cls}>{label}</a></li>'
-
-    gs = "".join([
-        link("getting-started/introduction.html", "Introduction"),
-        link("getting-started/download.html", "Download"),
-        link("getting-started/contents.html", "Contents"),
-        link("getting-started/editor-setup.html", "Editor setup"),
-        link("getting-started/browser-compatibility.html", "Compatibility"),
-        link("getting-started/upgrading.html", "Upgrading"),
-        link("getting-started/states-and-variants.html", "States &amp; variants"),
-        link("getting-started/accessibility.html", "Accessibility"),
-        link("getting-started/rtl.html", "RTL"),
-        link("getting-started/a11y-patterns.html", "A11y patterns"),
-        link("getting-started/a11y-dashboard.html", "A11y Dashboard"),
-    ])
-    cu = "".join([
-        link("customize/overview.html", "Overview"),
-        link("customize/color.html", "Color"),
-        link("customize/color-modes.html", "Color Modes"),
-        link("customize/css-variables.html", "CSS Variables"),
-        link("customize/components.html", "Components"),
-        link("customize/optimize.html", "Optimize"),
-    ])
-    lo = "".join([
-        link("layout/breakpoints.html", "Breakpoints"),
-        link("layout/containers.html", "Containers"),
-        link("layout/grid.html", "Grid"),
-        link("layout/patterns.html", "Patterns"),
-        link("layout/columns.html", "Columns"),
-        link("layout/gutters.html", "Gutters"),
-        link("layout/utilities.html", "Utilities"),
-        link("layout/z-index.html", "Z-index"),
-    ])
-    co = "".join([
-        link("content/reboot.html", "Reboot"),
-        link("content/typography.html", "Typography"),
-        link("content/images.html", "Images"),
-        link("content/tables.html", "Tables"),
-        link("content/figures.html", "Figures"),
-    ])
-    fo = "".join([
-        link("forms/overview.html", "Overview"),
-        link("forms/form-control.html", "Form Control"),
-        link("forms/select.html", "Select"),
-        link("forms/checks-radios.html", "Checks &amp; Radios"),
-        link("forms/range.html", "Range"),
-        link("forms/input-group.html", "Input Group"),
-        link("forms/floating-labels.html", "Floating Labels"),
-        link("forms/layout.html", "Layout"),
-        link("forms/validation.html", "Validation"),
-    ])
-    components = [
-        "accordion", "alerts", "avatar", "badge", "breadcrumb", "buttons", "button-group",
-        "card", "carousel", "chip", "close-button", "collapse", "dialog", "divider", "drawer",
-        "dropdown", "lightbox", "list-group", "modal", "navbar", "navs-tabs", "pagination",
-        "popover", "progress", "progress-ring", "scrollspy", "spinners", "stat", "stepper",
-        "timeline", "toasts", "tooltips",
-    ]
-    labels = {
-        "navs-tabs": "Navs &amp; Tabs", "button-group": "Button Group",
-        "close-button": "Close Button", "list-group": "List Group",
-        "progress-ring": "Progress Ring", "checks-radios": "Checks &amp; Radios",
-    }
-    cm = "".join(
-        link(f"components/{c}.html", labels.get(c, c.replace("-", " ").title()))
-        for c in components
+def icon_tag(name: str, size: str, css: str) -> str:
+    return (
+        f'<velin-icon name="{name}" {FA} size="{size}" '
+        f'class="{css}" aria-hidden="true"></velin-icon>'
     )
-    he = "".join([
-        link("helpers/clearfix.html", "Clearfix"),
-        link("helpers/colored-links.html", "Colored Links"),
-        link("helpers/focus-ring.html", "Focus Ring"),
-        link("helpers/icon-link.html", "Icon Link"),
-        link("helpers/ratios.html", "Ratios"),
-        link("helpers/stacks.html", "Stacks"),
-        link("helpers/stretched-link.html", "Stretched Link"),
-        link("helpers/text-truncation.html", "Text Truncation"),
-        link("helpers/vertical-rule.html", "Vertical Rule"),
-        link("helpers/visually-hidden.html", "Visually Hidden"),
-    ])
-    ut = "".join([
-        link("utilities/api.html", "API"),
-        link("utilities/background.html", "Background"),
-        link("utilities/borders.html", "Borders"),
-        link("utilities/colors.html", "Colors"),
-        link("utilities/color-mix.html", "Color Mix"),
-        link("utilities/display.html", "Display"),
-        link("utilities/divide.html", "Divide"),
-        link("utilities/flex.html", "Flex"),
-        link("utilities/float.html", "Float"),
-        link("utilities/filters.html", "Filters"),
-        link("utilities/interactions.html", "Interactions"),
-        link("utilities/object-fit.html", "Object Fit"),
-        link("utilities/opacity.html", "Opacity"),
-        link("utilities/overflow.html", "Overflow"),
-        link("utilities/position.html", "Position"),
-        link("utilities/print.html", "Print"),
-        link("utilities/scroll.html", "Scroll"),
-        link("utilities/shadows.html", "Shadows"),
-        link("utilities/sizing.html", "Sizing"),
-        link("utilities/spacing.html", "Spacing"),
-        link("utilities/text.html", "Text"),
-        link("utilities/transitions.html", "Transitions"),
-        link("utilities/transforms.html", "Transforms"),
-        link("utilities/vertical-align.html", "Vertical Align"),
-        link("utilities/visibility.html", "Visibility"),
-        link("utilities/z-index.html", "Z-index"),
-    ])
-    an = "".join([
-        link("animations/overview.html", "Overview"),
-        link("animations/entrance.html", "Entrance"),
-        link("animations/attention.html", "Attention"),
-        link("animations/exit.html", "Exit"),
-        link("animations/scroll-driven.html", "Scroll-driven"),
-        link("animations/view-transitions.html", "View Transitions"),
-    ])
-    ex = "".join([
-        link("extend/approach.html", "Approach"),
-        link("extend/utility-coverage.html", "Utility coverage"),
-        link("extend/icons.html", "Icons"),
-        link("extend/cli.html", "CLI"),
-        link("extend/security.html", "Security"),
-        link("extend/repo-tools.html", "Repo tools"),
-        link("extend/web-components.html", "Web Components"),
-        link("extend/javascript-api.html", "JavaScript API"),
-    ])
-    gu = "".join([
-        link("guides/index.html", "Overview"),
-        link("guides/existing-project.html", "Existing project"),
-        link("guides/react-vite-starter.html", "Vite &amp; React"),
-    ])
-    ab = "".join([
-        link("about/overview.html", "Overview"),
-        link("about/brand.html", "Brand"),
-        link("about/license.html", "License"),
-    ])
-    mi = link("migration.html", "Migration Guide")
 
-    def cat(title: str, links: str) -> str:
-        open_cat = '<div class="velin-doc-sidebar__category">'
+
+def sidebar_html(rel: str, active_href: str) -> str:
+    def link(href: str, label: str, icon: str | None = None, *, cat: str | None = None, external: bool = False) -> str:
+        full = href if external or href.startswith("http") else f"{rel}{href}"
+        cls = ""
+        if not external and href == active_href:
+            cls = ' class="active"'
+        extra = ' target="_blank" rel="noopener noreferrer" data-external' if external else ""
+        dcat = f' data-cat="{cat}"' if cat else ""
+        icon_html = icon_tag(icon, "14", "velin-doc-sidebar__icon") if icon else ""
         return (
-            open_cat
-            + f'<button class="velin-doc-sidebar__category-header" aria-expanded="true">'
-            + f'{title} <span class="chevron">▼</span></button>'
-            + f'<ul class="velin-doc-sidebar__links">{links}</ul></div>'
+            f'<li><a href="{full}"{dcat}{cls}{extra}>{icon_html}'
+            f'<span class="velin-doc-sidebar__label">{label}</span></a></li>'
         )
 
-    body = (
-        cat("Getting Started", gs) + cat("Customize", cu) + cat("Layout", lo)
-        + cat("Content", co) + cat("Forms", fo) + cat("Components", cm)
-        + cat("Helpers", he) + cat("Utilities", ut) + cat("Animations", an)
-        + cat("Extend", ex) + cat("Guides", gu) + cat("About", ab) + cat("Migration", mi)
+    quick = "".join(link(h, l, i, cat=c) for h, l, i, c in PINNED_QUICK)
+    guides = "".join(link(h, l, i, cat=c) for h, l, i, c in PINNED_GUIDES)
+    pinned = (
+        '<div class="velin-doc-sidebar__pinned" data-cat="pinned">'
+        '<p class="velin-doc-sidebar__pinned-label">Switch quickly</p>'
+        f'<ul class="velin-doc-sidebar__links velin-doc-sidebar__links--prominent">{quick}</ul>'
+        '<p class="velin-doc-sidebar__pinned-label velin-doc-sidebar__pinned-label--sub">'
+        "Framework guides</p>"
+        f'<ul class="velin-doc-sidebar__links velin-doc-sidebar__links--prominent">{guides}</ul>'
+        "</div>"
     )
+
+    gs = "".join([
+        link("getting-started/introduction.html", "Introduction", "house"),
+        link("getting-started/download.html", "Download", "download"),
+        link("getting-started/contents.html", "Contents", "list"),
+        link("getting-started/editor-setup.html", "Editor setup", "laptop-code"),
+        link("getting-started/browser-compatibility.html", "Compatibility", "globe"),
+        link("getting-started/upgrading.html", "Upgrading", "arrow-up"),
+        link("getting-started/states-and-variants.html", "States &amp; variants", "sliders"),
+        link("getting-started/accessibility.html", "Accessibility", "wheelchair"),
+        link("getting-started/rtl.html", "RTL", "align-right"),
+        link("getting-started/a11y-patterns.html", "A11y patterns", "clipboard-list"),
+        link("getting-started/a11y-dashboard.html", "A11y Dashboard", "gauge-high"),
+    ])
+    cu = "".join([
+        link("customize/overview.html", "Overview", "palette"),
+        link("customize/color.html", "Color", "droplet"),
+        link("customize/color-modes.html", "Color Modes", "circle-half-stroke"),
+        link("customize/css-variables.html", "CSS Variables", "code"),
+        link("customize/components.html", "Components", "cubes"),
+        link("customize/optimize.html", "Optimize", "gauge-simple"),
+    ])
+    lo = "".join([
+        link("layout/breakpoints.html", "Breakpoints", "mobile-screen"),
+        link("layout/containers.html", "Containers", "box"),
+        link("layout/grid.html", "Grid", "table-cells"),
+        link("layout/patterns.html", "Patterns", "table-columns"),
+        link("layout/columns.html", "Columns", "columns"),
+        link("layout/gutters.html", "Gutters", "grip-lines"),
+        link("layout/utilities.html", "Utilities", "ruler-combined"),
+        link("layout/z-index.html", "Z-index", "layer-group"),
+    ])
+    co = "".join([
+        link("content/reboot.html", "Reboot", "rotate"),
+        link("content/typography.html", "Typography", "font"),
+        link("content/images.html", "Images", "image"),
+        link("content/tables.html", "Tables", "table"),
+        link("content/figures.html", "Figures", "images"),
+    ])
+    fo = "".join([
+        link("forms/overview.html", "Overview", "keyboard"),
+        link("forms/form-control.html", "Form Control", "input-text"),
+        link("forms/select.html", "Select", "caret-down"),
+        link("forms/checks-radios.html", "Checks &amp; Radios", "square-check"),
+        link("forms/range.html", "Range", "slider"),
+        link("forms/input-group.html", "Input Group", "object-group"),
+        link("forms/floating-labels.html", "Floating Labels", "tag"),
+        link("forms/layout.html", "Layout", "table-list"),
+        link("forms/validation.html", "Validation", "circle-check"),
+    ])
+    cm = "".join(
+        link(f"components/{s}.html", COMPONENT_LABELS.get(s, s.replace("-", " ").title()),
+             COMPONENT_ICONS.get(s, "cube"))
+        for s in COMPONENT_SLUGS
+    )
+    he = "".join([
+        link("helpers/clearfix.html", "Clearfix", "broom"),
+        link("helpers/colored-links.html", "Colored Links", "link"),
+        link("helpers/focus-ring.html", "Focus Ring", "bullseye"),
+        link("helpers/icon-link.html", "Icon Link", "icons"),
+        link("helpers/ratios.html", "Ratios", "crop"),
+        link("helpers/stacks.html", "Stacks", "layer-group"),
+        link("helpers/stretched-link.html", "Stretched Link", "up-right-and-down-left-from-center"),
+        link("helpers/text-truncation.html", "Text Truncation", "ellipsis"),
+        link("helpers/vertical-rule.html", "Vertical Rule", "grip-lines-vertical"),
+        link("helpers/visually-hidden.html", "Visually Hidden", "eye-slash"),
+    ])
+    ut = "".join([
+        link("utilities/api.html", "API", "book"),
+        link("utilities/background.html", "Background", "fill-drip"),
+        link("utilities/borders.html", "Borders", "border-all"),
+        link("utilities/colors.html", "Colors", "palette"),
+        link("utilities/color-mix.html", "Color Mix", "swatchbook"),
+        link("utilities/display.html", "Display", "eye"),
+        link("utilities/divide.html", "Divide", "grip-lines"),
+        link("utilities/flex.html", "Flex", "arrows-up-down-left-right"),
+        link("utilities/float.html", "Float", "water"),
+        link("utilities/filters.html", "Filters", "filter"),
+        link("utilities/interactions.html", "Interactions", "hand-pointer"),
+        link("utilities/object-fit.html", "Object Fit", "object-ungroup"),
+        link("utilities/opacity.html", "Opacity", "circle-half-stroke"),
+        link("utilities/overflow.html", "Overflow", "expand"),
+        link("utilities/position.html", "Position", "location-dot"),
+        link("utilities/print.html", "Print", "print"),
+        link("utilities/scroll.html", "Scroll", "scroll"),
+        link("utilities/shadows.html", "Shadows", "cloud"),
+        link("utilities/sizing.html", "Sizing", "maximize"),
+        link("utilities/spacing.html", "Spacing", "arrows-left-right"),
+        link("utilities/text.html", "Text", "font"),
+        link("utilities/transitions.html", "Transitions", "timeline"),
+        link("utilities/transforms.html", "Transforms", "shapes"),
+        link("utilities/motion.html", "Motion tokens", "stopwatch"),
+        link("utilities/filter-effects.html", "Filter effects", "wand-magic-sparkles"),
+        link("utilities/chart-animation.html", "Chart animation", "chart-line"),
+        link("utilities/vertical-align.html", "Vertical Align", "align-center"),
+        link("utilities/visibility.html", "Visibility", "eye-slash"),
+        link("utilities/safe-area.html", "Safe area", "mobile-screen-button"),
+        link("utilities/z-index.html", "Z-index", "layer-group"),
+    ])
+    an = "".join([
+        link("animations/overview.html", "Overview", "bolt"),
+        link("animations/entrance.html", "Entrance", "door-open"),
+        link("animations/attention.html", "Attention", "bell"),
+        link("animations/exit.html", "Exit", "door-closed"),
+        link("animations/scroll-driven.html", "Scroll-driven", "scroll"),
+        link("animations/view-transitions.html", "View Transitions", "film"),
+    ])
+    ex = "".join([
+        link("extend/approach.html", "Approach", "compass"),
+        link("extend/utility-coverage.html", "Utility coverage", "list-check"),
+        link("extend/icons.html", "Icons", "icons"),
+        link("extend/cli.html", "CLI", "terminal"),
+        link("extend/security.html", "Security", "shield-halved"),
+        link("extend/repo-tools.html", "Repo tools", "screwdriver-wrench"),
+        link("extend/web-components.html", "Web Components", "puzzle-piece"),
+        link("extend/javascript-api.html", "JavaScript API", "code"),
+    ])
+    gu = "".join([
+        link("guides/index.html", "Overview", "map"),
+        link("guides/existing-project.html", "Existing project", "folder-open"),
+        link("guides/react-vite-starter.html", "Vite &amp; React", "code-branch"),
+        link("guides/prompt-scaffolding.html", "Prompt scaffolding", "wand-magic-sparkles"),
+        link("guides/responsive-layout.html", "Responsive layout", "mobile-screen"),
+        link("guides/laravel.html", "Laravel", "php"),
+        link("guides/wordpress.html", "WordPress", "wordpress"),
+    ])
+    ab = "".join([
+        link("about/overview.html", "Overview", "circle-info"),
+        link("about/brand.html", "Brand", "gem"),
+        link("about/license.html", "License", "file-contract"),
+    ])
+    su = "".join([
+        link("https://forum.birdapi.de/", "BirdAPI Forum", "comments", external=True),
+        link("https://birdapi.de/", "birdapi.de", "globe", external=True),
+    ])
+
+    def cat_has_active(links_html: str) -> bool:
+        return ' class="active"' in links_html
+
+    def cat(title: str, links: str, cat_id: str, icon: str) -> str:
+        expanded = cat_has_active(links)
+        collapsed_cls = "" if expanded else " collapsed"
+        aria = "true" if expanded else "false"
+        hi = icon_tag(icon, "12", "velin-doc-sidebar__cat-icon")
+        return (
+            f'<div class="velin-doc-sidebar__category{collapsed_cls}" data-cat="{cat_id}">'
+            f'<button class="velin-doc-sidebar__category-header" aria-expanded="{aria}" type="button">'
+            f'{hi}<span>{title}</span> <span class="chevron" aria-hidden="true">▼</span></button>'
+            f'<ul class="velin-doc-sidebar__links">{links}</ul></div>'
+        )
+
+    body = pinned + cat("Getting Started", gs, "getting-started", "rocket") + cat("Customize", cu, "customize", "palette")
+    body += cat("Layout", lo, "layout", "table-cells") + cat("Content", co, "content", "file-lines")
+    body += cat("Forms", fo, "forms", "keyboard") + cat("Components", cm, "components", "cubes")
+    body += cat("Helpers", he, "helpers", "toolbox") + cat("Utilities", ut, "utilities", "ruler-combined")
+    body += cat("Animations", an, "animations", "bolt") + cat("Extend", ex, "extend", "puzzle-piece")
+    body += cat("Guides", gu, "guides", "book") + cat("About", ab, "about", "circle-info")
+    body += cat("Support &amp; Community", su, "support", "life-ring")
     return (
         '    <nav class="velin-doc-sidebar" id="sidebar" aria-label="Documentation navigation">\n'
-        + body
-        + "    </nav>"
+        + body + "    </nav>"
     )
 
 
@@ -193,11 +286,7 @@ def patch_file(path: Path) -> bool:
         return False
     text = SIDEBAR_RE.sub(new_sb, text, count=1)
     idx = rel + "search-index.json"
-    text = SEARCH_ATTR_RE.sub(
-        rf'\1 autocomplete="off" data-search-index="{idx}"\2',
-        text,
-        count=1,
-    )
+    text = SEARCH_ATTR_RE.sub(rf'\1 autocomplete="off" data-search-index="{idx}"\2', text, count=1)
     if "doc-search.js" not in text:
         text = text.replace(
             '<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>',
@@ -207,23 +296,18 @@ def patch_file(path: Path) -> bool:
         )
     else:
         text = SEARCH_TAG_RE.sub(f'<script src="{rel}doc-search.js"></script>\n  ', text, count=1)
-    if 'type="image/svg+xml"' not in text and "favicon.ico" in text:
-        logo = rel + "../assets/img/velinstyle-logo.svg"
-        text = text.replace(
-            'type="image/x-icon">',
-            f'type="image/x-icon">\n  <link rel="icon" href="{logo}" type="image/svg+xml">',
-            1,
-        )
+    if "doc-nav.js" not in text:
+        ins = f'<script src="{rel}doc-search.js"></script>'
+        if ins in text:
+            text = text.replace(ins, ins + f'\n  <script src="{rel}doc-nav.js"></script>', 1)
+    else:
+        text = NAV_TAG_RE.sub(f'<script src="{rel}doc-nav.js"></script>\n  ', text, count=1)
     path.write_text(text, encoding="utf-8")
     return True
 
 
 def main() -> None:
-    n = 0
-    for html in DOCS.rglob("*.html"):
-        if patch_file(html):
-            n += 1
-            print("patched", html.relative_to(SITE))
+    n = sum(1 for html in DOCS.rglob("*.html") if patch_file(html))
     print(f"Done: {n} files")
 
 

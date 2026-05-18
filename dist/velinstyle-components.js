@@ -94,19 +94,49 @@ function clearBackgroundInert() {
 // components/sanitize.js
 var ESCAPE_MAP = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
 var ESCAPE_RE = /[&<>"']/g;
+var CONTROL_RE = /[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g;
+var ALLOWED_URL_PROTOCOLS = /* @__PURE__ */ new Set(["http:", "https:", "data:", "mailto:", "tel:"]);
+var BLOCKED_DATA_MIME = /^data:text\/html/i;
 function escapeHTML(str) {
   if (typeof str !== "string") return "";
   return str.replace(ESCAPE_RE, (ch) => ESCAPE_MAP[ch]);
 }
+function stripControlChars(str) {
+  if (typeof str !== "string") return "";
+  return str.replace(CONTROL_RE, "");
+}
+function escapeHTMLAttribute(str) {
+  return escapeHTML(stripControlChars(str));
+}
 function sanitizeURL(url) {
   if (typeof url !== "string") return "";
+  const trimmed = url.trim();
+  if (/^\s*javascript:/i.test(trimmed) || /^\s*vbscript:/i.test(trimmed)) return "";
+  if (BLOCKED_DATA_MIME.test(trimmed)) return "";
   try {
-    const parsed = new URL(url, location.href);
-    if (["http:", "https:", "data:"].includes(parsed.protocol)) return url;
-    return "";
+    const parsed = new URL(trimmed, typeof location !== "undefined" ? location.href : "https://example.invalid/");
+    if (!ALLOWED_URL_PROTOCOLS.has(parsed.protocol)) return "";
+    if (parsed.protocol === "data:" && BLOCKED_DATA_MIME.test(trimmed)) return "";
+    return trimmed;
   } catch {
     return "";
   }
+}
+var _policy = null;
+function getTrustedPolicy() {
+  if (_policy) return _policy;
+  if (typeof window !== "undefined" && window.trustedTypes?.createPolicy) {
+    _policy = window.trustedTypes.createPolicy("velinstyle", {
+      createHTML: (input) => escapeHTML(input)
+    });
+  }
+  return _policy;
+}
+function createSafeHTML(str) {
+  const policy = getTrustedPolicy();
+  const safe = escapeHTML(stripControlChars(str));
+  if (policy?.createHTML) return policy.createHTML(safe);
+  return safe;
 }
 
 // components/velin-modal.js
@@ -781,12 +811,29 @@ var PROVIDER_CDNS = {
   heroicons: "https://unpkg.com/heroicons@2/24/outline/{name}.svg",
   bootstrap: "https://unpkg.com/bootstrap-icons@latest/icons/{name}.svg",
   material: "https://fonts.gstatic.com/s/i/short-term/release/materialsymbolsoutlined/{name}/default/24px.svg",
-  fontawesome: "https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/regular/{name}.svg"
+  fontawesome: "https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/{name}.svg"
 };
+var PROVIDER_VARIANTS = {
+  fontawesome: {
+    regular: "https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/regular/{name}.svg",
+    solid: "https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/{name}.svg",
+    brands: "https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/brands/{name}.svg"
+  },
+  heroicons: {
+    outline: "https://unpkg.com/heroicons@2/24/outline/{name}.svg",
+    solid: "https://unpkg.com/heroicons@2/24/solid/{name}.svg",
+    mini: "https://unpkg.com/heroicons@2/20/solid/{name}.svg"
+  }
+};
+function resolveProviderUrl(provider, variant) {
+  const variants = PROVIDER_VARIANTS[provider];
+  if (variant && variants?.[variant]) return variants[variant];
+  return PROVIDER_CDNS[provider];
+}
 var _svgCache = /* @__PURE__ */ new Map();
 var VelinIcon = class extends HTMLElement {
   static get observedAttributes() {
-    return ["name", "size", "label", "provider", "sprite"];
+    return ["name", "size", "label", "provider", "variant", "sprite"];
   }
   constructor() {
     super();
@@ -803,12 +850,13 @@ var VelinIcon = class extends HTMLElement {
     const size = this.getAttribute("size") || "24";
     const label = this.getAttribute("label");
     const provider = this.getAttribute("provider");
+    const variant = this.getAttribute("variant");
     if (!name) {
       this.innerHTML = "";
       return;
     }
-    if (provider && PROVIDER_CDNS[provider]) {
-      this._renderFromCDN(name, size, label, provider);
+    if (provider && (PROVIDER_CDNS[provider] || PROVIDER_VARIANTS[provider])) {
+      this._renderFromCDN(name, size, label, provider, variant);
       return;
     }
     this._renderFromSprite(name, size, label);
@@ -827,20 +875,34 @@ var VelinIcon = class extends HTMLElement {
     this._applyStyle(svg);
     this._applyA11y(svg, label);
     const use = document.createElementNS(svgNS, "use");
-    const spriteUrl = this.getAttribute("sprite") || "velin-icons.svg";
-    use.setAttribute("href", `${spriteUrl}#${name}`);
+    const spriteAttr = this.getAttribute("sprite");
+    const localSymbol = document.getElementById(name);
+    const isLocalSymbol = localSymbol && localSymbol.tagName && localSymbol.tagName.toLowerCase() === "symbol";
+    let href;
+    if (spriteAttr === "" || spriteAttr == null && isLocalSymbol) {
+      href = `#${name}`;
+    } else {
+      const spriteUrl = spriteAttr || "velin-icons.svg";
+      href = `${spriteUrl}#${name}`;
+    }
+    use.setAttribute("href", href);
     svg.appendChild(use);
     this.innerHTML = "";
     this.appendChild(svg);
     this._rendered = true;
   }
-  async _renderFromCDN(name, size, label, provider) {
-    const cacheKey = `${provider}:${name}`;
+  async _renderFromCDN(name, size, label, provider, variant) {
+    const cacheKey = `${provider}:${variant || "default"}:${name}`;
     if (_svgCache.has(cacheKey)) {
       this._injectSVG(_svgCache.get(cacheKey), size, label);
       return;
     }
-    const url = PROVIDER_CDNS[provider].replace("{name}", name);
+    const template = resolveProviderUrl(provider, variant);
+    if (!template) {
+      this._renderFromSprite(name, size, label);
+      return;
+    }
+    const url = template.replace("{name}", name);
     try {
       const res = await fetch(url);
       if (!res.ok) throw new Error(`${res.status}`);
@@ -1009,85 +1071,283 @@ customElements.define("velin-drawer", VelinDrawer);
 var velin_drawer_default = VelinDrawer;
 
 // components/velin-theme-toggle.js
+var THEMES = [
+  { slug: "", label: "Default (Light)" },
+  { slug: "dark", label: "Dark" },
+  { slug: "brutalist", label: "Brutalist" },
+  { slug: "corporate", label: "Corporate" },
+  { slug: "earth", label: "Earth" },
+  { slug: "forest", label: "Forest" },
+  { slug: "midnight", label: "Midnight" },
+  { slug: "neon", label: "Neon" },
+  { slug: "nordic", label: "Nordic" },
+  { slug: "ocean", label: "Ocean" },
+  { slug: "pastel", label: "Pastel" },
+  { slug: "retro", label: "Retro" },
+  { slug: "sharp", label: "Sharp" },
+  { slug: "soft", label: "Soft" },
+  { slug: "sunset", label: "Sunset" }
+];
+var BUILTIN_THEMES = /* @__PURE__ */ new Set(["", "dark"]);
+var loadedThemeStylesheets = /* @__PURE__ */ new Set();
+function ensureThemeStylesheet(slug, base) {
+  if (!slug || BUILTIN_THEMES.has(slug)) return;
+  if (loadedThemeStylesheets.has(slug)) return;
+  const existing = document.querySelector(`link[data-velin-theme-css="${slug}"]`);
+  if (existing) {
+    loadedThemeStylesheets.add(slug);
+    return;
+  }
+  const link = document.createElement("link");
+  link.rel = "stylesheet";
+  link.href = `${base.replace(/\/$/, "")}/${slug}.min.css`;
+  link.setAttribute("data-velin-theme-css", slug);
+  document.head.appendChild(link);
+  loadedThemeStylesheets.add(slug);
+}
 var styles7 = `
-  :host { display: inline-flex; }
+  :host { display: inline-flex; position: relative; }
+  .group {
+    display: inline-flex; align-items: stretch;
+    border: 2px solid var(--velin-color-border, #ddd);
+    border-radius: var(--velin-radius-md, 0.5rem);
+    background: none;
+    overflow: hidden;
+  }
   button {
     display: inline-flex; align-items: center; justify-content: center;
-    min-width: 2.75rem; min-height: 2.75rem; padding: 0.5rem;
-    background: none; border: 2px solid var(--velin-color-border, #ddd);
-    border-radius: var(--velin-radius-md, 0.5rem); cursor: pointer;
-    color: var(--velin-color-text, #111); transition: background 150ms ease, border-color 150ms ease;
+    min-height: 2.75rem; padding: 0.5rem;
+    background: none; border: 0; cursor: pointer;
+    color: var(--velin-color-text, #111);
+    transition: background 150ms ease;
   }
-  button:hover { background: var(--velin-color-surface-dim, #eee); border-color: var(--velin-color-border-strong, #999); }
-  button:focus-visible { outline: 3px solid var(--velin-color-focus, #2563eb); outline-offset: 2px; }
+  button:hover { background: var(--velin-color-surface-dim, #eee); }
+  button:focus-visible {
+    outline: 3px solid var(--velin-color-focus, #2563eb);
+    outline-offset: 2px;
+  }
+  .toggle { min-width: 2.75rem; }
+  .picker {
+    min-width: 1.75rem;
+    border-inline-start: 1px solid var(--velin-color-border, #ddd);
+    color: var(--velin-color-text-muted, #555);
+  }
   svg { width: 1.25rem; height: 1.25rem; transition: transform 300ms ease; }
+  .chev { width: 0.75rem; height: 0.75rem; }
   :host([theme="dark"]) .sun { display: none; }
   :host(:not([theme="dark"])) .moon { display: none; }
+  :host([compact]) .picker { display: none; }
+  :host([compact]) .toggle { border-inline-end: 0; }
   @media (prefers-reduced-motion: reduce) { svg { transition: none; } }
+
+  .menu {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    inset-inline-end: 0;
+    z-index: 1000;
+    min-width: 12rem;
+    padding: 0.375rem;
+    background: var(--velin-color-surface-bright, #fff);
+    border: 1px solid var(--velin-color-border, #ddd);
+    border-radius: var(--velin-radius-md, 0.5rem);
+    box-shadow: var(--velin-shadow-lg, 0 12px 32px rgba(0,0,0,0.12));
+    list-style: none;
+    margin: 0;
+    display: none;
+    max-height: min(70vh, 24rem);
+    overflow-y: auto;
+  }
+  :host([menu-open]) .menu { display: block; }
+  .menu li { margin: 0; }
+  .menu button {
+    width: 100%;
+    justify-content: flex-start;
+    padding: 0.4rem 0.75rem;
+    font-size: 0.875rem;
+    color: var(--velin-color-text, #111);
+    border-radius: var(--velin-radius-sm, 0.25rem);
+    min-height: 2rem;
+    text-align: start;
+  }
+  .menu button:hover,
+  .menu button[aria-current="true"] {
+    background: var(--velin-color-primary-subtle, #eef);
+    color: var(--velin-color-primary, #2a4cf0);
+  }
+  .menu button[aria-current="true"] {
+    font-weight: 600;
+  }
+  .menu .swatch {
+    width: 0.75rem; height: 0.75rem;
+    border-radius: 50%;
+    margin-inline-end: 0.5rem;
+    background: currentColor;
+    border: 1px solid var(--velin-color-border, #ddd);
+  }
 `;
 var VelinThemeToggle = class extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
+    this._onDocClick = this._onDocClick.bind(this);
+    this._onKeyDown = this._onKeyDown.bind(this);
   }
   connectedCallback() {
     this.shadowRoot.innerHTML = `
       <style>${styles7}</style>
-      <button part="button" aria-label="Toggle dark mode">
-        <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-          <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
-          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-          <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
-          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-        </svg>
-        <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-          <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
-        </svg>
-      </button>
+      <div class="group" part="group">
+        <button class="toggle" part="button" aria-label="Toggle dark mode">
+          <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+          <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+          </svg>
+        </button>
+        <button class="picker" part="picker" aria-label="Choose theme" aria-haspopup="menu" aria-expanded="false">
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
+        </button>
+      </div>
+      <ul class="menu" role="menu" hidden></ul>
     `;
-    const target = this.getAttribute("target") || "html";
-    const el = document.querySelector(target);
-    const stored = localStorage.getItem("velin-theme");
+    this._target = document.querySelector(this.getAttribute("target") || "html");
+    this._themesBase = this.getAttribute("themes-base") || "dist/themes";
+    this._menu = this.shadowRoot.querySelector(".menu");
+    this._toggleBtn = this.shadowRoot.querySelector(".toggle");
+    this._pickerBtn = this.shadowRoot.querySelector(".picker");
+    this._renderMenu();
+    this._initPreference();
+    this._toggleBtn.addEventListener("click", () => this._toggleDarkMode());
+    this._pickerBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      this._toggleMenu();
+    });
+    document.addEventListener("click", this._onDocClick);
+    this.shadowRoot.addEventListener("keydown", this._onKeyDown);
     const prefersDarkMq = window.matchMedia("(prefers-color-scheme: dark)");
-    const applyFromPreference = () => {
-      if (localStorage.getItem("velin-theme")) return;
-      if (prefersDarkMq.matches) {
-        el?.setAttribute("data-velin-theme", "dark");
-        this.setAttribute("theme", "dark");
-      } else {
-        el?.removeAttribute("data-velin-theme");
-        this.removeAttribute("theme");
-      }
-    };
-    const prefersDark = prefersDarkMq.matches;
-    if (stored === "dark" || !stored && prefersDark) {
-      el?.setAttribute("data-velin-theme", "dark");
-      this.setAttribute("theme", "dark");
-    }
-    prefersDarkMq.addEventListener("change", applyFromPreference);
+    prefersDarkMq.addEventListener("change", () => this._applyFromPreference());
     window.addEventListener("storage", (e) => {
-      if (e.key !== "velin-theme" || !el) return;
-      if (e.newValue === "dark") {
-        el.setAttribute("data-velin-theme", "dark");
-        this.setAttribute("theme", "dark");
-      } else {
-        el.removeAttribute("data-velin-theme");
-        this.removeAttribute("theme");
-      }
+      if (e.key === "velin-theme") this._readStorage();
     });
-    this.shadowRoot.querySelector("button").addEventListener("click", () => {
-      const isDark = el?.getAttribute("data-velin-theme") === "dark";
-      if (isDark) {
-        el?.removeAttribute("data-velin-theme");
-        this.removeAttribute("theme");
-        localStorage.setItem("velin-theme", "light");
-      } else {
-        el?.setAttribute("data-velin-theme", "dark");
-        this.setAttribute("theme", "dark");
-        localStorage.setItem("velin-theme", "dark");
-      }
-      this.dispatchEvent(new CustomEvent("velin-theme-change", { bubbles: true, detail: { theme: isDark ? "light" : "dark", dark: !isDark } }));
+  }
+  disconnectedCallback() {
+    document.removeEventListener("click", this._onDocClick);
+  }
+  _renderMenu() {
+    this._menu.innerHTML = THEMES.map((t) => `
+      <li role="none">
+        <button type="button" role="menuitem" data-theme="${t.slug}">
+          <span class="swatch" aria-hidden="true" data-theme-swatch="${t.slug}"></span>
+          ${t.label}
+        </button>
+      </li>
+    `).join("");
+    this._menu.removeAttribute("hidden");
+    this._menu.querySelectorAll("button[data-theme]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const slug = btn.getAttribute("data-theme");
+        this._applyTheme(slug, { persist: true });
+        this._closeMenu();
+      });
     });
+  }
+  _toggleMenu() {
+    if (this.hasAttribute("menu-open")) this._closeMenu();
+    else this._openMenu();
+  }
+  _openMenu() {
+    this.setAttribute("menu-open", "");
+    this._pickerBtn.setAttribute("aria-expanded", "true");
+    this._highlightActive();
+    const first = this._menu.querySelector("button[data-theme]");
+    if (first) first.focus();
+  }
+  _closeMenu() {
+    this.removeAttribute("menu-open");
+    this._pickerBtn.setAttribute("aria-expanded", "false");
+  }
+  _onDocClick(e) {
+    if (!this.hasAttribute("menu-open")) return;
+    if (e.composedPath().includes(this)) return;
+    this._closeMenu();
+  }
+  _onKeyDown(e) {
+    if (!this.hasAttribute("menu-open")) return;
+    if (e.key === "Escape") {
+      e.preventDefault();
+      this._closeMenu();
+      this._pickerBtn.focus();
+      return;
+    }
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      e.preventDefault();
+      const items = Array.from(this._menu.querySelectorAll("button[data-theme]"));
+      const idx = items.indexOf(this.shadowRoot.activeElement);
+      const next = e.key === "ArrowDown" ? items[(idx + 1) % items.length] : items[(idx - 1 + items.length) % items.length];
+      next?.focus();
+    }
+  }
+  _highlightActive() {
+    const current = this._currentSlug();
+    this._menu.querySelectorAll("button[data-theme]").forEach((btn) => {
+      const slug = btn.getAttribute("data-theme");
+      if (slug === current) btn.setAttribute("aria-current", "true");
+      else btn.removeAttribute("aria-current");
+    });
+  }
+  _currentSlug() {
+    if (!this._target) return "";
+    const value = this._target.getAttribute("data-velin-theme");
+    if (!value || value === "light") return "";
+    return value;
+  }
+  _initPreference() {
+    const stored = localStorage.getItem("velin-theme");
+    if (stored) {
+      this._applyTheme(stored, { persist: false });
+      return;
+    }
+    this._applyFromPreference();
+  }
+  _readStorage() {
+    const stored = localStorage.getItem("velin-theme");
+    this._applyTheme(stored || "", { persist: false });
+  }
+  _applyFromPreference() {
+    if (localStorage.getItem("velin-theme")) return;
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    this._applyTheme(prefersDark ? "dark" : "", { persist: false });
+  }
+  _applyTheme(slug, { persist }) {
+    const normalized = !slug || slug === "light" ? "" : slug;
+    if (!this._target) return;
+    if (!normalized) {
+      this._target.removeAttribute("data-velin-theme");
+      this.removeAttribute("theme");
+    } else {
+      this._target.setAttribute("data-velin-theme", normalized);
+      this.setAttribute("theme", normalized === "dark" ? "dark" : normalized);
+      ensureThemeStylesheet(normalized, this._themesBase);
+    }
+    if (persist) {
+      if (!normalized) localStorage.removeItem("velin-theme");
+      else localStorage.setItem("velin-theme", normalized);
+    }
+    this._highlightActive();
+    this.dispatchEvent(new CustomEvent("velin-theme-change", {
+      bubbles: true,
+      detail: { theme: normalized || "light", dark: normalized === "dark", slug: normalized }
+    }));
+  }
+  _toggleDarkMode() {
+    const current = this._currentSlug();
+    const next = current === "dark" ? "" : "dark";
+    this._applyTheme(next, { persist: true });
   }
 };
 customElements.define("velin-theme-toggle", VelinThemeToggle);
@@ -2432,6 +2692,1306 @@ var VelinPersist = class extends HTMLElement {
 customElements.define("velin-persist", VelinPersist);
 var velin_persist_default = VelinPersist;
 
+// components/velin-combobox.js
+var styles19 = `
+  :host { display: inline-block; position: relative; }
+  .listbox {
+    position: absolute; z-index: var(--velin-z-dropdown, 100);
+    inset-block-start: 100%; inset-inline-start: 0;
+    min-inline-size: 100%; margin-block-start: var(--velin-space-1, 0.25rem);
+    padding-block: var(--velin-space-1, 0.25rem);
+    background: var(--velin-color-surface-bright, #fff);
+    border: 1px solid var(--velin-color-border, #ddd);
+    border-radius: var(--velin-radius-md, 0.5rem);
+    box-shadow: var(--velin-shadow-lg, 0 10px 15px rgba(0,0,0,0.08));
+    opacity: 0; visibility: hidden;
+    transition: opacity 150ms ease, visibility 150ms ease;
+  }
+  :host([open]) .listbox { opacity: 1; visibility: visible; }
+  ::slotted([role="option"]) {
+    display: block; inline-size: 100%;
+    padding: var(--velin-space-2, 0.5rem) var(--velin-space-4, 1rem);
+    min-block-size: 2.5rem;
+    text-align: start; background: none; border: none;
+    cursor: pointer; font-size: var(--velin-text-base, 1rem);
+  }
+  ::slotted([role="option"][aria-selected="true"]) {
+    background: var(--velin-color-surface-dim, #eee);
+  }
+`;
+var VelinCombobox = class extends HTMLElement {
+  static get observedAttributes() {
+    return ["open", "aria-label"];
+  }
+  constructor() {
+    super();
+    this.attachShadow({ mode: "open", delegatesFocus: true });
+    this._onDocClick = this._onDocClick.bind(this);
+    this._onKey = this._onKey.bind(this);
+  }
+  connectedCallback() {
+    const listId = `velin-combobox-list-${Math.random().toString(36).slice(2, 9)}`;
+    this._listId = listId;
+    const listLabel = escapeHTML(this.getAttribute("aria-label") || "Options");
+    this.shadowRoot.innerHTML = `
+      <style>${styles19}</style>
+      <slot name="trigger"></slot>
+      <div class="listbox" id="${listId}" role="listbox" aria-label="${listLabel}" part="listbox"><slot></slot></div>
+    `;
+    const triggerSlot = this.shadowRoot.querySelector('slot[name="trigger"]');
+    triggerSlot.addEventListener("slotchange", () => this._wireTrigger());
+    this.shadowRoot.querySelector("slot:not([name])")?.addEventListener("slotchange", () => this._wireOptions());
+    this._wireTrigger();
+    this._wireOptions();
+    this.addEventListener("keydown", this._onKey);
+  }
+  _wireTrigger() {
+    const trigger = this.shadowRoot.querySelector('slot[name="trigger"]')?.assignedElements()[0];
+    if (!trigger) return;
+    trigger.setAttribute("role", "combobox");
+    trigger.setAttribute("aria-expanded", this.hasAttribute("open") ? "true" : "false");
+    trigger.setAttribute("aria-controls", this._listId);
+    trigger.setAttribute("aria-autocomplete", "list");
+    if (!trigger.id) trigger.id = `velin-combobox-trigger-${Math.random().toString(36).slice(2, 9)}`;
+    const list = this.shadowRoot.querySelector(".listbox");
+    if (list) list.setAttribute("aria-labelledby", trigger.id);
+    if (!trigger.dataset.velinComboWired) {
+      trigger.dataset.velinComboWired = "1";
+      trigger.addEventListener("click", () => this.toggle());
+      trigger.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowDown" || e.key === "Enter") {
+          e.preventDefault();
+          this.open();
+        }
+      });
+    }
+  }
+  _wireOptions() {
+    const options = this._getOptions();
+    options.forEach((el, i) => {
+      el.setAttribute("role", "option");
+      el.setAttribute("aria-selected", el.hasAttribute("selected") ? "true" : "false");
+      el.setAttribute("tabindex", i === 0 ? "0" : "-1");
+    });
+  }
+  _getOptions() {
+    const slot = this.shadowRoot.querySelector("slot:not([name])");
+    return slot ? slot.assignedElements().filter((el) => !el.hidden) : [];
+  }
+  toggle() {
+    this.hasAttribute("open") ? this.close() : this.open();
+  }
+  open() {
+    this.setAttribute("open", "");
+    const trigger = this.shadowRoot.querySelector('slot[name="trigger"]')?.assignedElements()[0];
+    if (trigger) trigger.setAttribute("aria-expanded", "true");
+    document.addEventListener("click", this._onDocClick, true);
+    requestAnimationFrame(() => {
+      const opts = this._getOptions();
+      if (opts.length) opts[0].focus();
+    });
+  }
+  close() {
+    this.removeAttribute("open");
+    const trigger = this.shadowRoot.querySelector('slot[name="trigger"]')?.assignedElements()[0];
+    if (trigger) {
+      trigger.setAttribute("aria-expanded", "false");
+      trigger.focus();
+    }
+    document.removeEventListener("click", this._onDocClick, true);
+    this.dispatchEvent(new CustomEvent("velin-close", { bubbles: true }));
+  }
+  _onDocClick(e) {
+    if (!this.contains(e.target)) this.close();
+  }
+  _onKey(e) {
+    if (!this.hasAttribute("open")) return;
+    if (e.key === "Escape") {
+      this.close();
+      return;
+    }
+    const options = this._getOptions();
+    if (!options.length) return;
+    rovingTabindex(this, options, e);
+    if (e.key === "Enter" && options.includes(e.target)) {
+      this._selectOption(e.target);
+      this.close();
+    }
+  }
+  _selectOption(el) {
+    this._getOptions().forEach((o) => o.setAttribute("aria-selected", o === el ? "true" : "false"));
+    const trigger = this.shadowRoot.querySelector('slot[name="trigger"]')?.assignedElements()[0];
+    if (trigger && "value" in trigger) trigger.value = el.textContent?.trim() || "";
+    this.dispatchEvent(new CustomEvent("velin-select", { bubbles: true, detail: { option: el } }));
+  }
+  attributeChangedCallback(name) {
+    if (name === "open") this._wireTrigger();
+    if (name === "aria-label") {
+      const list = this.shadowRoot?.querySelector(".listbox");
+      if (list) list.setAttribute("aria-label", escapeHTML(this.getAttribute("aria-label") || "Options"));
+    }
+  }
+  disconnectedCallback() {
+    document.removeEventListener("click", this._onDocClick, true);
+  }
+};
+customElements.define("velin-combobox", VelinCombobox);
+var velin_combobox_default = VelinCombobox;
+
+// components/velin-bottom-nav.js
+var styles20 = `
+  :host { display: block; }
+  nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: var(--velin-space-2, 0.5rem) var(--velin-space-4, 1rem);
+    padding-block-end: max(var(--velin-space-2, 0.5rem), env(safe-area-inset-bottom, 0px));
+    background: var(--velin-color-surface-bright, #fff);
+    border-block-start: 1px solid var(--velin-color-border, #ddd);
+  }
+  ::slotted(a), ::slotted(button) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--velin-space-1, 0.25rem);
+    min-inline-size: 2.75rem;
+    min-block-size: 2.75rem;
+    padding: var(--velin-space-2, 0.5rem);
+    font-size: var(--velin-text-xs, 0.75rem);
+    color: var(--velin-color-text-muted, #666);
+    text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  ::slotted([current]) {
+    color: var(--velin-color-primary, #2563eb);
+    font-weight: var(--velin-weight-semibold, 600);
+  }
+`;
+var VelinBottomNav = class extends HTMLElement {
+  constructor() {
+    super();
+    this.attachShadow({ mode: "open" });
+    this._onSlot = this._onSlot.bind(this);
+  }
+  connectedCallback() {
+    const label = escapeHTML(this.getAttribute("aria-label") || "Bottom navigation");
+    this.shadowRoot.innerHTML = `
+      <style>${styles20}</style>
+      <nav role="navigation" aria-label="${label}"><slot></slot></nav>
+    `;
+    const slot = this.shadowRoot.querySelector("slot");
+    slot.addEventListener("slotchange", this._onSlot);
+    this._onSlot();
+  }
+  _onSlot() {
+    this._syncCurrent();
+  }
+  _syncCurrent() {
+    const slot = this.shadowRoot?.querySelector("slot");
+    if (!slot) return;
+    const hostKey = this.getAttribute("current");
+    slot.assignedElements().forEach((el) => {
+      const active = el.hasAttribute("current") || hostKey && (el.dataset.nav === hostKey || el.getAttribute("data-nav") === hostKey);
+      if (active) {
+        el.setAttribute("current", "");
+        el.setAttribute("aria-current", "page");
+      } else {
+        el.removeAttribute("current");
+        el.removeAttribute("aria-current");
+      }
+    });
+  }
+  static get observedAttributes() {
+    return ["aria-label", "current"];
+  }
+  attributeChangedCallback(name) {
+    if (name === "aria-label") {
+      const nav = this.shadowRoot?.querySelector("nav");
+      if (nav) nav.setAttribute("aria-label", escapeHTML(this.getAttribute("aria-label") || "Bottom navigation"));
+    }
+    if (name === "current") this._syncCurrent();
+  }
+};
+customElements.define("velin-bottom-nav", VelinBottomNav);
+var velin_bottom_nav_default = VelinBottomNav;
+
+// components/shadow-a11y-styles.js
+var SHADOW_A11Y_STYLES = `
+  :host { display: block; }
+  button, [role="button"] {
+    min-inline-size: 2.75rem;
+    min-block-size: 2.75rem;
+    cursor: pointer;
+  }
+  button:focus-visible, [role="button"]:focus-visible {
+    outline: 3px solid var(--velin-color-focus, #2563eb);
+    outline-offset: 2px;
+  }
+  @media (forced-colors: active) {
+    button, [role="button"] {
+      border: 1px solid ButtonText;
+    }
+  }
+`;
+
+// components/velin-sheet.js
+var styles21 = `
+  ${SHADOW_A11Y_STYLES}
+  :host { display: contents; }
+  .overlay {
+    position: fixed; inset: 0; z-index: var(--velin-z-overlay, 400);
+    background: var(--velin-color-overlay, rgba(0,0,0,0.4));
+    opacity: 0; visibility: hidden;
+    transition: opacity 200ms ease, visibility 200ms ease;
+  }
+  :host([open]) .overlay { opacity: 1; visibility: visible; }
+  .sheet {
+    position: fixed; inset-inline: 0; inset-block-end: 0;
+    z-index: var(--velin-z-modal, 500);
+    max-block-size: min(85vh, 32rem);
+    background: var(--velin-color-surface-bright, #fff);
+    border-radius: var(--velin-radius-lg, 0.75rem) var(--velin-radius-lg, 0.75rem) 0 0;
+    box-shadow: var(--velin-shadow-xl, 0 -4px 24px rgba(0,0,0,0.12));
+    display: flex; flex-direction: column;
+    transform: translateY(100%);
+    transition: transform 250ms ease;
+    padding-block-end: env(safe-area-inset-bottom, 0px);
+  }
+  :host([open]) .sheet { transform: translateY(0); }
+  .header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: var(--velin-space-4, 1rem) var(--velin-space-5, 1.25rem);
+    border-bottom: 1px solid var(--velin-color-border, #ddd);
+  }
+  .title { font-size: var(--velin-text-lg, 1.25rem); font-weight: 600; margin: 0; }
+  .body { flex: 1; overflow-y: auto; padding: var(--velin-space-5, 1.25rem); }
+  @media (prefers-reduced-motion: reduce) { .overlay, .sheet { transition: none; } }
+`;
+var VelinSheet = class extends HTMLElement {
+  static get observedAttributes() {
+    return ["open"];
+  }
+  constructor() {
+    super();
+    this.attachShadow({ mode: "open", delegatesFocus: true });
+    this._prev = null;
+    this._onKey = this._onKey.bind(this);
+  }
+  connectedCallback() {
+    const title = escapeHTML(this.getAttribute("title") || this.getAttribute("label") || "");
+    const titleId = "velin-sheet-title";
+    this.shadowRoot.innerHTML = `
+      <style>${styles21}</style>
+      <div class="overlay" part="overlay"></div>
+      <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="${titleId}" part="sheet">
+        <div class="header" part="header">
+          <h2 class="title" id="${titleId}">${title}</h2>
+          <button class="close-btn" aria-label="Close" part="close">&#215;</button>
+        </div>
+        <div class="body" part="body"><slot></slot></div>
+      </div>
+    `;
+    this.shadowRoot.querySelector(".close-btn").addEventListener("click", () => this.close());
+    this.shadowRoot.querySelector(".overlay").addEventListener("click", () => this.close());
+    if (this.hasAttribute("open")) this._open();
+  }
+  attributeChangedCallback(name) {
+    if (name === "open") this.hasAttribute("open") ? this._open() : this._close();
+  }
+  open() {
+    this.setAttribute("open", "");
+  }
+  close() {
+    this.removeAttribute("open");
+    this.dispatchEvent(new CustomEvent("velin-close", { bubbles: true }));
+  }
+  _open() {
+    this._prev = saveFocus();
+    setBackgroundInert(this);
+    document.addEventListener("keydown", this._onKey);
+    document.body.style.overflow = "hidden";
+    requestAnimationFrame(() => {
+      const f = getFocusableElements(this.shadowRoot);
+      if (f.length) f[0].focus();
+    });
+  }
+  _close() {
+    document.removeEventListener("keydown", this._onKey);
+    document.body.style.overflow = "";
+    clearBackgroundInert();
+    restoreFocus(this._prev);
+  }
+  _onKey(e) {
+    if (e.key === "Escape") {
+      this.close();
+      return;
+    }
+    trapFocus(this.shadowRoot, e);
+  }
+  disconnectedCallback() {
+    document.removeEventListener("keydown", this._onKey);
+    document.body.style.overflow = "";
+  }
+};
+customElements.define("velin-sheet", VelinSheet);
+var velin_sheet_default = VelinSheet;
+
+// components/velin-segmented-control.js
+var styles22 = `
+  ${SHADOW_A11Y_STYLES}
+  :host { display: block; }
+  .group {
+    display: inline-flex;
+    gap: var(--velin-space-1, 0.25rem);
+    padding: var(--velin-space-1, 0.25rem);
+    background: var(--velin-color-surface-dim, #eee);
+    border-radius: var(--velin-radius-md, 0.5rem);
+  }
+  ::slotted(button) {
+    min-inline-size: 2.75rem;
+    min-block-size: 2.75rem;
+    padding: var(--velin-space-2, 0.5rem) var(--velin-space-4, 1rem);
+    border: none;
+    border-radius: var(--velin-radius-sm, 0.25rem);
+    background: transparent;
+    color: var(--velin-color-text-muted, #666);
+    cursor: pointer;
+    font-size: var(--velin-text-sm, 0.875rem);
+  }
+  ::slotted(button[aria-pressed="true"]) {
+    background: var(--velin-color-surface-bright, #fff);
+    color: var(--velin-color-text, #111);
+    font-weight: var(--velin-weight-semibold, 600);
+    box-shadow: var(--velin-shadow-sm, 0 1px 2px rgba(0,0,0,0.06));
+  }
+`;
+var VelinSegmentedControl = class extends HTMLElement {
+  constructor() {
+    super();
+    this.attachShadow({ mode: "open", delegatesFocus: true });
+    this._onClick = this._onClick.bind(this);
+    this._onKey = this._onKey.bind(this);
+  }
+  connectedCallback() {
+    const label = escapeHTML(this.getAttribute("aria-label") || "Segmented control");
+    this.shadowRoot.innerHTML = `
+      <style>${styles22}</style>
+      <div class="group" role="group" aria-label="${label}"><slot></slot></div>
+    `;
+    this.addEventListener("click", this._onClick);
+    this.addEventListener("keydown", this._onKey);
+    this.shadowRoot.querySelector("slot")?.addEventListener("slotchange", () => this._init());
+    this._init();
+  }
+  _getButtons() {
+    const slot = this.shadowRoot.querySelector("slot");
+    return slot ? slot.assignedElements().filter((el) => el.tagName === "BUTTON") : [];
+  }
+  _init() {
+    const buttons = this._getButtons();
+    const selected = buttons.find((b) => b.hasAttribute("selected")) || buttons[0];
+    buttons.forEach((btn, i) => {
+      btn.setAttribute("aria-pressed", btn === selected ? "true" : "false");
+      btn.setAttribute("tabindex", btn === selected ? "0" : "-1");
+    });
+  }
+  _onClick(e) {
+    const btn = e.target.closest("button");
+    if (!btn || !this.contains(btn)) return;
+    this._select(btn);
+  }
+  _select(btn) {
+    this._getButtons().forEach((b) => {
+      b.setAttribute("aria-pressed", b === btn ? "true" : "false");
+      b.setAttribute("tabindex", b === btn ? "0" : "-1");
+    });
+    this.dispatchEvent(new CustomEvent("velin-change", { bubbles: true, detail: { value: btn.value || btn.textContent?.trim() } }));
+  }
+  _onKey(e) {
+    const buttons = this._getButtons();
+    if (!buttons.includes(e.target)) return;
+    rovingTabindex(this, buttons, e);
+    if (["ArrowLeft", "ArrowRight", "Home", "End"].includes(e.key)) {
+      const focused = buttons.find((b) => b.getAttribute("tabindex") === "0");
+      if (focused) this._select(focused);
+    }
+  }
+  static get observedAttributes() {
+    return ["aria-label"];
+  }
+  attributeChangedCallback(name) {
+    if (name === "aria-label") {
+      const group = this.shadowRoot?.querySelector(".group");
+      if (group) group.setAttribute("aria-label", escapeHTML(this.getAttribute("aria-label") || "Segmented control"));
+    }
+  }
+  disconnectedCallback() {
+    this.removeEventListener("click", this._onClick);
+    this.removeEventListener("keydown", this._onKey);
+  }
+};
+customElements.define("velin-segmented-control", VelinSegmentedControl);
+var velin_segmented_control_default = VelinSegmentedControl;
+
+// components/velin-rating.js
+var styles23 = `
+  ${SHADOW_A11Y_STYLES}
+  :host { display: inline-block; }
+  .stars { display: inline-flex; gap: var(--velin-space-1, 0.25rem); }
+  button {
+    background: none; border: none; padding: var(--velin-space-1, 0.25rem);
+    font-size: 1.5rem; line-height: 1; cursor: pointer;
+    color: var(--velin-color-border, #ccc);
+  }
+  button[aria-checked="true"] { color: var(--velin-color-warning, #f59e0b); }
+`;
+var MAX = 5;
+var VelinRating = class extends HTMLElement {
+  static get observedAttributes() {
+    return ["value"];
+  }
+  constructor() {
+    super();
+    this.attachShadow({ mode: "open", delegatesFocus: true });
+    this._onClick = this._onClick.bind(this);
+    this._onKey = this._onKey.bind(this);
+  }
+  connectedCallback() {
+    this.shadowRoot.innerHTML = `<style>${styles23}</style><div class="stars" role="radiogroup"></div>`;
+    this._render();
+    this.shadowRoot.querySelector(".stars").addEventListener("click", this._onClick);
+    this.shadowRoot.querySelector(".stars").addEventListener("keydown", this._onKey);
+  }
+  _value() {
+    const v = parseInt(this.getAttribute("value") || "0", 10);
+    return Math.min(MAX, Math.max(0, Number.isNaN(v) ? 0 : v));
+  }
+  _render() {
+    const group = this.shadowRoot.querySelector(".stars");
+    const val = this._value();
+    const label = escapeHTML(this.getAttribute("aria-label") || "Rating");
+    group.setAttribute("aria-label", label);
+    group.innerHTML = "";
+    for (let i = 1; i <= MAX; i++) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.setAttribute("role", "radio");
+      btn.setAttribute("aria-checked", i <= val ? "true" : "false");
+      btn.setAttribute("aria-label", escapeHTML(`${i} star${i > 1 ? "s" : ""}`));
+      btn.setAttribute("tabindex", i === (val || 1) ? "0" : "-1");
+      btn.dataset.value = String(i);
+      btn.textContent = i <= val ? "\u2605" : "\u2606";
+      group.appendChild(btn);
+    }
+  }
+  _getButtons() {
+    return [...this.shadowRoot.querySelectorAll('button[role="radio"]')];
+  }
+  _onClick(e) {
+    const btn = e.target.closest("button");
+    if (!btn) return;
+    this._setValue(parseInt(btn.dataset.value, 10));
+  }
+  _onKey(e) {
+    const buttons = this._getButtons();
+    if (!buttons.includes(e.target)) return;
+    rovingTabindex(this, buttons, e);
+    if (["ArrowLeft", "ArrowRight", "Home", "End"].includes(e.key)) {
+      const focused = buttons.find((b) => b.getAttribute("tabindex") === "0");
+      if (focused) this._setValue(parseInt(focused.dataset.value, 10));
+    }
+  }
+  _setValue(n) {
+    this.setAttribute("value", String(n));
+    this.dispatchEvent(new CustomEvent("velin-change", { bubbles: true, detail: { value: n } }));
+  }
+  attributeChangedCallback(name) {
+    if (name === "value" && this.shadowRoot?.querySelector(".stars")) this._render();
+  }
+};
+customElements.define("velin-rating", VelinRating);
+var velin_rating_default = VelinRating;
+
+// components/velin-menubar.js
+var styles24 = `
+  ${SHADOW_A11Y_STYLES}
+  :host { display: block; }
+  .menubar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--velin-space-1, 0.25rem);
+    padding: var(--velin-space-2, 0.5rem);
+    background: var(--velin-color-surface-bright, #fff);
+    border-bottom: 1px solid var(--velin-color-border, #ddd);
+  }
+  ::slotted([role="menuitem"]) {
+    min-inline-size: 2.75rem;
+    min-block-size: 2.75rem;
+    padding: var(--velin-space-2, 0.5rem) var(--velin-space-4, 1rem);
+    background: none;
+    border: none;
+    border-radius: var(--velin-radius-sm, 0.25rem);
+    cursor: pointer;
+    font-size: var(--velin-text-base, 1rem);
+    color: var(--velin-color-text, #111);
+  }
+  ::slotted([role="menuitem"]:hover) {
+    background: var(--velin-color-surface-dim, #eee);
+  }
+`;
+var VelinMenubar = class extends HTMLElement {
+  constructor() {
+    super();
+    this.attachShadow({ mode: "open", delegatesFocus: true });
+    this._onKey = this._onKey.bind(this);
+  }
+  connectedCallback() {
+    const label = escapeHTML(this.getAttribute("aria-label") || "Menu bar");
+    this.shadowRoot.innerHTML = `
+      <style>${styles24}</style>
+      <div class="menubar" role="menubar" aria-label="${label}"><slot></slot></div>
+    `;
+    this.addEventListener("keydown", this._onKey);
+    this.shadowRoot.querySelector("slot")?.addEventListener("slotchange", () => this._init());
+    this._init();
+  }
+  _getItems() {
+    const slot = this.shadowRoot.querySelector("slot");
+    return slot ? slot.assignedElements().filter((el) => !el.hasAttribute("disabled")) : [];
+  }
+  _init() {
+    const items = this._getItems();
+    items.forEach((el, i) => {
+      if (!el.hasAttribute("role")) el.setAttribute("role", "menuitem");
+      el.setAttribute("tabindex", i === 0 ? "0" : "-1");
+    });
+  }
+  _onKey(e) {
+    const items = this._getItems();
+    if (items.includes(e.target)) rovingTabindex(this, items, e);
+  }
+  static get observedAttributes() {
+    return ["aria-label"];
+  }
+  attributeChangedCallback(name) {
+    if (name === "aria-label") {
+      const bar = this.shadowRoot?.querySelector(".menubar");
+      if (bar) bar.setAttribute("aria-label", escapeHTML(this.getAttribute("aria-label") || "Menu bar"));
+    }
+  }
+  disconnectedCallback() {
+    this.removeEventListener("keydown", this._onKey);
+  }
+};
+customElements.define("velin-menubar", VelinMenubar);
+var velin_menubar_default = VelinMenubar;
+
+// components/velin-command.js
+var styles25 = `
+  ${SHADOW_A11Y_STYLES}
+  :host { display: contents; }
+  .overlay {
+    position: fixed; inset: 0; z-index: var(--velin-z-modal, 500);
+    display: flex; align-items: flex-start; justify-content: center;
+    padding: 10vh var(--velin-space-4, 1rem) var(--velin-space-4, 1rem);
+    background: var(--velin-color-overlay, rgba(0,0,0,0.4));
+    opacity: 0; visibility: hidden;
+    transition: opacity 150ms ease, visibility 150ms ease;
+  }
+  :host([open]) .overlay { opacity: 1; visibility: visible; }
+  .panel {
+    inline-size: min(32rem, 100%);
+    background: var(--velin-color-surface-bright, #fff);
+    border-radius: var(--velin-radius-lg, 0.75rem);
+    box-shadow: var(--velin-shadow-xl, 0 20px 25px rgba(0,0,0,0.1));
+    overflow: hidden;
+  }
+  .search {
+    inline-size: 100%; padding: var(--velin-space-4, 1rem);
+    border: none; border-bottom: 1px solid var(--velin-color-border, #ddd);
+    font-size: var(--velin-text-base, 1rem);
+    background: transparent;
+    color: var(--velin-color-text, #111);
+  }
+  .results { max-block-size: 20rem; overflow-y: auto; padding: var(--velin-space-2, 0.5rem); }
+  ::slotted(button) {
+    display: flex; inline-size: 100%;
+    padding: var(--velin-space-3, 0.75rem) var(--velin-space-4, 1rem);
+    min-block-size: 2.5rem;
+    border: none; background: none; text-align: start;
+    cursor: pointer; font-size: var(--velin-text-base, 1rem);
+    border-radius: var(--velin-radius-sm, 0.25rem);
+  }
+  ::slotted(button[hidden]) { display: none; }
+  ::slotted(button:focus-visible) {
+    background: var(--velin-color-surface-dim, #eee);
+  }
+`;
+var VelinCommand = class extends HTMLElement {
+  static get observedAttributes() {
+    return ["open"];
+  }
+  constructor() {
+    super();
+    this.attachShadow({ mode: "open", delegatesFocus: true });
+    this._prev = null;
+    this._onKey = this._onKey.bind(this);
+    this._onInput = this._onInput.bind(this);
+  }
+  connectedCallback() {
+    const placeholder = escapeHTML(this.getAttribute("placeholder") || "Search commands\u2026");
+    this.shadowRoot.innerHTML = `
+      <style>${styles25}</style>
+      <div class="overlay" part="overlay">
+        <div class="panel" role="dialog" aria-modal="true" aria-label="Command palette" part="panel">
+          <input class="search" type="search" autocomplete="off" placeholder="${placeholder}" aria-label="Search" part="search" />
+          <div class="results" part="results"><slot></slot></div>
+        </div>
+      </div>
+    `;
+    this.shadowRoot.querySelector(".search").addEventListener("input", this._onInput);
+    this.shadowRoot.querySelector("slot")?.addEventListener("slotchange", () => this._filter(""));
+    this._filter("");
+  }
+  attributeChangedCallback(name) {
+    if (name === "open") this.hasAttribute("open") ? this._open() : this._close();
+  }
+  open() {
+    this.setAttribute("open", "");
+  }
+  close() {
+    this.removeAttribute("open");
+    this.dispatchEvent(new CustomEvent("velin-close", { bubbles: true }));
+  }
+  _open() {
+    this._prev = saveFocus();
+    setBackgroundInert(this);
+    document.addEventListener("keydown", this._onKey);
+    requestAnimationFrame(() => {
+      this.shadowRoot.querySelector(".search")?.focus();
+      this._filter("");
+    });
+  }
+  _close() {
+    document.removeEventListener("keydown", this._onKey);
+    clearBackgroundInert();
+    restoreFocus(this._prev);
+    const input = this.shadowRoot.querySelector(".search");
+    if (input) input.value = "";
+    this._filter("");
+  }
+  _onInput(e) {
+    this._filter(e.target.value);
+  }
+  _filter(query) {
+    const q = query.trim().toLowerCase();
+    const slot = this.shadowRoot.querySelector("slot");
+    slot?.assignedElements().forEach((btn) => {
+      const text = btn.textContent?.trim().toLowerCase() || "";
+      const match = !q || text.includes(q);
+      btn.hidden = !match;
+    });
+  }
+  _onKey(e) {
+    if (e.key === "Escape") {
+      this.close();
+      return;
+    }
+    trapFocus(this.shadowRoot, e);
+  }
+  disconnectedCallback() {
+    document.removeEventListener("keydown", this._onKey);
+  }
+};
+customElements.define("velin-command", VelinCommand);
+var velin_command_default = VelinCommand;
+
+// components/velin-announcer.js
+var styles26 = `
+  :host { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+`;
+var VelinAnnouncer = class extends HTMLElement {
+  connectedCallback() {
+    if (!this.shadowRoot) this.attachShadow({ mode: "open" });
+    const live = this.getAttribute("polite") === "false" ? "assertive" : "polite";
+    this.shadowRoot.innerHTML = "<style>" + styles26 + '</style><div role="status" aria-live="' + live + '" aria-atomic="true" part="region"></div>';
+    this._region = this.shadowRoot.querySelector('[role="status"]');
+  }
+  announce(message, { assertive = false } = {}) {
+    if (!this._region) this.connectedCallback();
+    this._region.setAttribute("aria-live", assertive ? "assertive" : "polite");
+    this._region.textContent = "";
+    requestAnimationFrame(() => {
+      this._region.textContent = typeof message === "string" ? message : "";
+    });
+  }
+  static announceGlobal(message, options) {
+    let el = document.querySelector("velin-announcer");
+    if (!el) {
+      el = document.createElement("velin-announcer");
+      document.body.appendChild(el);
+    }
+    el.announce(message, options);
+  }
+};
+customElements.define("velin-announcer", VelinAnnouncer);
+var velin_announcer_default = VelinAnnouncer;
+
+// components/velin-sparkline.js
+var NS = "http://www.w3.org/2000/svg";
+function parseValues(raw) {
+  if (!raw) return [];
+  const trimmed = String(raw).trim();
+  if (trimmed.startsWith("[")) {
+    try {
+      const parsed = JSON.parse(trimmed);
+      return Array.isArray(parsed) ? parsed.map(Number).filter((n) => Number.isFinite(n)) : [];
+    } catch {
+      return [];
+    }
+  }
+  return trimmed.split(/[\s,]+/).map((s) => Number.parseFloat(s)).filter((n) => Number.isFinite(n));
+}
+function buildPoints(values, w, h, min, max) {
+  const n = values.length;
+  if (n === 0) return [];
+  if (n === 1) {
+    return [[0, h / 2], [w, h / 2]];
+  }
+  const range = Math.max(max - min, 1e-6);
+  const stepX = w / (n - 1);
+  return values.map((v, i) => {
+    const x = i * stepX;
+    const y = h - (v - min) / range * h;
+    return [x, y];
+  });
+}
+function pointsToPath(points) {
+  if (!points.length) return "";
+  return points.map(([x, y], i) => `${i === 0 ? "M" : "L"}${x.toFixed(2)},${y.toFixed(2)}`).join(" ");
+}
+function pointsToArea(points, h) {
+  if (!points.length) return "";
+  const line = pointsToPath(points);
+  const last = points[points.length - 1][0];
+  const first = points[0][0];
+  return `${line} L${last.toFixed(2)},${h} L${first.toFixed(2)},${h} Z`;
+}
+var VelinSparkline = class extends HTMLElement {
+  static get observedAttributes() {
+    return ["values", "width", "height", "min", "max", "area", "glow", "animate", "label"];
+  }
+  constructor() {
+    super();
+    this._values = [];
+    this._gradientId = `velin-spark-grad-${Math.random().toString(36).slice(2, 8)}`;
+  }
+  connectedCallback() {
+    this._render();
+  }
+  attributeChangedCallback() {
+    if (this.isConnected) this._render();
+  }
+  get values() {
+    return this._values.slice();
+  }
+  set values(arr) {
+    if (!Array.isArray(arr)) return;
+    this._values = arr.filter((n) => Number.isFinite(Number(n))).map(Number);
+    this.setAttribute("values", this._values.join(","));
+  }
+  update(values) {
+    if (!Array.isArray(values)) return;
+    this._values = values.filter((n) => Number.isFinite(Number(n))).map(Number);
+    this._render({ tick: true });
+  }
+  _render({ tick = false } = {}) {
+    const w = Number.parseFloat(this.getAttribute("width")) || 320;
+    const h = Number.parseFloat(this.getAttribute("height")) || 96;
+    const values = this._values.length ? this._values : parseValues(this.getAttribute("values"));
+    this._values = values;
+    if (!values.length) {
+      this.innerHTML = "";
+      return;
+    }
+    const minAttr = Number.parseFloat(this.getAttribute("min"));
+    const maxAttr = Number.parseFloat(this.getAttribute("max"));
+    const min = Number.isFinite(minAttr) ? minAttr : Math.min(...values);
+    const max = Number.isFinite(maxAttr) ? maxAttr : Math.max(...values);
+    const wantsArea = this.hasAttribute("area") && this.getAttribute("area") !== "false";
+    const wantsGlow = this.hasAttribute("glow") && this.getAttribute("glow") !== "false";
+    const animate = (this.getAttribute("animate") || "draw").toLowerCase();
+    const label = this.getAttribute("label");
+    const points = buildPoints(values, w, h, min, max);
+    const linePath = pointsToPath(points);
+    const areaPath = wantsArea ? pointsToArea(points, h) : "";
+    this.innerHTML = "";
+    const svg = document.createElementNS(NS, "svg");
+    svg.setAttribute("viewBox", `0 0 ${w} ${h}`);
+    svg.setAttribute("preserveAspectRatio", "none");
+    svg.style.display = "block";
+    svg.style.width = "100%";
+    svg.style.height = "100%";
+    if (label) {
+      svg.setAttribute("role", "img");
+      svg.setAttribute("aria-label", label);
+    } else {
+      svg.setAttribute("aria-hidden", "true");
+    }
+    if (wantsArea) {
+      const defs = document.createElementNS(NS, "defs");
+      const grad = document.createElementNS(NS, "linearGradient");
+      grad.setAttribute("id", this._gradientId);
+      grad.setAttribute("x1", "0");
+      grad.setAttribute("x2", "0");
+      grad.setAttribute("y1", "0");
+      grad.setAttribute("y2", "1");
+      const stops = [
+        ["0%", "currentColor", "0.35"],
+        ["100%", "currentColor", "0"]
+      ];
+      stops.forEach(([offset, color, op]) => {
+        const stop = document.createElementNS(NS, "stop");
+        stop.setAttribute("offset", offset);
+        stop.setAttribute("stop-color", color);
+        stop.setAttribute("stop-opacity", op);
+        grad.appendChild(stop);
+      });
+      defs.appendChild(grad);
+      svg.appendChild(defs);
+      const area = document.createElementNS(NS, "path");
+      area.setAttribute("d", areaPath);
+      area.setAttribute("fill", `url(#${this._gradientId})`);
+      area.setAttribute("stroke", "none");
+      area.classList.add("velin-chart-area");
+      svg.appendChild(area);
+    }
+    const line = document.createElementNS(NS, "path");
+    line.setAttribute("d", linePath);
+    line.setAttribute("fill", "none");
+    line.setAttribute("stroke", "currentColor");
+    line.setAttribute("stroke-width", "2");
+    line.setAttribute("stroke-linecap", "round");
+    line.setAttribute("stroke-linejoin", "round");
+    line.setAttribute("vector-effect", "non-scaling-stroke");
+    svg.appendChild(line);
+    if (wantsGlow) svg.classList.add("velin-chart-glow");
+    this.appendChild(svg);
+    if (animate !== "none") {
+      const len = typeof line.getTotalLength === "function" && line.getTotalLength() || w;
+      line.style.setProperty("--velin-chart-len", len.toFixed(2));
+      line.classList.add("velin-chart-line");
+    } else {
+      line.style.strokeDasharray = "";
+      line.style.strokeDashoffset = "";
+    }
+    if (tick) {
+      this.classList.remove("velin-spark-tick");
+      void this.offsetWidth;
+      this.classList.add("velin-spark-tick");
+    }
+  }
+};
+if (typeof customElements !== "undefined" && !customElements.get("velin-sparkline")) {
+  customElements.define("velin-sparkline", VelinSparkline);
+}
+var velin_sparkline_default = VelinSparkline;
+
+// components/velin-counter.js
+var easeOutExpo = (t) => t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+function buildFormatter(host) {
+  const format = (host.getAttribute("format") || "number").toLowerCase();
+  const locale = host.getAttribute("locale") || void 0;
+  const decimalsAttr = host.getAttribute("decimals");
+  const decimals = decimalsAttr != null ? Math.max(0, Number.parseInt(decimalsAttr, 10) || 0) : null;
+  const opts = {};
+  if (decimals != null) {
+    opts.minimumFractionDigits = decimals;
+    opts.maximumFractionDigits = decimals;
+  }
+  if (format === "currency") {
+    opts.style = "currency";
+    opts.currency = host.getAttribute("currency") || "EUR";
+  } else if (format === "percent") {
+    opts.style = "percent";
+  }
+  try {
+    return new Intl.NumberFormat(locale, opts);
+  } catch {
+    return new Intl.NumberFormat(void 0, opts);
+  }
+}
+var VelinCounter = class extends HTMLElement {
+  static get observedAttributes() {
+    return ["from", "to", "duration", "decimals", "prefix", "suffix", "format", "currency", "locale"];
+  }
+  constructor() {
+    super();
+    this._rafId = 0;
+    this._started = false;
+    this._observer = null;
+  }
+  connectedCallback() {
+    this._render(this._fromValue());
+    if (this.getAttribute("autostart") === "false") return;
+    this._scheduleStart();
+  }
+  disconnectedCallback() {
+    cancelAnimationFrame(this._rafId);
+    this._observer?.disconnect();
+  }
+  attributeChangedCallback(name) {
+    if (!this.isConnected) return;
+    if (name === "to" || name === "from") {
+      this.start();
+    } else {
+      this._render(this._lastValue ?? this._toValue());
+    }
+  }
+  _fromValue() {
+    return Number.parseFloat(this.getAttribute("from")) || 0;
+  }
+  _toValue() {
+    return Number.parseFloat(this.getAttribute("to")) || 0;
+  }
+  _duration() {
+    return Math.max(0, Number.parseFloat(this.getAttribute("duration")) || 900);
+  }
+  _scheduleStart() {
+    if (this._started) return;
+    if (typeof IntersectionObserver === "undefined") {
+      this.start();
+      return;
+    }
+    this._observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          this.start();
+          this._observer.disconnect();
+          this._observer = null;
+          break;
+        }
+      }
+    }, { threshold: 0.2 });
+    this._observer.observe(this);
+  }
+  start() {
+    cancelAnimationFrame(this._rafId);
+    this._started = true;
+    const from = this._fromValue();
+    const to = this._toValue();
+    const duration = this._duration();
+    const reduced = typeof window !== "undefined" && window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced || duration === 0) {
+      this._render(to);
+      return;
+    }
+    const start = performance.now();
+    const tick = (now) => {
+      const t = Math.min(1, (now - start) / duration);
+      const value = from + (to - from) * easeOutExpo(t);
+      this._render(value);
+      if (t < 1) this._rafId = requestAnimationFrame(tick);
+    };
+    this._rafId = requestAnimationFrame(tick);
+  }
+  reset() {
+    cancelAnimationFrame(this._rafId);
+    this._started = false;
+    this._render(this._fromValue());
+  }
+  _render(value) {
+    this._lastValue = value;
+    const formatter = buildFormatter(this);
+    const prefix = this.getAttribute("prefix") || "";
+    const suffix = this.getAttribute("suffix") || "";
+    this.textContent = `${prefix}${formatter.format(value)}${suffix}`;
+  }
+};
+if (typeof customElements !== "undefined" && !customElements.get("velin-counter")) {
+  customElements.define("velin-counter", VelinCounter);
+}
+var velin_counter_default = VelinCounter;
+
+// components/velin-live-dot.js
+var STATUS_COLORS = {
+  live: "var(--velin-color-success, oklch(60% 0.16 145))",
+  paused: "var(--velin-color-text-muted, oklch(60% 0.02 240))",
+  warning: "var(--velin-color-warning, oklch(75% 0.16 80))",
+  error: "var(--velin-color-danger, oklch(60% 0.2 25))",
+  muted: "var(--velin-color-border, oklch(85% 0.01 240))"
+};
+var styles27 = `
+  :host {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--velin-space-2, 0.5rem);
+    font-size: inherit;
+    color: inherit;
+    line-height: 1.2;
+  }
+  .dot {
+    inline-size: 0.55rem;
+    block-size: 0.55rem;
+    border-radius: 50%;
+    background: var(--velin-live-color);
+    flex-shrink: 0;
+  }
+  :host([pulse="false"]) .dot { animation: none; }
+  :host(:not([pulse="false"])) .dot { animation: velin-live-pulse 1.8s var(--velin-ease-out, ease-out) infinite; }
+  @media (prefers-reduced-motion: reduce) {
+    .dot { animation: none !important; }
+  }
+`;
+var KEYFRAMES_FALLBACK = `
+@keyframes velin-live-pulse {
+  0% { box-shadow: 0 0 0 0 color-mix(in oklch, var(--velin-live-color) 65%, transparent); }
+  70% { box-shadow: 0 0 0 0.6rem color-mix(in oklch, var(--velin-live-color) 0%, transparent); }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}`;
+var VelinLiveDot = class extends HTMLElement {
+  static get observedAttributes() {
+    return ["status", "pulse"];
+  }
+  constructor() {
+    super();
+    this.attachShadow({ mode: "open" });
+  }
+  connectedCallback() {
+    this._render();
+  }
+  attributeChangedCallback() {
+    if (this.shadowRoot) this._render();
+  }
+  _render() {
+    const status = this.getAttribute("status") || "live";
+    const color = STATUS_COLORS[status] || STATUS_COLORS.live;
+    this.style.setProperty("--velin-live-color", color);
+    this.shadowRoot.innerHTML = `
+      <style>${styles27}${KEYFRAMES_FALLBACK}</style>
+      <span class="dot" aria-hidden="true"></span><slot></slot>
+    `;
+  }
+};
+if (typeof customElements !== "undefined" && !customElements.get("velin-live-dot")) {
+  customElements.define("velin-live-dot", VelinLiveDot);
+}
+var velin_live_dot_default = VelinLiveDot;
+
+// components/velin-reveal.js
+var DEFAULTS = {
+  selector: ".velin-animate-on-scroll",
+  threshold: 0.1,
+  rootMargin: "0px 0px -40px 0px",
+  once: true,
+  visibleClass: "is-visible"
+};
+var _activeObservers = /* @__PURE__ */ new WeakMap();
+function initReveal(options = {}) {
+  if (typeof document === "undefined") return () => {
+  };
+  const opts = { ...DEFAULTS, ...options };
+  const reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const targets = Array.from(document.querySelectorAll(opts.selector));
+  if (reduced || typeof IntersectionObserver === "undefined") {
+    targets.forEach((el) => el.classList.add(opts.visibleClass));
+    return () => {
+    };
+  }
+  const observer = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        entry.target.classList.add(opts.visibleClass);
+        if (opts.once) observer.unobserve(entry.target);
+      }
+    },
+    { threshold: opts.threshold, rootMargin: opts.rootMargin }
+  );
+  targets.forEach((el) => {
+    if (_activeObservers.has(el)) return;
+    _activeObservers.set(el, observer);
+    observer.observe(el);
+  });
+  return () => {
+    observer.disconnect();
+    targets.forEach((el) => _activeObservers.delete(el));
+  };
+}
+if (typeof document !== "undefined") {
+  const autoInit2 = () => {
+    if (document.documentElement && document.documentElement.hasAttribute("data-velin-reveal-auto")) {
+      initReveal();
+    }
+  };
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", autoInit2, { once: true });
+  } else {
+    autoInit2();
+  }
+}
+
+// components/velin-flip.js
+var REDUCED_MOTION_MQ = typeof window !== "undefined" && window.matchMedia ? window.matchMedia("(prefers-reduced-motion: reduce)") : null;
+var DEFAULTS2 = {
+  duration: 250,
+  easing: "var(--velin-ease-expo-out, cubic-bezier(0.16, 1, 0.3, 1))",
+  itemSelector: ":scope > *"
+};
+function getItems(container, selector) {
+  return Array.from(container.querySelectorAll(selector));
+}
+function flipReorder(container, mutateFn, options = {}) {
+  if (!container || typeof mutateFn !== "function") return;
+  const opts = { ...DEFAULTS2, ...options };
+  const reduced = REDUCED_MOTION_MQ && REDUCED_MOTION_MQ.matches;
+  const items = getItems(container, opts.itemSelector);
+  const before = /* @__PURE__ */ new Map();
+  items.forEach((el) => {
+    if (!el.hidden) before.set(el, el.getBoundingClientRect());
+  });
+  mutateFn();
+  if (reduced) return;
+  const items2 = getItems(container, opts.itemSelector);
+  items2.forEach((el) => {
+    if (el.hidden) return;
+    const prev = before.get(el);
+    const next = el.getBoundingClientRect();
+    if (!prev) {
+      if (typeof el.animate !== "function") return;
+      el.animate(
+        [
+          { opacity: 0, transform: "scale(0.96)" },
+          { opacity: 1, transform: "scale(1)" }
+        ],
+        { duration: opts.duration, easing: opts.easing, fill: "both" }
+      );
+      return;
+    }
+    const dx = prev.left - next.left;
+    const dy = prev.top - next.top;
+    if (dx === 0 && dy === 0) return;
+    if (typeof el.animate !== "function") return;
+    el.animate(
+      [
+        { transform: `translate(${dx}px, ${dy}px)` },
+        { transform: "translate(0, 0)" }
+      ],
+      { duration: opts.duration, easing: opts.easing, fill: "both" }
+    );
+  });
+}
+function filterList(container, predicate, options = {}) {
+  if (!container || typeof predicate !== "function") return;
+  const opts = { ...DEFAULTS2, ...options };
+  flipReorder(
+    container,
+    () => {
+      getItems(container, opts.itemSelector).forEach((el) => {
+        el.hidden = !predicate(el);
+      });
+    },
+    opts
+  );
+}
+function readTokens(value) {
+  if (!value) return [];
+  return String(value).toLowerCase().split(/[\s,|]+/).map((s) => s.trim()).filter(Boolean);
+}
+function matchTokens(itemTokens, queryTokens, mode) {
+  if (!queryTokens.length) return true;
+  if (mode === "all") return queryTokens.every((q) => itemTokens.includes(q));
+  return queryTokens.some((q) => itemTokens.includes(q));
+}
+function matchSearch(item, query) {
+  if (!query) return true;
+  const haystack = (item.getAttribute("data-tags") || "") + " " + (item.getAttribute("data-search") || "") + " " + (item.textContent || "");
+  return haystack.toLowerCase().includes(query.toLowerCase());
+}
+var FilterController = class {
+  constructor(container) {
+    this.container = container;
+    this.tag = "";
+    this.search = "";
+    this.matchMode = container.getAttribute("data-velin-filter-mode") === "all" ? "all" : "any";
+    this.itemSelector = container.getAttribute("data-velin-filter-item") || ":scope > *";
+  }
+  apply() {
+    const queryTokens = readTokens(this.tag);
+    const term = this.search;
+    filterList(
+      this.container,
+      (el) => {
+        const tokens = readTokens(el.getAttribute("data-tags"));
+        return matchTokens(tokens, queryTokens, this.matchMode) && matchSearch(el, term);
+      },
+      { itemSelector: this.itemSelector }
+    );
+  }
+};
+var _controllers = /* @__PURE__ */ new WeakMap();
+function getController(container) {
+  let ctrl = _controllers.get(container);
+  if (!ctrl) {
+    ctrl = new FilterController(container);
+    _controllers.set(container, ctrl);
+  }
+  return ctrl;
+}
+function resolveTarget(triggerEl) {
+  const sel = triggerEl.getAttribute("data-velin-filter-target");
+  if (!sel) return null;
+  try {
+    return document.querySelector(sel);
+  } catch {
+    return null;
+  }
+}
+function highlightActive(group, active) {
+  if (!group) return;
+  group.querySelectorAll("[data-velin-filter-value]").forEach((btn) => {
+    if (btn === active) btn.setAttribute("data-velin-filter-active", "");
+    else btn.removeAttribute("data-velin-filter-active");
+  });
+}
+function autoInit() {
+  if (typeof document === "undefined") return;
+  document.addEventListener("click", (event) => {
+    const target = event.target.closest("[data-velin-filter-value]");
+    if (!target) return;
+    const container = resolveTarget(target);
+    if (!container) return;
+    const group = target.closest("[data-velin-filter-group]") || target.parentElement;
+    highlightActive(group, target);
+    const ctrl = getController(container);
+    ctrl.tag = target.getAttribute("data-velin-filter-value") || "";
+    if (ctrl.tag.toLowerCase() === "all" || ctrl.tag === "*") ctrl.tag = "";
+    ctrl.apply();
+  });
+  const handleInput = (event) => {
+    const input = event.target.closest("[data-velin-filter-input]");
+    if (!input) return;
+    const container = resolveTarget(input);
+    if (!container) return;
+    const ctrl = getController(container);
+    const raw = input.value || (typeof input.getAttribute === "function" ? input.getAttribute("value") : "");
+    ctrl.search = (raw || "").trim();
+    ctrl.apply();
+  };
+  document.addEventListener("input", handleInput);
+  document.addEventListener("change", handleInput);
+}
+if (typeof document !== "undefined") {
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", autoInit, { once: true });
+  } else {
+    autoInit();
+  }
+}
+
 // components/velin-haptic.js
 var PATTERNS = {
   tap: [10],
@@ -2489,22 +4049,33 @@ if (typeof document !== "undefined") {
 export {
   PATTERNS as HapticPatterns,
   velin_accordion_default as VelinAccordion,
+  velin_announcer_default as VelinAnnouncer,
+  velin_bottom_nav_default as VelinBottomNav,
   velin_carousel_default as VelinCarousel,
   velin_collapse_default as VelinCollapse,
+  velin_combobox_default as VelinCombobox,
+  velin_command_default as VelinCommand,
   velin_copy_default as VelinCopy,
   velin_countdown_default as VelinCountdown,
+  velin_counter_default as VelinCounter,
   velin_dialog_default as VelinDialog,
   velin_drawer_default as VelinDrawer,
   velin_dropdown_default as VelinDropdown,
   VelinHapticObserver,
   velin_icon_default as VelinIcon,
   velin_lightbox_default as VelinLightbox,
+  velin_live_dot_default as VelinLiveDot,
+  velin_menubar_default as VelinMenubar,
   velin_modal_default as VelinModal,
   velin_persist_default as VelinPersist,
   velin_popover_default as VelinPopover,
   velin_progress_ring_default as VelinProgressRing,
+  velin_rating_default as VelinRating,
   velin_scroll_top_default as VelinScrollTop,
   velin_scrollspy_default as VelinScrollspy,
+  velin_segmented_control_default as VelinSegmentedControl,
+  velin_sheet_default as VelinSheet,
+  velin_sparkline_default as VelinSparkline,
   velin_stepper_wc_default as VelinStepperWC,
   velin_tabs_default as VelinTabs,
   velin_theme_toggle_default as VelinThemeToggle,
@@ -2512,11 +4083,20 @@ export {
   velin_tooltip_wc_default as VelinTooltipWC,
   applyHaptic,
   clearBackgroundInert,
+  createSafeHTML,
+  escapeHTML,
+  escapeHTMLAttribute,
+  filterList,
+  flipReorder,
   getFocusableElements,
+  getTrustedPolicy,
+  initReveal,
   restoreFocus,
   rovingTabindex,
+  sanitizeURL,
   saveFocus,
   setBackgroundInert,
+  stripControlChars,
   trapFocus,
   vibrate
 };

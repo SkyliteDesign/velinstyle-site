@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-velin-reveal-auto>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,13 +10,16 @@
 
   <!-- Open Graph -->
   <meta property="og:title" content="VelinStyle — Accessibility-First CSS Framework">
-  <meta property="og:description" content="35+ components, 22 web components, 13 themes, WCAG 2.2 AA aligned, CLI scanner. Modern CSS only.">
+  <meta property="og:description" content="35+ components, 29 web components, 13 themes, WCAG 2.2 AA, CLI scaffold & layout audit. Modern CSS only.">
   <meta property="og:url" content="https://velinstyle.info">
   <meta property="og:type" content="website">
 
   <!-- VelinStyle CSS -->
   <link rel="stylesheet" href="dist/velinstyle.min.css">
   <link rel="stylesheet" href="assets/css/home.css">
+
+  <!-- Favicon -->
+  <link rel="icon" href="assets/img/velinstyle-logo.svg" type="image/svg+xml">
 
   <!-- Fonts for themes -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,13 +28,9 @@
 
 </head>
 <body>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('velin-icon').forEach(icon => {
-        if (!icon.getAttribute('sprite')) icon.setAttribute('sprite', 'dist/velin-icons.svg');
-      });
-    });
-  </script>
+<svg data-velin-inline-sprite="1" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden"><symbol id="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="20 6 9 17 4 12"/>
+  </symbol></svg>
 
   <!-- Skip link -->
   <a href="#main" class="velin-skip-link">Skip to main content</a>
@@ -43,7 +42,9 @@
   <nav class="site-nav" id="siteNav" aria-label="Main navigation">
     <div class="site-nav__shell">
       <a href="index.html" class="site-nav__logo" aria-label="VelinStyle home">
-        <span aria-hidden="true">◆</span> VelinStyle
+        <img src="assets/img/velinstyle-logo.svg" alt="" width="28" height="28" class="site-nav__logo-mark">
+        <span class="site-nav__logo-text">VelinStyle</span>
+        <span class="site-nav__logo-version">v0.8.0</span>
       </a>
       <button type="button" class="site-nav__toggle" id="siteNavToggle" aria-label="Open menu" aria-expanded="false" aria-controls="siteNavPanel">&#9776;</button>
       <div class="site-nav__panel" id="siteNavPanel">
@@ -60,6 +61,9 @@
               <li role="none"><a href="demos/showcase-saas.html" role="menuitem">SaaS marketing<span class="site-nav__dropdown-desc">Landing layout &amp; content</span></a></li>
               <li role="none"><a href="demos/showcase-dashboard.html" role="menuitem">Dashboard<span class="site-nav__dropdown-desc">App shell &amp; data UI</span></a></li>
               <li role="none"><a href="demos/showcase-interactive.html" role="menuitem">Interactive<span class="site-nav__dropdown-desc">Web Components in action</span></a></li>
+              <li role="none"><a href="demos/showcase-forum.html" role="menuitem">Forum<span class="site-nav__dropdown-desc">Threads, ratings, composer</span></a></li>
+              <li role="none"><a href="demos/showcase-ecommerce.html" role="menuitem">E-Commerce<span class="site-nav__dropdown-desc">Catalog, cart sheet, bottom nav</span></a></li>
+              <li role="none"><a href="demos/showcase-crypto.html" role="menuitem">Crypto dashboard<span class="site-nav__dropdown-desc">Markets, command palette, order book</span></a></li>
             </ul>
           </li>
           <li><a href="#worlds">Story</a></li>
@@ -96,6 +100,18 @@
         <span class="site-nav__demo-tile-title">Interactive</span>
         <span class="site-nav__demo-tile-sub">Modals, toasts, widgets</span>
       </a>
+      <a href="demos/showcase-forum.html" class="site-nav__demo-tile">
+        <span class="site-nav__demo-tile-title">Forum</span>
+        <span class="site-nav__demo-tile-sub">Threads &amp; ratings</span>
+      </a>
+      <a href="demos/showcase-ecommerce.html" class="site-nav__demo-tile">
+        <span class="site-nav__demo-tile-title">Shop</span>
+        <span class="site-nav__demo-tile-sub">Catalog, cart sheet</span>
+      </a>
+      <a href="demos/showcase-crypto.html" class="site-nav__demo-tile">
+        <span class="site-nav__demo-tile-title">Crypto</span>
+        <span class="site-nav__demo-tile-sub">Markets &amp; command palette</span>
+      </a>
       <a href="demos/index.html" class="site-nav__demo-tile site-nav__demo-tile--all">
         <span class="site-nav__demo-tile-title">All</span>
       </a>
@@ -108,8 +124,7 @@
       <div class="hero__shine" aria-hidden="true"></div>
       <div class="hero__content">
         <div class="hero__badge">
-          <span class="hero__badge-dot" aria-hidden="true"></span>
-          v0.7.0 — Open Source &amp; Free
+          <velin-live-dot status="live" class="hero__badge-livedot">v0.8.0 &mdash; Open Source &amp; Free</velin-live-dot>
         </div>
         <h1 class="hero__title">VelinStyle</h1>
         <p class="hero__subtitle">
@@ -133,15 +148,15 @@
         <div class="hero__stats hero__stats--pills" aria-label="Highlights">
           <span class="hero__stat-pill">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="m9 12 2 2 4-4"/></svg>
-            35+ components
+            <velin-counter from="0" to="35" duration="1200" suffix="+"></velin-counter>&nbsp;components
           </span>
           <span class="hero__stat-pill">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-            22 web components
+            <velin-counter from="0" to="29" duration="1200"></velin-counter>&nbsp;web components
           </span>
           <span class="hero__stat-pill">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            13 themes
+            <velin-counter from="0" to="13" duration="1000"></velin-counter>&nbsp;themes
           </span>
           <span class="hero__stat-pill">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
@@ -152,6 +167,15 @@
             Lean bundle
           </span>
         </div>
+        <figure class="hero__spark" aria-label="VelinStyle adoption momentum">
+          <velin-sparkline
+            values="3,4,5,6,8,9,11,14,17,20,24,28,33"
+            width="640" height="80"
+            area glow
+            animate="draw"
+            label="VelinStyle component growth across 0.6 to 0.8.0 releases"></velin-sparkline>
+          <figcaption class="hero__spark-caption">Component growth from 0.5 &rarr; 0.8.0</figcaption>
+        </figure>
       </div>
     </section>
 
@@ -261,10 +285,10 @@
             <div class="feature-card__icon feature-card__icon--cli" aria-hidden="true">
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
             </div>
-            <h3 class="feature-card__title">CLI + Scanner</h3>
+            <h3 class="feature-card__title">CLI: scaffold, audit, scan</h3>
             <p class="feature-card__text">
-              Tree-shake CSS layers, download icons from any provider, and scan your project
-              for security, accessibility, and CSS issues — all from one CLI.
+              <strong>0.8.0:</strong> <code>velinstyle scaffold</code> turns prompts into blueprint HTML;
+              <code>layout audit</code> suggests responsive fixes. Plus icons, tokens, and security scan.
             </p>
           </article>
           <!-- Security -->
@@ -276,6 +300,24 @@
             <p class="feature-card__text">
               XSS-safe Web Components with <code>escapeHTML()</code>, CSP compatibility,
               Trusted Types, URL sanitization, and CSS content sandboxing out of the box.
+            </p>
+          </article>
+          <!-- New in 0.8.0 -->
+          <article class="feature-card">
+            <div class="feature-card__icon feature-card__icon--cli" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <h3 class="feature-card__title">New Web Components (0.8.0)</h3>
+            <p class="feature-card__text">
+              Eight production-ready primitives ship in 0.8.0:
+              <a href="docs/components/bottom-nav.html">bottom-nav</a>,
+              <a href="docs/components/combobox.html">combobox</a>,
+              <a href="docs/components/command.html">command palette</a>,
+              <a href="docs/components/menubar.html">menubar</a>,
+              <a href="docs/components/rating.html">rating</a>,
+              <a href="docs/components/segmented-control.html">segmented control</a>,
+              <a href="docs/components/sheet.html">sheet</a>, and
+              <a href="docs/components/announcer.html">announcer</a>.
             </p>
           </article>
         </div>
@@ -342,9 +384,9 @@
                 <h3>Drop in from a CDN</h3>
                 <p>Great for static HTML or quick prototypes (pin a version in production).</p>
                 <div class="install-code-row">
-                  <div class="playground__code"><code>&lt;link rel="stylesheet" href="https://unpkg.com/@birdapi/velinstyle@0.7.0/dist/velinstyle.min.css"&gt;
-&lt;script type="module" src="https://unpkg.com/@birdapi/velinstyle@0.7.0/dist/velinstyle-components.min.js"&gt;&lt;/script&gt;</code></div>
-                  <velin-copy value='&lt;link rel="stylesheet" href="https://unpkg.com/@birdapi/velinstyle@0.7.0/dist/velinstyle.min.css"&gt;&#10;&lt;script type="module" src="https://unpkg.com/@birdapi/velinstyle@0.7.0/dist/velinstyle-components.min.js"&gt;&lt;/script&gt;' label="Copy CDN tags"></velin-copy>
+                  <div class="playground__code"><code>&lt;link rel="stylesheet" href="https://unpkg.com/@birdapi/velinstyle@0.8.0/dist/velinstyle.min.css"&gt;
+&lt;script type="module" src="https://unpkg.com/@birdapi/velinstyle@0.8.0/dist/velinstyle-components.min.js"&gt;&lt;/script&gt;</code></div>
+                  <velin-copy value='&lt;link rel="stylesheet" href="https://unpkg.com/@birdapi/velinstyle@0.8.0/dist/velinstyle.min.css"&gt;&#10;&lt;script type="module" src="https://unpkg.com/@birdapi/velinstyle@0.8.0/dist/velinstyle-components.min.js"&gt;&lt;/script&gt;' label="Copy CDN tags"></velin-copy>
                 </div>
               </li>
             </ol>
@@ -413,6 +455,20 @@
         </div>
 
         <div class="dev-toolkit__grid velin-animate-on-scroll">
+          <article class="dev-toolkit-card">
+            <div class="dev-toolkit-card__meta">
+              <span class="dev-toolkit-card__tag">0.8.0</span>
+            </div>
+            <h3 class="dev-toolkit-card__title">Scaffold &amp; layout audit</h3>
+            <p class="dev-toolkit-card__text">
+              Generate Navbars, dashboards, and modals from text prompts, then run responsive layout checks before <code>scan</code>.
+            </p>
+            <div class="dev-toolkit-card__actions" style="display:flex;gap:0.5rem;flex-wrap:wrap">
+              <a href="docs/guides/prompt-scaffolding.html" class="velin-btn velin-btn--primary velin-btn--sm">Scaffold guide</a>
+              <a href="docs/guides/responsive-layout.html" class="velin-btn velin-btn--ghost velin-btn--sm">Layout audit</a>
+            </div>
+          </article>
+
           <article class="dev-toolkit-card dev-toolkit-card--span-2">
             <div class="dev-toolkit-card__meta">
               <span class="dev-toolkit-card__tag">CLI</span>
@@ -1256,8 +1312,73 @@ velinstyle icons add lucide --icons heart,star,zap</code></pre>
             A framework built for the modern web — not patched onto the old one.
           </p>
         </div>
+
+        <!-- ── At-a-glance scorecards ── -->
+        <div class="compare-cards" role="list">
+          <article class="compare-card compare-card--bs" role="listitem">
+            <header class="compare-card__head">
+              <span class="compare-card__name">Bootstrap</span>
+              <span class="compare-card__year">since 2011</span>
+            </header>
+            <div class="compare-card__score">
+              <div class="compare-card__score-num"><velin-counter from="0" to="6" decimals="1" suffix="/10" duration="900"></velin-counter></div>
+              <div class="compare-card__score-label">Modernness</div>
+            </div>
+            <velin-sparkline class="compare-card__spark" values="6,6,5.5,5,5,5,5,5,5,6" width="200" height="48" area animate="draw" label="Bootstrap relevance trend"></velin-sparkline>
+            <dl class="compare-card__stats">
+              <div><dt>Bundle</dt><dd><velin-counter from="0" to="230" suffix=" KB" duration="900"></velin-counter></dd></div>
+              <div><dt>Components</dt><dd>~25</dd></div>
+              <div><dt>Deps</dt><dd>jQuery&nbsp;/&nbsp;Popper</dd></div>
+            </dl>
+          </article>
+
+          <article class="compare-card compare-card--tw" role="listitem">
+            <header class="compare-card__head">
+              <span class="compare-card__name">Tailwind</span>
+              <span class="compare-card__year">since 2017</span>
+            </header>
+            <div class="compare-card__score">
+              <div class="compare-card__score-num"><velin-counter from="0" to="7.5" decimals="1" suffix="/10" duration="900"></velin-counter></div>
+              <div class="compare-card__score-label">Modernness</div>
+            </div>
+            <velin-sparkline class="compare-card__spark" values="3,4,5,6,7,7,8,8,7,7" width="200" height="48" area animate="draw" label="Tailwind relevance trend"></velin-sparkline>
+            <dl class="compare-card__stats">
+              <div><dt>Bundle</dt><dd>JIT (varies)</dd></div>
+              <div><dt>Components</dt><dd>0 (utility only)</dd></div>
+              <div><dt>Deps</dt><dd>PostCSS&nbsp;+&nbsp;Node</dd></div>
+            </dl>
+          </article>
+
+          <article class="compare-card compare-card--vs velin-chart-glow" role="listitem">
+            <header class="compare-card__head">
+              <span class="compare-card__name">VelinStyle <velin-live-dot status="live" pulse="true">v0.8.0</velin-live-dot></span>
+              <span class="compare-card__year">since 2025</span>
+            </header>
+            <div class="compare-card__score">
+              <div class="compare-card__score-num"><velin-counter from="0" to="9.6" decimals="1" suffix="/10" duration="1200"></velin-counter></div>
+              <div class="compare-card__score-label">Modernness</div>
+            </div>
+            <velin-sparkline class="compare-card__spark" values="3,4,5,5,6,7,8,9,10,10" width="200" height="48" area glow animate="draw" label="VelinStyle adoption trend"></velin-sparkline>
+            <dl class="compare-card__stats">
+              <div><dt>CSS bundle</dt><dd><velin-counter from="0" to="46" suffix=" KB" duration="1000"></velin-counter></dd></div>
+              <div><dt>JS bundle</dt><dd><velin-counter from="0" to="111" suffix=" KB" duration="1000"></velin-counter></dd></div>
+              <div><dt>Components</dt><dd>35+ CSS · 29 WC</dd></div>
+              <div><dt>Deps</dt><dd>None</dd></div>
+            </dl>
+          </article>
+        </div>
+
+        <!-- ── Filter chips that drive FLIP-animated table rows ── -->
+        <div class="compare-filterbar" role="group" aria-label="Filter rows by category" data-velin-filter-group>
+          <button type="button" class="velin-chip velin-chip--sm" data-velin-filter-value="all" data-velin-filter-target="#compareTable tbody" data-velin-filter-active>All features</button>
+          <button type="button" class="velin-chip velin-chip--sm" data-velin-filter-value="foundations" data-velin-filter-target="#compareTable tbody">Foundations</button>
+          <button type="button" class="velin-chip velin-chip--sm" data-velin-filter-value="a11y" data-velin-filter-target="#compareTable tbody">A11y &amp; UX</button>
+          <button type="button" class="velin-chip velin-chip--sm" data-velin-filter-value="modern" data-velin-filter-target="#compareTable tbody">Modern CSS</button>
+          <button type="button" class="velin-chip velin-chip--sm" data-velin-filter-value="dx" data-velin-filter-target="#compareTable tbody">DX &amp; Tooling</button>
+        </div>
+
         <div class="comparison-wrap">
-          <table class="comparison-table" aria-label="Framework comparison">
+          <table class="comparison-table" id="compareTable" aria-label="Framework comparison">
             <thead>
               <tr>
                 <th scope="col">Feature</th>
@@ -1266,108 +1387,114 @@ velinstyle icons add lucide --icons heart,star,zap</code></pre>
                 <th scope="col" class="highlight-col">VelinStyle</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
+            <tbody data-velin-flip data-velin-filter-item="tr">
+              <tr data-tags="foundations">
                 <td>Components</td>
                 <td>~25</td>
                 <td>0 (utility only)</td>
-                <td class="highlight-col">35+ CSS + 22 Web Components</td>
+                <td class="highlight-col">35+ CSS + 29 Web Components</td>
               </tr>
-              <tr>
+              <tr data-tags="foundations">
                 <td>Bundle Size</td>
                 <td>~230 KB (CSS+JS)</td>
                 <td>JIT (varies)</td>
-                <td class="highlight-col">~46 KB CSS + ~66 KB JS</td>
+                <td class="highlight-col">~46 KB CSS + ~111 KB JS</td>
               </tr>
-              <tr>
+              <tr data-tags="a11y">
                 <td>Accessibility</td>
                 <td><span class="partial-icon" aria-label="Partial">◐</span> Partial (ARIA in JS)</td>
                 <td><span class="x-icon" aria-label="None">✕</span> None built-in</td>
                 <td class="highlight-col"><span class="check-icon" aria-label="Full">✓</span> WCAG 2.2 AA structural</td>
               </tr>
-              <tr>
+              <tr data-tags="modern a11y">
                 <td>Dark Mode</td>
                 <td>Manual Sass swap</td>
                 <td><code>dark:</code> variant</td>
                 <td class="highlight-col">Automatic token swap</td>
               </tr>
-              <tr>
+              <tr data-tags="modern foundations">
                 <td>Color System</td>
                 <td>HEX / RGB</td>
                 <td>HEX / RGB</td>
                 <td class="highlight-col">OKLCH (perceptual)</td>
               </tr>
-              <tr>
+              <tr data-tags="foundations">
                 <td>JS Dependency</td>
                 <td>jQuery / Popper</td>
                 <td>PostCSS + Node</td>
                 <td class="highlight-col">None (Web Components)</td>
               </tr>
-              <tr>
+              <tr data-tags="modern">
                 <td>CSS Layers</td>
                 <td><span class="x-icon" aria-label="No">✕</span></td>
                 <td><span class="x-icon" aria-label="No">✕</span></td>
                 <td class="highlight-col"><span class="check-icon" aria-label="Yes">✓</span> 8 ordered layers</td>
               </tr>
-              <tr>
+              <tr data-tags="modern">
                 <td>Container Queries</td>
                 <td><span class="x-icon" aria-label="No">✕</span></td>
                 <td><span class="partial-icon" aria-label="Partial">◐</span> v4 only</td>
                 <td class="highlight-col"><span class="check-icon" aria-label="Yes">✓</span> First-class</td>
               </tr>
-              <tr>
+              <tr data-tags="a11y">
                 <td>RTL Support</td>
                 <td>Plugin</td>
                 <td>Plugin</td>
                 <td class="highlight-col">Built-in (logical props)</td>
               </tr>
-              <tr>
+              <tr data-tags="foundations">
                 <td>Theme System</td>
                 <td>Sass variables</td>
                 <td>tailwind.config</td>
                 <td class="highlight-col"><span class="check-icon" aria-label="Yes">&#10003;</span> 13 presets, 1 attribute swap</td>
               </tr>
-              <tr>
+              <tr data-tags="foundations">
                 <td>Icon System</td>
                 <td>External (Bootstrap Icons)</td>
                 <td>External (Heroicons)</td>
                 <td class="highlight-col"><span class="check-icon" aria-label="Yes">&#10003;</span> Built-in + 6 providers</td>
               </tr>
-              <tr>
+              <tr data-tags="dx">
                 <td>CLI Scanner</td>
                 <td><span class="x-icon" aria-label="No">&#10005;</span></td>
                 <td><span class="x-icon" aria-label="No">&#10005;</span></td>
                 <td class="highlight-col"><span class="check-icon" aria-label="Yes">&#10003;</span> A11y, Security, CSS</td>
               </tr>
-              <tr>
+              <tr data-tags="dx a11y">
                 <td>Security (XSS, CSP)</td>
                 <td><span class="x-icon" aria-label="No">&#10005;</span></td>
                 <td><span class="x-icon" aria-label="No">&#10005;</span></td>
                 <td class="highlight-col"><span class="check-icon" aria-label="Yes">&#10003;</span> Sanitization, Trusted Types</td>
               </tr>
-              <tr>
+              <tr data-tags="modern">
                 <td>View Transitions</td>
                 <td><span class="x-icon" aria-label="No">&#10005;</span></td>
                 <td><span class="x-icon" aria-label="No">&#10005;</span></td>
                 <td class="highlight-col"><span class="check-icon" aria-label="Yes">&#10003;</span> CSS-only morph</td>
               </tr>
-              <tr>
+              <tr data-tags="a11y">
                 <td>Haptic Feedback</td>
                 <td><span class="x-icon" aria-label="No">&#10005;</span></td>
                 <td><span class="x-icon" aria-label="No">&#10005;</span></td>
                 <td class="highlight-col"><span class="check-icon" aria-label="Yes">&#10003;</span> 6 patterns</td>
               </tr>
-              <tr>
+              <tr data-tags="dx">
                 <td>Form Persistence</td>
                 <td><span class="x-icon" aria-label="No">&#10005;</span></td>
                 <td><span class="x-icon" aria-label="No">&#10005;</span></td>
                 <td class="highlight-col"><span class="check-icon" aria-label="Yes">&#10003;</span> Zero-JS &lt;velin-persist&gt;</td>
               </tr>
-              <tr>
+              <tr data-tags="modern">
                 <td>Fluid Typography</td>
                 <td><span class="x-icon" aria-label="No">&#10005;</span></td>
                 <td><span class="partial-icon" aria-label="Partial">&#9680;</span> Manual</td>
                 <td class="highlight-col"><span class="check-icon" aria-label="Yes">&#10003;</span> clamp() engine</td>
+              </tr>
+              <tr data-tags="modern dx">
+                <td>Motion &amp; charts <small>(new 0.8.0)</small></td>
+                <td><span class="x-icon" aria-label="No">&#10005;</span></td>
+                <td><span class="x-icon" aria-label="No">&#10005;</span></td>
+                <td class="highlight-col"><span class="check-icon" aria-label="Yes">&#10003;</span> Sparkline, counter, FLIP-filter</td>
               </tr>
             </tbody>
           </table>
@@ -1687,6 +1814,7 @@ $ <span class="hl-attr">npx velinstyle scan</span> <span class="hl-str">--fix --
         <a href="https://www.npmjs.com/package/@birdapi/velinstyle" class="site-footer__link" target="_blank" rel="noopener">npm</a>
         <a href="https://github.com/SkyliteDesign/velinstyle/blob/main/CHANGELOG.md" class="site-footer__link" target="_blank" rel="noopener">Changelog</a>
         <a href="https://github.com/SkyliteDesign/velinstyle/blob/main/LICENSE" class="site-footer__link" target="_blank" rel="noopener">MIT License</a>
+        <a href="https://birdapi.de/impressum/" class="site-footer__link" target="_blank" rel="noopener">Imprint</a>
       </div>
     </div>
     <div class="site-footer__bottom">
@@ -1837,22 +1965,8 @@ $ <span class="hl-attr">npx velinstyle scan</span> <span class="hl-str">--fix --
     })();
 
     // ─── Scroll reveal ───
-    (function() {
-      const els = document.querySelectorAll('.velin-animate-on-scroll');
-      if (!window.IntersectionObserver) {
-        els.forEach(el => el.classList.add('is-visible'));
-        return;
-      }
-      const obs = new IntersectionObserver((entries) => {
-        entries.forEach(e => {
-          if (e.isIntersecting) {
-            e.target.classList.add('is-visible');
-            obs.unobserve(e.target);
-          }
-        });
-      }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-      els.forEach(el => obs.observe(el));
-    })();
+    // Handled by the velin-reveal helper that ships in dist/velinstyle-components.iife.js.
+    // Activation happens via data-velin-reveal-auto on <html>.
 
     // ─── Site nav: mobile panel, demos dropdown, scroll state ───
     (function() {

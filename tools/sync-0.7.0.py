@@ -10,9 +10,9 @@ FRAMEWORK_DIST = ROOT.parent / "velinstyle" / "dist"
 SITE_DIST = ROOT / "dist"
 
 VERSION_REPLACEMENTS = [
-    ("v0.7.0", "v0.7.0"),
-    ("@birdapi/velinstyle@0.7.0", "@birdapi/velinstyle@0.7.0"),
-    ("@birdapi/velinstyle@0.7.0", "@birdapi/velinstyle@0.7.0"),
+    ("v0.8.0", "v0.8.0"),
+    ("@birdapi/velinstyle@0.8.0", "@birdapi/velinstyle@0.8.0"),
+    ("@birdapi/velinstyle@0.8.0", "@birdapi/velinstyle@0.8.0"),
     ("WCAG 2.2 AA aligned", "WCAG 2.2 AA aligned"),
     ("WCAG 2.2 AA by design", "WCAG 2.2 AA by design"),
     ("WCAG 2.2 AA", "WCAG 2.2 AA"),

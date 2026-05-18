@@ -66,6 +66,12 @@
     "keywords": "Alerts VelinStyle Alerts — contextual feedback messages with info, success, warning, and danger variants. components alerts.html"
   },
   {
+    "title": "Announcer",
+    "section": "Components",
+    "url": "components/announcer.html",
+    "keywords": "Announcer VelinStyle Announcer — velin-announcer Web Component documentation. components announcer.html"
+  },
+  {
     "title": "Avatar",
     "section": "Components",
     "url": "components/avatar.html",
@@ -76,6 +82,12 @@
     "section": "Components",
     "url": "components/badge.html",
     "keywords": "Badge VelinStyle Badge — small labels for counts, statuses, and categories with color variants, outline, and dot styles. components badge.html"
+  },
+  {
+    "title": "Bottom navigation",
+    "section": "Components",
+    "url": "components/bottom-nav.html",
+    "keywords": "Bottom navigation VelinStyle Bottom navigation — velin-bottom-nav Web Component documentation. components bottom-nav.html"
   },
   {
     "title": "Breadcrumb",
@@ -126,6 +138,18 @@
     "keywords": "Collapse VelinStyle Collapse — a Web Component for toggling content visibility with smooth CSS grid animation. components collapse.html"
   },
   {
+    "title": "Combobox",
+    "section": "Components",
+    "url": "components/combobox.html",
+    "keywords": "Combobox VelinStyle Combobox — velin-combobox Web Component documentation. components combobox.html"
+  },
+  {
+    "title": "Command palette",
+    "section": "Components",
+    "url": "components/command.html",
+    "keywords": "Command palette VelinStyle Command palette — velin-command Web Component documentation. components command.html"
+  },
+  {
     "title": "Dialog",
     "section": "Components",
     "url": "components/dialog.html",
@@ -160,6 +184,12 @@
     "section": "Components",
     "url": "components/list-group.html",
     "keywords": "List Group VelinStyle list group component — flexible lists with active states, badges, flush variant, and contextual colors. components list-group.html"
+  },
+  {
+    "title": "Menubar",
+    "section": "Components",
+    "url": "components/menubar.html",
+    "keywords": "Menubar VelinStyle Menubar — velin-menubar Web Component documentation. components menubar.html"
   },
   {
     "title": "Modal",
@@ -204,10 +234,28 @@
     "keywords": "Progress VelinStyle progress bar component — sizes, colors, striped, animated, and indeterminate variants. components progress.html"
   },
   {
+    "title": "Rating",
+    "section": "Components",
+    "url": "components/rating.html",
+    "keywords": "Rating VelinStyle Rating — velin-rating Web Component documentation. components rating.html"
+  },
+  {
     "title": "Scrollspy",
     "section": "Components",
     "url": "components/scrollspy.html",
     "keywords": "Scrollspy VelinStyle scrollspy component — automatically update navigation highlighting based on scroll position using IntersectionObserver. components scrollspy.html"
+  },
+  {
+    "title": "Segmented control",
+    "section": "Components",
+    "url": "components/segmented-control.html",
+    "keywords": "Segmented control VelinStyle Segmented control — velin-segmented-control Web Component documentation. components segmented-control.html"
+  },
+  {
+    "title": "Sheet",
+    "section": "Components",
+    "url": "components/sheet.html",
+    "keywords": "Sheet VelinStyle Sheet — velin-sheet Web Component documentation. components sheet.html"
   },
   {
     "title": "Spinners",
@@ -492,10 +540,34 @@
     "keywords": "Guides Practical guides: integrate VelinStyle into an existing project, and use the Vite starter with optional React wrappers. guides index.html"
   },
   {
+    "title": "Laravel (Vite + Blade)",
+    "section": "Guides",
+    "url": "guides/laravel.html",
+    "keywords": "Laravel (Vite + Blade) Use VelinStyle in Laravel with Vite and Blade: npm install, CSS/JS imports, themes, and icons. guides laravel.html"
+  },
+  {
+    "title": "Prompt scaffolding",
+    "section": "Guides",
+    "url": "guides/prompt-scaffolding.html",
+    "keywords": "Prompt scaffolding Generate HTML from text prompts with velinstyle scaffold — blueprint composition without an API key. guides prompt-scaffolding.html"
+  },
+  {
     "title": "Vite starter &amp; React",
     "section": "Guides",
     "url": "guides/react-vite-starter.html",
     "keywords": "Vite starter &amp; React Vite starter template and @velinstyle/react — clone, run, and wire thin Web Component wrappers in React. guides react-vite-starter.html"
+  },
+  {
+    "title": "Responsive layout audit",
+    "section": "Guides",
+    "url": "guides/responsive-layout.html",
+    "keywords": "Responsive layout audit Responsive layout audit with velinstyle layout audit, suggest, and safe fix — flex, grid, and breakpoint patterns. guides responsive-layout.html"
+  },
+  {
+    "title": "WordPress",
+    "section": "Guides",
+    "url": "guides/wordpress.html",
+    "keywords": "WordPress Use VelinStyle in WordPress: wp_enqueue_style/script, block editor notes, and icon sprites. guides wordpress.html"
   },
   {
     "title": "Clearfix",
@@ -706,6 +778,12 @@
     "section": "Utilities",
     "url": "utilities/print.html",
     "keywords": "Print Print-only and no-print utilities for documents. utilities print.html"
+  },
+  {
+    "title": "Safe area",
+    "section": "Utilities",
+    "url": "utilities/safe-area.html",
+    "keywords": "Safe area Safe-area padding utilities and mobile/desktop visibility helpers for notched devices and responsive layouts. utilities safe-area.html"
   },
   {
     "title": "Scroll",

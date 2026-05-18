@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-"""Update velinstyle-site docs to @birdapi/velinstyle@0.7.0 install/CDN paths."""
+"""Update velinstyle-site docs to @birdapi/velinstyle@0.8.0 install/CDN paths."""
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 EXT = {".html", ".md", ".json", ".js", ".py"}
 
 REPLACEMENTS = [
-    ("velinstyle@0.4.0", "@birdapi/velinstyle@0.7.0"),
-    ("@birdapi/velinstyle@0.6.1", "@birdapi/velinstyle@0.7.0"),
+    ("velinstyle@0.4.0", "@birdapi/velinstyle@0.8.0"),
+    ("@birdapi/velinstyle@0.6.1", "@birdapi/velinstyle@0.8.0"),
     ("cdn.jsdelivr.net/npm/velinstyle@", "cdn.jsdelivr.net/npm/@birdapi/velinstyle@"),
     ("unpkg.com/velinstyle@", "unpkg.com/@birdapi/velinstyle@"),
     ("https://www.npmjs.com/package/velinstyle", "https://www.npmjs.com/package/@birdapi/velinstyle"),

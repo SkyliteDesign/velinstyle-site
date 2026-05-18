@@ -196,11 +196,18 @@
     --velin-duration-normal: .2s;
     --velin-duration-slow: .3s;
     --velin-duration-slower: .5s;
+    --velin-duration-slowest: .8s;
+    --velin-duration-cinematic: 1.2s;
     --velin-ease-default: cubic-bezier(.4, 0, .2, 1);
     --velin-ease-in: cubic-bezier(.4, 0, 1, 1);
     --velin-ease-out: cubic-bezier(0, 0, .2, 1);
     --velin-ease-in-out: cubic-bezier(.4, 0, .2, 1);
     --velin-ease-bounce: cubic-bezier(.34, 1.56, .64, 1);
+    --velin-ease-spring: cubic-bezier(.34, 1.56, .64, 1.4);
+    --velin-ease-elastic: cubic-bezier(.68, -.6, .32, 1.6);
+    --velin-ease-expo-out: cubic-bezier(.16, 1, .3, 1);
+    --velin-ease-back-out: cubic-bezier(.34, 1.4, .64, 1);
+    --velin-ease-snappy: cubic-bezier(.2, .8, .2, 1);
     --velin-transition-colors: color var(--velin-duration-normal) var(--velin-ease-default),
       background-color var(--velin-duration-normal) var(--velin-ease-default),
       border-color var(--velin-duration-normal) var(--velin-ease-default);
@@ -334,7 +341,7 @@
     display: none !important;
   }
 
-  velin-modal:not(:defined), velin-drawer:not(:defined), velin-tabs:not(:defined), velin-accordion:not(:defined), velin-dropdown:not(:defined), velin-toast:not(:defined), velin-dialog:not(:defined), velin-popover:not(:defined), velin-tooltip-wc:not(:defined), velin-lightbox:not(:defined), velin-carousel:not(:defined), velin-collapse:not(:defined), velin-stepper-wc:not(:defined), velin-countdown:not(:defined), velin-progress-ring:not(:defined), velin-persist:not(:defined), velin-copy:not(:defined), velin-scroll-top:not(:defined), velin-scrollspy:not(:defined), velin-theme-toggle:not(:defined), velin-icon:not(:defined) {
+  velin-modal:not(:defined), velin-drawer:not(:defined), velin-tabs:not(:defined), velin-accordion:not(:defined), velin-dropdown:not(:defined), velin-toast:not(:defined), velin-dialog:not(:defined), velin-popover:not(:defined), velin-tooltip-wc:not(:defined), velin-lightbox:not(:defined), velin-carousel:not(:defined), velin-collapse:not(:defined), velin-stepper-wc:not(:defined), velin-countdown:not(:defined), velin-progress-ring:not(:defined), velin-persist:not(:defined), velin-copy:not(:defined), velin-scroll-top:not(:defined), velin-scrollspy:not(:defined), velin-theme-toggle:not(:defined), velin-icon:not(:defined), velin-combobox:not(:defined), velin-bottom-nav:not(:defined), velin-sheet:not(:defined), velin-segmented-control:not(:defined), velin-rating:not(:defined), velin-menubar:not(:defined), velin-command:not(:defined), velin-announcer:not(:defined), velin-sparkline:not(:defined), velin-counter:not(:defined), velin-live-dot:not(:defined) {
     opacity: 0;
     visibility: hidden;
   }
@@ -6426,8 +6433,414 @@
     animation-play-state: paused;
   }
 
-  .velin-animate-hover:hover {
-    animation-play-state: running;
+  @media (hover: hover) and (pointer: fine) {
+    .velin-animate-hover:hover {
+      animation-play-state: running;
+    }
+  }
+
+  .velin-animate-blur-in {
+    animation: velin-blur-in var(--velin-duration-normal) var(--velin-ease-out) both;
+  }
+
+  .velin-animate-blur-out {
+    animation: velin-blur-out var(--velin-duration-normal) var(--velin-ease-in) both;
+  }
+
+  .velin-animate-rotate-in {
+    animation: velin-rotate-in var(--velin-duration-normal) var(--velin-ease-out) both;
+  }
+
+  .velin-animate-float {
+    animation: velin-float 3s var(--velin-ease-in-out) infinite;
+  }
+
+  .velin-animate-flash {
+    animation: velin-flash .6s var(--velin-ease-default) both;
+  }
+
+  .velin-animate-reveal-up {
+    animation: velin-reveal-up var(--velin-duration-normal) var(--velin-ease-out) both;
+  }
+
+  .velin-animate-reveal-down {
+    animation: velin-reveal-down var(--velin-duration-normal) var(--velin-ease-out) both;
+  }
+
+  .velin-animate-glow {
+    animation: velin-glow 2s var(--velin-ease-in-out) infinite;
+  }
+
+  .velin-animate-slide-fade-left {
+    animation: velin-slide-fade-left var(--velin-duration-normal) var(--velin-ease-out) both;
+  }
+
+  .velin-animate-slide-fade-right {
+    animation: velin-slide-fade-right var(--velin-duration-normal) var(--velin-ease-out) both;
+  }
+
+  @keyframes velin-blur-in {
+    from {
+      opacity: 0;
+      filter: blur(8px);
+    }
+
+    to {
+      opacity: 1;
+      filter: blur();
+    }
+  }
+
+  @keyframes velin-blur-out {
+    from {
+      opacity: 1;
+      filter: blur();
+    }
+
+    to {
+      opacity: 0;
+      filter: blur(8px);
+    }
+  }
+
+  @keyframes velin-rotate-in {
+    from {
+      opacity: 0;
+      transform: rotate(-8deg) scale(.95);
+    }
+
+    to {
+      opacity: 1;
+      transform: rotate(0) scale(1);
+    }
+  }
+
+  @keyframes velin-float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-.35rem);
+    }
+  }
+
+  @keyframes velin-flash {
+    0%, 50%, 100% {
+      opacity: 1;
+    }
+
+    25%, 75% {
+      opacity: .35;
+    }
+  }
+
+  @keyframes velin-reveal-up {
+    from {
+      clip-path: inset(100% 0 0);
+      opacity: 0;
+    }
+
+    to {
+      clip-path: inset(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes velin-reveal-down {
+    from {
+      clip-path: inset(0 0 100%);
+      opacity: 0;
+    }
+
+    to {
+      clip-path: inset(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes velin-glow {
+    0%, 100% {
+      box-shadow: 0 0 #0000;
+    }
+
+    50% {
+      box-shadow: 0 0 1rem 0 color-mix(in oklch, var(--velin-color-primary, #2563eb) 35%, transparent);
+    }
+  }
+
+  @keyframes velin-slide-fade-left {
+    from {
+      opacity: 0;
+      transform: translateX(1rem);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes velin-slide-fade-right {
+    from {
+      opacity: 0;
+      transform: translateX(-1rem);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .velin-animate-blur-in, .velin-animate-blur-out, .velin-animate-rotate-in, .velin-animate-reveal-up, .velin-animate-reveal-down, .velin-animate-slide-fade-left, .velin-animate-slide-fade-right {
+      opacity: 1;
+      filter: none;
+      clip-path: none;
+      animation: none;
+      transform: none;
+    }
+
+    .velin-animate-float, .velin-animate-glow, .velin-animate-flash {
+      animation: none;
+    }
+  }
+
+  .velin-saturate-0 {
+    filter: saturate(0);
+  }
+
+  .velin-saturate-50 {
+    filter: saturate(.5);
+  }
+
+  .velin-saturate-100 {
+    filter: saturate();
+  }
+
+  .velin-saturate-150 {
+    filter: saturate(1.5);
+  }
+
+  .velin-saturate-200 {
+    filter: saturate(2);
+  }
+
+  .velin-hue-rotate-15 {
+    filter: hue-rotate(15deg);
+  }
+
+  .velin-hue-rotate-30 {
+    filter: hue-rotate(30deg);
+  }
+
+  .velin-hue-rotate-60 {
+    filter: hue-rotate(60deg);
+  }
+
+  .velin-hue-rotate-90 {
+    filter: hue-rotate(90deg);
+  }
+
+  .velin-hue-rotate-180 {
+    filter: hue-rotate(180deg);
+  }
+
+  .velin-contrast-50 {
+    filter: contrast(.5);
+  }
+
+  .velin-contrast-75 {
+    filter: contrast(.75);
+  }
+
+  .velin-contrast-100 {
+    filter: contrast();
+  }
+
+  .velin-contrast-125 {
+    filter: contrast(1.25);
+  }
+
+  .velin-contrast-150 {
+    filter: contrast(1.5);
+  }
+
+  .velin-invert {
+    filter: invert();
+  }
+
+  .velin-invert-0 {
+    filter: invert(0);
+  }
+
+  .velin-sepia {
+    filter: sepia();
+  }
+
+  .velin-sepia-50 {
+    filter: sepia(.5);
+  }
+
+  .velin-sepia-0 {
+    filter: sepia(0);
+  }
+
+  .velin-drop-shadow-sm {
+    filter: drop-shadow(0 1px 1px oklch(0% 0 0 / .18));
+  }
+
+  .velin-drop-shadow-md {
+    filter: drop-shadow(0 4px 6px oklch(0% 0 0 / .18));
+  }
+
+  .velin-drop-shadow-lg {
+    filter: drop-shadow(0 12px 24px oklch(0% 0 0 / .22));
+  }
+
+  .velin-drop-shadow-glow {
+    filter: drop-shadow(0 0 1.5rem color-mix(in oklch, var(--velin-color-primary, #2563eb) 60%, transparent));
+  }
+
+  .velin-backdrop-saturate {
+    -webkit-backdrop-filter: saturate(180%);
+  }
+
+  .velin-backdrop-brightness-90 {
+    -webkit-backdrop-filter: brightness(.9);
+  }
+
+  .velin-backdrop-brightness-110 {
+    -webkit-backdrop-filter: brightness(1.1);
+  }
+
+  .velin-backdrop-grayscale {
+    -webkit-backdrop-filter: grayscale();
+  }
+
+  .velin-glass {
+    background: color-mix(in oklch, var(--velin-color-surface-bright, #fff) 70%, transparent);
+    -webkit-backdrop-filter: blur(12px) saturate(160%);
+    border: 1px solid color-mix(in oklch, var(--velin-color-border, #ddd) 60%, transparent);
+  }
+
+  .velin-glass-strong {
+    background: color-mix(in oklch, var(--velin-color-surface-bright, #fff) 55%, transparent);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid color-mix(in oklch, var(--velin-color-border, #ddd) 70%, transparent);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .velin-saturate-0, .velin-saturate-50, .velin-saturate-100, .velin-saturate-150, .velin-saturate-200, .velin-hue-rotate-15, .velin-hue-rotate-30, .velin-hue-rotate-60, .velin-hue-rotate-90, .velin-hue-rotate-180 {
+      filter: none;
+    }
+  }
+
+  @keyframes velin-stroke-draw {
+    from {
+      stroke-dashoffset: var(--velin-chart-len, 1000);
+    }
+
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes velin-sparkline-glow {
+    0%, 100% {
+      filter: drop-shadow(0 0 #0000);
+    }
+
+    50% {
+      filter: drop-shadow(0 0 .5rem color-mix(in oklch, var(--velin-chart-glow-color, var(--velin-color-primary, #2563eb)) 50%, transparent));
+    }
+  }
+
+  @keyframes velin-value-bump {
+    0% {
+      transform: scale(1);
+    }
+
+    35% {
+      color: var(--velin-chart-bump-color, var(--velin-color-primary, #2563eb));
+      transform: scale(1.06);
+    }
+
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  @keyframes velin-live-pulse {
+    0% {
+      box-shadow: 0 0 0 0 color-mix(in oklch, var(--velin-live-color, var(--velin-color-success, oklch(60% .16 145))) 65%, transparent);
+    }
+
+    70% {
+      box-shadow: 0 0 0 .65rem color-mix(in oklch, var(--velin-live-color, var(--velin-color-success, oklch(60% .16 145))) 0%, transparent);
+    }
+
+    100% {
+      box-shadow: 0 0 #0000;
+    }
+  }
+
+  @keyframes velin-count-fade {
+    from {
+      opacity: 0;
+      transform: translateY(.4rem);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .velin-chart-line {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: var(--velin-chart-len, 1000);
+    stroke-dashoffset: 0;
+    animation: velin-stroke-draw var(--velin-duration-cinematic, 1.2s) var(--velin-ease-expo-out, ease-out) both;
+  }
+
+  .velin-chart-area {
+    fill: var(--velin-chart-area-fill, currentColor);
+    opacity: 0;
+    animation: velin-count-fade var(--velin-duration-slowest, .8s) var(--velin-ease-expo-out, ease-out) .2s forwards;
+  }
+
+  .velin-chart-glow {
+    animation: velin-sparkline-glow 2.4s var(--velin-ease-in-out, ease-in-out) infinite;
+  }
+
+  .velin-spark-tick {
+    animation: velin-value-bump var(--velin-duration-slow, .3s) var(--velin-ease-spring, ease-out) both;
+  }
+
+  .velin-live-pulse {
+    animation: velin-live-pulse 1.8s var(--velin-ease-out, ease-out) infinite;
+    border-radius: 50%;
+  }
+
+  .velin-count-fade {
+    animation: velin-count-fade var(--velin-duration-slow, .3s) var(--velin-ease-expo-out, ease-out) both;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .velin-chart-line, .velin-chart-area, .velin-chart-glow, .velin-spark-tick, .velin-live-pulse, .velin-count-fade {
+      stroke-dashoffset: 0;
+      opacity: 1;
+      filter: none;
+      box-shadow: none;
+      animation: none;
+      transform: none;
+    }
   }
 
   .velin-gradient-primary {
@@ -7485,6 +7898,44 @@
 
     .velin-xl-w-1\/4 {
       inline-size: 25%;
+    }
+  }
+
+  .velin-pt-safe {
+    padding-block-start: max(var(--velin-space-4, 1rem), env(safe-area-inset-top, 0px));
+  }
+
+  .velin-pb-safe {
+    padding-block-end: max(var(--velin-space-4, 1rem), env(safe-area-inset-bottom, 0px));
+  }
+
+  .velin-px-safe {
+    padding-inline: max(var(--velin-space-4, 1rem), env(safe-area-inset-left, 0px))
+      max(var(--velin-space-4, 1rem), env(safe-area-inset-right, 0px));
+  }
+
+  .velin-p-safe {
+    padding-block: max(var(--velin-space-4, 1rem), env(safe-area-inset-top, 0px))
+      max(var(--velin-space-4, 1rem), env(safe-area-inset-bottom, 0px));
+    padding-inline: max(var(--velin-space-4, 1rem), env(safe-area-inset-left, 0px))
+      max(var(--velin-space-4, 1rem), env(safe-area-inset-right, 0px));
+  }
+
+  .velin-mobile-only {
+    display: block;
+  }
+
+  .velin-desktop-only {
+    display: none;
+  }
+
+  @media (width >= 48rem) {
+    .velin-mobile-only {
+      display: none;
+    }
+
+    .velin-desktop-only {
+      display: block;
     }
   }
 
@@ -8681,6 +9132,24 @@
     -webkit-box-shadow: 0 0 0 1000px var(--velin-color-surface-bright, #fff) inset;
     -webkit-text-fill-color: var(--velin-color-text, #1a1a2e);
     transition: background-color 600000s, color 600000s;
+  }
+
+  .velin-isolate {
+    isolation: isolate;
+    contain: layout style paint;
+  }
+
+  .velin-sensitive {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  .velin-overlay-lock {
+    overscroll-behavior: contain;
+  }
+
+  .velin-user-content img[src^="data:"] {
+    max-inline-size: 100%;
   }
 }
 

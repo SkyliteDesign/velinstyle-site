@@ -11,7 +11,7 @@
     .demo-bar {
       background: var(--velin-color-surface-bright);
       border-bottom: 1px solid var(--velin-color-border);
-      padding: var(--velin-space-3) var(--velin-space-6);
+      padding: max(var(--velin-space-3), env(safe-area-inset-top)) var(--velin-space-6) var(--velin-space-3);
       position: sticky;
       top: 0;
       z-index: 50;
@@ -51,7 +51,7 @@
         <a href="../index.html">Home</a>
         <a href="index.html">All demos</a>
       </nav>
-      <velin-theme-toggle></velin-theme-toggle>
+      <velin-theme-toggle themes-base="../dist/themes/"></velin-theme-toggle>
     </div>
   </header>
   <div class="page" id="main">
@@ -117,6 +117,36 @@
         </div>
       </div>
     </section>
+
+    <section class="panel" aria-labelledby="announcer-title">
+      <h2 id="announcer-title">Announcer <span class="velin-badge velin-badge--info" style="margin-inline-start:.5rem">New in 0.8.0</span></h2>
+      <p style="margin:0 0 var(--velin-space-4);font-size:var(--velin-text-sm);color:var(--velin-color-text-muted)">
+        Politely announces status messages to assistive tech (live region). Try the buttons—screen readers will read each message.
+      </p>
+      <div class="row">
+        <button type="button" class="velin-btn velin-btn--outline velin-btn--sm" data-announce="polite">Polite announcement</button>
+        <button type="button" class="velin-btn velin-btn--outline velin-btn--sm" data-announce="assertive">Assertive announcement</button>
+      </div>
+      <velin-announcer id="demoAnnouncer"></velin-announcer>
+    </section>
+
+    <section class="panel" aria-labelledby="sheet-title">
+      <h2 id="sheet-title">Sheet <span class="velin-badge velin-badge--info" style="margin-inline-start:.5rem">New in 0.8.0</span></h2>
+      <p style="margin:0 0 var(--velin-space-4);font-size:var(--velin-text-sm);color:var(--velin-color-text-muted)">
+        Side-anchored panel for filters, carts, or secondary forms. Opens via <code>show()</code>, closes on backdrop click.
+      </p>
+      <button type="button" class="velin-btn velin-btn--primary" id="openSheetBtn">Open sheet</button>
+      <velin-sheet id="demoSheet" position="end" aria-label="Demo sheet">
+        <h3 slot="header" style="margin:0;font-size:var(--velin-text-lg)">Side sheet</h3>
+        <p>Slide-in surface for tasks that need context but not a full modal. Pair with form-control inputs.</p>
+        <label class="velin-label" for="sheet-note">Note</label>
+        <textarea class="velin-textarea" id="sheet-note" rows="4" placeholder="What's on your mind?"></textarea>
+        <div slot="footer" style="display:flex;gap:var(--velin-space-2);justify-content:flex-end;width:100%">
+          <button type="button" class="velin-btn velin-btn--ghost" id="closeSheetBtn">Cancel</button>
+          <button type="button" class="velin-btn velin-btn--primary" id="saveSheetBtn">Save</button>
+        </div>
+      </velin-sheet>
+    </section>
   </div>
   <script src="../dist/velinstyle-components.iife.js"></script>
   <script>
@@ -138,6 +168,37 @@
           toaster.show({ message: messages[type] || 'Notice', type });
         });
       });
+
+      const announcer = document.getElementById('demoAnnouncer');
+      document.querySelectorAll('[data-announce]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const mode = btn.getAttribute('data-announce');
+          const message = mode === 'assertive'
+            ? 'Critical update: payment method required.'
+            : 'Saved draft at ' + new Date().toLocaleTimeString();
+          if (announcer && typeof announcer.announce === 'function') {
+            announcer.announce(message, { politeness: mode });
+          } else if (announcer) {
+            announcer.setAttribute('message', message);
+            announcer.setAttribute('politeness', mode);
+          }
+        });
+      });
+
+      const sheet = document.getElementById('demoSheet');
+      function openSheet() {
+        if (!sheet) return;
+        if (typeof sheet.show === 'function') sheet.show();
+        else sheet.setAttribute('open', '');
+      }
+      function closeSheet() {
+        if (!sheet) return;
+        if (typeof sheet.hide === 'function') sheet.hide();
+        else sheet.removeAttribute('open');
+      }
+      document.getElementById('openSheetBtn').addEventListener('click', openSheet);
+      document.getElementById('closeSheetBtn').addEventListener('click', closeSheet);
+      document.getElementById('saveSheetBtn').addEventListener('click', closeSheet);
     });
   </script>
 </body>

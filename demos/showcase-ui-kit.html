@@ -11,7 +11,7 @@
     .demo-bar {
       background: var(--velin-color-surface-bright);
       border-bottom: 1px solid var(--velin-color-border);
-      padding: var(--velin-space-3) var(--velin-space-6);
+      padding: max(var(--velin-space-3), env(safe-area-inset-top)) var(--velin-space-6) var(--velin-space-3);
       position: sticky;
       top: 0;
       z-index: 100;
@@ -45,14 +45,19 @@
   </style>
 </head>
 <body>
-  <a href="#main" class="velin-skip-link">Skip to main content</a>
+<svg data-velin-inline-sprite="1" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden"><symbol id="search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="11" cy="11" r="8"/>
+  <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+  </symbol></svg>
+
+<a href="#main" class="velin-skip-link">Skip to main content</a>
   <header class="demo-bar">
     <div class="demo-bar__inner">
       <nav aria-label="Demo navigation">
         <a href="../index.html">Home</a>
         <a href="index.html">All demos</a>
       </nav>
-      <velin-theme-toggle></velin-theme-toggle>
+      <velin-theme-toggle themes-base="../dist/themes/"></velin-theme-toggle>
     </div>
   </header>
   <div class="velin-container page" id="main">
@@ -148,14 +153,37 @@
         </details>
       </velin-accordion>
     </section>
+
+    <section class="panel" aria-labelledby="rating-heading">
+      <h2 id="rating-heading">Rating &amp; segmented control <span class="velin-badge velin-badge--info" style="margin-inline-start:.5rem">New in 0.8.0</span></h2>
+      <p class="muted">Star input and segmented toggles share theme tokens and respect <code>prefers-reduced-motion</code>.</p>
+      <div class="stack">
+        <label class="velin-label" for="rating-demo">Overall rating</label>
+        <velin-rating id="rating-demo" value="4" max="5" aria-label="Rate this UI kit"></velin-rating>
+        <label class="velin-label" for="density-demo" style="margin-top:var(--velin-space-3)">Density</label>
+        <velin-segmented-control id="density-demo" value="comfortable" aria-label="Layout density">
+          <button type="button" data-value="compact">Compact</button>
+          <button type="button" data-value="comfortable">Comfortable</button>
+          <button type="button" data-value="spacious">Spacious</button>
+        </velin-segmented-control>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="combobox-heading">
+      <h2 id="combobox-heading">Combobox <span class="velin-badge velin-badge--info" style="margin-inline-start:.5rem">New in 0.8.0</span></h2>
+      <p class="muted">Filterable single-select with full keyboard support.</p>
+      <label class="velin-label" for="framework-combo">Pick your framework</label>
+      <velin-combobox id="framework-combo" placeholder="Search frameworks…" aria-label="Framework">
+        <option value="react">React</option>
+        <option value="vue">Vue</option>
+        <option value="svelte">Svelte</option>
+        <option value="solid">Solid</option>
+        <option value="angular">Angular</option>
+        <option value="qwik">Qwik</option>
+        <option value="lit">Lit</option>
+      </velin-combobox>
+    </section>
   </div>
   <script src="../dist/velinstyle-components.iife.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('velin-icon').forEach((icon) => {
-        if (!icon.getAttribute('sprite')) icon.setAttribute('sprite', '../dist/velin-icons.svg');
-      });
-    });
-  </script>
 </body>
 </html>

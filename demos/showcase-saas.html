@@ -1,22 +1,37 @@
 <!DOCTYPE html>
-<html lang="en" data-velin-theme="ocean">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SaaS landing showcase — VelinStyle</title>
   <meta name="description" content="Marketing-style landing page: hero, social proof, features, pricing teaser, built with VelinStyle layout utilities.">
   <link rel="stylesheet" href="../dist/velinstyle.min.css">
-  <link rel="stylesheet" href="../dist/themes/ocean.min.css">
   <style>
     body { margin: 0; background: var(--velin-color-surface); }
     .demo-bar {
       background: oklch(from var(--velin-color-surface-bright) l c h / 0.92);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--velin-color-border);
-      padding: var(--velin-space-3) var(--velin-space-6);
+      padding: max(var(--velin-space-3), env(safe-area-inset-top)) var(--velin-space-6) var(--velin-space-3);
       position: sticky;
       top: 0;
       z-index: 100;
+    }
+    .mobile-menu-trigger { display: none; }
+    @media (max-width: 48rem) {
+      .demo-bar nav .desktop-only { display: none; }
+      .mobile-menu-trigger { display: inline-flex; }
+    }
+    velin-bottom-nav {
+      display: none;
+      position: fixed;
+      inset-inline: 0;
+      inset-block-end: 0;
+      z-index: 90;
+    }
+    @media (max-width: 48rem) {
+      velin-bottom-nav { display: flex; }
+      main { padding-block-end: 5rem; }
     }
     .demo-bar__inner {
       max-width: 72rem;
@@ -118,16 +133,47 @@
   </style>
 </head>
 <body>
-  <a href="#main" class="velin-skip-link">Skip to main content</a>
+<svg data-velin-inline-sprite="1" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden"><symbol id="github" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+  </symbol><symbol id="home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+  <polyline points="9 22 9 12 15 12 15 22"/>
+  </symbol><symbol id="image" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+  <circle cx="8.5" cy="8.5" r="1.5"/>
+  <polyline points="21 15 16 10 5 21"/>
+  </symbol><symbol id="info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10"/>
+  <line x1="12" y1="16" x2="12" y2="12"/>
+  <line x1="12" y1="8" x2="12.01" y2="8"/>
+  </symbol><symbol id="menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="3" y1="12" x2="21" y2="12"/>
+  <line x1="3" y1="6" x2="21" y2="6"/>
+  <line x1="3" y1="18" x2="21" y2="18"/>
+  </symbol></svg>
+
+<a href="#main" class="velin-skip-link">Skip to main content</a>
   <header class="demo-bar">
     <div class="demo-bar__inner">
       <nav aria-label="Demo navigation">
-        <a href="../index.html">Home</a>
-        <a href="index.html">Demos</a>
+        <a href="../index.html" class="desktop-only">Home</a>
+        <a href="index.html" class="desktop-only">Demos</a>
+        <button type="button" class="velin-btn velin-btn--ghost velin-btn--icon mobile-menu-trigger" id="mobileMenuTrigger" aria-label="Open menu" aria-controls="mobileMenu">
+          <velin-icon name="menu" size="18"></velin-icon>
+        </button>
       </nav>
-      <velin-theme-toggle></velin-theme-toggle>
+      <velin-theme-toggle themes-base="../dist/themes/"></velin-theme-toggle>
     </div>
   </header>
+  <velin-sheet id="mobileMenu" position="start" aria-label="Site menu">
+    <h2 slot="header" style="margin:0;font-size:var(--velin-text-lg)">VelinStyle SaaS</h2>
+    <nav aria-label="Site sections" style="display:flex;flex-direction:column;gap:var(--velin-space-2)">
+      <a href="../index.html">Home</a>
+      <a href="index.html">All demos</a>
+      <a href="showcase-dashboard.html">Dashboard demo</a>
+      <a href="../docs/getting-started/introduction.html">Documentation</a>
+    </nav>
+  </velin-sheet>
   <main id="main">
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero__inner">
@@ -185,9 +231,27 @@
       </div>
     </section>
   </main>
+  <velin-bottom-nav aria-label="Mobile primary nav" current="home">
+    <a href="../index.html" data-nav="home"><velin-icon name="home" size="22"></velin-icon><span>Home</span></a>
+    <a href="index.html" data-nav="demos"><velin-icon name="image" size="22"></velin-icon><span>Demos</span></a>
+    <a href="../docs/getting-started/introduction.html" data-nav="docs"><velin-icon name="info" size="22"></velin-icon><span>Docs</span></a>
+    <a href="https://github.com/SkyliteDesign/velinstyle" data-nav="github"><velin-icon name="github" size="22"></velin-icon><span>GitHub</span></a>
+  </velin-bottom-nav>
   <footer class="site-footer">
     <p>VelinStyle SaaS demo · <a href="index.html">More demos</a> · MIT License</p>
   </footer>
   <script src="../dist/velinstyle-components.iife.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const trigger = document.getElementById('mobileMenuTrigger');
+      const sheet = document.getElementById('mobileMenu');
+      if (trigger && sheet) {
+        trigger.addEventListener('click', () => {
+          if (typeof sheet.show === 'function') sheet.show();
+          else sheet.setAttribute('open', '');
+        });
+      }
+    });
+  </script>
 </body>
 </html>

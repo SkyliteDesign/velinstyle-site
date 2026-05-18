@@ -71,12 +71,38 @@
     }
 
     .site-nav__logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
       font-size: 1.25rem;
       font-weight: 800;
       letter-spacing: -0.03em;
       color: var(--velin-color-primary);
       text-decoration: none;
       flex-shrink: 0;
+    }
+
+    .site-nav__logo-mark {
+      width: 1.75rem;
+      height: 1.75rem;
+      display: block;
+      flex-shrink: 0;
+    }
+
+    .site-nav__logo-text {
+      line-height: 1;
+    }
+
+    .site-nav__logo-version {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 0.18rem 0.45rem;
+      border-radius: 999px;
+      color: var(--velin-color-primary);
+      background: var(--velin-color-primary-subtle, oklch(96% 0.03 264));
+      border: 1px solid var(--velin-color-border, oklch(90% 0.01 264));
     }
 
     .site-nav__panel {
@@ -449,8 +475,7 @@
 
     .hero__content {
       position: relative;
-      z-index: 1;
-      max-width: 52rem;
+      z-index: 1; 
     }
 
     .hero__badge {
@@ -978,6 +1003,146 @@
     .check-icon { color: oklch(55% 0.16 145); }
     .x-icon { color: oklch(55% 0.2 25); }
     .partial-icon { color: oklch(75% 0.15 85); }
+
+    /* ─── Compare scorecards (0.8.0) ─── */
+    .compare-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+      gap: var(--velin-space-4, 1rem);
+      margin-block-end: var(--velin-space-5, 1.5rem);
+    }
+    .compare-card {
+      display: flex;
+      flex-direction: column;
+      gap: var(--velin-space-3, 0.75rem);
+      padding: var(--velin-space-4, 1rem);
+      border: 1px solid var(--velin-color-border);
+      border-radius: var(--velin-radius-lg, 0.75rem);
+      background: var(--velin-color-surface-bright, var(--velin-color-bg));
+      transition: transform var(--velin-duration-slow, 300ms) var(--velin-ease-expo-out, ease-out),
+                  box-shadow var(--velin-duration-slow, 300ms) var(--velin-ease-expo-out, ease-out);
+    }
+    .compare-card:hover { transform: translateY(-3px); box-shadow: 0 14px 28px oklch(0% 0 0 / 0.08); }
+    .compare-card--vs {
+      border-color: color-mix(in oklch, var(--velin-color-primary) 35%, var(--velin-color-border));
+      background: linear-gradient(160deg,
+        color-mix(in oklch, var(--velin-color-primary) 6%, var(--velin-color-surface-bright, var(--velin-color-bg))),
+        var(--velin-color-surface-bright, var(--velin-color-bg)) 70%);
+      --velin-chart-glow-color: var(--velin-color-primary);
+    }
+    .compare-card__head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      font-weight: 600;
+    }
+    .compare-card__name {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: var(--velin-text-base, 1rem);
+    }
+    .compare-card__year {
+      font-size: var(--velin-text-xs, 0.75rem);
+      color: var(--velin-color-text-muted);
+      font-weight: 500;
+    }
+    .compare-card__score {
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+    }
+    .compare-card__score-num {
+      font-size: clamp(1.75rem, 1.4rem + 1.5vw, 2.4rem);
+      font-weight: 700;
+      color: var(--velin-color-text);
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+    }
+    .compare-card--vs .compare-card__score-num { color: var(--velin-color-primary); }
+    .compare-card__score-label {
+      font-size: var(--velin-text-xs, 0.75rem);
+      color: var(--velin-color-text-muted);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .compare-card__spark {
+      display: block;
+      width: 100%;
+      height: 2.75rem;
+      color: var(--velin-color-text-muted);
+    }
+    .compare-card--vs .compare-card__spark { color: var(--velin-color-primary); }
+    .compare-card__stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.4rem var(--velin-space-3, 0.75rem);
+      margin: 0;
+      font-size: var(--velin-text-sm, 0.875rem);
+    }
+    .compare-card__stats div { display: flex; flex-direction: column; }
+    .compare-card__stats dt {
+      font-size: var(--velin-text-xs, 0.75rem);
+      color: var(--velin-color-text-muted);
+      margin: 0;
+    }
+    .compare-card__stats dd {
+      margin: 0;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ─── Filter chips above the comparison table ─── */
+    .compare-filterbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--velin-space-2, 0.5rem);
+      margin-block-end: var(--velin-space-4, 1rem);
+    }
+    .compare-filterbar .velin-chip {
+      cursor: pointer;
+      border: 1px solid var(--velin-color-border);
+      background: var(--velin-color-surface-bright, var(--velin-color-bg));
+      transition: background var(--velin-duration-fast, 100ms) var(--velin-ease-snappy, ease),
+                  color var(--velin-duration-fast, 100ms) var(--velin-ease-snappy, ease),
+                  border-color var(--velin-duration-fast, 100ms) var(--velin-ease-snappy, ease);
+    }
+    .compare-filterbar .velin-chip[data-velin-filter-active] {
+      background: var(--velin-color-primary);
+      color: var(--velin-color-on-primary, #fff);
+      border-color: var(--velin-color-primary);
+    }
+    .compare-filterbar .velin-chip:not([data-velin-filter-active]):hover {
+      background: color-mix(in oklch, var(--velin-color-primary) 10%, transparent);
+    }
+
+    /* ─── Hero sparkline (0.8.0) ─── */
+    .hero__spark {
+      margin: var(--velin-space-4, 1rem) 0 0;
+      max-width: 28rem;
+      color: var(--velin-color-primary);
+    }
+    .hero__spark velin-sparkline {
+      display: block;
+      width: 100%;
+      height: 3.25rem;
+    }
+    .hero__spark-caption {
+      margin: 0.35rem 0 0;
+      font-size: var(--velin-text-xs, 0.75rem);
+      color: var(--velin-color-text-muted);
+      letter-spacing: 0.02em;
+    }
+    .hero__badge-livedot {
+      font-size: inherit;
+      color: inherit;
+      gap: 0.5rem;
+    }
+    .hero__badge .hero__badge-livedot,
+    .hero__badge velin-live-dot {
+      --velin-live-color: oklch(80% 0.18 145);
+    }
 
     /* â”€â”€â”€ Code examples â”€â”€â”€ */
     .code-tabs {
