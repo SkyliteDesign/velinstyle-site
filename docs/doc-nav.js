@@ -2,8 +2,33 @@
  * Docs chrome: Font Awesome icons, sidebar collapse, mobile drawer, active link scroll.
  */
 (function () {
+  /** Redirect /docs/{section}/ to default page (avoids directory listings on static servers). */
+  (function redirectDocSectionRoot() {
+    const path = location.pathname.replace(/\\/g, '/');
+    if (/\.html?$/i.test(path)) return;
+    const match = path.match(/\/docs\/([^/]+)\/?$/);
+    if (!match) return;
+    const defaults = {
+      forms: 'overview.html',
+      components: 'accordion.html',
+      'getting-started': 'introduction.html',
+      customize: 'overview.html',
+      layout: 'breakpoints.html',
+      content: 'reboot.html',
+      helpers: 'clearfix.html',
+      utilities: 'api.html',
+      animations: 'overview.html',
+      extend: 'approach.html',
+      about: 'overview.html',
+    };
+    const page = defaults[match[1]];
+    if (!page) return;
+    const base = path.replace(/\/?$/, '/');
+    location.replace(base + page + location.search + location.hash);
+  })();
+
   const FA_SOLID =
-    'https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/{name}.svg';
+    'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/svgs/solid/{name}.svg';
 
   const bc = document.querySelector('.velin-doc-breadcrumb');
   if (bc) {
@@ -13,6 +38,40 @@
   document.querySelectorAll('.velin-doc-sidebar__links a[data-external]').forEach((a) => {
     a.setAttribute('title', a.textContent.trim() + ' (opens in new tab)');
   });
+
+  const FILE_PROTOCOL = window.location.protocol === 'file:';
+
+  const HEADER_ICON_FA = {
+    menu: { name: 'bars', variant: 'solid' },
+    github: { name: 'github', variant: 'brands' },
+    copy: { name: 'copy', variant: 'solid' },
+    check: { name: 'check', variant: 'solid' },
+  };
+
+  function distBaseFromStylesheet() {
+    const link = document.querySelector('link[href*="velinstyle.min.css"]');
+    if (!link) return '/dist/';
+    const href = link.getAttribute('href') || '';
+    return href.replace(/[^/]+$/, '');
+  }
+
+  function ensureBuiltinIcons() {
+    document.querySelectorAll('velin-icon:not([provider])').forEach((el) => {
+      const iconName = el.getAttribute('name');
+      if (FILE_PROTOCOL && iconName && HEADER_ICON_FA[iconName]) {
+        const spec = HEADER_ICON_FA[iconName];
+        el.setAttribute('provider', 'fontawesome');
+        el.setAttribute('name', spec.name);
+        el.setAttribute('variant', spec.variant);
+        el.removeAttribute('sprite');
+        return;
+      }
+      const sprite = distBaseFromStylesheet() + 'velin-icons.svg';
+      if (el.getAttribute('sprite') !== sprite) {
+        el.setAttribute('sprite', sprite);
+      }
+    });
+  }
 
   function ensureSolidIcons() {
     const VI = customElements.get('velin-icon');
@@ -108,11 +167,25 @@
     });
   }
 
+  function scrollToLocationHash() {
+    const hash = window.location.hash;
+    if (!hash || hash.length < 2) return;
+    const id = decodeURIComponent(hash.slice(1));
+    const el = document.getElementById(id) || document.querySelector(hash);
+    if (el) {
+      requestAnimationFrame(() => {
+        el.scrollIntoView({ behavior: 'auto', block: 'start' });
+      });
+    }
+  }
+
   function init() {
+    ensureBuiltinIcons();
     ensureSolidIcons();
     initCategoryToggles();
     initMobileSidebar();
     revealActiveLink(false);
+    scrollToLocationHash();
   }
 
   if (customElements.get('velin-icon')) {

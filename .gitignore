@@ -5,3 +5,19 @@ __pycache__/
 Thumbs.db
 *.log
 .env
+.env.*
+
+# Build artifacts (site ships iife + css; not lazy chunks)
+dist/chunks/
+
+# Search-index intermediates (canonical: docs/search-index.json)
+dist/search-index.json
+dist/search-index.framework.json
+dist/search-index.test.json
+
+# Local / scratch assets
+assets/img_demo/
+
+# Editor
+.cursor/
+.vscode/

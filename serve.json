@@ -1,0 +1,8 @@
+{
+  "cleanUrls": false,
+  "trailingSlash": true,
+  "redirects": [
+    { "source": "/docs/guides", "destination": "/docs/guides/", "type": 301 },
+    { "source": "/docs/generated", "destination": "/docs/generated/", "type": 301 }
+  ]
+}

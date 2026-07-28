@@ -4,7 +4,22 @@
   "description": "Official marketing website for VelinStyle CSS framework",
   "private": true,
   "scripts": {
-    "dev": "npx serve . -l 4000"
+    "dev": "npx serve . -l 4000",
+    "sync:dist": "python tools/sync-framework-0.9.0.py",
+    "sync:a11y-docs": "python tools/patch-site-a11y-aaa.py",
+    "build:search": "node tools/build-doc-search-bundle.mjs",
+    "build:highlight": "node tools/build-doc-highlight-bundle.mjs",
+    "build:search-index": "python tools/build-search-index.py",
+    "repair:docs": "python tools/repair-docs-html.py",
+    "generate:sitemaps": "python tools/generate-sitemaps.py",
+    "validate:sitemap": "python tools/validate-sitemap.py --live",
+    "bundle:chrome": "python tools/bundle-doc-chrome.py",
+    "capture:showcase": "node tools/capture-showcase.mjs",
+    "build:showcase": "python tools/build-showcase.py",
+    "sync:check": "node ../velinstyle/scripts/check-release-sync.mjs",
+    "sync:fix": "node ../velinstyle/scripts/check-release-sync.mjs --fix",
+    "build": "cd ../velinstyle && npm run build && npm run docs:generate && cd ../velinstyle-site && npm run sync:dist && npm run sync:a11y-docs && python tools/patch-docs-090-final.py && python tools/patch-seo-canonical.py && npm run build:showcase && npm run generate:sitemaps && npm run build:search && npm run build:highlight && npm run build:search-index && npm run bundle:chrome && npm run repair:docs && python tools/sync-sidebar.py && npm run sync:check",
+    "patch:seo": "python tools/patch-seo-canonical.py"
   },
   "author": "SkyliteDesign",
   "license": "MIT"

@@ -1,17 +1,22 @@
 <!DOCTYPE html>
-<html lang="en" data-velin-reveal-auto>
+<html lang="en" data-velin-home data-velin-reveal-auto>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VelinStyle — The Accessibility-First CSS Framework for Modern Web</title>
-  <meta name="description" content="A modern CSS framework built from the ground up with accessibility, mobile-first design, and modern CSS features. No preprocessor required.">
-  <meta name="theme-color" content="#4338ca">
-  <link rel="canonical" href="https://velinstyle.info">
+  <!-- velin-seo -->
+  <link rel="canonical" href="https://velinstyle.info/">
+  <meta name="description" content="VelinStyle is the WCAG 2.2 AAA CSS framework with native JavaScript runtime and Web Components.">
+  <link rel="alternate" type="application/vnd.velinstyle.meta+json" href="/dist/velin-agent.json" title="VelinStyle agent metadata">
+  <link rel="alternate" type="text/plain" href="/dist/llms.txt" title="VelinStyle llms.txt">
+  <script type="application/ld+json">{"@context": "https://schema.org","@graph": [{"@type": "WebSite","name": "VelinStyle","url": "https://velinstyle.info/","description": "VelinStyle is the WCAG 2.2 AAA CSS framework with native JavaScript runtime and Web Components.","inLanguage": ["en","de"]},{"@type": "SoftwareApplication","name": "VelinStyle","applicationCategory": "DeveloperApplication","operatingSystem": "Web","description": "VelinStyle is the WCAG 2.2 AAA CSS framework with native JavaScript runtime and Web Components.","url": "https://velinstyle.info/","softwareVersion": "1.1.0","license": "https://opensource.org/licenses/MIT","isAccessibleForFree": true,"publisher": {"@type": "Organization","name": "SkyliteDesign"}}]}</script>
+  <!-- /velin-seo -->
 
-  <!-- Open Graph -->
-  <meta property="og:title" content="VelinStyle — Accessibility-First CSS Framework">
-  <meta property="og:description" content="35+ components, 29 web components, 13 themes, WCAG 2.2 AA, CLI scaffold & layout audit. Modern CSS only.">
-  <meta property="og:url" content="https://velinstyle.info">
+<title>VelinStyle — WCAG 2.2 AAA CSS Framework with Web Components</title>
+<meta name="theme-color" content="#4338ca">
+<!-- Open Graph -->
+  <meta property="og:title" content="VelinStyle — WCAG 2.2 AAA CSS Framework with Web Components">
+  <meta property="og:description" content="VelinStyle is the WCAG 2.2 AAA CSS framework with native JavaScript runtime and Web Components.">
+  <meta property="og:url" content="https://velinstyle.info/">
   <meta property="og:type" content="website">
 
   <!-- VelinStyle CSS -->
@@ -21,6 +26,8 @@
   <!-- Favicon -->
   <link rel="icon" href="assets/img/velinstyle-logo.svg" type="image/svg+xml">
 
+  <script src="assets/js/velin-theme-init.js"></script>
+  <script>document.documentElement.setAttribute('data-velin-themes-base','dist/themes');</script>
   <!-- Fonts for themes -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -42,14 +49,15 @@
   <nav class="site-nav" id="siteNav" aria-label="Main navigation">
     <div class="site-nav__shell">
       <a href="index.html" class="site-nav__logo" aria-label="VelinStyle home">
-        <img src="assets/img/velinstyle-logo.svg" alt="" width="28" height="28" class="site-nav__logo-mark">
+        <img src="assets/img/velinstyle-logo.svg" alt="" width="28" height="28" class="site-nav__logo-mark" aria-hidden="true">
         <span class="site-nav__logo-text">VelinStyle</span>
-        <span class="site-nav__logo-version">v0.8.0</span>
+        <span class="site-nav__logo-version">v1.1.0</span>
       </a>
       <button type="button" class="site-nav__toggle" id="siteNavToggle" aria-label="Open menu" aria-expanded="false" aria-controls="siteNavPanel">&#9776;</button>
       <div class="site-nav__panel" id="siteNavPanel">
         <ul class="site-nav__links">
           <li><a href="docs/getting-started/introduction.html">Docs</a></li>
+          <li><a href="showcase/index.html">Showcase</a></li>
           <li>
             <button type="button" class="site-nav__demos-trigger" id="demosMenuTrigger" aria-expanded="false" aria-haspopup="true" aria-controls="demosMenuList">
               Demos
@@ -57,6 +65,8 @@
             </button>
             <ul class="site-nav__dropdown" id="demosMenuList" role="menu" hidden>
               <li role="none"><a href="demos/index.html" role="menuitem">All demos<span class="site-nav__dropdown-desc">Overview of live showcases</span></a></li>
+              <li role="none"><a href="showcase/index.html" role="menuitem">Live projects<span class="site-nav__dropdown-desc">Real sites built with VelinStyle</span></a></li>
+              <li role="none"><a href="demos/showcase-runtime.html" role="menuitem">Runtime 1.0<span class="site-nav__dropdown-desc">Motion, search, highlight, meta</span></a></li>
               <li role="none"><a href="demos/showcase-ui-kit.html" role="menuitem">UI kit<span class="site-nav__dropdown-desc">Buttons, forms, alerts, patterns</span></a></li>
               <li role="none"><a href="demos/showcase-saas.html" role="menuitem">SaaS marketing<span class="site-nav__dropdown-desc">Landing layout &amp; content</span></a></li>
               <li role="none"><a href="demos/showcase-dashboard.html" role="menuitem">Dashboard<span class="site-nav__dropdown-desc">App shell &amp; data UI</span></a></li>
@@ -68,18 +78,32 @@
           </li>
           <li><a href="#worlds">Story</a></li>
           <li><a href="#features">Features</a></li>
-          <li><a href="#install">Install</a></li>
-          <li><a href="#developers">Toolkit</a></li>
-          <li><a href="#playground">Playground</a></li>
-          <li><a href="#comparison">Compare</a></li>
-          <li><a href="docs/extend/javascript-api.html">JS API</a></li>
+          <li><a href="#runtime">1.0.0 runtime</a></li>
+          <li><a href="#extension">Extension APIs</a></li>
+          <li>
+            <button type="button" class="site-nav__demos-trigger site-nav__section-trigger" id="sectionsMenuTrigger" aria-expanded="false" aria-haspopup="true" aria-controls="sectionsMenuList">
+              More
+              <span class="site-nav__demos-chevron" aria-hidden="true">▾</span>
+            </button>
+            <ul class="site-nav__dropdown site-nav__dropdown--plain" id="sectionsMenuList" role="menu" hidden>
+              <!-- <li role="none"><a href="#runtime" role="menuitem">1.0.0 runtime</a></li>
+              <li role="none"><a href="#extension" role="menuitem">Extension APIs</a></li> -->
+              <li role="none"><a href="#install" role="menuitem">Install</a></li>
+              <li role="none"><a href="#developers" role="menuitem">Toolkit</a></li>
+              <li role="none"><a href="#playground" role="menuitem">Playground</a></li>
+              <li role="none"><a href="#comparison" role="menuitem">Compare</a></li>
+              <li role="none"><a href="docs/guides/api-reference.html" role="menuitem">API reference</a></li>
+              <li role="none"><a href="docs/guides/velin-meta.html" role="menuitem">Velin-Meta</a></li>
+              <li role="none"><a href="docs/generated/index.html" role="menuitem">Generated Markdown</a></li>
+            </ul>
+          </li>
         </ul>
         <div class="site-nav__actions">
           <a href="docs/getting-started/introduction.html" class="site-nav__cta">Get started</a>
           <a href="https://github.com/SkyliteDesign/velinstyle" class="site-nav__icon-link" target="_blank" rel="noopener noreferrer" aria-label="GitHub repository">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
           </a>
-          <velin-theme-toggle></velin-theme-toggle>
+          <velin-theme-toggle themes-base="dist/themes/"></velin-theme-toggle>
         </div>
       </div>
     </div>
@@ -124,19 +148,19 @@
       <div class="hero__shine" aria-hidden="true"></div>
       <div class="hero__content">
         <div class="hero__badge">
-          <velin-live-dot status="live" class="hero__badge-livedot">v0.8.0 &mdash; Open Source &amp; Free</velin-live-dot>
+          <velin-live-dot status="live" class="hero__badge-livedot">v1.1.0 &mdash; Open Source &amp; Free</velin-live-dot>
         </div>
         <h1 class="hero__title">VelinStyle</h1>
-        <p class="hero__subtitle">
-          One system that reads like <strong>familiar component UI</strong>, stays as composable as <strong>utility workflows</strong>,
-          and ships with <strong>WCAG-first primitives</strong> — without shipping another framework on top.
+                                                                                                                        <p class="hero__subtitle">
+          VelinStyle is the WCAG 2.2 AAA CSS framework with native JavaScript runtime and Web Components.
+          35+ CSS components, 38 Web Components, 27 declarative HTML attributes, 13 OKLCH themes, and agent metadata (<code>velin-agent.json</code>, <code>llms.txt</code>).
         </p>
         <div class="hero__actions">
           <a href="docs/getting-started/introduction.html" class="hero__btn hero__btn--primary">
             Get Started
           </a>
-          <a href="#worlds" class="hero__btn hero__btn--secondary">
-            Why VelinStyle wins
+          <a href="#runtime" class="hero__btn hero__btn--secondary">
+            1.0.0 runtime
           </a>
           <a href="demos/index.html" class="hero__btn hero__btn--secondary">
             Live demos
@@ -152,7 +176,7 @@
           </span>
           <span class="hero__stat-pill">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-            <velin-counter from="0" to="29" duration="1200"></velin-counter>&nbsp;web components
+            <velin-counter from="0" to="38" duration="1200"></velin-counter>&nbsp;web components
           </span>
           <span class="hero__stat-pill">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
@@ -160,28 +184,32 @@
           </span>
           <span class="hero__stat-pill">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
-            WCAG 2.2 AA
+            WCAG 2.2 AAA · ready
           </span>
           <span class="hero__stat-pill">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-            Lean bundle
+            Subpath APIs
+          </span>
+          <span class="hero__stat-pill">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+            Velin-Meta
           </span>
         </div>
         <figure class="hero__spark" aria-label="VelinStyle adoption momentum">
           <velin-sparkline
-            values="3,4,5,6,8,9,11,14,17,20,24,28,33"
+            values="3,4,5,6,8,9,11,14,17,20,24,28,33,37,40"
             width="640" height="80"
             area glow
             animate="draw"
-            label="VelinStyle component growth across 0.6 to 0.8.0 releases"></velin-sparkline>
-          <figcaption class="hero__spark-caption">Component growth from 0.5 &rarr; 0.8.0</figcaption>
+            label="VelinStyle component growth from 0.5 through 1.1.0"></velin-sparkline>
+          <figcaption class="hero__spark-caption">Component growth 0.5 &rarr; 1.1.0</figcaption>
         </figure>
       </div>
     </section>
 
     <!-- ═══ THREE WORLDS (concept strip) ═══ -->
     <section id="worlds" class="worlds" aria-labelledby="worlds-title">
-      <div class="site-section__inner site-section__inner--wide">
+      <div class="site-section__inner site-section__inner--wide velin-animate-on-scroll velin-animate-on-scroll--slide-up">
         <div class="site-section__header">
           <span class="site-section__eyebrow">One stack, three habits</span>
           <h2 class="site-section__title" id="worlds-title">VelinStyle meets you where you are — then levels you up</h2>
@@ -189,8 +217,8 @@
             We do <strong>not</strong> ship Bootstrap or Tailwind. This strip shows how the <em>same product story</em> feels in three engineering cultures — and how VelinStyle collapses noise into tokens, components, and accessible defaults.
           </p>
         </div>
-        <div class="worlds__grid">
-          <article class="worlds__card">
+        <div class="worlds__grid" velin-stagger="90">
+          <article class="worlds__card" velin-reveal="slide-up">
             <div class="worlds__label worlds__label--bs">Component-first habit</div>
             <div class="worlds__body">
               <div class="worlds__mock" aria-hidden="true">&lt;div class="card"&gt;
@@ -201,7 +229,7 @@
               <p class="worlds__foot"><strong>Familiar</strong> — but every surface is a bespoke bundle of class names and JS plugins for focus, overlays, and dark mode.</p>
             </div>
           </article>
-          <article class="worlds__card">
+          <article class="worlds__card" velin-reveal="slide-up">
             <div class="worlds__label worlds__label--tw">Utility-first habit</div>
             <div class="worlds__body">
               <div class="worlds__mock worlds__mock--busy" aria-hidden="true">&lt;button class="px-4 py-2 rounded-lg shadow-md
@@ -211,7 +239,7 @@
               <p class="worlds__foot"><strong>Flexible</strong> — but every screen re-encodes design decisions as long class strings; A11y and theming stay your responsibility.</p>
             </div>
           </article>
-          <article class="worlds__card">
+          <article class="worlds__card" velin-reveal="slide-up">
             <div class="worlds__label worlds__label--vs">VelinStyle</div>
             <div class="worlds__body">
               <div class="worlds__mock" aria-hidden="true">&lt;button class="velin-btn velin-btn--primary"&gt;
@@ -226,7 +254,7 @@
 
     <!-- ═══ WHY VELINSTYLE ═══ -->
     <section id="features" class="site-section" aria-labelledby="features-title">
-      <div class="site-section__inner velin-animate-on-scroll">
+      <div class="site-section__inner velin-animate-on-scroll velin-animate-on-scroll--slide-up">
         <div class="site-section__header">
           <span class="site-section__eyebrow">Why VelinStyle?</span>
           <h2 class="site-section__title" id="features-title">Built Different from the Ground Up</h2>
@@ -235,20 +263,20 @@
             to deliver accessibility, performance, and developer experience in one package.
           </p>
         </div>
-        <div class="features-grid">
+        <div class="features-grid" velin-stagger="70">
           <!-- Accessibility -->
-          <article class="feature-card">
+          <article class="feature-card" velin-reveal="fade">
             <div class="feature-card__icon feature-card__icon--a11y" aria-hidden="true">
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="4" r="2"/><path d="M4 10h16M12 10v12M8 22l4-4 4 4"/></svg>
             </div>
             <h3 class="feature-card__title">Accessibility Built-in</h3>
             <p class="feature-card__text">
-              WCAG 2.2 AA compliance is structural, not an afterthought. Focus trapping, ARIA attributes,
-              skip links, screen reader support, and <code>forced-colors</code> mode — all included.
+              WCAG 2.2 AAA token defaults are built in (AA via <code>data-velin-contrast="aa"</code>). Focus trapping,
+              labeled dialogs, skip links, 44px targets, and <code>forced-colors</code> — production-ready in CSS and components.
             </p>
           </article>
           <!-- Modern CSS -->
-          <article class="feature-card">
+          <article class="feature-card" velin-reveal="fade">
             <div class="feature-card__icon feature-card__icon--css" aria-hidden="true">
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
             </div>
@@ -259,7 +287,7 @@
             </p>
           </article>
           <!-- Dark Mode -->
-          <article class="feature-card">
+          <article class="feature-card" velin-reveal="fade">
             <div class="feature-card__icon feature-card__icon--dark" aria-hidden="true">
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
             </div>
@@ -270,7 +298,7 @@
             </p>
           </article>
           <!-- Icons -->
-          <article class="feature-card">
+          <article class="feature-card" velin-reveal="fade">
             <div class="feature-card__icon feature-card__icon--icons" aria-hidden="true">
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
             </div>
@@ -281,44 +309,203 @@
             </p>
           </article>
           <!-- CLI -->
-          <article class="feature-card">
+          <article class="feature-card" velin-reveal="fade">
             <div class="feature-card__icon feature-card__icon--cli" aria-hidden="true">
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
             </div>
             <h3 class="feature-card__title">CLI: scaffold, audit, scan</h3>
             <p class="feature-card__text">
-              <strong>0.8.0:</strong> <code>velinstyle scaffold</code> turns prompts into blueprint HTML;
-              <code>layout audit</code> suggests responsive fixes. Plus icons, tokens, and security scan.
+              <strong>1.0.0:</strong> <code>docs generate</code>, <code>perf audit</code>, <code>tokens validate</code>, PII scan (<code>--only pii --fix</code>),
+              scaffold, layout audit, and security scan.
+            </p>
+            <p class="feature-card__links" style="margin-block-start:0.5rem;font-size:0.875rem">
+              <a href="docs/guides/api-reference.html">API guide</a> ·
+              <a href="docs/generated/index.html">Markdown</a> ·
+              <a href="docs/extend/cli.html#docs">CLI</a>
             </p>
           </article>
           <!-- Security -->
-          <article class="feature-card">
+          <article class="feature-card" velin-reveal="fade">
             <div class="feature-card__icon feature-card__icon--security" aria-hidden="true">
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
             </div>
             <h3 class="feature-card__title">Security Built-in</h3>
             <p class="feature-card__text">
-              XSS-safe Web Components with <code>escapeHTML()</code>, CSP compatibility,
-              Trusted Types, URL sanitization, and CSS content sandboxing out of the box.
+              XSS-safe Web Components, PII scanner, <code>&lt;velin-email&gt;</code> obfuscation,
+              optional <code>velin-secure-field</code>, CSP, and Trusted Types.
             </p>
           </article>
-          <!-- New in 0.8.0 -->
-          <article class="feature-card">
-            <div class="feature-card__icon feature-card__icon--cli" aria-hidden="true">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          <!-- Motion -->
+          <article class="feature-card" velin-reveal="fade">
+            <div class="feature-card__icon feature-card__icon--css" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
             </div>
-            <h3 class="feature-card__title">New Web Components (0.8.0)</h3>
+            <h3 class="feature-card__title">Motion runtime (1.0.0)</h3>
             <p class="feature-card__text">
-              Eight production-ready primitives ship in 0.8.0:
-              <a href="docs/components/bottom-nav.html">bottom-nav</a>,
-              <a href="docs/components/combobox.html">combobox</a>,
-              <a href="docs/components/command.html">command palette</a>,
-              <a href="docs/components/menubar.html">menubar</a>,
-              <a href="docs/components/rating.html">rating</a>,
-              <a href="docs/components/segmented-control.html">segmented control</a>,
-              <a href="docs/components/sheet.html">sheet</a>, and
-              <a href="docs/components/announcer.html">announcer</a>.
+              <code>initMotion</code>, <code>velin-stagger</code>, scroll-driven <code>.velin-in-view</code>, and attribute bridges
+              (<code>velin-reveal</code>, <code>velin-fade</code>, …). This page uses <code>data-velin-reveal-auto</code> on <code>&lt;html&gt;</code>.
             </p>
+            <p class="feature-card__links" style="margin-block-start:0.5rem;font-size:0.875rem">
+              <a href="docs/guides/motion-attributes.html">Motion guide</a> ·
+              <a href="docs/animations/overview.html">Animations</a>
+            </p>
+          </article>
+          <!-- Search & highlight -->
+          <article class="feature-card" velin-reveal="fade">
+            <div class="feature-card__icon feature-card__icon--cli" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            </div>
+            <h3 class="feature-card__title">Search &amp; highlight (1.0.0)</h3>
+            <p class="feature-card__text">
+              Offline fuzzy <code>VelinSearch</code>, <code>&lt;velin-search&gt;</code>, and <code>VelinHighlight</code> with lazy in-view tokenizing
+              via <code>&lt;velin-code-block&gt;</code> — same engine as the docs site.
+            </p>
+            <p class="feature-card__links" style="margin-block-start:0.5rem;font-size:0.875rem">
+              <a href="docs/guides/velin-search.html">VelinSearch</a> ·
+              <a href="docs/guides/syntax-highlight.html">Highlight</a>
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ 1.0.0 RUNTIME (live) ═══ -->
+    <section id="runtime" class="site-section site-section--runtime" aria-labelledby="runtime-title">
+      <div class="site-section__inner">
+        <div class="site-section__header">
+          <span class="site-section__eyebrow">Live on this page</span>
+          <h2 class="site-section__title" id="runtime-title">1.0.0 runtime in action</h2>
+          <p class="site-section__desc">
+            Motion, syntax highlighting, and agent metadata ship as subpath exports — wired into this homepage, not just listed in the changelog.
+          </p>
+        </div>
+        <div class="runtime-live">
+          <article class="runtime-live__card">
+            <span class="runtime-live__tag">Motion</span>
+            <h3 class="runtime-live__title">Stagger &amp; reveals</h3>
+            <p class="runtime-live__text"><code>initMotion()</code> + <code>velin-stagger</code> — scroll the page or resize to see cards animate in. Respects <code>prefers-reduced-motion</code>.</p>
+            <div class="runtime-motion-chips" aria-hidden="true">
+              <span class="velin-badge velin-badge--primary">Reveal</span>
+              <span class="velin-badge velin-badge--success">Slide</span>
+              <span class="velin-badge velin-badge--info">Scale</span>
+              <span class="velin-badge velin-badge--warning">Stagger</span>
+            </div>
+            <a href="docs/guides/motion-attributes.html" class="runtime-live__link">Motion guide →</a>
+          </article>
+          <article class="runtime-live__card">
+            <span class="runtime-live__tag">VelinHighlight</span>
+            <h3 class="runtime-live__title">Lazy in-view code</h3>
+            <p class="runtime-live__text"><code>&lt;velin-code-block&gt;</code> highlights when scrolled into view (IntersectionObserver + rAF batching).</p>
+            <velin-code-block language="js" line-numbers>import { initHighlight } from '@birdapi/velinstyle/highlight';
+
+initHighlight(document, {
+  selector: 'pre.playground-pane__code, velin-code-block pre',
+});</velin-code-block>
+            <a href="docs/guides/syntax-highlight.html" class="runtime-live__link">Syntax guide →</a>
+          </article>
+          <article class="runtime-live__card">
+            <span class="runtime-live__tag">Velin-Meta</span>
+            <h3 class="runtime-live__title">Agent-ready bundle</h3>
+            <p class="runtime-live__text">
+              <code>velin-agent.json</code> + <code>llms.txt</code> for Cursor, Copilot, and custom tools. MIME
+              <code>application/vnd.velinstyle.meta+json</code> (served as JSON on GitHub Pages).
+            </p>
+            <div class="runtime-live__actions">
+              <a href="dist/velin-agent.json" class="velin-btn velin-btn--primary velin-btn--sm" target="_blank" rel="noopener">Open JSON</a>
+              <a href="dist/llms.txt" class="velin-btn velin-btn--ghost velin-btn--sm" target="_blank" rel="noopener">llms.txt</a>
+              <a href="docs/guides/velin-meta.html" class="velin-btn velin-btn--ghost velin-btn--sm">Guide</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ 1.0.0 EXTENSION APIs ═══ -->
+    <section id="extension" class="site-section site-section--extension" aria-labelledby="extension-title">
+      <div class="site-section__inner">
+        <div class="site-section__header">
+          <span class="site-section__eyebrow">1.0.0 runtime &amp; toolchain</span>
+          <h2 class="site-section__title" id="extension-title">Search, motion, highlight, attributes &amp; Velin-Meta</h2>
+          <p class="site-section__desc">
+            Subpath exports, Web Components, and CLI doc generation — see the <a href="#runtime">live runtime strip</a> above for motion, highlight, and Velin-Meta.
+            Hero also uses <code>velin-counter</code>, <code>velin-sparkline</code>, and <code>velin-live-dot</code>.
+            <a href="docs/guides/feature-scope.html">Full feature scope map</a>.
+          </p>
+        </div>
+        <div class="extension-bento" velin-stagger="45">
+          <article class="extension-card extension-card--hero" velin-reveal="slide-up">
+            <div class="extension-card__head">
+              <span class="extension-card__tag extension-card__tag--accent">New · Velin-Meta</span>
+              <h3 class="extension-card__title">Agent context for Cursor &amp; Copilot</h3>
+            </div>
+            <p class="extension-card__text">
+              <code>dist/velin-agent.json</code> + <code>llms.txt</code> and page-level
+              <code>application/vnd.velinstyle.meta+json</code> — conventions, components, CLI, doc URLs without hiding content from humans.
+            </p>
+            <div class="extension-card__actions">
+              <a href="docs/guides/velin-meta.html" class="velin-btn velin-btn--primary velin-btn--sm">Velin-Meta guide</a>
+              <a href="dist/velin-agent.json" class="velin-btn velin-btn--ghost velin-btn--sm" target="_blank" rel="noopener">Open bundle</a>
+              <a href="dist/llms.txt" class="velin-btn velin-btn--ghost velin-btn--sm" target="_blank" rel="noopener">llms.txt</a>
+              <a href="docs/guides/feature-scope.html" class="velin-btn velin-btn--ghost velin-btn--sm">Feature scope</a>
+            </div>
+          </article>
+          <article class="extension-card" velin-reveal="slide-up">
+            <span class="extension-card__tag">Runtime</span>
+            <h3 class="extension-card__title">VelinSearch</h3>
+            <p class="extension-card__text">Fuzzy offline search — same engine as the docs header. <code>@birdapi/velinstyle/search</code></p>
+            <a href="docs/guides/velin-search.html" class="extension-card__link">Guide →</a>
+          </article>
+          <article class="extension-card" velin-reveal="slide-up">
+            <span class="extension-card__tag">Runtime</span>
+            <h3 class="extension-card__title">Motion</h3>
+            <p class="extension-card__text"><code>initMotion</code>, stagger, scroll-driven reveals. <code>@birdapi/velinstyle/motion</code></p>
+            <a href="docs/guides/motion-attributes.html" class="extension-card__link">Guide →</a>
+          </article>
+          <article class="extension-card" velin-reveal="slide-up">
+            <span class="extension-card__tag">Runtime</span>
+            <h3 class="extension-card__title">VelinHighlight</h3>
+            <p class="extension-card__text">Lazy in-view highlighting (IntersectionObserver). Playground code panes use the same pipeline via <code>&lt;velin-code-block&gt;</code>.</p>
+            <a href="#runtime" class="extension-card__link">Live demo ↑</a>
+            <a href="docs/guides/syntax-highlight.html" class="extension-card__link">Guide →</a>
+          </article>
+          <article class="extension-card" velin-reveal="slide-up">
+            <span class="extension-card__tag">Runtime</span>
+            <h3 class="extension-card__title">HTML attributes</h3>
+            <p class="extension-card__text">27 bridges: <code>velin-modal</code>, <code>velin-reveal</code>, <code>velin-scroll-top</code>, <code>velin-code</code>, …</p>
+            <a href="docs/guides/html-attributes.html" class="extension-card__link">Guide →</a>
+          </article>
+          <article class="extension-card" velin-reveal="slide-up">
+            <span class="extension-card__tag">Web Component</span>
+            <h3 class="extension-card__title">&lt;velin-search&gt;</h3>
+            <p class="extension-card__text">Autocomplete with keyboard navigation and grouped results.</p>
+            <a href="docs/components/velin-search.html" class="extension-card__link">Component →</a>
+          </article>
+          <article class="extension-card" velin-reveal="slide-up">
+            <span class="extension-card__tag">Web Component</span>
+            <h3 class="extension-card__title">&lt;velin-code-block&gt;</h3>
+            <p class="extension-card__text">Copy, line numbers, collapsible blocks with lazy highlight.</p>
+            <a href="docs/components/velin-code-block.html" class="extension-card__link">Component →</a>
+          </article>
+          <article class="extension-card extension-card--wide extension-card--muted" velin-reveal="slide-up">
+            <span class="extension-card__tag">CLI · Exports</span>
+            <h3 class="extension-card__title">Toolchain</h3>
+            <p class="extension-card__text">
+              <code>velinstyle search index</code>,
+              <code>docs generate</code>,
+              <code>meta</code>,
+              <code>tokens build</code>
+              — subpaths
+              <code>/search</code>,
+              <code>/motion</code>,
+              <code>/attributes</code>,
+              <code>/highlight</code>,
+              <code>/meta</code>.
+            </p>
+            <div class="extension-card__links">
+              <a href="docs/extend/cli.html">CLI reference</a>
+              <a href="docs/generated/index.html">Generated Markdown</a>
+              <a href="docs/guides/api-reference.html">API reference</a>
+            </div>
           </article>
         </div>
       </div>
@@ -384,9 +571,9 @@
                 <h3>Drop in from a CDN</h3>
                 <p>Great for static HTML or quick prototypes (pin a version in production).</p>
                 <div class="install-code-row">
-                  <div class="playground__code"><code>&lt;link rel="stylesheet" href="https://unpkg.com/@birdapi/velinstyle@0.8.0/dist/velinstyle.min.css"&gt;
-&lt;script type="module" src="https://unpkg.com/@birdapi/velinstyle@0.8.0/dist/velinstyle-components.min.js"&gt;&lt;/script&gt;</code></div>
-                  <velin-copy value='&lt;link rel="stylesheet" href="https://unpkg.com/@birdapi/velinstyle@0.8.0/dist/velinstyle.min.css"&gt;&#10;&lt;script type="module" src="https://unpkg.com/@birdapi/velinstyle@0.8.0/dist/velinstyle-components.min.js"&gt;&lt;/script&gt;' label="Copy CDN tags"></velin-copy>
+                  <div class="playground__code"><code>&lt;link rel="stylesheet" href="https://unpkg.com/@birdapi/velinstyle@1.1.0/dist/velinstyle.min.css"&gt;
+&lt;script type="module" src="https://unpkg.com/@birdapi/velinstyle@1.1.0/dist/velinstyle-components.min.js"&gt;&lt;/script&gt;</code></div>
+                  <velin-copy value='&lt;link rel="stylesheet" href="https://unpkg.com/@birdapi/velinstyle@1.1.0/dist/velinstyle.min.css"&gt;&#10;&lt;script type="module" src="https://unpkg.com/@birdapi/velinstyle@1.1.0/dist/velinstyle-components.min.js"&gt;&lt;/script&gt;' label="Copy CDN tags"></velin-copy>
                 </div>
               </li>
             </ol>
@@ -454,10 +641,10 @@
           </p>
         </div>
 
-        <div class="dev-toolkit__grid velin-animate-on-scroll">
+        <div class="dev-toolkit__grid velin-animate-on-scroll" velin-stagger="80">
           <article class="dev-toolkit-card">
             <div class="dev-toolkit-card__meta">
-              <span class="dev-toolkit-card__tag">0.8.0</span>
+              <span class="dev-toolkit-card__tag">1.0.0</span>
             </div>
             <h3 class="dev-toolkit-card__title">Scaffold &amp; layout audit</h3>
             <p class="dev-toolkit-card__text">
@@ -466,13 +653,15 @@
             <div class="dev-toolkit-card__actions" style="display:flex;gap:0.5rem;flex-wrap:wrap">
               <a href="docs/guides/prompt-scaffolding.html" class="velin-btn velin-btn--primary velin-btn--sm">Scaffold guide</a>
               <a href="docs/guides/responsive-layout.html" class="velin-btn velin-btn--ghost velin-btn--sm">Layout audit</a>
+              <a href="docs/guides/performance-audit.html" class="velin-btn velin-btn--ghost velin-btn--sm">Perf audit</a>
+              <a href="docs/generated/index.html" class="velin-btn velin-btn--ghost velin-btn--sm">Generated docs</a>
             </div>
           </article>
 
           <article class="dev-toolkit-card dev-toolkit-card--span-2">
             <div class="dev-toolkit-card__meta">
               <span class="dev-toolkit-card__tag">CLI</span>
-              <span class="dev-toolkit-card__tag dev-toolkit-card__tag--muted">blueprint · scan · tokens</span>
+              <span class="dev-toolkit-card__tag dev-toolkit-card__tag--muted">docs · perf · scan · tokens</span>
             </div>
             <h3 class="dev-toolkit-card__title">Command-line reference</h3>
             <p class="dev-toolkit-card__text">
@@ -480,7 +669,9 @@
             </p>
             <div class="dev-toolkit-card__actions">
               <a href="docs/extend/cli.html" class="velin-btn velin-btn--primary velin-btn--sm">CLI docs</a>
-              <a href="docs/extend/javascript-api.html" class="velin-btn velin-btn--ghost velin-btn--sm">JS API</a>
+              <a href="docs/guides/api-reference.html" class="velin-btn velin-btn--ghost velin-btn--sm">API reference</a>
+              <a href="docs/guides/velin-meta.html" class="velin-btn velin-btn--ghost velin-btn--sm">Velin-Meta</a>
+              <a href="docs/guides/design-tokens.html" class="velin-btn velin-btn--ghost velin-btn--sm">Design tokens</a>
             </div>
           </article>
 
@@ -519,7 +710,7 @@
         </div>
 
         <div class="dev-toolkit__note velin-animate-on-scroll" role="note">
-          <strong>Clone workflow:</strong> run <code>npm run build</code> in the VelinStyle repo so <code>dist/</code> exists before wiring <code>file:../velinstyle</code> or a Vite app. Refresh <code>dist/</code> in this site when you bump the framework (see site README).
+          <strong>Local preview:</strong> run <code>npm run build</code> in this repo, then <code>npm run dev</code> (port 4000). Open via <code>http://localhost:4000</code> — <code>file://</code> needs <code>dist/</code> present.
         </div>
       </div>
     </section>
@@ -584,7 +775,7 @@
           <span class="site-section__eyebrow">Try It Live</span>
           <h2 class="site-section__title" id="playground-title">Interactive Playground</h2>
           <p class="site-section__desc">
-            Wähle links ein Beispiel — <strong>Preview</strong> und <strong>HTML</strong> stehen klar nebeneinander (wie in der Tailwind-Doku). Alle CSS-Kategorien findest du unter „CSS“ in der Seitenleiste.
+            Pick an example on the left — <strong>Preview</strong> and <strong>HTML</strong> sit side by side (docs-style layout). The Buttons tab uses <code>&lt;velin-code-block&gt;</code> with lazy highlight; other tabs show plain markup until you switch.
           </p>
         </div>
         <div class="playground playground--docs" id="interactive-playground">
@@ -655,12 +846,12 @@
               </div>
               <div class="playground-pane playground-pane--code">
                 <div class="playground-pane__head"><span>HTML</span></div>
-                <pre class="playground-pane__code"><code>&lt;button class=&quot;velin-btn velin-btn--primary&quot;&gt;Primary&lt;/button&gt;
-&lt;button class=&quot;velin-btn velin-btn--success&quot;&gt;Success&lt;/button&gt;
-&lt;button class=&quot;velin-btn velin-btn--outline&quot;&gt;Outline&lt;/button&gt;
-&lt;button class=&quot;velin-btn velin-btn--primary velin-btn--sm&quot;&gt;Small&lt;/button&gt;
-&lt;button class=&quot;velin-btn velin-btn--primary velin-btn--loading&quot;&gt;Loading&lt;/button&gt;
-&lt;button class=&quot;velin-btn velin-btn--primary velin-btn--block&quot;&gt;Block&lt;/button&gt;</code></pre>
+                <velin-code-block language="html" line-numbers>&lt;button class="velin-btn velin-btn--primary"&gt;Primary&lt;/button&gt;
+&lt;button class="velin-btn velin-btn--success"&gt;Success&lt;/button&gt;
+&lt;button class="velin-btn velin-btn--outline"&gt;Outline&lt;/button&gt;
+&lt;button class="velin-btn velin-btn--primary velin-btn--sm"&gt;Small&lt;/button&gt;
+&lt;button class="velin-btn velin-btn--primary velin-btn--loading"&gt;Loading&lt;/button&gt;
+&lt;button class="velin-btn velin-btn--primary velin-btn--block"&gt;Block&lt;/button&gt;</velin-code-block>
               </div>
             </div>
           </div>
@@ -823,7 +1014,7 @@
                         <button slot="tab" aria-selected="true">Overview</button>
                         <button slot="tab">Features</button>
                         <button slot="tab">API</button>
-                        <div slot="panel"><p>22 Web Components with keyboard support, ARIA, and focus trapping.</p></div>
+                        <div slot="panel"><p>38 canonical Web Components (40 lazy loaders) with keyboard support, ARIA, contracts, and focus trapping.</p></div>
                         <div slot="panel"><p>Works with React, Vue, Angular, or plain HTML.</p></div>
                         <div slot="panel"><p>Methods, events, and CSS parts for full customization.</p></div>
                       </velin-tabs>
@@ -834,13 +1025,13 @@
                     </velin-modal>
                     <velin-drawer id="site-drawer" title="Navigation" side="start">
                       <ul class="playground-drawer-list">
-                        <li><a href="#">Dashboard</a></li>
-                        <li><a href="#">Settings</a></li>
-                        <li><a href="#">Profile</a></li>
+                        <li><button type="button" class="velin-btn velin-btn--ghost velin-btn--sm">Dashboard</button></li>
+                        <li><button type="button" class="velin-btn velin-btn--ghost velin-btn--sm">Settings</button></li>
+                        <li><button type="button" class="velin-btn velin-btn--ghost velin-btn--sm">Profile</button></li>
                       </ul>
                     </velin-drawer>
                     <velin-toast id="site-toast"></velin-toast>
-                    <velin-dialog id="site-dialog"></velin-dialog>
+                    <velin-dialog id="site-dialog" aria-label="VelinStyle dialog"></velin-dialog>
                   </div>
 
                 </div>
@@ -1314,7 +1505,7 @@ velinstyle icons add lucide --icons heart,star,zap</code></pre>
         </div>
 
         <!-- ── At-a-glance scorecards ── -->
-        <div class="compare-cards" role="list">
+        <div class="compare-cards" role="list" velin-stagger="100">
           <article class="compare-card compare-card--bs" role="listitem">
             <header class="compare-card__head">
               <span class="compare-card__name">Bootstrap</span>
@@ -1351,7 +1542,7 @@ velinstyle icons add lucide --icons heart,star,zap</code></pre>
 
           <article class="compare-card compare-card--vs velin-chart-glow" role="listitem">
             <header class="compare-card__head">
-              <span class="compare-card__name">VelinStyle <velin-live-dot status="live" pulse="true">v0.8.0</velin-live-dot></span>
+              <span class="compare-card__name">VelinStyle <velin-live-dot status="live" pulse="true">v1.1.0</velin-live-dot></span>
               <span class="compare-card__year">since 2025</span>
             </header>
             <div class="compare-card__score">
@@ -1362,7 +1553,7 @@ velinstyle icons add lucide --icons heart,star,zap</code></pre>
             <dl class="compare-card__stats">
               <div><dt>CSS bundle</dt><dd><velin-counter from="0" to="46" suffix=" KB" duration="1000"></velin-counter></dd></div>
               <div><dt>JS bundle</dt><dd><velin-counter from="0" to="111" suffix=" KB" duration="1000"></velin-counter></dd></div>
-              <div><dt>Components</dt><dd>35+ CSS · 29 WC</dd></div>
+              <div><dt>Components</dt><dd>35+ CSS · 38 WC</dd></div>
               <div><dt>Deps</dt><dd>None</dd></div>
             </dl>
           </article>
@@ -1392,7 +1583,7 @@ velinstyle icons add lucide --icons heart,star,zap</code></pre>
                 <td>Components</td>
                 <td>~25</td>
                 <td>0 (utility only)</td>
-                <td class="highlight-col">35+ CSS + 29 Web Components</td>
+                <td class="highlight-col">35+ CSS + 38 Web Components</td>
               </tr>
               <tr data-tags="foundations">
                 <td>Bundle Size</td>
@@ -1404,7 +1595,7 @@ velinstyle icons add lucide --icons heart,star,zap</code></pre>
                 <td>Accessibility</td>
                 <td><span class="partial-icon" aria-label="Partial">◐</span> Partial (ARIA in JS)</td>
                 <td><span class="x-icon" aria-label="None">✕</span> None built-in</td>
-                <td class="highlight-col"><span class="check-icon" aria-label="Full">✓</span> WCAG 2.2 AA structural</td>
+                <td class="highlight-col"><span class="check-icon" aria-label="Full">✓</span> WCAG 2.2 AAA · ready</td>
               </tr>
               <tr data-tags="modern a11y">
                 <td>Dark Mode</td>
@@ -1491,10 +1682,34 @@ velinstyle icons add lucide --icons heart,star,zap</code></pre>
                 <td class="highlight-col"><span class="check-icon" aria-label="Yes">&#10003;</span> clamp() engine</td>
               </tr>
               <tr data-tags="modern dx">
-                <td>Motion &amp; charts <small>(new 0.8.0)</small></td>
+                <td>Motion &amp; charts <small>(0.8.0+)</small></td>
                 <td><span class="x-icon" aria-label="No">&#10005;</span></td>
                 <td><span class="x-icon" aria-label="No">&#10005;</span></td>
                 <td class="highlight-col"><span class="check-icon" aria-label="Yes">&#10003;</span> Sparkline, counter, FLIP-filter</td>
+              </tr>
+              <tr data-tags="dx">
+                <td>VelinSearch &amp; docs index <small>(1.0.0)</small></td>
+                <td><span class="x-icon" aria-label="No">&#10005;</span></td>
+                <td><span class="x-icon" aria-label="No">&#10005;</span></td>
+                <td class="highlight-col"><span class="check-icon" aria-label="Yes">&#10003;</span> Fuzzy search + <code>search index</code></td>
+              </tr>
+              <tr data-tags="dx">
+                <td>Auto-generated API docs <small>(1.0.0)</small></td>
+                <td><span class="x-icon" aria-label="No">&#10005;</span></td>
+                <td><span class="x-icon" aria-label="No">&#10005;</span></td>
+                <td class="highlight-col"><span class="check-icon" aria-label="Yes">&#10003;</span> <code>docs generate</code> Markdown</td>
+              </tr>
+              <tr data-tags="dx a11y">
+                <td>Velin-Meta (AI context) <small>(1.0.0)</small></td>
+                <td><span class="x-icon" aria-label="No">&#10005;</span></td>
+                <td><span class="x-icon" aria-label="No">&#10005;</span></td>
+                <td class="highlight-col"><span class="check-icon" aria-label="Yes">&#10003;</span> <code>velin-agent.json</code>, <code>llms.txt</code></td>
+              </tr>
+              <tr data-tags="dx a11y">
+                <td>PII &amp; perf CLI <small>(1.0.0)</small></td>
+                <td><span class="x-icon" aria-label="No">&#10005;</span></td>
+                <td><span class="x-icon" aria-label="No">&#10005;</span></td>
+                <td class="highlight-col"><span class="check-icon" aria-label="Yes">&#10003;</span> <code>scan --only pii</code>, <code>perf audit</code></td>
               </tr>
             </tbody>
           </table>
@@ -1513,11 +1728,11 @@ velinstyle icons add lucide --icons heart,star,zap</code></pre>
           </p>
         </div>
         <div class="code-tabs" role="tablist" aria-label="Code examples">
-          <button class="code-tab active" role="tab" aria-selected="true" aria-controls="code-quickstart" id="ctab-qs">Quick Start</button>
-          <button class="code-tab" role="tab" aria-selected="false" aria-controls="code-darkmode" id="ctab-dm">Dark Mode</button>
-          <button class="code-tab" role="tab" aria-selected="false" aria-controls="code-theme" id="ctab-th">Custom Theme</button>
-          <button class="code-tab" role="tab" aria-selected="false" aria-controls="code-jsapi" id="ctab-js">JS API</button>
-          <button class="code-tab" role="tab" aria-selected="false" aria-controls="code-cli" id="ctab-cli">CLI</button>
+          <button type="button" class="code-tab active" role="tab" aria-selected="true" aria-controls="code-quickstart" id="ctab-qs">Quick Start</button>
+          <button type="button" class="code-tab" role="tab" aria-selected="false" aria-controls="code-darkmode" id="ctab-dm">Dark Mode</button>
+          <button type="button" class="code-tab" role="tab" aria-selected="false" aria-controls="code-theme" id="ctab-th">Custom Theme</button>
+          <button type="button" class="code-tab" role="tab" aria-selected="false" aria-controls="code-jsapi" id="ctab-js">JS API</button>
+          <button type="button" class="code-tab" role="tab" aria-selected="false" aria-controls="code-cli" id="ctab-cli">CLI</button>
         </div>
         <div class="code-block active" role="tabpanel" id="code-quickstart" aria-labelledby="ctab-qs">
           <pre><code><span class="hl-comment">&lt;!-- Add to &lt;head&gt; — that's it! --&gt;</span>
@@ -1617,11 +1832,11 @@ $ <span class="hl-attr">npx velinstyle scan</span> <span class="hl-str">--fix --
     <section class="site-section" aria-labelledby="wc-title">
       <div class="site-section__inner velin-animate-on-scroll">
         <div class="site-section__header">
-          <span class="site-section__eyebrow">22 Native Components</span>
+          <span class="site-section__eyebrow">38 Canonical Components</span>
           <h2 class="site-section__title" id="wc-title">Zero-Dependency Web Components</h2>
           <p class="site-section__desc">
-            Every component is a native Custom Element. Works with React, Vue, Angular, Svelte, or plain HTML.
-            No framework lock-in, no runtime dependency.
+            38 canonical custom elements (40 lazy-loader entries). Native Custom Elements with CLS placeholders, component contracts, and Playwright smoke tests in CI.
+            Works with React, Vue, Angular, Svelte, or plain HTML — no framework lock-in.
           </p>
         </div>
         <div class="gallery-grid">
@@ -1699,7 +1914,7 @@ $ <span class="hl-attr">npx velinstyle scan</span> <span class="hl-str">--fix --
           </div>
         </div>
         <p style="text-align:center;margin-top:2rem">
-          <a href="docs/extend/web-components.html" class="velin-btn velin-btn--outline">View All 22 Components &rarr;</a>
+          <a href="docs/extend/web-components.html" class="velin-btn velin-btn--outline">View all 38 components &rarr;</a>
         </p>
       </div>
     </section>
@@ -1806,6 +2021,7 @@ $ <span class="hl-attr">npx velinstyle scan</span> <span class="hl-str">--fix --
         <div class="site-footer__brand-sub">Made by SkyliteDesign</div>
       </div>
       <div class="site-footer__links">
+        <a href="showcase/index.html" class="site-footer__link">Showcase</a>
         <a href="demos/index.html" class="site-footer__link">Demos</a>
         <a href="https://github.com/SkyliteDesign/velinstyle-demos" class="site-footer__link" target="_blank" rel="noopener">Fork demos</a>
         <a href="docs/getting-started/introduction.html" class="site-footer__link">Docs</a>
@@ -1828,6 +2044,23 @@ $ <span class="hl-attr">npx velinstyle scan</span> <span class="hl-str">--fix --
 
   <!-- VelinStyle JS -->
   <script src="dist/velinstyle-components.iife.js"></script>
+  <script src="docs/doc-md-viewer.js"></script>
+  <script>
+    (function () {
+      var nav = document.getElementById('siteNav');
+      if (!nav) return;
+      function apply() {
+        document.documentElement.style.setProperty(
+          '--velin-nav-height',
+          Math.ceil(nav.getBoundingClientRect().height) + 'px'
+        );
+        document.documentElement.classList.add('velin-scroll-pt-nav');
+      }
+      apply();
+      window.addEventListener('resize', apply, { passive: true });
+    })();
+  </script>
+  <script src="assets/js/home.js" defer></script>
 
   <script>
 
@@ -1976,6 +2209,8 @@ $ <span class="hl-attr">npx velinstyle scan</span> <span class="hl-str">--fix --
       const panel = document.getElementById('siteNavPanel');
       const demosBtn = document.getElementById('demosMenuTrigger');
       const demosList = document.getElementById('demosMenuList');
+      const sectionsBtn = document.getElementById('sectionsMenuTrigger');
+      const sectionsList = document.getElementById('sectionsMenuList');
       const mqWide = window.matchMedia('(min-width: 1024px)');
 
       function closeMobilePanel() {
@@ -1984,17 +2219,35 @@ $ <span class="hl-attr">npx velinstyle scan</span> <span class="hl-str">--fix --
         toggle.setAttribute('aria-expanded', 'false');
       }
 
+      function closeDropdown(btn, list) {
+        if (!btn || !list) return;
+        list.hidden = true;
+        btn.setAttribute('aria-expanded', 'false');
+      }
+
       function closeDemosMenu() {
-        if (!demosBtn || !demosList) return;
-        demosList.hidden = true;
-        demosBtn.setAttribute('aria-expanded', 'false');
+        closeDropdown(demosBtn, demosList);
+      }
+
+      function closeSectionsMenu() {
+        closeDropdown(sectionsBtn, sectionsList);
+      }
+
+      function toggleDropdown(btn, list) {
+        if (!btn || !list) return;
+        const open = list.hidden;
+        list.hidden = !open;
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
       }
 
       function toggleDemosMenu() {
-        if (!demosBtn || !demosList) return;
-        const open = demosList.hidden;
-        demosList.hidden = !open;
-        demosBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        closeSectionsMenu();
+        toggleDropdown(demosBtn, demosList);
+      }
+
+      function toggleSectionsMenu() {
+        closeDemosMenu();
+        toggleDropdown(sectionsBtn, sectionsList);
       }
 
       if (toggle && panel) {
@@ -2017,10 +2270,18 @@ $ <span class="hl-attr">npx velinstyle scan</span> <span class="hl-str">--fix --
         });
       }
 
+      if (sectionsBtn && sectionsList) {
+        sectionsBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          toggleSectionsMenu();
+        });
+      }
+
       document.addEventListener('click', (e) => {
         if (!nav) return;
         if (!nav.contains(e.target)) {
           closeDemosMenu();
+          closeSectionsMenu();
           if (!mqWide.matches) closeMobilePanel();
         }
       });
@@ -2028,6 +2289,7 @@ $ <span class="hl-attr">npx velinstyle scan</span> <span class="hl-str">--fix --
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
           closeDemosMenu();
+          closeSectionsMenu();
           closeMobilePanel();
         }
       });
@@ -2041,6 +2303,7 @@ $ <span class="hl-attr">npx velinstyle scan</span> <span class="hl-str">--fix --
         panel.querySelectorAll('.site-nav__dropdown a').forEach((a) => {
           a.addEventListener('click', () => {
             closeDemosMenu();
+            closeSectionsMenu();
             if (!mqWide.matches) closeMobilePanel();
           });
         });

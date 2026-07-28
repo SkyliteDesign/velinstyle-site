@@ -1,0 +1,8 @@
+# VelinStyle — public HTML only (see sitemap.xml)
+User-agent: *
+Allow: /
+Disallow: /tools/
+Disallow: /docs/dist/
+
+Sitemap: https://velinstyle.info/sitemap.xml
+

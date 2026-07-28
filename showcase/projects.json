@@ -1,0 +1,42 @@
+[
+  {
+    "id": "velinstyle-info",
+    "title": "VelinStyle Docs",
+    "url": "https://velinstyle.info/",
+    "description": "Offizielle Marketing- und Dokumentationsseite für das WCAG-2.2-AAA-CSS-Framework.",
+    "image": "../assets/img/showcase/velinstyle-info.webp",
+    "tags": ["docs", "marketing"]
+  },
+  {
+    "id": "birdapi",
+    "title": "BirdAPI",
+    "url": "https://birdapi.de/",
+    "description": "BirdAPI-Plattform — APIs, Produkte und Community rund um SkyliteDesign.",
+    "image": "../assets/img/showcase/birdapi.webp",
+    "tags": ["platform", "apis"]
+  },
+  {
+    "id": "mein-birdapi",
+    "title": "Mein BirdAPI",
+    "url": "https://mein.birdapi.store/",
+    "description": "Kundenportal und Dashboard für BirdAPI-Dienste — Abos, Lizenzen, Tickets und Rechnungen.",
+    "image": "../assets/img/showcase/mein-birdapi.webp",
+    "tags": ["dashboard", "portal"]
+  },
+  {
+    "id": "papageienregister",
+    "title": "Papageienregister",
+    "url": "https://papageienregister.de/",
+    "description": "Online-Register für Papageien — Nachweis und Verwaltung.",
+    "image": "../assets/img/showcase/papageienregister.webp",
+    "tags": ["register", "service"]
+  },
+  {
+    "id": "inselsorglos",
+    "title": "Insel Sorglos",
+    "url": "https://inselsorglos.de/",
+    "description": "Ferienwohnungs-Service Usedom — Reinigung, Check-in und Bettenwechsel.",
+    "image": "../assets/img/showcase/inselsorglos.webp",
+    "tags": ["service", "booking"]
+  }
+]

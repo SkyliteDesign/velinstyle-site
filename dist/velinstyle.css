@@ -1,8 +1,9 @@
 @layer tokens {
   :root {
-    --velin-color-primary: oklch(55% .15 250);
-    --velin-color-primary-hover: oklch(48% .15 250);
-    --velin-color-primary-active: oklch(42% .15 250);
+    --velin-color-primary: oklch(38% .18 250);
+    --velin-color-primary-text: oklch(38% .18 250);
+    --velin-color-primary-hover: oklch(32% .18 250);
+    --velin-color-primary-active: oklch(32% .18 250);
     --velin-color-primary-subtle: oklch(92% .04 250);
     --velin-color-on-primary: oklch(100% 0 0);
     --velin-color-secondary: oklch(55% .12 320);
@@ -13,18 +14,21 @@
     --velin-color-surface: oklch(98% .005 250);
     --velin-color-surface-dim: oklch(93% .005 250);
     --velin-color-surface-bright: oklch(100% 0 0);
-    --velin-color-text: oklch(15% .01 250);
-    --velin-color-text-muted: oklch(45% .01 250);
-    --velin-color-text-subtle: oklch(60% .005 250);
-    --velin-color-border: oklch(82% .01 250);
-    --velin-color-border-strong: oklch(65% .01 250);
+    --velin-color-text: oklch(8% .01 250);
+    --velin-color-text-muted: oklch(28% .01 250);
+    --velin-color-text-subtle: oklch(38% .005 250);
+    --velin-color-border: oklch(35% .01 250);
+    --velin-color-border-strong: oklch(20% .01 250);
     --velin-color-success: oklch(55% .16 145);
+    --velin-color-success-text: oklch(38% .16 145);
     --velin-color-success-subtle: oklch(92% .04 145);
     --velin-color-on-success: oklch(100% 0 0);
     --velin-color-warning: oklch(75% .15 85);
+    --velin-color-warning-text: oklch(42% .14 85);
     --velin-color-warning-subtle: oklch(95% .04 85);
     --velin-color-on-warning: oklch(20% .02 85);
     --velin-color-danger: oklch(55% .2 25);
+    --velin-color-danger-text: oklch(40% .2 25);
     --velin-color-danger-hover: oklch(48% .2 25);
     --velin-color-danger-subtle: oklch(92% .04 25);
     --velin-color-on-danger: oklch(100% 0 0);
@@ -32,16 +36,16 @@
     --velin-color-info-subtle: oklch(92% .04 240);
     --velin-color-on-info: oklch(100% 0 0);
     --velin-color-overlay: oklch(0% 0 0 / .4);
-    --velin-color-focus: oklch(60% .2 250);
+    --velin-color-focus: oklch(35% .22 250);
   }
 
   @media (prefers-color-scheme: dark) {
     :root:not([data-velin-theme="light"]) {
-      --velin-color-primary: oklch(72% .12 250);
-      --velin-color-primary-hover: oklch(78% .12 250);
-      --velin-color-primary-active: oklch(65% .12 250);
+      --velin-color-primary: oklch(48% .14 250);
+      --velin-color-primary-hover: oklch(55% .14 250);
+      --velin-color-primary-active: oklch(42% .14 250);
       --velin-color-primary-subtle: oklch(25% .06 250);
-      --velin-color-on-primary: oklch(10% .01 250);
+      --velin-color-on-primary: oklch(98% 0 0);
       --velin-color-secondary: oklch(72% .1 320);
       --velin-color-secondary-hover: oklch(78% .1 320);
       --velin-color-secondary-active: oklch(65% .1 320);
@@ -51,20 +55,24 @@
       --velin-color-surface-dim: oklch(10% .01 250);
       --velin-color-surface-bright: oklch(22% .01 250);
       --velin-color-text: oklch(92% .005 250);
-      --velin-color-text-muted: oklch(70% .005 250);
-      --velin-color-text-subtle: oklch(55% .005 250);
+      --velin-color-text-muted: oklch(85% .005 250);
+      --velin-color-text-subtle: oklch(72% .005 250);
       --velin-color-border: oklch(30% .01 250);
       --velin-color-border-strong: oklch(45% .01 250);
+      --velin-color-primary-text: oklch(82% .12 250);
       --velin-color-success: oklch(72% .14 145);
+      --velin-color-success-text: oklch(82% .14 145);
       --velin-color-success-subtle: oklch(25% .06 145);
       --velin-color-on-success: oklch(10% .01 145);
       --velin-color-warning: oklch(80% .12 85);
+      --velin-color-warning-text: oklch(80% .12 85);
       --velin-color-warning-subtle: oklch(25% .06 85);
       --velin-color-on-warning: oklch(10% .02 85);
-      --velin-color-danger: oklch(70% .16 25);
-      --velin-color-danger-hover: oklch(76% .16 25);
+      --velin-color-danger: oklch(52% .16 25);
+      --velin-color-danger-text: oklch(82% .16 25);
+      --velin-color-danger-hover: oklch(58% .16 25);
       --velin-color-danger-subtle: oklch(25% .06 25);
-      --velin-color-on-danger: oklch(10% .01 25);
+      --velin-color-on-danger: oklch(98% 0 0);
       --velin-color-info: oklch(72% .1 240);
       --velin-color-info-subtle: oklch(25% .04 240);
       --velin-color-on-info: oklch(10% .01 240);
@@ -74,11 +82,12 @@
   }
 
   [data-velin-theme="dark"] {
-    --velin-color-primary: oklch(72% .12 250);
-    --velin-color-primary-hover: oklch(78% .12 250);
-    --velin-color-primary-active: oklch(65% .12 250);
+    --velin-color-primary: oklch(48% .12 250);
+    --velin-color-primary-text: oklch(82% .12 250);
+    --velin-color-primary-hover: oklch(55% .12 250);
+    --velin-color-primary-active: oklch(42% .12 250);
     --velin-color-primary-subtle: oklch(25% .06 250);
-    --velin-color-on-primary: oklch(10% .01 250);
+    --velin-color-on-primary: oklch(98% 0 0);
     --velin-color-secondary: oklch(72% .1 320);
     --velin-color-secondary-hover: oklch(78% .1 320);
     --velin-color-secondary-active: oklch(65% .1 320);
@@ -88,25 +97,28 @@
     --velin-color-surface-dim: oklch(10% .01 250);
     --velin-color-surface-bright: oklch(22% .01 250);
     --velin-color-text: oklch(92% .005 250);
-    --velin-color-text-muted: oklch(70% .005 250);
-    --velin-color-text-subtle: oklch(55% .005 250);
+    --velin-color-text-muted: oklch(88% .005 250);
+    --velin-color-text-subtle: oklch(78% .005 250);
     --velin-color-border: oklch(30% .01 250);
     --velin-color-border-strong: oklch(45% .01 250);
     --velin-color-success: oklch(72% .14 145);
+    --velin-color-success-text: oklch(82% .14 145);
     --velin-color-success-subtle: oklch(25% .06 145);
     --velin-color-on-success: oklch(10% .01 145);
     --velin-color-warning: oklch(80% .12 85);
+    --velin-color-warning-text: oklch(80% .12 85);
     --velin-color-warning-subtle: oklch(25% .06 85);
     --velin-color-on-warning: oklch(10% .02 85);
-    --velin-color-danger: oklch(70% .16 25);
+    --velin-color-danger: oklch(52% .16 25);
+    --velin-color-danger-text: oklch(82% .16 25);
     --velin-color-danger-hover: oklch(76% .16 25);
     --velin-color-danger-subtle: oklch(25% .06 25);
-    --velin-color-on-danger: oklch(10% .01 25);
+    --velin-color-on-danger: oklch(98% 0 0);
     --velin-color-info: oklch(72% .1 240);
     --velin-color-info-subtle: oklch(25% .04 240);
-    --velin-color-on-info: oklch(10% .01 240);
+    --velin-color-on-info: oklch(98% 0 0);
     --velin-color-overlay: oklch(0% 0 0 / .6);
-    --velin-color-focus: oklch(72% .18 250);
+    --velin-color-focus: oklch(82% .18 250);
   }
 
   :root {
@@ -128,11 +140,17 @@
     --velin-space-20: 5rem;
     --velin-space-24: 6rem;
     --velin-space-32: 8rem;
-    --velin-font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --velin-font-display: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --velin-font-text: var(--velin-font-display);
+    --velin-font-code: "JetBrains Mono", "Cascadia Code", "Fira Code", Consolas, monospace;
+    --velin-font-features: "cv02", "ss01";
+    --velin-font-optical: auto;
+    --velin-font-size-adjust-fallback: .52;
+    --velin-font-sans: var(--velin-font-text, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
     --velin-font-serif: Georgia, Cambria, "Times New Roman", Times, serif;
-    --velin-font-mono: "Cascadia Code", "Fira Code", Consolas, "Courier New", monospace;
-    --velin-font-heading: var(--velin-font-sans);
-    --velin-font-body: var(--velin-font-sans);
+    --velin-font-mono: var(--velin-font-code, "Cascadia Code", "Fira Code", Consolas, "Courier New", monospace);
+    --velin-font-heading: var(--velin-font-display, var(--velin-font-sans));
+    --velin-font-body: var(--velin-font-text, var(--velin-font-sans));
     --velin-fluid-min-vw: 20;
     --velin-fluid-max-vw: 90;
     --velin-text-xs: clamp(.625rem, .6rem + .1vw, .75rem);
@@ -340,14 +358,80 @@
   [hidden] {
     display: none !important;
   }
-
-  velin-modal:not(:defined), velin-drawer:not(:defined), velin-tabs:not(:defined), velin-accordion:not(:defined), velin-dropdown:not(:defined), velin-toast:not(:defined), velin-dialog:not(:defined), velin-popover:not(:defined), velin-tooltip-wc:not(:defined), velin-lightbox:not(:defined), velin-carousel:not(:defined), velin-collapse:not(:defined), velin-stepper-wc:not(:defined), velin-countdown:not(:defined), velin-progress-ring:not(:defined), velin-persist:not(:defined), velin-copy:not(:defined), velin-scroll-top:not(:defined), velin-scrollspy:not(:defined), velin-theme-toggle:not(:defined), velin-icon:not(:defined), velin-combobox:not(:defined), velin-bottom-nav:not(:defined), velin-sheet:not(:defined), velin-segmented-control:not(:defined), velin-rating:not(:defined), velin-menubar:not(:defined), velin-command:not(:defined), velin-announcer:not(:defined), velin-sparkline:not(:defined), velin-counter:not(:defined), velin-live-dot:not(:defined) {
-    opacity: 0;
-    visibility: hidden;
-  }
 }
 
 @layer base {
+  velin-modal:not(:defined), velin-drawer:not(:defined), velin-dialog:not(:defined), velin-sheet:not(:defined), velin-lightbox:not(:defined), velin-command:not(:defined) {
+    opacity: 0;
+    visibility: hidden;
+    contain: layout style;
+    block-size: 0;
+    display: block;
+    overflow: hidden;
+  }
+
+  velin-tabs:not(:defined), velin-accordion:not(:defined), velin-carousel:not(:defined), velin-collapse:not(:defined), velin-stepper:not(:defined), velin-stepper-wc:not(:defined), velin-bottom-nav:not(:defined), velin-menubar:not(:defined), velin-segmented-control:not(:defined), velin-code-block:not(:defined), velin-secure-field:not(:defined), velin-search:not(:defined) {
+    opacity: 0;
+    visibility: hidden;
+    contain: layout style;
+    min-block-size: 2.75rem;
+    display: block;
+  }
+
+  velin-dropdown:not(:defined), velin-combobox:not(:defined), velin-popover:not(:defined), velin-tooltip:not(:defined), velin-tooltip-wc:not(:defined), velin-rating:not(:defined), velin-copy:not(:defined), velin-email:not(:defined), velin-countdown:not(:defined), velin-counter:not(:defined), velin-live-dot:not(:defined), velin-progress-ring:not(:defined), velin-icon:not(:defined), velin-theme-toggle:not(:defined) {
+    vertical-align: middle;
+    opacity: 0;
+    visibility: hidden;
+    contain: layout style;
+    min-block-size: 2.75rem;
+    min-inline-size: 2.75rem;
+    display: inline-block;
+  }
+
+  velin-sparkline:not(:defined) {
+    vertical-align: middle;
+    opacity: 0;
+    visibility: hidden;
+    contain: layout style;
+    min-block-size: 1.5rem;
+    min-inline-size: 4rem;
+    display: inline-block;
+  }
+
+  velin-scroll-top:not(:defined) {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    contain: layout style;
+    block-size: 2.75rem;
+    inline-size: 2.75rem;
+    position: fixed;
+    inset-block-end: var(--velin-space-4, 1rem);
+    inset-inline-end: var(--velin-space-4, 1rem);
+  }
+
+  velin-toast:not(:defined), velin-announcer:not(:defined) {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    contain: strict;
+    block-size: 1px;
+    inline-size: 1px;
+    position: fixed;
+    overflow: hidden;
+  }
+
+  velin-persist:not(:defined), velin-scrollspy:not(:defined) {
+    opacity: 0;
+    visibility: hidden;
+    display: contents;
+  }
+
+  velin-data-table:not(:defined), velin-form-summary:not(:defined) {
+    contain: layout style;
+    display: block;
+  }
+
   :focus-visible {
     outline: 3px solid var(--velin-color-focus);
     outline-offset: 2px;
@@ -538,7 +622,7 @@
     overflow: hidden;
   }
 
-  .velin-sr-only--focusable:focus, .velin-sr-only--focusable:active {
+  .velin-sr-only--focusable:focus-visible, .velin-sr-only--focusable:active {
     width: auto;
     height: auto;
     padding: inherit;
@@ -577,7 +661,9 @@
     inset-inline-start: var(--velin-space-4);
   }
 
-  .velin-skip-link:focus {
+  .velin-skip-link:focus-visible {
+    outline: 3px solid var(--velin-color-focus);
+    outline-offset: 2px;
     inset-block-start: var(--velin-space-4);
   }
 
@@ -843,32 +929,111 @@
     min-inline-size: 2.75rem;
   }
 
-  :root[data-velin-contrast="aaa"] {
-    --velin-color-text: oklch(8% .01 250);
-    --velin-color-text-muted: oklch(28% .01 250);
-    --velin-color-text-subtle: oklch(38% .01 250);
-    --velin-color-border: oklch(35% .01 250);
-    --velin-color-border-strong: oklch(20% .01 250);
-    --velin-color-primary: oklch(38% .18 250);
-    --velin-color-primary-hover: oklch(32% .18 250);
-    --velin-color-on-primary: oklch(100% 0 0);
-    --velin-color-focus: oklch(35% .22 250);
+  :root[data-velin-contrast="aa"] {
+    --velin-color-text: oklch(15% .01 250);
+    --velin-color-text-muted: oklch(45% .01 250);
+    --velin-color-text-subtle: oklch(60% .005 250);
+    --velin-color-primary: oklch(55% .15 250);
+    --velin-color-primary-text: oklch(42% .15 250);
+    --velin-color-border: oklch(82% .01 250);
+    --velin-color-focus: oklch(60% .2 250);
   }
 
-  :root[data-velin-contrast="aaa"][data-velin-theme="dark"], :root[data-velin-contrast="aaa"]:not([data-velin-theme="light"]) {
-    @media (prefers-color-scheme: dark) {
-      --velin-color-text: oklch(98% .005 250);
-      --velin-color-text-muted: oklch(82% .005 250);
-      --velin-color-text-subtle: oklch(72% .005 250);
-      --velin-color-border: oklch(55% .01 250);
-      --velin-color-border-strong: oklch(70% .01 250);
-      --velin-color-primary: oklch(78% .14 250);
-      --velin-color-on-primary: oklch(8% .01 250);
-    }
-  }
-
-  :root[data-velin-contrast="aaa"] .velin-btn, :root[data-velin-contrast="aaa"] .velin-input, :root[data-velin-contrast="aaa"] .velin-select, :root[data-velin-contrast="aaa"] .velin-textarea {
+  :root[data-velin-contrast="aaa"] .velin-btn, :root:not([data-velin-contrast="aa"]) .velin-btn, :root[data-velin-contrast="aaa"] .velin-input, :root[data-velin-contrast="aaa"] .velin-select, :root[data-velin-contrast="aaa"] .velin-textarea, :root:not([data-velin-contrast="aa"]) .velin-input, :root:not([data-velin-contrast="aa"]) .velin-select, :root:not([data-velin-contrast="aa"]) .velin-textarea {
     border-width: 2px;
+  }
+
+  .velin-auth-form {
+    gap: var(--velin-space-4);
+    flex-direction: column;
+    max-width: 28rem;
+    display: flex;
+  }
+
+  .velin-auth-form .velin-field-error {
+    color: var(--velin-color-danger, #b91c1c);
+    font-size: var(--velin-text-sm);
+    align-items: flex-start;
+    gap: var(--velin-space-2);
+    display: flex;
+  }
+
+  .velin-auth-form .velin-field-error:before {
+    content: "";
+    background: currentColor;
+    flex-shrink: 0;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-block-start: .1em;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cline x1='12' y1='8' x2='12' y2='12'/%3E%3Cline x1='12' y1='16' x2='12.01' y2='16'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
+
+  .velin-input[aria-invalid="true"], .velin-auth-form .velin-input:invalid:not(:placeholder-shown) {
+    border-color: var(--velin-color-danger, #b91c1c);
+    outline-color: var(--velin-color-danger, #b91c1c);
+  }
+
+  .velin-auth-form .velin-input[aria-invalid="true"] {
+    background-image: linear-gradient(#0000, #0000);
+  }
+
+  .velin-field-help {
+    font-size: var(--velin-text-sm);
+    color: var(--velin-color-text-muted);
+    line-height: var(--velin-leading-snug);
+    margin-block-start: var(--velin-space-1);
+  }
+
+  .velin-form-legend {
+    font-size: var(--velin-text-lg);
+    font-weight: var(--velin-weight-semibold);
+    margin-block-end: var(--velin-space-2);
+    padding: 0;
+  }
+
+  .velin-form-section-help {
+    font-size: var(--velin-text-sm);
+    color: var(--velin-color-text-muted);
+    margin-block-end: var(--velin-space-4);
+  }
+
+  .velin-drag-handle {
+    cursor: grab;
+    touch-action: none;
+    justify-content: center;
+    align-items: center;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    display: inline-flex;
+  }
+
+  .velin-drag-handle:active {
+    cursor: grabbing;
+  }
+
+  .velin-drag-keyboard-hint {
+    font-size: var(--velin-text-xs);
+    color: var(--velin-color-text-muted);
+    margin-block-start: var(--velin-space-1);
+  }
+
+  .velin-drag-keyboard-hint kbd {
+    font-family: var(--velin-font-mono);
+    border-radius: var(--velin-radius-sm);
+    border: 1px solid var(--velin-color-border);
+    background: var(--velin-color-surface-dim);
+    padding: .1em .35em;
+  }
+
+  :root {
+    --velin-focus-ring-width: 3px;
+    --velin-focus-ring-offset: 2px;
+    --velin-focus-ring-color: var(--velin-color-focus, oklch(55% .2 264));
+  }
+
+  :where(a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, [tabindex]:not([tabindex="-1"]):focus-visible) {
+    outline: var(--velin-focus-ring-width) solid var(--velin-focus-ring-color);
+    outline-offset: var(--velin-focus-ring-offset);
   }
 }
 
@@ -2854,6 +3019,92 @@
     }
   }
 
+  .velin-data-table {
+    display: block;
+  }
+
+  .velin-data-table tr[hidden] {
+    display: none;
+  }
+
+  .velin-data-table__th {
+    padding: 0;
+  }
+
+  .velin-data-table__sort {
+    align-items: center;
+    gap: var(--velin-space-2);
+    min-block-size: 2.75rem;
+    inline-size: 100%;
+    padding: var(--velin-space-3) var(--velin-space-4);
+    font: inherit;
+    font-weight: var(--velin-weight-semibold);
+    color: inherit;
+    text-align: inherit;
+    cursor: pointer;
+    background: none;
+    border: none;
+    display: flex;
+  }
+
+  .velin-data-table__sort:hover {
+    background-color: var(--velin-color-surface-dim);
+  }
+
+  .velin-data-table__sort-icon {
+    inline-size: .75rem;
+    color: var(--velin-color-text-muted);
+    flex-shrink: 0;
+  }
+
+  .velin-data-table__sort-icon:after {
+    content: "↕";
+  }
+
+  [aria-sort="ascending"] .velin-data-table__sort-icon:after {
+    content: "↑";
+  }
+
+  [aria-sort="descending"] .velin-data-table__sort-icon:after {
+    content: "↓";
+  }
+
+  [aria-sort="ascending"] .velin-data-table__sort-icon, [aria-sort="descending"] .velin-data-table__sort-icon {
+    color: var(--velin-color-primary);
+  }
+
+  .velin-data-table__empty td {
+    padding-block: var(--velin-space-6);
+    color: var(--velin-color-text-muted);
+    text-align: center;
+  }
+
+  .velin-data-table__pagination {
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--velin-space-3);
+    flex-wrap: wrap;
+    margin-block-start: var(--velin-space-4);
+    display: flex;
+  }
+
+  .velin-data-table__page-status {
+    color: var(--velin-color-text-muted);
+    font-size: var(--velin-text-sm);
+    margin: 0;
+  }
+
+  @media (forced-colors: active) {
+    .velin-data-table__sort:hover {
+      color: highlighttext;
+      background-color: highlight;
+    }
+
+    .velin-data-table__sort-icon {
+      color: canvastext;
+    }
+  }
+
   .velin-tooltip {
     display: inline-block;
     position: relative;
@@ -2892,8 +3143,7 @@
   }
 
   .velin-tooltip--bottom .velin-tooltip__content {
-    inset-block-start: calc(100% + var(--velin-space-2));
-    inset-block-end: auto;
+    inset-block: calc(100% + var(--velin-space-2)) auto;
   }
 
   .velin-tooltip--bottom .velin-tooltip__content:after {
@@ -3899,12 +4149,11 @@
 
   .velin-timeline:before {
     content: "";
+    inset-inline-start: .5rem;
+    inset-block: var(--velin-space-2) var(--velin-space-2);
     background: var(--velin-color-border);
     inline-size: 2px;
     position: absolute;
-    inset-block-start: var(--velin-space-2);
-    inset-block-end: var(--velin-space-2);
-    inset-inline-start: .5rem;
   }
 
   .velin-timeline__item {
@@ -4262,8 +4511,7 @@
   }
 
   .velin-float-label > .velin-input, .velin-float-label > .velin-select, .velin-float-label > .velin-textarea {
-    padding-block-start: var(--velin-space-5);
-    padding-block-end: var(--velin-space-1);
+    padding-block: var(--velin-space-5) var(--velin-space-1);
   }
 
   .velin-float-label > .velin-label {
@@ -4345,6 +4593,44 @@
     overflow: visible;
   }
 
+  .velin-form-summary {
+    display: block;
+  }
+
+  .velin-form-summary[hidden] {
+    display: none;
+  }
+
+  .velin-form-summary__panel {
+    margin-block-end: var(--velin-space-4);
+  }
+
+  .velin-form-summary__heading {
+    margin: 0 0 var(--velin-space-2);
+    font-weight: var(--velin-weight-semibold);
+  }
+
+  .velin-form-summary__list {
+    margin: 0;
+    padding-inline-start: var(--velin-space-5);
+  }
+
+  .velin-form-summary__list li + li {
+    margin-block-start: var(--velin-space-1);
+  }
+
+  .velin-form-summary__list a {
+    min-block-size: 1.5rem;
+    padding-block: var(--velin-space-1);
+    color: inherit;
+    text-decoration: underline;
+    display: inline-block;
+  }
+
+  .velin-field-error:empty {
+    display: none;
+  }
+
   @supports selector(:user-invalid) {
     .velin-form--validated .velin-input:user-valid, .velin-form--validated .velin-select:user-valid, .velin-form--validated .velin-textarea:user-valid {
       border-color: var(--velin-color-success);
@@ -4402,6 +4688,312 @@
     .velin-collapse-trigger__icon {
       transition: none;
     }
+  }
+
+  .velin-search {
+    inline-size: 100%;
+    position: relative;
+  }
+
+  .velin-search__input {
+    inline-size: 100%;
+    padding: var(--velin-space-2) var(--velin-space-3);
+    border: 1px solid var(--velin-color-border);
+    border-radius: var(--velin-radius-md);
+    background: var(--velin-color-surface);
+    color: var(--velin-color-text);
+  }
+
+  .velin-search__results {
+    z-index: var(--velin-z-dropdown, 100);
+    border: 1px solid var(--velin-color-border);
+    border-radius: var(--velin-radius-md);
+    background: var(--velin-color-surface);
+    max-block-size: 20rem;
+    box-shadow: var(--velin-shadow-lg);
+    opacity: 0;
+    transition: opacity var(--velin-duration-fast, .15s) ease,
+      transform var(--velin-duration-fast, .15s) ease;
+    position: absolute;
+    inset-block-start: calc(100% + var(--velin-space-1));
+    inset-inline: 0;
+    overflow: auto;
+    transform: translateY(-.25rem);
+  }
+
+  .velin-search__results--open {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .velin-search__group-label {
+    padding: var(--velin-space-2) var(--velin-space-3);
+    font-size: var(--velin-text-xs, .75rem);
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    color: var(--velin-color-text-muted);
+    border-block-end: 1px solid var(--velin-color-border);
+    font-weight: 600;
+  }
+
+  .velin-search__item {
+    gap: var(--velin-space-1);
+    padding: var(--velin-space-2) var(--velin-space-3);
+    color: inherit;
+    flex-direction: column;
+    text-decoration: none;
+    display: flex;
+  }
+
+  .velin-search__item:hover, .velin-search__item--active {
+    background: var(--velin-color-surface-hover, color-mix(in oklch, var(--velin-color-primary) 12%, transparent));
+  }
+
+  .velin-search__title {
+    font-weight: 600;
+  }
+
+  .velin-search__excerpt {
+    font-size: var(--velin-text-sm, .875rem);
+    color: var(--velin-color-text-muted);
+  }
+
+  .velin-search-hit {
+    background: color-mix(in oklch, var(--velin-color-primary) 35%, transparent);
+    border-radius: 2px;
+    padding-inline: 1px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .velin-search__results {
+      transition: none;
+    }
+  }
+
+  @media (width <= 640px) {
+    .velin-search {
+      min-inline-size: 0;
+    }
+
+    .velin-search__results {
+      box-sizing: border-box;
+      max-inline-size: min(100vw, 100%);
+      inset-inline: 0;
+    }
+  }
+
+  .velin-quote {
+    margin-block: var(--velin-space-4);
+    border-inline-start: 4px solid var(--velin-color-primary);
+    color: var(--velin-color-text-muted);
+    padding-inline-start: var(--velin-space-4);
+    font-style: italic;
+  }
+
+  .velin-code-block {
+    margin-block: var(--velin-space-4);
+    border-radius: var(--velin-radius-md);
+    background: var(--velin-color-surface-elevated, var(--velin-color-surface));
+    border: 1px solid var(--velin-color-border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .velin-code-block pre {
+    padding: var(--velin-space-4);
+    font-family: var(--velin-font-mono, ui-monospace, monospace);
+    font-size: var(--velin-text-sm, .875rem);
+    margin: 0;
+    overflow-x: auto;
+  }
+
+  .velin-code-block__copy {
+    position: absolute;
+    inset-block-start: var(--velin-space-2);
+    inset-inline-end: var(--velin-space-2);
+  }
+
+  .velin-highlight {
+    background: color-mix(in oklch, var(--velin-color-warning, #f59e0b) 35%, transparent);
+    border-radius: 2px;
+    padding-inline: 2px;
+  }
+
+  [velin-anchor] {
+    scroll-margin-block: var(--velin-space-16, 4rem);
+  }
+
+  pre.velin-syntax-pending code, code.velin-syntax-pending {
+    opacity: 0;
+  }
+
+  pre.velin-syntax-ready code, code.velin-syntax-ready {
+    opacity: 1;
+    transition: opacity var(--velin-duration-normal, .25s) var(--velin-ease-out, ease-out);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    pre.velin-syntax-ready code, code.velin-syntax-ready {
+      transition: none;
+    }
+  }
+
+  .velin-token {
+    font-family: inherit;
+  }
+
+  .velin-token--keyword {
+    color: oklch(45% .2 265);
+  }
+
+  .velin-token--string {
+    color: oklch(42% .14 145);
+  }
+
+  .velin-token--comment {
+    color: oklch(55% .02 265);
+    font-style: italic;
+  }
+
+  .velin-token--number {
+    color: oklch(48% .16 55);
+  }
+
+  .velin-token--operator {
+    color: oklch(50% .18 25);
+  }
+
+  .velin-token--punctuation {
+    color: oklch(52% .02 265);
+  }
+
+  .velin-token--identifier {
+    color: oklch(38% .04 265);
+  }
+
+  .velin-token--tag {
+    color: oklch(48% .18 25);
+  }
+
+  .velin-token--attr-name {
+    color: oklch(45% .16 265);
+  }
+
+  .velin-token--attr-value {
+    color: oklch(42% .14 145);
+  }
+
+  .velin-token--builtin {
+    color: oklch(46% .17 310);
+  }
+
+  .velin-token--regex {
+    color: oklch(50% .16 55);
+  }
+
+  @supports (color: color(display-p3 1 1 1)) {
+    .velin-token--keyword {
+      color: color(display-p3 .2 .35 .85);
+    }
+
+    .velin-token--string {
+      color: color(display-p3 .15 .55 .35);
+    }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-velin-theme="light"]) .velin-token--keyword {
+      color: oklch(78% .14 285);
+    }
+  }
+
+  [data-velin-theme="dark"] .velin-token--keyword {
+    color: oklch(78% .14 285);
+  }
+
+  [data-velin-theme="dark"] .velin-token--string {
+    color: oklch(78% .12 145);
+  }
+
+  [data-velin-theme="dark"] .velin-token--comment {
+    color: oklch(62% .03 285);
+  }
+
+  [data-velin-theme="dark"] .velin-token--number {
+    color: oklch(80% .12 75);
+  }
+
+  [data-velin-theme="dark"] .velin-token--operator, [data-velin-theme="dark"] .velin-token--tag {
+    color: oklch(78% .14 25);
+  }
+
+  [data-velin-theme="dark"] .velin-token--attr-name {
+    color: oklch(76% .12 285);
+  }
+
+  [data-velin-theme="dark"] .velin-token--identifier {
+    color: oklch(88% .02 285);
+  }
+
+  .velin-code-block__line--highlight {
+    background: color-mix(in oklch, var(--velin-color-primary, oklch(55% .2 265)) 18%, transparent);
+    margin-inline: calc(-1 * var(--velin-space-4, 1rem));
+    padding-inline: var(--velin-space-4, 1rem);
+    display: block;
+  }
+
+  velin-code-block {
+    display: block;
+    position: relative;
+  }
+
+  velin-code-block[data-collapsed] pre {
+    max-height: 12rem;
+    overflow: hidden;
+  }
+
+  velin-code-block .velin-code-block__gutter {
+    grid-template-columns: auto 1fr;
+    gap: 0;
+    display: grid;
+  }
+
+  velin-code-block .velin-code-block__line-numbers {
+    padding: var(--velin-space-4);
+    text-align: end;
+    user-select: none;
+    color: var(--velin-color-text-muted);
+    font-family: var(--velin-font-mono, ui-monospace, monospace);
+    font-size: var(--velin-text-sm, .875rem);
+    border-inline-end: 1px solid var(--velin-color-border);
+    flex-direction: column;
+    flex-shrink: 0;
+    align-items: flex-end;
+    padding-inline-end: var(--velin-space-2);
+    line-height: 1.55;
+    display: flex;
+  }
+
+  velin-code-block .velin-code-block__line-numbers > span {
+    min-height: 1.55em;
+    line-height: 1.55;
+    display: block;
+  }
+
+  velin-code-block .velin-code-block__gutter pre, velin-code-block .velin-code-block__gutter pre code {
+    white-space: pre;
+    tab-size: 2;
+    margin: 0;
+    line-height: 1.55;
+  }
+
+  velin-code-block .velin-code-block__toolbar {
+    gap: var(--velin-space-2);
+    z-index: 1;
+    display: flex;
+    position: absolute;
+    inset-block-start: var(--velin-space-2);
+    inset-inline-end: var(--velin-space-2);
   }
 }
 
@@ -4539,30 +5131,58 @@
   }
 
   .velin-mb-0 {
-    margin-block: var(--velin-space-0);
+    margin-bottom: var(--velin-space-0);
   }
 
   .velin-mb-1 {
-    margin-block: var(--velin-space-1);
+    margin-bottom: var(--velin-space-1);
   }
 
   .velin-mb-2 {
-    margin-block: var(--velin-space-2);
+    margin-bottom: var(--velin-space-2);
   }
 
   .velin-mb-3 {
-    margin-block: var(--velin-space-3);
+    margin-bottom: var(--velin-space-3);
   }
 
   .velin-mb-4 {
-    margin-block: var(--velin-space-4);
+    margin-bottom: var(--velin-space-4);
   }
 
   .velin-mb-6 {
-    margin-block: var(--velin-space-6);
+    margin-bottom: var(--velin-space-6);
   }
 
   .velin-mb-8 {
+    margin-bottom: var(--velin-space-8);
+  }
+
+  .velin-my-0 {
+    margin-block: var(--velin-space-0);
+  }
+
+  .velin-my-1 {
+    margin-block: var(--velin-space-1);
+  }
+
+  .velin-my-2 {
+    margin-block: var(--velin-space-2);
+  }
+
+  .velin-my-3 {
+    margin-block: var(--velin-space-3);
+  }
+
+  .velin-my-4 {
+    margin-block: var(--velin-space-4);
+  }
+
+  .velin-my-6 {
+    margin-block: var(--velin-space-6);
+  }
+
+  .velin-my-8 {
     margin-block: var(--velin-space-8);
   }
 
@@ -5056,6 +5676,22 @@
     font-family: var(--velin-font-mono);
   }
 
+  .velin-font-display {
+    font-family: var(--velin-font-display);
+  }
+
+  .velin-font-text {
+    font-family: var(--velin-font-text);
+  }
+
+  .velin-tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .velin-text-pretty {
+    text-wrap: pretty;
+  }
+
   .velin-text-start {
     text-align: start;
   }
@@ -5178,10 +5814,6 @@
 
   .velin-text-balance {
     text-wrap: balance;
-  }
-
-  .velin-text-pretty {
-    text-wrap: pretty;
   }
 
   .velin-text-nowrap {
@@ -6220,7 +6852,7 @@
   }
 
   @keyframes velin-flip {
-    from {
+    0% {
       opacity: 0;
       transform: perspective(400px) rotateY(90deg);
     }
@@ -6233,7 +6865,7 @@
       transform: perspective(400px) rotateY(15deg);
     }
 
-    to {
+    100% {
       opacity: 1;
       transform: perspective(400px) rotateY(0);
     }
@@ -7948,15 +8580,11 @@
   }
 
   .velin-divide-y-2 > * + * {
-    border-block-start-style: solid;
-    border-block-start-width: 2px;
-    border-block-start-color: var(--velin-color-border);
+    border-block-start: 2px solid var(--velin-color-border);
   }
 
   .velin-divide-x-2 > * + * {
-    border-inline-start-style: solid;
-    border-inline-start-width: 2px;
-    border-inline-start-color: var(--velin-color-border);
+    border-inline-start: 2px solid var(--velin-color-border);
   }
 
   .velin-divide-primary > * + * {
@@ -8294,6 +8922,39 @@
     to {
       transform: translateY(5%);
     }
+  }
+
+  @supports not (animation-timeline: view()) {
+    .velin-animate-on-scroll:not(.velin-in-view) {
+      opacity: 0;
+      transform: translateY(1.5rem);
+    }
+
+    .velin-animate-on-scroll--fade:not(.velin-in-view) {
+      opacity: 0;
+      transform: none;
+    }
+
+    .velin-animate-on-scroll--slide-up:not(.velin-in-view) {
+      opacity: 0;
+      transform: translateY(2rem);
+    }
+
+    .velin-animate-on-scroll--scale:not(.velin-in-view) {
+      opacity: 0;
+      transform: scale(.92);
+    }
+
+    .velin-animate-on-scroll.velin-in-view, .velin-animate-on-scroll--fade.velin-in-view, .velin-animate-on-scroll--slide-up.velin-in-view, .velin-animate-on-scroll--scale.velin-in-view {
+      opacity: 1;
+      transition: opacity var(--velin-duration-normal, .4s) var(--velin-ease-out, ease-out),
+        transform var(--velin-duration-normal, .4s) var(--velin-ease-out, ease-out);
+      transform: none;
+    }
+  }
+
+  .velin-stagger-item {
+    transition-delay: var(--velin-stagger-delay, 0s);
   }
 
   @media (prefers-reduced-motion: reduce) {
