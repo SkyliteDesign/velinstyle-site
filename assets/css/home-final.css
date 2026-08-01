@@ -1,0 +1,847 @@
+/**
+ * Final UI polish — Architecture Map, Token Lab 70/30 tabs,
+ * Showcase gallery cards, full-width footer. Reduced-motion safe.
+ */
+
+/* ─── Capabilities Architecture Map ─── */
+.expo-arch {
+  display: grid;
+  gap: clamp(1.25rem, 3vw, 2rem);
+  justify-items: center;
+  padding-block: 0.5rem 0.25rem;
+}
+
+.expo-arch__hub {
+  margin: 0;
+  font-size: clamp(1.15rem, 2.2vw, 1.45rem);
+  font-weight: var(--velin-weight-bold);
+  letter-spacing: -0.02em;
+  color: var(--velin-color-text);
+  padding: 0.55rem 1.25rem;
+  border: 1px solid color-mix(in oklab, var(--velin-color-primary) 35%, var(--velin-color-border));
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--velin-color-primary) 12%, var(--velin-color-surface));
+}
+
+.expo-arch__core {
+  width: min(100%, 42rem);
+}
+
+.expo-arch__row {
+  width: 100%;
+  display: grid;
+  gap: var(--velin-space-3);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 56rem) {
+  .expo-arch__row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.expo-arch__ai {
+  width: min(100%, 28rem);
+}
+
+.expo-arch-panel {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1.15rem 1.2rem;
+  border: 1px solid var(--velin-color-border);
+  border-radius: var(--velin-radius-lg);
+  background:
+    linear-gradient(
+      165deg,
+      color-mix(in oklab, var(--expo-arch-accent, var(--velin-color-primary)) 14%, transparent),
+      transparent 48%
+    ),
+    var(--velin-color-surface);
+  min-height: 100%;
+}
+
+.expo-arch-panel[data-tone="core"] { --expo-arch-accent: var(--velin-color-primary); }
+.expo-arch-panel[data-tone="runtime"] { --expo-arch-accent: var(--velin-color-info, #2f8fdb); }
+.expo-arch-panel[data-tone="a11y"] { --expo-arch-accent: var(--velin-color-success, #22a06b); }
+.expo-arch-panel[data-tone="dev"] { --expo-arch-accent: color-mix(in oklab, var(--velin-color-primary) 40%, #d97706); }
+.expo-arch-panel[data-tone="ai"] { --expo-arch-accent: color-mix(in oklab, var(--velin-color-primary) 50%, #6366f1); }
+
+.expo-arch-panel__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.expo-arch-panel__icon {
+  display: grid;
+  place-items: center;
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: var(--velin-radius-md);
+  background: color-mix(in oklab, var(--expo-arch-accent) 22%, transparent);
+  color: var(--expo-arch-accent);
+  font-size: 0.72rem;
+  font-weight: var(--velin-weight-bold);
+  letter-spacing: 0.04em;
+}
+
+.expo-arch-panel__meta {
+  text-align: end;
+}
+
+.expo-arch-panel__count {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--velin-color-text-muted);
+}
+
+.expo-arch-panel h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  letter-spacing: -0.015em;
+}
+
+.expo-arch-panel > p {
+  margin: 0;
+  font-size: var(--velin-text-sm);
+  color: var(--velin-color-text-muted);
+  line-height: 1.45;
+}
+
+.expo-arch-panel__nodes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.expo-arch-node {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.25rem;
+  padding: 0.35rem 0.7rem;
+  border: 1px solid var(--velin-color-border);
+  border-radius: var(--velin-radius-md);
+  background: color-mix(in oklab, var(--velin-color-bg) 80%, transparent);
+  color: var(--velin-color-text);
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: border-color 160ms var(--expo-ease, ease), background 160ms var(--expo-ease, ease), transform 160ms var(--expo-ease, ease);
+}
+
+.expo-arch-node:hover,
+.expo-arch-node:focus-visible {
+  border-color: color-mix(in oklab, var(--expo-arch-accent) 45%, var(--velin-color-border));
+  background: color-mix(in oklab, var(--expo-arch-accent) 10%, var(--velin-color-bg));
+  outline: none;
+  transform: translateY(-1px);
+}
+
+.expo-arch-panel__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem;
+  margin-block-start: 0.15rem;
+}
+
+.expo-arch-panel__preview {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2rem;
+  pointer-events: none;
+}
+
+.expo-arch-panel__preview .velin-btn,
+.expo-arch-panel__preview .velin-badge {
+  pointer-events: none;
+}
+
+.expo-arch-panel__docs {
+  font-size: var(--velin-text-sm);
+  font-weight: var(--velin-weight-semibold);
+  color: var(--velin-color-primary);
+  text-decoration: none;
+}
+
+.expo-arch-panel__docs:hover,
+.expo-arch-panel__docs:focus-visible {
+  text-decoration: underline;
+  outline: none;
+}
+
+/* Hide legacy feature-card styles if leftover */
+.expo-cap-board:has(.expo-arch) {
+  display: contents;
+}
+
+/* ─── Token Lab 70 / 30 ─── */
+.expo-token-lab {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(1.25rem, 3vw, 2rem);
+  align-items: start;
+}
+
+@media (min-width: 64rem) {
+  .expo-token-lab {
+    grid-template-columns: minmax(0, 1.7fr) minmax(16rem, 0.72fr);
+  }
+}
+
+.expo-token-lab__stage {
+  display: grid;
+  gap: var(--velin-space-3);
+  min-width: 0;
+}
+
+.expo-token-lab__live {
+  min-width: 0;
+}
+
+.expo-token-lab__live #tokenSurface {
+  padding: clamp(1.1rem, 2.5vw, 1.75rem);
+  min-height: 18rem;
+}
+
+.expo-token-lab__components {
+  display: none;
+}
+
+.expo-token-inspector {
+  max-height: none;
+  overflow: visible;
+  padding: 0;
+  border: 1px solid var(--velin-color-border);
+  border-radius: var(--velin-radius-lg);
+  background: color-mix(in oklab, var(--velin-color-surface) 94%, transparent);
+}
+
+.expo-token-inspector__title {
+  margin: 0;
+  padding: 0.9rem 1rem 0.35rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--velin-color-text-muted);
+}
+
+.expo-token-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  padding: 0.35rem 0.75rem 0.65rem;
+  border-block-end: 1px solid var(--velin-color-border);
+}
+
+.expo-token-tabs [role="tab"] {
+  min-height: 2.15rem;
+  padding: 0.3rem 0.65rem;
+  border: 1px solid transparent;
+  border-radius: var(--velin-radius-md);
+  background: transparent;
+  color: var(--velin-color-text-muted);
+  font: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.expo-token-tabs [role="tab"][aria-selected="true"] {
+  color: var(--velin-color-text);
+  border-color: color-mix(in oklab, var(--velin-color-primary) 35%, var(--velin-color-border));
+  background: color-mix(in oklab, var(--velin-color-primary) 12%, transparent);
+}
+
+.expo-token-tabs [role="tab"]:focus-visible {
+  outline: 2px solid var(--velin-color-primary);
+  outline-offset: 2px;
+}
+
+.expo-token-inspector__panel {
+  display: none;
+  padding: 0.9rem 1rem 1.1rem;
+  gap: 0.75rem;
+}
+
+.expo-token-inspector__panel.is-active {
+  display: grid;
+}
+
+.expo-token-inspector__panel label {
+  display: grid;
+  gap: 0.35rem;
+  font-size: var(--velin-text-sm);
+}
+
+.expo-token-inspector__group {
+  border: 0;
+  padding: 0;
+}
+
+/* ─── Showcase gallery cards ─── */
+.expo-showcase-track .expo-case {
+  flex-basis: min(22rem, 86vw);
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--velin-color-border);
+  border-radius: var(--velin-radius-lg);
+  background: var(--velin-color-surface);
+}
+
+.expo-showcase-track .expo-case__media {
+  aspect-ratio: 16 / 10;
+  min-height: 11rem;
+  margin: 0;
+  border-radius: 0;
+}
+
+.expo-showcase-track .expo-case__body {
+  display: grid;
+  gap: 0.55rem;
+  padding: 1rem 1.05rem 1.15rem;
+  align-content: start;
+}
+
+.expo-showcase-track .expo-case__cat {
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--velin-color-primary);
+  font-weight: var(--velin-weight-semibold);
+}
+
+.expo-showcase-track .expo-case__body h3 {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.expo-showcase-track .expo-case__body > p {
+  margin: 0;
+  font-size: var(--velin-text-sm);
+  color: var(--velin-color-text-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ─── Quick install (content width, between playground & contracts) ─── */
+.expo-quick-install {
+  padding: clamp(0.85rem, 2vw, 1.25rem) clamp(1rem, 2.5vw, 1.5rem);
+}
+
+.expo-quick-install__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.85rem 1.1rem;
+}
+
+.expo-quick-install__copy {
+  display: grid;
+  gap: 0.2rem;
+  flex: 1 1 12rem;
+  min-width: 0;
+}
+
+.expo-quick-install__lede {
+  margin: 0;
+  font-size: var(--velin-text-sm);
+  color: var(--velin-color-text-muted);
+}
+
+.expo-quick-install .expo-install-cmd {
+  flex: 1 1 16rem;
+  max-width: 28rem;
+}
+
+.expo-quick-install .expo-kicker {
+  margin: 0;
+}
+
+/* ─── Footer aligned to nav start/end ─── */
+.expo-footer.expo-band {
+  padding-inline: 0;
+}
+
+.expo-footer__stage {
+  width: 100%;
+  box-sizing: border-box;
+  /* Match .expo-nav horizontal inset so grid starts/ends with the nav */
+  padding-inline: clamp(0.75rem, 3vw, 1.5rem);
+  padding-block: clamp(2.5rem, 6vw, 4rem) clamp(1.75rem, 4vw, 2.75rem);
+}
+
+.expo-footer__grid {
+  display: grid;
+  width: 100%;
+  max-width: none;
+  margin-inline: 0;
+  gap: clamp(2rem, 4vw, 3rem);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 64rem) {
+  .expo-footer__grid {
+    grid-template-columns: minmax(12rem, 0.9fr) minmax(0, 1.5fr) minmax(14rem, 1fr);
+    align-items: start;
+  }
+}
+
+.expo-footer__left,
+.expo-footer__right {
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+}
+
+.expo-footer__mid {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.expo-footer__mid-cols {
+  display: grid;
+  gap: 1.25rem 1.75rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (min-width: 40rem) {
+  .expo-footer__mid-cols {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.expo-footer__status-list {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.expo-footer__status-list div {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  font-size: var(--velin-text-sm);
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--velin-color-border);
+  border-radius: var(--velin-radius-md);
+  background: color-mix(in oklab, var(--velin-color-bg) 70%, transparent);
+}
+
+.expo-footer__status-list strong {
+  color: var(--velin-color-text);
+  font-weight: var(--velin-weight-semibold);
+}
+
+.expo-footer__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.expo-footer__bar {
+  width: 100%;
+  box-sizing: border-box;
+  padding-inline: clamp(0.75rem, 3vw, 1.5rem);
+}
+
+@media (max-width: 47.99rem) {
+  .expo-token-tabs {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .expo-arch__hub {
+    font-size: 1.05rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .expo-arch-node {
+    transition: none;
+  }
+
+  .expo-arch-node:hover,
+  .expo-arch-node:focus-visible {
+    transform: none;
+  }
+
+  .expo-ai-runtime__step {
+    transition: none;
+  }
+
+  .expo-ai-runtime__step:hover {
+    transform: none;
+  }
+}
+
+/* ─── Docs nav emphasis ─── */
+.expo-nav__group--docs > .expo-nav__docs-btn {
+  color: var(--velin-color-on-primary, #fff);
+  background: var(--velin-color-primary);
+  border: 1px solid color-mix(in oklab, var(--velin-color-primary) 80%, #000);
+  box-shadow: 0 1px 0 color-mix(in oklab, #fff 18%, transparent) inset;
+  animation: expo-docs-pulse 2.8s ease-in-out infinite;
+}
+
+.expo-nav__group--docs > .expo-nav__docs-btn:hover,
+.expo-nav__group--docs > .expo-nav__docs-btn[aria-expanded="true"] {
+  color: var(--velin-color-on-primary, #fff);
+  background: var(--velin-color-primary-hover, var(--velin-color-primary));
+  animation: none;
+}
+
+@keyframes expo-docs-pulse {
+  0%, 100% {
+    box-shadow:
+      0 1px 0 color-mix(in oklab, #fff 18%, transparent) inset,
+      0 0 0 0 color-mix(in oklab, var(--velin-color-primary) 0%, transparent);
+    transform: translateY(0);
+  }
+  50% {
+    box-shadow:
+      0 1px 0 color-mix(in oklab, #fff 18%, transparent) inset,
+      0 0 0 6px color-mix(in oklab, var(--velin-color-primary) 18%, transparent);
+    transform: translateY(-1px);
+  }
+}
+
+.expo-nav__link-item {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.5rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: var(--velin-radius-md);
+  color: var(--velin-color-text-muted);
+  font-size: var(--velin-text-sm);
+  font-weight: var(--velin-weight-semibold);
+  text-decoration: none;
+}
+
+.expo-nav__link-item:hover,
+.expo-nav__link-item:focus-visible {
+  color: var(--velin-color-text);
+  background: var(--velin-color-surface-dim);
+}
+
+.expo-nav__actions .expo-lang {
+  order: 40;
+}
+
+.expo-nav__actions .velin-btn--primary[href="#install"] {
+  order: 50;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .expo-nav__group--docs > .expo-nav__docs-btn {
+    animation: none;
+  }
+}
+
+/* Markdown module viewer (homepage) */
+.velin-doc-md-dialog {
+  border: none;
+  padding: 0;
+  margin: auto;
+  max-width: min(52rem, 96vw);
+  width: min(52rem, 96vw);
+  max-height: min(90vh, 900px);
+  border-radius: var(--velin-radius-lg, 0.75rem);
+  background: var(--velin-color-surface);
+  color: var(--velin-color-text);
+  box-shadow: 0 1.5rem 3rem rgb(0 0 0 / 0.28);
+}
+
+.velin-doc-md-dialog::backdrop {
+  background: rgb(0 0 0 / 0.5);
+}
+
+.velin-doc-md-dialog__panel {
+  display: flex;
+  flex-direction: column;
+  max-height: min(90vh, 900px);
+  margin: 0;
+}
+
+.velin-doc-md-dialog__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--velin-color-border);
+}
+
+.velin-doc-md-dialog__title {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--velin-color-text);
+}
+
+.velin-doc-md-dialog__close {
+  border: 1px solid var(--velin-color-border);
+  background: var(--velin-color-surface-dim);
+  color: var(--velin-color-text);
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--velin-radius-sm, 0.35rem);
+  font-size: 1.35rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.velin-doc-md-dialog__body {
+  overflow: auto;
+  padding: 1.25rem;
+  color: var(--velin-color-text);
+}
+
+.velin-doc-md-dialog__body pre {
+  margin-block: 1rem;
+  overflow: auto;
+  padding: 0.85rem 1rem;
+  border-radius: var(--velin-radius-md);
+  background: var(--velin-color-surface-dim);
+}
+
+.velin-doc-plain-text {
+  margin: 0;
+  padding: 1rem 1.1rem;
+  border-radius: var(--velin-radius-md);
+  background: var(--velin-color-surface-dim);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-x: auto;
+}
+
+a[href$=".md"],
+a[href$=".txt"],
+a.velin-doc-md-link {
+  text-decoration-style: dashed;
+}
+
+.expo-nav__group--docs .expo-nav__panel {
+  min-width: 17.5rem;
+  border-color: color-mix(in oklab, var(--velin-color-primary) 35%, var(--velin-color-border));
+}
+
+/* ─── AI Runtime ─── */
+.expo-ai-runtime {
+  display: grid;
+  gap: clamp(1rem, 2.5vw, 1.6rem);
+}
+
+.expo-ai-runtime__status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.expo-ai-runtime__flow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11.5rem, 1fr));
+  gap: 0.75rem;
+}
+
+.expo-ai-runtime__step {
+  position: relative;
+  display: grid;
+  gap: 0.35rem;
+  padding: 1rem 1.05rem;
+  border: 1px solid color-mix(in oklab, var(--velin-color-primary) 22%, var(--velin-color-border));
+  border-radius: var(--velin-radius-lg);
+  background:
+    linear-gradient(160deg, color-mix(in oklab, var(--velin-color-primary) 10%, transparent), transparent 55%),
+    var(--velin-color-surface);
+  transition: transform 220ms var(--expo-ease, ease), border-color 220ms ease, box-shadow 220ms ease;
+}
+
+.expo-ai-runtime__step:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in oklab, var(--velin-color-primary) 45%, var(--velin-color-border));
+  box-shadow: 0 10px 24px color-mix(in oklab, var(--velin-color-primary) 12%, transparent);
+}
+
+.expo-ai-runtime__step strong {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  color: var(--velin-color-primary-text, var(--velin-color-primary));
+}
+
+.expo-ai-runtime__step span {
+  font-size: 1.05rem;
+  font-weight: var(--velin-weight-semibold, 600);
+  color: var(--velin-color-text);
+}
+
+.expo-ai-runtime__step p {
+  margin: 0;
+  font-size: var(--velin-text-sm);
+  color: var(--velin-color-text);
+  opacity: 0.88;
+  line-height: 1.4;
+}
+
+.expo-ai-runtime__cli {
+  display: grid;
+  gap: 0.45rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--velin-color-border);
+  border-radius: var(--velin-radius-lg);
+  background: color-mix(in oklab, var(--velin-color-surface-dim) 70%, var(--velin-color-surface));
+}
+
+.expo-ai-runtime__cli-label {
+  margin: 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--velin-color-text-muted);
+}
+
+.expo-ai-runtime .expo-install-cmd {
+  margin: 0;
+  max-width: none;
+}
+
+/* ─── Token Lab readability & settings ─── */
+.expo-token-lab {
+  grid-template-columns: 1fr;
+  gap: clamp(1rem, 2.5vw, 1.5rem);
+}
+
+@media (min-width: 64rem) {
+  .expo-token-lab {
+    grid-template-columns: minmax(0, 1.55fr) minmax(17rem, 0.9fr);
+  }
+}
+
+.expo-token-lab__live #tokenSurface {
+  color: var(--velin-color-text);
+  background: var(--velin-color-surface);
+  min-height: 20rem;
+  overflow: auto;
+}
+
+.expo-token-lab__live #tokenSurface .expo-kicker,
+.expo-token-lab__live #tokenSurface .velin-nav__brand,
+.expo-token-lab__live #tokenSurface .velin-nav__link,
+.expo-token-lab__live #tokenSurface .velin-card__title,
+.expo-token-lab__live #tokenSurface .velin-card__text,
+.expo-token-lab__live #tokenSurface .velin-label,
+.expo-token-lab__live #tokenSurface .velin-table,
+.expo-token-lab__live #tokenSurface .velin-table th,
+.expo-token-lab__live #tokenSurface .velin-table td {
+  color: var(--velin-color-text);
+}
+
+.expo-token-lab__live #tokenSurface .velin-input {
+  color: var(--velin-color-text);
+  background: var(--velin-color-bg, var(--velin-color-surface-bright, #fff));
+  border-color: var(--velin-color-border-strong, var(--velin-color-border));
+}
+
+.expo-token-lab__live #tokenSurface .velin-card {
+  background: var(--velin-color-bg, var(--velin-color-surface-bright, #fff));
+  border-color: var(--velin-color-border);
+}
+
+.expo-token-readout {
+  gap: 0.45rem;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--velin-color-border);
+  border-radius: var(--velin-radius-md);
+  background: var(--velin-color-surface);
+  color: var(--velin-color-text);
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+.expo-token-readout code {
+  color: var(--velin-color-text);
+  background: var(--velin-color-surface-dim);
+  border: 1px solid color-mix(in oklab, var(--velin-color-border) 80%, transparent);
+}
+
+.expo-token-inspector {
+  position: sticky;
+  top: calc(var(--expo-nav-h, 4rem) + 0.75rem);
+  max-height: min(70vh, 38rem);
+  overflow: auto;
+  padding: 0 0 0.85rem;
+  border: 1px solid var(--velin-color-border);
+  border-radius: var(--velin-radius-lg);
+  background: var(--velin-color-surface);
+  color: var(--velin-color-text);
+  scrollbar-width: thin;
+}
+
+.expo-token-inspector__title {
+  color: var(--velin-color-text);
+  font-weight: var(--velin-weight-bold, 700);
+}
+
+.expo-token-tabs {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--velin-color-surface);
+}
+
+.expo-token-tabs [role="tab"] {
+  color: var(--velin-color-text);
+  background: var(--velin-color-surface-dim);
+  border-color: var(--velin-color-border);
+}
+
+.expo-token-tabs [role="tab"][aria-selected="true"] {
+  color: var(--velin-color-text);
+  border-color: color-mix(in oklab, var(--velin-color-primary) 45%, var(--velin-color-border));
+  background: color-mix(in oklab, var(--velin-color-primary) 16%, var(--velin-color-surface));
+  font-weight: var(--velin-weight-semibold, 600);
+}
+
+.expo-token-inspector__panel {
+  color: var(--velin-color-text);
+}
+
+.expo-token-inspector__panel.is-active {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.expo-token-inspector__panel label {
+  color: var(--velin-color-text);
+  font-size: 0.9rem;
+  font-weight: var(--velin-weight-semibold, 600);
+}
+
+.expo-token-inspector__panel .velin-input,
+.expo-token-inspector__panel select,
+.expo-token-inspector__panel input[type="range"] {
+  width: 100%;
+  max-width: 100%;
+  color: var(--velin-color-text);
+  background: var(--velin-color-bg, var(--velin-color-surface-bright, #fff));
+  border: 1px solid var(--velin-color-border-strong, var(--velin-color-border));
+  accent-color: var(--velin-color-primary);
+}
+
+.expo-token-inspector__panel input[type="range"] {
+  height: 1.5rem;
+  background: transparent;
+}
+
+.expo-token-inspector__panel .velin-btn {
+  justify-self: start;
+}

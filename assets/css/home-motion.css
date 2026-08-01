@@ -1,0 +1,591 @@
+/**
+ * VelinStyle Homepage — entry motion & effects layer (1.2.0)
+ * Full-bleed hero atmosphere + scroll presentation for facts / why / diff / habits / capabilities.
+ * Every animated rule sits behind `prefers-reduced-motion: no-preference`.
+ * Hidden-until-revealed states only apply when `html.expo-motion` is set by home.js,
+ * so content stays readable without JS and without scroll-driven animation support.
+ */
+
+@property --expo-spin {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 120deg;
+}
+
+/* ─── Scroll progress rail (scroll-driven browsers only) ─── */
+.expo-scroll-progress {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline: 0;
+  z-index: 1001;
+  block-size: 3px;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  background-image: linear-gradient(
+    90deg,
+    var(--velin-color-primary),
+    color-mix(in oklab, var(--velin-color-info, var(--velin-color-primary)) 70%, var(--velin-color-primary))
+  );
+  animation-name: expo-progress;
+  animation-duration: auto;
+  animation-timing-function: linear;
+  animation-fill-mode: both;
+  animation-timeline: scroll(root block);
+  pointer-events: none;
+}
+
+@supports not (animation-timeline: scroll(root block)) {
+  .expo-scroll-progress { display: none; }
+}
+
+@keyframes expo-progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* ─── Shared reveal system ─── */
+/* Stagger index — one step per sibling, capped so late rows stay snappy. */
+[data-expo-stagger] > :nth-child(1) { --expo-i: 0; }
+[data-expo-stagger] > :nth-child(2) { --expo-i: 1; }
+[data-expo-stagger] > :nth-child(3) { --expo-i: 2; }
+[data-expo-stagger] > :nth-child(4) { --expo-i: 3; }
+[data-expo-stagger] > :nth-child(5) { --expo-i: 4; }
+[data-expo-stagger] > :nth-child(6) { --expo-i: 5; }
+[data-expo-stagger] > :nth-child(7) { --expo-i: 6; }
+[data-expo-stagger] > :nth-child(n + 8) { --expo-i: 7; }
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Scroll-driven path: each element animates against its own view() timeline. */
+  @supports (animation-timeline: view()) {
+    [data-expo-reveal],
+    [data-expo-stagger] > * {
+      animation-name: expo-rise;
+      animation-duration: auto;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: view();
+      animation-range-start: entry calc(8% + var(--expo-i, 0) * 4%);
+      animation-range-end: entry calc(68% + var(--expo-i, 0) * 4%);
+    }
+
+    /* Dense card grids: avoid invisible “holes” while siblings are still off-screen */
+    .expo-whats-new > *,
+    .expo-feature-grid > *,
+    .expo-gallery-grid > *,
+    .expo-contract-grid > * {
+      animation-fill-mode: forwards;
+      animation-range-start: entry 0%;
+      animation-range-end: entry 28%;
+      --expo-i: 0;
+      opacity: 1;
+    }
+  }
+
+  /* IntersectionObserver path (home.js sets .expo-io and toggles .is-inview). */
+  @supports not (animation-timeline: view()) {
+    html.expo-io [data-expo-reveal],
+    html.expo-io [data-expo-stagger] > * {
+      opacity: 0;
+      transform: translateY(1.15rem);
+      transition:
+        opacity 520ms var(--expo-ease) calc(var(--expo-i, 0) * 70ms),
+        transform 520ms var(--expo-ease) calc(var(--expo-i, 0) * 70ms);
+    }
+
+    html.expo-io [data-expo-reveal].is-inview,
+    html.expo-io [data-expo-stagger].is-inview > * {
+      opacity: 1;
+      transform: none;
+    }
+
+    html.expo-io .expo-whats-new > *,
+    html.expo-io .expo-feature-grid > *,
+    html.expo-io .expo-gallery-grid > *,
+    html.expo-io .expo-contract-grid > * {
+      transition-delay: 0ms;
+    }
+  }
+}
+
+@keyframes expo-rise {
+  from {
+    opacity: 0;
+    transform: translateY(1.6rem) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ─── Hero atmosphere ─── */
+.expo-hero {
+  overflow: visible;
+}
+
+/* Aurora wash */
+.expo-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(
+      closest-side circle at 20% 26%,
+      color-mix(in oklab, var(--velin-color-primary) 30%, transparent),
+      transparent 72%
+    ),
+    radial-gradient(
+      closest-side circle at 76% 20%,
+      color-mix(in oklab, var(--velin-color-info, var(--velin-color-primary)) 24%, transparent),
+      transparent 74%
+    ),
+    radial-gradient(
+      closest-side circle at 58% 86%,
+      color-mix(in oklab, var(--velin-color-secondary, var(--velin-color-primary)) 20%, transparent),
+      transparent 72%
+    );
+  filter: blur(22px) saturate(1.1);
+  opacity: 0.55;
+  transform: scale(1.12);
+  mask-image: linear-gradient(180deg, #000 60%, transparent);
+}
+
+/* Dot grid, faded towards the copy column */
+.expo-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: radial-gradient(
+    circle at center,
+    color-mix(in oklab, var(--velin-color-text) 18%, transparent) 1px,
+    transparent 1.7px
+  );
+  background-size: 2.25rem 2.25rem;
+  mask-image: radial-gradient(ellipse 70% 60% at 32% 42%, #000, transparent 74%);
+  opacity: 0.45;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .expo-hero::before {
+    animation: expo-aurora 24s ease-in-out infinite alternate;
+  }
+
+  .expo-hero--rest::before,
+  .expo-hero--rest .expo-hero__live {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes expo-aurora {
+  from { transform: scale(1.12) translate3d(-2.5%, -1.5%, 0); }
+  to { transform: scale(1.2) translate3d(2.5%, 2%, 0); }
+}
+
+/* Hero entrance — copy blocks then the live surface */
+@media (prefers-reduced-motion: no-preference) {
+  html.expo-motion .expo-hero__copy > * {
+    animation: expo-hero-in 620ms var(--expo-ease) both;
+  }
+
+  html.expo-motion .expo-hero__copy > :nth-child(2) { animation-delay: 60ms; }
+  html.expo-motion .expo-hero__copy > :nth-child(3) { animation-delay: 120ms; }
+  html.expo-motion .expo-hero__copy > :nth-child(4) { animation-delay: 180ms; }
+  html.expo-motion .expo-hero__copy > :nth-child(5) { animation-delay: 240ms; }
+
+  html.expo-motion .expo-hero__trust li {
+    animation: expo-pop 420ms var(--expo-ease) both;
+  }
+
+  html.expo-motion .expo-hero__trust li:nth-child(1) { animation-delay: 160ms; }
+  html.expo-motion .expo-hero__trust li:nth-child(2) { animation-delay: 205ms; }
+  html.expo-motion .expo-hero__trust li:nth-child(3) { animation-delay: 250ms; }
+  html.expo-motion .expo-hero__trust li:nth-child(4) { animation-delay: 295ms; }
+  html.expo-motion .expo-hero__trust li:nth-child(5) { animation-delay: 340ms; }
+  html.expo-motion .expo-hero__trust li:nth-child(6) { animation-delay: 385ms; }
+}
+
+@keyframes expo-hero-in {
+  from {
+    opacity: 0;
+    transform: translateY(1.15rem);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+@keyframes expo-pop {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Trust badges — one verified look across all six claims */
+.expo-hero__trust a.expo-trust-badge {
+  padding-block: 0.35rem;
+  padding-inline: 0.7rem;
+  border: 1px solid color-mix(in oklab, var(--velin-color-primary) 26%, var(--velin-color-border));
+  background-color: color-mix(in oklab, var(--velin-color-surface) 76%, transparent);
+  background-image: linear-gradient(
+    150deg,
+    color-mix(in oklab, var(--velin-color-primary) 12%, transparent),
+    transparent 60%
+  );
+  color: var(--velin-color-text);
+  transition:
+    transform 180ms var(--expo-ease),
+    box-shadow 180ms var(--expo-ease),
+    border-color 180ms var(--expo-ease);
+}
+
+.expo-hero__trust a.expo-trust-badge:hover,
+.expo-hero__trust a.expo-trust-badge:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px color-mix(in oklab, var(--velin-color-primary) 22%, transparent);
+}
+
+/* Install command gets a soft frame so it reads as a control, not a paragraph */
+.expo-hero__install {
+  border: 1px solid color-mix(in oklab, var(--velin-color-primary) 24%, var(--velin-color-border));
+  background-image: linear-gradient(
+    120deg,
+    color-mix(in oklab, var(--velin-color-primary) 10%, transparent),
+    transparent 58%
+  );
+}
+
+/* Live surface — animated gradient border + depth */
+.expo-hero__live {
+  align-content: start;
+  border: 1px solid transparent;
+  background-image:
+    linear-gradient(var(--velin-color-surface), var(--velin-color-surface)),
+    conic-gradient(
+      from var(--expo-spin),
+      color-mix(in oklab, var(--velin-color-primary) 60%, transparent) 0deg,
+      color-mix(in oklab, var(--velin-color-info, var(--velin-color-primary)) 42%, transparent) 95deg,
+      color-mix(in oklab, var(--velin-color-border) 92%, transparent) 200deg,
+      color-mix(in oklab, var(--velin-color-primary) 60%, transparent) 360deg
+    );
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  box-shadow:
+    0 26px 60px color-mix(in oklab, var(--velin-color-text) 16%, transparent),
+    inset 0 1px 0 color-mix(in oklab, #fff 10%, transparent);
+}
+
+/* Hero chart reads as brand data, not as a white block */
+.expo-hero__live velin-sparkline {
+  display: block;
+  color: var(--velin-color-primary);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html.expo-motion .expo-hero__live {
+    animation:
+      expo-hero-panel 720ms var(--expo-ease) 140ms both,
+      expo-spin 18s linear 900ms infinite;
+  }
+}
+
+@keyframes expo-hero-panel {
+  from {
+    opacity: 0;
+    transform: translateY(1.75rem) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes expo-spin {
+  to { --expo-spin: 480deg; }
+}
+
+/* ─── Entry sections: shared presentation ─── */
+[data-expo-entry] .expo-kicker {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+[data-expo-entry] .expo-kicker::before {
+  content: "";
+  inline-size: 1.5rem;
+  block-size: 2px;
+  border-radius: 999px;
+  background-image: linear-gradient(
+    90deg,
+    var(--velin-color-primary),
+    color-mix(in oklab, var(--velin-color-primary) 10%, transparent)
+  );
+}
+
+[data-expo-entry] .expo-section__header h2 {
+  text-wrap: balance;
+}
+
+/* Spotlight that follows the pointer across a card group (set by home.js) */
+[data-expo-spotlight] > * {
+  position: relative;
+  isolation: isolate;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  [data-expo-spotlight] > *::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 220ms var(--expo-ease);
+    background-image: radial-gradient(
+      14rem circle at var(--expo-mx, 50%) var(--expo-my, 0%),
+      color-mix(in oklab, var(--velin-color-primary) 18%, transparent),
+      transparent 68%
+    );
+  }
+
+  [data-expo-spotlight]:hover > *::after { opacity: 1; }
+  [data-expo-spotlight]:hover > :not(:hover) { opacity: 0.94; }
+}
+
+/* ─── Facts ─── */
+.expo-fact {
+  position: relative;
+  overflow: clip;
+  transition:
+    transform 200ms var(--expo-ease),
+    border-color 200ms var(--expo-ease),
+    box-shadow 200ms var(--expo-ease);
+}
+
+.expo-fact__value {
+  font-variant-numeric: tabular-nums;
+}
+
+.expo-fact::before {
+  content: "";
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 0;
+  block-size: 2px;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform 320ms var(--expo-ease);
+  background-image: linear-gradient(
+    90deg,
+    var(--velin-color-primary),
+    color-mix(in oklab, var(--velin-color-info, var(--velin-color-primary)) 60%, transparent)
+  );
+}
+
+.expo-fact:hover,
+.expo-fact:focus-visible {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 34px color-mix(in oklab, var(--velin-color-text) 12%, transparent);
+}
+
+.expo-fact:hover::before,
+.expo-fact:focus-visible::before {
+  transform: scaleX(1);
+}
+
+.expo-fact-chips {
+  gap: 0.5rem;
+}
+
+.expo-fact-chips a.velin-badge {
+  padding-block: 0.3rem;
+  padding-inline: 0.65rem;
+  border: 1px solid color-mix(in oklab, var(--velin-color-border) 88%, var(--velin-color-primary));
+  background-color: color-mix(in oklab, var(--velin-color-surface-dim) 88%, transparent);
+  color: var(--velin-color-text);
+  font-size: var(--velin-text-sm);
+  transition:
+    transform 160ms var(--expo-ease),
+    border-color 160ms var(--expo-ease);
+}
+
+.expo-fact-chips a:hover,
+.expo-fact-chips a:focus-visible {
+  transform: translateY(-2px);
+}
+
+/* ─── Why cards ─── */
+.expo-why-card {
+  transition:
+    transform 220ms var(--expo-ease),
+    border-color 220ms var(--expo-ease),
+    box-shadow 220ms var(--expo-ease);
+}
+
+.expo-why-card:hover,
+.expo-why-card:focus-within {
+  transform: translateY(-4px);
+  border-color: color-mix(in oklab, var(--velin-color-primary) 42%, var(--velin-color-border));
+  box-shadow: 0 20px 42px color-mix(in oklab, var(--velin-color-text) 14%, transparent);
+}
+
+.expo-why-card__icon {
+  transition:
+    transform 220ms var(--expo-ease),
+    background-color 220ms var(--expo-ease);
+}
+
+.expo-why-card:hover .expo-why-card__icon {
+  transform: translateY(-1px) scale(1.06);
+  background-color: color-mix(in oklab, var(--velin-color-primary) 26%, transparent);
+}
+
+/* ─── Comparison table ─── */
+.expo-diff__row:not(.expo-diff__row--head) > *:last-child {
+  background-image: linear-gradient(
+    90deg,
+    color-mix(in oklab, var(--velin-color-primary) 15%, transparent),
+    color-mix(in oklab, var(--velin-color-primary) 7%, transparent)
+  );
+  font-weight: var(--velin-weight-semibold);
+}
+
+.expo-diff__row--head > *:last-child {
+  color: var(--velin-color-primary);
+}
+
+.expo-diff__row:not(.expo-diff__row--head) {
+  transition: background-color 180ms var(--expo-ease);
+}
+
+.expo-diff__row:not(.expo-diff__row--head):hover {
+  background-color: color-mix(in oklab, var(--velin-color-primary) 7%, transparent);
+}
+
+/* ─── Habits ─── */
+.expo-habit {
+  position: relative;
+  overflow: clip;
+  transition:
+    transform 220ms var(--expo-ease),
+    border-color 220ms var(--expo-ease),
+    box-shadow 220ms var(--expo-ease);
+}
+
+.expo-habit::before {
+  content: "";
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 0;
+  block-size: 2px;
+  background-image: linear-gradient(
+    90deg,
+    var(--velin-color-primary),
+    transparent 78%
+  );
+  opacity: 0.5;
+  transition: opacity 220ms var(--expo-ease);
+}
+
+.expo-habit:hover,
+.expo-habit:focus-within {
+  transform: translateY(-3px);
+  border-color: color-mix(in oklab, var(--velin-color-primary) 38%, var(--velin-color-border));
+  box-shadow: 0 18px 40px color-mix(in oklab, var(--velin-color-text) 13%, transparent);
+}
+
+.expo-habit:hover::before,
+.expo-habit:focus-within::before {
+  opacity: 1;
+}
+
+.expo-habit__result {
+  background-image: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--velin-color-primary) 8%, transparent),
+    transparent 62%
+  );
+}
+
+/* Keep the code toolbar off the sample and let short samples wrap instead of scroll */
+.expo-habit velin-code-block pre {
+  padding-block-start: 2.9rem;
+}
+
+.expo-habit velin-code-block pre,
+.expo-habit velin-code-block pre code {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* ─── Capabilities (legacy strip rules overridden by home-ux.css) ─── */
+.expo-capabilities {
+  mask-image: none;
+}
+
+.expo-cap {
+  transition:
+    transform 170ms var(--expo-ease),
+    border-color 170ms var(--expo-ease),
+    box-shadow 170ms var(--expo-ease);
+}
+
+.expo-cap::before {
+  transition: box-shadow 170ms var(--expo-ease);
+}
+
+.expo-cap:hover,
+.expo-cap:focus-visible {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 26px color-mix(in oklab, var(--velin-color-text) 12%, transparent);
+}
+
+.expo-cap:hover::before,
+.expo-cap:focus-visible::before {
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--velin-color-success, var(--velin-color-primary)) 22%, transparent);
+}
+
+/* ─── Reduced motion: presentation stays, movement stops ─── */
+@media (prefers-reduced-motion: reduce) {
+  .expo-scroll-progress { display: none; }
+
+  .expo-hero::before,
+  .expo-hero__live,
+  .expo-hero__copy > *,
+  .expo-hero__trust li,
+  [data-expo-reveal],
+  [data-expo-stagger] > * {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+
+  .expo-fact,
+  .expo-why-card,
+  .expo-habit,
+  .expo-cap,
+  .expo-hero__trust a.expo-trust-badge {
+    transition: none;
+  }
+
+  .expo-fact:hover,
+  .expo-why-card:hover,
+  .expo-habit:hover,
+  .expo-cap:hover,
+  .expo-hero__trust a.expo-trust-badge:hover {
+    transform: none;
+  }
+}

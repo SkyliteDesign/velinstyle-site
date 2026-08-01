@@ -1,0 +1,772 @@
+/**
+ * VelinStyle Homepage — global motion system + premium polish
+ * Shared tokens first; section personalities reuse the same language.
+ */
+
+:root {
+  /* Motion contract */
+  --expo-motion-fast: 280ms;
+  --expo-motion-base: 420ms;
+  --expo-motion-slow: 560ms;
+  --expo-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --expo-ease-soft: cubic-bezier(0.33, 1, 0.68, 1);
+  --expo-hover-lift: -2px;
+  --expo-hover-scale: 1.015;
+
+  /* Lighting (blue → soft violet, restrained) */
+  --expo-glow: color-mix(in oklab, var(--velin-color-primary) 36%, transparent);
+  --expo-glow-soft: color-mix(in oklab, var(--velin-color-primary) 20%, transparent);
+  --expo-glow-violet: color-mix(in oklab, oklch(55% 0.16 295) 24%, transparent);
+  --expo-beam: color-mix(in oklab, var(--velin-color-info, var(--velin-color-primary)) 32%, transparent);
+  --expo-glass: var(--velin-color-surface);
+  --expo-glass-edge: var(--velin-color-border);
+  --expo-particle-speed: 18s;
+  --expo-mesh-speed: 22s;
+  --expo-ring-speed: 28s;
+  --expo-fx-opacity: 0.85;
+}
+
+html[data-velin-theme="dark"] {
+  --expo-glass: var(--velin-color-surface);
+  --expo-glass-edge: var(--velin-color-border);
+  --expo-fx-opacity: 0.95;
+}
+
+/* ─── Premium navigation ─── */
+.expo-nav {
+  gap: clamp(0.75rem, 1.6vw, 1.35rem);
+  min-height: calc(var(--expo-nav-h) + 0.35rem);
+  padding-inline: clamp(1rem, 3.5vw, 2rem);
+  padding-block: 0.65rem;
+  background: var(--velin-color-surface);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-block-end: 1px solid var(--velin-color-border);
+  box-shadow: 0 8px 24px color-mix(in oklab, #000 10%, transparent);
+}
+
+.expo-nav__brand {
+  gap: 0.55rem;
+  padding: 0.2rem 0.15rem;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.expo-nav__brand img {
+  filter: drop-shadow(0 0 10px var(--expo-glow-soft));
+}
+
+.expo-nav__menu {
+  gap: 0.35rem;
+  flex-wrap: nowrap;
+}
+
+.expo-nav__group > button,
+.expo-nav__link-item {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 0.45rem;
+  min-height: 2.65rem;
+  padding: 0.4rem 0.85rem;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  transition:
+    color var(--expo-motion-fast) var(--expo-ease-out),
+    background var(--expo-motion-fast) var(--expo-ease-out),
+    border-color var(--expo-motion-fast) var(--expo-ease-out),
+    box-shadow var(--expo-motion-fast) var(--expo-ease-out),
+    transform var(--expo-motion-fast) var(--expo-ease-out);
+}
+
+.expo-nav__group > button:hover,
+.expo-nav__link-item:hover {
+  transform: translateY(var(--expo-hover-lift));
+  border-color: color-mix(in oklab, var(--velin-color-primary) 22%, var(--velin-color-border));
+  box-shadow: 0 8px 18px var(--expo-glow-soft);
+}
+
+.expo-nav__ico {
+  display: inline-flex;
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  opacity: 0.88;
+  color: inherit;
+}
+
+.expo-nav__ico svg {
+  width: 1rem;
+  height: 1rem;
+  display: block;
+}
+
+.expo-nav__group > button .expo-nav__label,
+.expo-nav__link-item .expo-nav__label,
+.expo-nav__panel a > span {
+  line-height: 1;
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+
+.expo-nav__panel {
+  padding: 0.55rem;
+  border-radius: var(--velin-radius-lg);
+  background: var(--velin-color-surface) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid var(--velin-color-border);
+  box-shadow:
+    0 18px 40px color-mix(in oklab, #000 18%, transparent),
+    0 0 0 1px color-mix(in oklab, var(--velin-color-primary) 12%, transparent);
+  min-width: max(14rem, max-content);
+}
+
+.expo-nav__panel a {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 0.5rem;
+  min-height: 2.35rem;
+  padding: 0.45rem 0.7rem;
+  border-radius: var(--velin-radius-md);
+  white-space: nowrap;
+  transition:
+    background var(--expo-motion-fast) var(--expo-ease-out),
+    color var(--expo-motion-fast) var(--expo-ease-out),
+    transform var(--expo-motion-fast) var(--expo-ease-out);
+}
+
+.expo-nav__panel a:hover {
+  transform: translateX(2px);
+}
+
+.expo-nav__actions {
+  gap: 0.55rem;
+  padding-inline-start: 0.25rem;
+}
+
+.expo-nav__group--docs > .expo-nav__docs-btn {
+  box-shadow:
+    0 1px 0 color-mix(in oklab, #fff 16%, transparent) inset,
+    0 0 0 0 var(--expo-glow-soft);
+}
+
+/* ─── Shared section FX stage ─── */
+.expo-section[data-expo-fx] {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  border-radius: var(--velin-radius-xl, 1.25rem);
+  border: 1px solid color-mix(in oklab, var(--velin-color-primary) 28%, var(--velin-color-border));
+  background: var(--velin-color-surface);
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--velin-color-primary) 8%, transparent),
+    0 18px 40px color-mix(in oklab, var(--velin-color-primary) 8%, transparent);
+  transition:
+    box-shadow var(--expo-motion-base) var(--expo-ease-out),
+    border-color var(--expo-motion-base) var(--expo-ease-out),
+    transform var(--expo-motion-base) var(--expo-ease-out);
+}
+
+.expo-section[data-expo-fx]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: var(--expo-fx-opacity);
+  border-radius: inherit;
+}
+
+.expo-section[data-expo-fx] > * {
+  position: relative;
+  z-index: 1;
+}
+
+.expo-section[data-expo-fx]:hover {
+  border-color: color-mix(in oklab, var(--velin-color-primary) 42%, var(--velin-color-border));
+  box-shadow: 0 20px 48px var(--expo-glow-soft);
+}
+
+/* 1 Facts — pulsing accent lines */
+#facts[data-expo-fx="pulse-lines"]::before {
+  background:
+    linear-gradient(90deg, transparent, var(--expo-glow), transparent) 0 10% / 100% 2px no-repeat,
+    linear-gradient(90deg, transparent, var(--expo-glow-violet), transparent) 0 90% / 80% 2px no-repeat,
+    radial-gradient(ellipse at 50% 0%, var(--expo-glow-soft), transparent 55%);
+  animation: expo-fx-pulse-line 4.5s var(--expo-ease-soft) infinite;
+}
+
+/* 2 Why — floating particles */
+#why[data-expo-fx="particles"]::before {
+  background-image:
+    radial-gradient(circle at 18% 28%, var(--expo-glow) 0 2px, transparent 3px),
+    radial-gradient(circle at 72% 22%, var(--expo-glow-violet) 0 1.8px, transparent 3px),
+    radial-gradient(circle at 42% 78%, var(--expo-beam) 0 2px, transparent 3.2px),
+    radial-gradient(circle at 84% 64%, var(--expo-glow) 0 1.6px, transparent 2.8px),
+    radial-gradient(circle at 28% 58%, var(--expo-glow-violet) 0 1.8px, transparent 3px),
+    radial-gradient(ellipse at 70% 40%, var(--expo-glow-soft), transparent 50%);
+  background-size: 140% 140%;
+  animation: expo-fx-drift var(--expo-particle-speed) linear infinite;
+}
+
+/* 3 Diff — moving light beam */
+#diff[data-expo-fx="beam"]::before {
+  background: linear-gradient(
+    105deg,
+    transparent 28%,
+    var(--expo-beam) 46%,
+    color-mix(in oklab, var(--velin-color-primary) 35%, transparent) 52%,
+    transparent 68%
+  );
+  mix-blend-mode: soft-light;
+  animation: expo-fx-beam 7s var(--expo-ease-soft) infinite;
+}
+
+/* 4 Habits — geometric float */
+#habits[data-expo-fx="geo"]::before {
+  background:
+    linear-gradient(135deg, var(--expo-glow), transparent 42%) 6% 18% / 6rem 6rem no-repeat,
+    linear-gradient(225deg, var(--expo-glow-violet), transparent 48%) 90% 74% / 5rem 5rem no-repeat,
+    radial-gradient(circle at 80% 20%, var(--expo-glow-soft), transparent 40%);
+  animation: expo-fx-float 10s var(--expo-ease-soft) infinite;
+}
+
+/* 5 AI Runtime — energy flow */
+#ai-skills[data-expo-fx="energy"]::before {
+  background:
+    repeating-linear-gradient(
+      -18deg,
+      transparent 0 14px,
+      color-mix(in oklab, var(--velin-color-primary) 16%, transparent) 14px 16px
+    );
+  mask-image: linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent);
+  animation: expo-fx-flow 10s linear infinite;
+}
+
+#ai-skills[data-expo-fx="energy"]::after {
+  inset: auto -8% -18% auto;
+  width: 18rem;
+  height: 18rem;
+  background: radial-gradient(circle, var(--expo-glow) 0%, transparent 68%);
+  filter: blur(6px);
+  animation: expo-fx-breathe 5s var(--expo-ease-soft) infinite;
+}
+
+/* 6 More galleries — glass reflection */
+#more-galleries[data-expo-fx="glass"]::before {
+  background:
+    linear-gradient(120deg, transparent 18%, color-mix(in oklab, #fff 14%, transparent) 42%, transparent 58%),
+    radial-gradient(ellipse at 20% 0%, var(--expo-glow-soft), transparent 50%);
+  animation: expo-fx-sheen 8s var(--expo-ease-soft) infinite;
+}
+
+/* 7 Pattern galleries — mesh */
+#pattern-galleries[data-expo-fx="mesh"]::before {
+  background:
+    radial-gradient(ellipse at 20% 30%, var(--expo-glow), transparent 55%),
+    radial-gradient(ellipse at 80% 70%, var(--expo-glow-violet), transparent 50%);
+  animation: expo-fx-mesh var(--expo-mesh-speed) var(--expo-ease-soft) infinite alternate;
+}
+
+/* 8 Quick install — aurora */
+#quick-install[data-expo-fx="aurora"]::before {
+  background:
+    linear-gradient(100deg, transparent, var(--expo-glow), transparent),
+    linear-gradient(260deg, transparent, var(--expo-glow-violet), transparent);
+  filter: blur(14px);
+  opacity: 0.7;
+  animation: expo-fx-aurora 12s var(--expo-ease-soft) infinite;
+}
+
+/* 9 Dashboard — depth shadow + soft bloom */
+#dashboard[data-expo-fx="bloom"]::before {
+  background: radial-gradient(ellipse at 50% 0%, var(--expo-glow), transparent 58%);
+  filter: blur(8px);
+  animation: expo-fx-breathe 5.5s var(--expo-ease-soft) infinite;
+}
+
+#dashboard[data-expo-fx="bloom"]:hover {
+  transform: translateY(-1px);
+}
+
+/* 10 Animation gallery — rotating ring */
+#animations[data-expo-fx="ring"]::before {
+  inset: -18%;
+  background: conic-gradient(
+    from var(--expo-spin, 120deg),
+    transparent 0deg,
+    var(--expo-glow) 40deg,
+    transparent 100deg,
+    var(--expo-glow-violet) 170deg,
+    transparent 230deg
+  );
+  mask-image: radial-gradient(circle, transparent 50%, #000 52%, #000 60%, transparent 62%);
+  opacity: 0.55;
+  animation: expo-fx-spin var(--expo-ring-speed) linear infinite;
+}
+
+/* 11 Fair criteria / compare — soft border glow */
+#compare[data-expo-fx="criteria"]::before {
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--velin-color-primary) 35%, transparent);
+  background:
+    radial-gradient(circle at 12% 50%, var(--expo-glow), transparent 42%),
+    radial-gradient(circle at 88% 40%, var(--expo-glow-violet), transparent 40%);
+  animation: expo-fx-breathe 6.5s var(--expo-ease-soft) infinite;
+}
+
+/* Card hover depth (shared) */
+.expo-section[data-expo-fx] .expo-why-card,
+.expo-section[data-expo-fx] .expo-fact,
+.expo-section[data-expo-fx] .expo-gallery-card,
+.expo-section[data-expo-fx] .expo-ai-runtime__step,
+.expo-section[data-expo-fx] .expo-variant-card {
+  transition:
+    transform var(--expo-motion-base) var(--expo-ease-out),
+    box-shadow var(--expo-motion-base) var(--expo-ease-out),
+    border-color var(--expo-motion-base) var(--expo-ease-out);
+}
+
+.expo-section[data-expo-fx] .expo-why-card:hover,
+.expo-section[data-expo-fx] .expo-fact:hover,
+.expo-section[data-expo-fx] .expo-gallery-card:hover,
+.expo-section[data-expo-fx] .expo-ai-runtime__step:hover,
+.expo-section[data-expo-fx] .expo-variant-card:hover {
+  transform: translateY(var(--expo-hover-lift)) scale(var(--expo-hover-scale));
+  box-shadow: 0 14px 28px var(--expo-glow-soft);
+  border-color: color-mix(in oklab, var(--velin-color-primary) 30%, var(--velin-color-border));
+}
+
+/* ─── Keyframes ─── */
+@keyframes expo-fx-pulse-line {
+  0%, 100% { opacity: 0.35; transform: scaleX(0.92); }
+  50% { opacity: 0.85; transform: scaleX(1); }
+}
+
+@keyframes expo-fx-drift {
+  from { background-position: 0 0, 10% 8%, 0 0, 20% 10%, 5% 15%; }
+  to { background-position: 8% 12%, 0 18%, 12% 6%, 0 0, 18% 0; }
+}
+
+@keyframes expo-fx-beam {
+  0% { transform: translateX(-35%); opacity: 0.2; }
+  50% { opacity: 0.55; }
+  100% { transform: translateX(35%); opacity: 0.2; }
+}
+
+@keyframes expo-fx-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes expo-fx-flow {
+  from { background-position: 0 0; }
+  to { background-position: 120px 40px; }
+}
+
+@keyframes expo-fx-breathe {
+  0%, 100% { opacity: 0.35; transform: scale(0.96); }
+  50% { opacity: 0.7; transform: scale(1.04); }
+}
+
+@keyframes expo-fx-sheen {
+  0% { transform: translateX(-40%); }
+  100% { transform: translateX(40%); }
+}
+
+@keyframes expo-fx-mesh {
+  from { transform: scale(1) translate(0, 0); }
+  to { transform: scale(1.08) translate(-2%, 2%); }
+}
+
+@keyframes expo-fx-aurora {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-6%) rotate(2deg); }
+}
+
+@keyframes expo-fx-spin {
+  to { --expo-spin: 480deg; }
+}
+
+/* ─── Premium highlight (before footer) ─── */
+.expo-premium {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  margin-block: clamp(2rem, 5vw, 3.5rem) clamp(1rem, 3vw, 2rem);
+  padding: clamp(3rem, 7vw, 5rem) clamp(1.25rem, 4vw, 2.5rem);
+  border-radius: var(--velin-radius-xl, 1.25rem);
+  border: 1px solid color-mix(in oklab, var(--velin-color-primary) 30%, var(--velin-color-border));
+  background: var(--velin-color-surface);
+  box-shadow:
+    0 24px 60px var(--expo-glow-soft),
+    inset 0 1px 0 color-mix(in oklab, #fff 8%, transparent);
+  text-align: center;
+  min-height: clamp(22rem, 48vh, 30rem);
+  display: grid;
+  place-items: center;
+}
+
+.expo-premium__rings {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: min(28rem, 78vw);
+  height: min(28rem, 78vw);
+  translate: -50% -50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.expo-premium__ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  border: 1px solid color-mix(in oklab, var(--velin-color-primary) 32%, transparent);
+  box-shadow: 0 0 28px var(--expo-glow-soft);
+  mask-image: conic-gradient(from 0deg, #000 0 22%, transparent 32% 100%);
+}
+
+.expo-premium__ring--a { inset: 8%; animation: expo-fx-spin 32s linear infinite; }
+.expo-premium__ring--b {
+  inset: 18%;
+  border-color: color-mix(in oklab, oklch(55% 0.16 295) 40%, transparent);
+  animation: expo-fx-spin 44s linear infinite reverse;
+}
+.expo-premium__ring--c { inset: 28%; opacity: 0.7; animation: expo-fx-spin 56s linear infinite; }
+
+.expo-premium__content {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 1.15rem;
+  justify-items: center;
+  max-width: 40rem;
+  margin-inline: auto;
+}
+
+.expo-premium__logo {
+  width: clamp(3.5rem, 8vw, 4.75rem);
+  height: auto;
+  filter: drop-shadow(0 0 18px var(--expo-glow));
+  animation: expo-fx-breathe 6s var(--expo-ease-soft) infinite;
+}
+
+.expo-premium__title {
+  margin: 0;
+  font-size: clamp(1.75rem, 4.2vw, 2.65rem);
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+  color: var(--velin-color-text);
+  font-weight: var(--velin-weight-bold, 700);
+}
+
+.expo-premium__chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.45rem;
+  margin: 0.15rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.expo-premium__chips li {
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in oklab, var(--velin-color-primary) 28%, var(--velin-color-border));
+  background: color-mix(in oklab, var(--velin-color-surface-dim) 70%, var(--velin-color-surface));
+  font-size: 0.78rem;
+  color: var(--velin-color-text);
+  transition: transform var(--expo-motion-fast) var(--expo-ease-out), box-shadow var(--expo-motion-fast) var(--expo-ease-out);
+}
+
+.expo-premium__chips li:hover {
+  transform: translateY(var(--expo-hover-lift));
+  box-shadow: 0 8px 18px var(--expo-glow-soft);
+}
+
+.expo-premium__closing {
+  margin: 0.85rem 0 0;
+  font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+  line-height: 1.45;
+  letter-spacing: -0.015em;
+  color: var(--velin-color-text);
+  opacity: 0.9;
+  font-weight: var(--velin-weight-semibold, 600);
+}
+
+/* Journey bridges between FX sections */
+.expo-section[data-expo-fx]::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -1.15rem;
+  width: min(42vw, 18rem);
+  height: 2.1rem;
+  translate: -50% 0;
+  z-index: 2;
+  pointer-events: none;
+  border-radius: 0;
+  opacity: 0.55;
+  background:
+    radial-gradient(ellipse at 50% 0%, var(--expo-glow), transparent 70%),
+    linear-gradient(90deg, transparent, var(--expo-glow-violet), transparent);
+  animation: expo-fx-bridge 5.5s var(--expo-ease-soft) infinite;
+}
+
+#ai-skills.expo-wow::after,
+#dashboard.expo-wow::after,
+#animations.expo-wow::after,
+#velin-signature::after,
+#compare[data-expo-fx]::after {
+  display: none;
+}
+
+#ai-skills[data-expo-fx="mesh-live"]::before,
+#dashboard[data-expo-fx="grid-live"]::before,
+#animations[data-expo-fx="aurora-live"]::before {
+  opacity: 0.2;
+  background: none;
+  animation: none;
+}
+
+/* Wow sections — AI Runtime / Dashboard / Animation Gallery */
+.expo-wow {
+  min-height: clamp(22rem, 52vh, 36rem);
+  border-color: color-mix(in oklab, var(--velin-color-primary) 40%, var(--velin-color-border)) !important;
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--velin-color-primary) 14%, transparent),
+    0 28px 70px color-mix(in oklab, var(--velin-color-primary) 14%, transparent) !important;
+}
+
+.expo-wow__layer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  overflow: hidden;
+}
+
+.expo-wow__layer--mesh {
+  background:
+    radial-gradient(ellipse at 15% 20%, color-mix(in oklab, var(--velin-color-primary) 34%, transparent), transparent 42%),
+    radial-gradient(ellipse at 85% 70%, color-mix(in oklab, oklch(55% 0.16 295) 30%, transparent), transparent 45%),
+    radial-gradient(ellipse at 50% 100%, var(--expo-glow-soft), transparent 50%);
+  background-size: 160% 160%;
+  animation: expo-fx-mesh 14s var(--expo-ease-soft) infinite alternate;
+  opacity: 0.9;
+}
+
+.expo-wow__layer--mesh::after {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  background: repeating-linear-gradient(
+    115deg,
+    transparent 0 22px,
+    color-mix(in oklab, var(--velin-color-primary) 12%, transparent) 22px 23px
+  );
+  mask-image: radial-gradient(circle at 50% 40%, #000 20%, transparent 70%);
+  animation: expo-fx-flow 9s linear infinite;
+}
+
+.expo-wow__layer--grid {
+  background-image:
+    linear-gradient(color-mix(in oklab, var(--velin-color-primary) 16%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in oklab, var(--velin-color-primary) 16%, transparent) 1px, transparent 1px),
+    radial-gradient(ellipse at 50% 0%, var(--expo-glow), transparent 55%);
+  background-size: 28px 28px, 28px 28px, 100% 100%;
+  animation: expo-fx-grid 16s linear infinite;
+  opacity: 0.55;
+}
+
+.expo-wow__layer--aurora {
+  background:
+    linear-gradient(115deg, transparent 10%, color-mix(in oklab, var(--velin-color-primary) 28%, transparent) 38%, transparent 55%),
+    linear-gradient(250deg, transparent 15%, color-mix(in oklab, oklch(55% 0.16 295) 26%, transparent) 48%, transparent 70%),
+    radial-gradient(ellipse at 70% 30%, var(--expo-glow-soft), transparent 45%);
+  filter: blur(10px);
+  animation: expo-fx-aurora 11s var(--expo-ease-soft) infinite;
+  opacity: 0.85;
+}
+
+.expo-wow__layer--aurora::after {
+  content: "";
+  position: absolute;
+  inset: 12% 18%;
+  border-radius: 999px;
+  border: 1px solid color-mix(in oklab, var(--velin-color-primary) 35%, transparent);
+  mask-image: conic-gradient(from 90deg, #000 0 20%, transparent 35% 100%);
+  animation: expo-fx-spin 26s linear infinite;
+}
+
+.expo-wow .expo-ai-runtime__step,
+.expo-wow .expo-anim-tile,
+.expo-wow .expo-dash {
+  background: color-mix(in oklab, var(--velin-color-surface) 90%, transparent);
+  border-color: color-mix(in oklab, var(--velin-color-primary) 22%, var(--velin-color-border));
+  box-shadow: 0 12px 28px color-mix(in oklab, #000 10%, transparent);
+}
+
+.expo-wow .expo-section__header .expo-kicker {
+  color: var(--velin-color-primary-text, var(--velin-color-primary));
+  letter-spacing: 0.08em;
+}
+
+/* Footer premium — compact */
+.expo-footer--premium {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-block-start: 1px solid color-mix(in oklab, var(--velin-color-primary) 25%, var(--velin-color-border));
+  background:
+    linear-gradient(180deg, color-mix(in oklab, var(--velin-color-primary) 6%, transparent), transparent 28%),
+    var(--velin-color-surface);
+}
+
+.expo-footer--premium .expo-footer__stage {
+  padding-block: clamp(1.15rem, 2.5vw, 1.75rem) clamp(0.85rem, 2vw, 1.25rem);
+}
+
+.expo-footer--premium .expo-footer__grid {
+  gap: clamp(1rem, 2vw, 1.5rem);
+}
+
+.expo-footer--premium .expo-footer__left,
+.expo-footer--premium .expo-footer__right {
+  gap: 0.65rem;
+}
+
+.expo-footer--premium .expo-footer__mid {
+  gap: 0.75rem;
+}
+
+.expo-footer--premium .expo-footer__mid-cols {
+  gap: 0.85rem 1.25rem;
+}
+
+.expo-footer--premium .expo-footer__left .expo-footer__status-list {
+  display: none;
+}
+
+.expo-footer--premium .expo-footer__status-list {
+  gap: 0.3rem;
+}
+
+.expo-footer--premium .expo-footer__status-list div {
+  padding: 0.28rem 0.5rem;
+  font-size: 0.78rem;
+}
+
+.expo-footer--premium .expo-footer__tagline {
+  margin: 0;
+  font-size: var(--velin-text-sm);
+  max-width: 24rem;
+}
+
+.expo-footer--premium .expo-footer__heading {
+  margin-block-end: 0.35rem;
+  font-size: 0.72rem;
+}
+
+.expo-footer--premium .expo-footer__col {
+  gap: 0.25rem;
+}
+
+.expo-footer--premium .expo-footer__col a {
+  padding-block: 0.15rem;
+  font-size: var(--velin-text-sm);
+  transition: color var(--expo-motion-fast) var(--expo-ease-out), transform var(--expo-motion-fast) var(--expo-ease-out);
+}
+
+.expo-footer--premium .expo-footer__col a:hover {
+  transform: translateX(3px);
+  color: var(--velin-color-primary-text, var(--velin-color-primary));
+}
+
+.expo-footer__aura {
+  position: absolute;
+  inset: -30% 20% auto;
+  height: 6rem;
+  background:
+    radial-gradient(ellipse at 30% 0%, var(--expo-glow), transparent 60%),
+    radial-gradient(ellipse at 70% 20%, var(--expo-glow-violet), transparent 55%);
+  filter: blur(10px);
+  opacity: 0.45;
+  pointer-events: none;
+  z-index: 0;
+  animation: expo-fx-breathe 8s var(--expo-ease-soft) infinite;
+}
+
+.expo-footer--premium .expo-footer__stage,
+.expo-footer--premium .expo-footer__bar {
+  position: relative;
+  z-index: 1;
+}
+
+.expo-footer--premium .expo-footer__logo img {
+  width: 22px;
+  height: 22px;
+  filter: drop-shadow(0 0 10px var(--expo-glow-soft));
+}
+
+.expo-footer--premium .expo-footer__bar {
+  padding-block: 0.65rem;
+  border-block-start: 1px solid color-mix(in oklab, var(--velin-color-primary) 18%, var(--velin-color-border));
+  background: color-mix(in oklab, var(--velin-color-surface-dim) 55%, var(--velin-color-surface));
+}
+
+.expo-footer--premium .expo-footer__swatches {
+  margin-block-start: 0.25rem;
+}
+
+@keyframes expo-fx-bridge {
+  0%, 100% { opacity: 0.28; transform: scaleX(0.85); }
+  50% { opacity: 0.75; transform: scaleX(1); }
+}
+
+@keyframes expo-fx-grid {
+  from { background-position: 0 0, 0 0, 0 0; }
+  to { background-position: 28px 28px, 28px 28px, 0 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .expo-section[data-expo-fx]::before,
+  .expo-section[data-expo-fx]::after,
+  .expo-premium__ring,
+  .expo-premium__logo,
+  .expo-wow__layer,
+  .expo-wow__layer::after,
+  .expo-footer__aura,
+  .expo-nav__group--docs > .expo-nav__docs-btn {
+    animation: none !important;
+  }
+
+  .expo-section[data-expo-fx]:hover,
+  .expo-section[data-expo-fx] .expo-why-card:hover,
+  .expo-section[data-expo-fx] .expo-fact:hover,
+  .expo-section[data-expo-fx] .expo-gallery-card:hover,
+  .expo-section[data-expo-fx] .expo-ai-runtime__step:hover,
+  .expo-section[data-expo-fx] .expo-variant-card:hover,
+  .expo-nav__group > button:hover,
+  .expo-nav__link-item:hover,
+  .expo-premium__chips li:hover,
+  .expo-footer--premium .expo-footer__col a:hover {
+    transform: none;
+  }
+}
+
+/* Mobile chrome — last in cascade so premium/final cannot resurrect topbar clutter */
+@media (max-width: 47.99rem) {
+  .expo-nav__actions .expo-nav__lang,
+  .expo-nav__actions .expo-nav__install,
+  .expo-nav__actions .velin-btn--primary[href="#install"] {
+    display: none !important;
+  }
+
+  .expo-nav {
+    flex-wrap: nowrap;
+  }
+}

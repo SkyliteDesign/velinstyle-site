@@ -148,14 +148,22 @@
       btn.setAttribute('aria-expanded', String(!!open));
     };
     btn.addEventListener('click', () => {
-      // data-expo-open also fires; sync after paint
-      requestAnimationFrame(sync);
+      requestAnimationFrame(() => requestAnimationFrame(sync));
     });
     drawer.addEventListener('velin-close', sync);
+    drawer.addEventListener('velin-open', sync);
     drawer.addEventListener('close', sync);
+    drawer.addEventListener('open', sync);
+    if (typeof MutationObserver !== 'undefined') {
+      new MutationObserver(sync).observe(drawer, {
+        attributes: true,
+        attributeFilter: ['open'],
+      });
+    }
     qsa('[data-expo-close="expoSiteNav"]').forEach((el) => {
       el.addEventListener('click', () => setTimeout(sync, 0));
     });
+    sync();
   }
 
   function initThemePack() {

@@ -104,13 +104,16 @@
     </nav>
     <div class="expo-nav__actions">
       <velin-search class="expo-nav__search" index="dist/search-index.json" categories="docs,components,api,examples" placeholder="Docs suchen…" min-chars="2" fuzzy="0.2" debounce="120" aria-label="Dokumentation durchsuchen"></velin-search>
-      <button type="button" class="velin-btn velin-btn--outline velin-btn--sm expo-nav__menu-btn" id="expoMobileMenuBtn" data-expo-open="expoSiteNav" aria-controls="expoSiteNav" aria-expanded="false">Menü</button>
+      <button type="button" class="velin-btn velin-btn--outline velin-btn--sm expo-nav__menu-btn" id="expoMobileMenuBtn" data-expo-open="expoSiteNav" aria-controls="expoSiteNav" aria-expanded="false" aria-label="Site-Menü öffnen">
+        <velin-icon class="expo-nav__ico" name="bars-3" provider="heroicons" size="20" aria-hidden="true"></velin-icon>
+        <span class="expo-nav__menu-btn-label">Menü</span>
+      </button>
       <velin-theme-toggle themes-base="dist/themes/"></velin-theme-toggle>
-      <div class="expo-lang" role="group" aria-label="Sprache">
+      <div class="expo-lang expo-nav__lang" role="group" aria-label="Sprache">
         <a class="expo-lang__opt" href="index.html" hreflang="en" lang="en">EN</a>
         <a class="expo-lang__opt" href="index.de.html" hreflang="de" lang="de" aria-current="true">DE</a>
       </div>
-      <a class="velin-btn velin-btn--primary velin-btn--sm" href="#install"><velin-icon class="expo-nav__ico" name="arrow-down-tray" provider="heroicons" size="16" aria-hidden="true"></velin-icon><span>Install</span></a>
+      <a class="velin-btn velin-btn--primary velin-btn--sm expo-nav__install" href="#install"><velin-icon class="expo-nav__ico" name="arrow-down-tray" provider="heroicons" size="16" aria-hidden="true"></velin-icon><span>Install</span></a>
     </div>
   </header>
 
@@ -1356,6 +1359,11 @@ bootFromDOM(document, { attributes: true, motion: true, highlight: true });</vel
   </velin-modal>
   <velin-drawer id="expoSiteNav" title="Site-Navigation" side="start">
     <nav class="expo-site-nav" aria-label="Mobile Site">
+      <div class="expo-site-nav__primaries">
+        <a class="velin-btn velin-btn--primary velin-btn--sm" href="docs/getting-started/einfuehrung.html">Docs</a>
+        <a class="velin-btn velin-btn--outline velin-btn--sm" href="#install" data-expo-close="expoSiteNav">Install</a>
+        <a class="velin-btn velin-btn--ghost velin-btn--sm" href="demos/index.html">Demos</a>
+      </div>
       <p class="expo-kicker">Start</p>
       <a href="#whats-new" data-expo-close="expoSiteNav">Neu</a>
       <a href="#facts" data-expo-close="expoSiteNav">Fakten</a>
@@ -1372,25 +1380,25 @@ bootFromDOM(document, { attributes: true, motion: true, highlight: true });</vel
       <a href="#animations" data-expo-close="expoSiteNav">Motion</a>
       <a href="#testing" data-expo-close="expoSiteNav">Test Center</a>
       <a href="#showcase" data-expo-close="expoSiteNav">Showcase</a>
-      <a href="#compare" data-expo-close="expoSiteNav">Positioning</a>
+      <a href="#compare" data-expo-close="expoSiteNav">Positionierung</a>
       <a href="#install" data-expo-close="expoSiteNav">Install</a>
-      <p class="expo-kicker">More</p>
+      <p class="expo-kicker">Mehr</p>
       <a href="demos/index.html">Alle Demos</a>
       <a href="docs/getting-started/einfuehrung.html">Docs</a>
       <a href="https://birdapi.de/blog" target="_blank" rel="noopener noreferrer">News</a>
       <a href="https://velisch.info/" target="_blank" rel="noopener noreferrer">VelinScript</a>
       <a href="https://birdapi.de/velin-puls" target="_blank" rel="noopener noreferrer">VelinPuls</a>
       <a href="https://birdapi.de/velin-deploy" target="_blank" rel="noopener noreferrer">VelinDeploy</a>
-      <div class="expo-lang" role="group" aria-label="Sprache">
+      <div class="expo-lang expo-site-nav__lang" role="group" aria-label="Sprache">
         <a class="expo-lang__opt" href="index.html" hreflang="en" lang="en">EN</a>
         <a class="expo-lang__opt" href="index.de.html" hreflang="de" lang="de" aria-current="true">DE</a>
       </div>
       <p class="expo-kicker">Community</p>
       <a href="https://github.com/SkyliteDesign/velinstyle" target="_blank" rel="noopener noreferrer">GitHub</a>
       <a href="https://forum.birdapi.de/" target="_blank" rel="noopener noreferrer">Forum</a>
-      <a href="dist/velin-agent.json">Agent metadata</a>
+      <a href="dist/velin-agent.json">Agent-Metadaten</a>
     </nav>
-    <button type="button" class="velin-btn velin-btn--primary velin-btn--sm" data-expo-close="expoSiteNav" style="margin-top:var(--velin-space-3)">Schließen</button>
+    <button type="button" class="velin-btn velin-btn--primary expo-site-nav__close" data-expo-close="expoSiteNav">Schließen</button>
   </velin-drawer>
   <velin-command id="expoCommand" placeholder="Zu Abschnitt oder Aktion springen…">
     <velin-command-item data-value="whats-new" data-href="#whats-new">Neu</velin-command-item>
