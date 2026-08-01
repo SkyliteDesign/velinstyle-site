@@ -1,12 +1,12 @@
 # velinstyle.info
 
-Marketing-Website und erweiterte Dokumentation für **[VelinStyle](https://github.com/SkyliteDesign/velinstyle)** (barrierefreies CSS-Framework, **v1.0.0** — WCAG-2.2-AAA-Token-Defaults).
+Marketing-Website und Dokumentation für **[VelinStyle](https://github.com/SkyliteDesign/velinstyle)** **v1.2.0** — accessibility-first CSS & Web Components mit plan-first AI-Scaffolding und WCAG-2.2-AAA-orientierten Defaults.
 
 **Ziel-URL:** [https://velinstyle.info](https://velinstyle.info)
 
 ## Inhalt dieses Repos
 
-- `index.html` — Landingpage (VelinStyle + Web Components)
+- `index.html` — Component-Expo-Landing (Live-Galerien, Playground, Tokens, Utilities, Testing, Vergleiche für v1.2.0)
 - `docs/` — Dokumentation im Bootstrap-Stil (relative Pfade, Live-Theme-Picker)
 - `docs/getting-started/einfuehrung.html` — **deutsche** Einführung (Spiegel zu `introduction.html`)
 - `dist/` — **Build-Artefakte aus dem Hauptrepo `velinstyle`** (CSS, JS-Bundles, Themes). Werden hier nicht allein erzeugt.
@@ -34,18 +34,19 @@ npm run sync:dist
 python tools/sync-generated-docs.py
 ```
 
-Die Site lädt **`dist/velinstyle.min.css`** und **`dist/velinstyle-components.iife.js`** — funktioniert auch über einfache Static Hosts ohne ESM.
+Die Homepage bootet Components selektiv über **`dist/chunks/runtime-entry.js`** (`bootFromDOM`). Andere Docs/Demos können weiterhin **`dist/velinstyle-components.iife.js`** nutzen.
 
 ## Abgleich mit dem Framework
 
 Marketing-Texte mit [README.de.md](https://github.com/SkyliteDesign/velinstyle/blob/main/README.de.md) / [README.md](https://github.com/SkyliteDesign/velinstyle/blob/main/README.md) synchron halten:
 
-| Thema | Stand (Audit 0.9.0) |
+| Thema | Stand (1.2.0) |
 | --- | --- |
 | CSS-Komponenten | 35+ BEM-Komponenten |
-| Web Components | **36 kanonisch**, 38 Lazy-Loader (inkl. Legacy-Aliase) |
-| HTML-Attribute | **27** deklarative Bridges |
-| A11y | 36/36 `component-contracts.json`, `test:a11y:coverage` |
+| Web Components | **38** mit A11y-Contracts |
+| HTML-Attribute | deklarative Bridges |
+| A11y | `component-contracts.json`, `test:a11y:coverage` |
+| AI Ready | Plan → scaffold → review, knowledge graph, `velin-agent.json` |
 | E2E | `npm run test:e2e` (Playwright, CI) |
 | CLS | `wc-placeholder.css` im CSS-Bundle |
 
@@ -56,7 +57,7 @@ Bei Releases Versionen in `docs/`-Headern und `index.html` zusammen mit [CHANGEL
 - **Sidebar:** viele HTML-Dateien duplizieren die Sidebar — bei neuen Top-Level-Seiten alle betroffenen Dateien oder `tools/sync-sidebar.py` nutzen.
 - **Sprachen:** Englisch `docs/getting-started/introduction.html` · Deutsch `docs/getting-started/einfuehrung.html`
 - **GitHub:** überall `https://github.com/SkyliteDesign/velinstyle`
-- **npm/CDN:** `@birdapi/velinstyle@1.1.0` für Releases
+- **npm/CDN:** `@birdapi/velinstyle@1.2.0` für Releases
 
 ## Lizenz
 

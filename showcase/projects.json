@@ -1,42 +1,81 @@
 [
   {
-    "id": "velinstyle-info",
-    "title": "VelinStyle Docs",
-    "url": "https://velinstyle.info/",
-    "description": "Offizielle Marketing- und Dokumentationsseite für das WCAG-2.2-AAA-CSS-Framework.",
-    "image": "../assets/img/showcase/velinstyle-info.webp",
-    "tags": ["docs", "marketing"]
-  },
-  {
     "id": "birdapi",
     "title": "BirdAPI",
     "url": "https://birdapi.de/",
-    "description": "BirdAPI-Plattform — APIs, Produkte und Community rund um SkyliteDesign.",
+    "description": "Platform home for APIs, products, and community — a living VelinStyle marketing surface.",
     "image": "../assets/img/showcase/birdapi.webp",
-    "tags": ["platform", "apis"]
+    "imageDark": "../assets/img/showcase/birdapi-dark.webp",
+    "imageMobile": "../assets/img/showcase/birdapi-mobile.webp",
+    "tags": ["platform", "apis"],
+    "components": ["velin-nav", "velin-btn", "velin-card", "velin-theme-toggle"],
+    "tokens": ["color", "spacing", "radius", "typography", "shadow"],
+    "utilities": ["flex", "gap", "container", "display", "text"],
+    "architecture": ["Tokens", "Marketing sections", "Theme contract", "Runtime components"],
+    "story": "Platform home for APIs, products, and community — built as a living VelinStyle surface, not a brochure PDF.",
+    "modes": ["light", "dark", "desktop", "mobile"]
   },
   {
     "id": "mein-birdapi",
     "title": "Mein BirdAPI",
     "url": "https://mein.birdapi.store/",
-    "description": "Kundenportal und Dashboard für BirdAPI-Dienste — Abos, Lizenzen, Tickets und Rechnungen.",
+    "description": "Customer portal for subscriptions, licenses, tickets, and invoices.",
     "image": "../assets/img/showcase/mein-birdapi.webp",
-    "tags": ["dashboard", "portal"]
+    "imageDark": "../assets/img/showcase/mein-birdapi-dark.webp",
+    "imageMobile": "../assets/img/showcase/mein-birdapi-mobile.webp",
+    "tags": ["dashboard", "portal"],
+    "components": ["velin-data-table", "velin-btn", "velin-badge", "velin-nav", "velin-alert"],
+    "tokens": ["color", "density", "spacing", "border", "shadow"],
+    "utilities": ["grid", "gap", "padding", "overflow", "flex"],
+    "architecture": ["App shell", "Data density", "Status feedback", "Portal flows"],
+    "story": "Customer portal for subscriptions, licenses, tickets, and invoices — dense UI that stays readable.",
+    "modes": ["light", "dark", "desktop", "mobile"]
   },
   {
     "id": "papageienregister",
     "title": "Papageienregister",
     "url": "https://papageienregister.de/",
-    "description": "Online-Register für Papageien — Nachweis und Verwaltung.",
+    "description": "Online register for parrots — proof and administration.",
     "image": "../assets/img/showcase/papageienregister.webp",
-    "tags": ["register", "service"]
+    "imageDark": "../assets/img/showcase/papageienregister-dark.webp",
+    "imageMobile": "../assets/img/showcase/papageienregister-mobile.webp",
+    "tags": ["register", "service"],
+    "components": ["velin-form-summary", "velin-input", "velin-btn", "velin-card"],
+    "tokens": ["color", "radius", "spacing", "typography"],
+    "utilities": ["form", "gap", "padding", "text", "display"],
+    "architecture": ["Service landing", "Forms + validation", "Trust content"],
+    "story": "Online register for parrots — proof and administration with calm, trustworthy service UI.",
+    "modes": ["light", "dark", "desktop", "mobile"]
   },
   {
     "id": "inselsorglos",
     "title": "Insel Sorglos",
     "url": "https://inselsorglos.de/",
-    "description": "Ferienwohnungs-Service Usedom — Reinigung, Check-in und Bettenwechsel.",
+    "description": "Holiday-home service on Usedom — cleaning, check-in, linen.",
     "image": "../assets/img/showcase/inselsorglos.webp",
-    "tags": ["service", "booking"]
+    "imageDark": "../assets/img/showcase/inselsorglos-dark.webp",
+    "imageMobile": "../assets/img/showcase/inselsorglos-mobile.webp",
+    "tags": ["service", "booking"],
+    "components": ["velin-btn", "velin-card", "velin-accordion", "velin-nav"],
+    "tokens": ["color", "spacing", "radius", "shadow"],
+    "utilities": ["flex", "gap", "container", "padding", "text"],
+    "architecture": ["Local service", "Booking intent", "Responsive content"],
+    "story": "Holiday-home service on Usedom — cleaning, check-in, linen — booked through a clear service site.",
+    "modes": ["light", "dark", "desktop", "mobile"]
+  },
+  {
+    "id": "velinstyle-info",
+    "title": "VelinStyle",
+    "url": "https://velinstyle.info/",
+    "description": "Meta: the VelinStyle site itself — listed as coda, not the showcase star.",
+    "image": "../assets/img/showcase/velinstyle-info.webp",
+    "tags": ["docs", "marketing"],
+    "meta": true,
+    "components": ["velin-theme-toggle", "velin-btn"],
+    "tokens": ["color", "spacing", "typography"],
+    "utilities": ["flex", "gap", "container"],
+    "architecture": ["Product film", "Docs", "Agent meta"],
+    "story": "The product site for VelinStyle — meta entry, not the hero of the showcase tunnel.",
+    "modes": ["light", "dark", "desktop", "mobile"]
   }
 ]

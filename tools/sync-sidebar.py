@@ -107,9 +107,9 @@ CHROME_RE = re.compile(
 COMPONENT_SLUGS = [
     "accordion", "alerts", "avatar", "badge", "breadcrumb", "buttons", "button-group",
     "card", "carousel", "chip", "velin-code-block", "close-button", "collapse",
-    "announcer", "bottom-nav", "combobox", "command", "velin-search", "menubar", "rating",
+    "announcer", "bottom-nav", "calendar", "combobox", "command", "velin-search", "menubar", "rating",
     "segmented-control", "sheet", "secure-field",
-    "dialog", "divider", "drawer", "dropdown", "email", "lightbox", "list-group", "modal",
+    "dialog", "divider", "drawer", "dropdown", "email", "file-dropzone", "lightbox", "list-group", "modal",
     "navbar", "navs-tabs", "pagination", "popover", "progress", "progress-ring",
     "scrollspy", "spinners", "stat", "stepper", "timeline", "toasts", "tooltips",
     "sparkline", "counter", "copy", "countdown", "data-table", "form-summary", "persist",
@@ -117,7 +117,7 @@ COMPONENT_SLUGS = [
 ]
 
 COMPONENT_LABELS = {
-    "announcer": "Announcer", "bottom-nav": "Bottom nav", "combobox": "Combobox",
+    "announcer": "Announcer", "bottom-nav": "Bottom nav", "calendar": "Calendar", "combobox": "Combobox",
     "command": "Command palette", "velin-search": "Velin Search", "menubar": "Menubar", "rating": "Rating",
     "segmented-control": "Segmented control", "sheet": "Sheet",
     "navs-tabs": "Navs &amp; Tabs", "button-group": "Button Group",
@@ -125,7 +125,7 @@ COMPONENT_LABELS = {
     "progress-ring": "Progress Ring",
     "sparkline": "Sparkline", "counter": "Counter", "copy": "Copy",
     "countdown": "Countdown", "persist": "Persist", "scroll-top": "Scroll to top",
-    "data-table": "Data table", "form-summary": "Form summary",
+    "data-table": "Data table", "form-summary": "Form summary", "file-dropzone": "File dropzone",
     "live-dot": "Live dot",
     "email": "Email", "secure-field": "Secure field", "velin-code-block": "Code block",
 }
@@ -136,10 +136,10 @@ COMPONENT_ICONS = {
     "button-group": "object-group", "card": "id-card", "carousel": "images", "chip": "tags",
     "velin-code-block": "code",
     "close-button": "xmark", "collapse": "compress", "announcer": "bullhorn",
-    "bottom-nav": "bars", "combobox": "list", "command": "terminal", "velin-search": "magnifying-glass",
+    "bottom-nav": "bars", "calendar": "calendar-days", "combobox": "list", "command": "terminal", "velin-search": "magnifying-glass",
     "menubar": "bars-progress", "rating": "star", "segmented-control": "table-cells-large",
     "sheet": "sheet-plastic", "dialog": "comment-dots", "divider": "minus", "drawer": "bars",
-    "dropdown": "caret-down", "lightbox": "expand", "list-group": "list-ul",
+    "dropdown": "caret-down", "file-dropzone": "cloud-arrow-up", "lightbox": "expand", "list-group": "list-ul",
     "modal": "window-maximize", "navbar": "bars", "navs-tabs": "folder",
     "pagination": "ellipsis", "popover": "comment", "progress": "bars-progress",
     "progress-ring": "circle-notch", "scrollspy": "binoculars", "spinners": "spinner",
@@ -168,11 +168,20 @@ PINNED_GUIDES = [
     ("guides/existing-project.html", "Existing project", "folder-open", "guides"),
     ("guides/react-vite-starter.html", "Vite &amp; React", "code-branch", "guides"),
     ("guides/prompt-scaffolding.html", "Prompt scaffolding", "wand-magic-sparkles", "guides"),
+    ("guides/landing-15-min.html", "Landing in 15 min", "rocket", "guides"),
+    ("guides/marketing-lite-css.html", "Marketing lite CSS", "gauge-simple", "guides"),
     ("guides/responsive-layout.html", "Responsive layout", "mobile-screen", "guides"),
     ("guides/performance-audit.html", "Performance audit", "gauge-high", "guides"),
     ("guides/design-tokens.html", "Design tokens", "swatchbook", "guides"),
     ("guides/api-reference.html", "API reference", "book", "guides"),
     ("guides/velin-meta.html", "Velin-Meta", "robot", "guides"),
+    ("guides/ai-skills.html", "AI Skills", "microchip", "guides"),
+    ("guides/design-intelligence.html", "Design Intelligence", "brain", "guides"),
+    ("guides/cli-ship-surface.html", "CLI ship surface", "terminal", "guides"),
+    ("guides/blueprints.html", "Blueprints", "puzzle-piece", "guides"),
+    ("guides/faq.html", "FAQ", "circle-question", "guides"),
+    ("guides/troubleshooting.html", "Troubleshooting", "wrench", "guides"),
+    ("guides/deploy.html", "Deploy", "cloud-arrow-up", "guides"),
     ("guides/ecommerce.html", "E-commerce", "cart-shopping", "guides"),
     ("guides/forum-update.html", "Forum update", "comments", "guides"),
     ("generated/index.html", "Generated Markdown", "file-lines", "extend"),
@@ -346,6 +355,8 @@ def sidebar_html(rel: str, active_href: str) -> str:
         link("guides/existing-project.html", "Existing project", "folder-open"),
         link("guides/react-vite-starter.html", "Vite &amp; React", "code-branch"),
         link("guides/prompt-scaffolding.html", "Prompt scaffolding", "wand-magic-sparkles"),
+        link("guides/landing-15-min.html", "Landing in 15 min", "rocket"),
+        link("guides/marketing-lite-css.html", "Marketing lite CSS", "gauge-simple"),
         link("guides/responsive-layout.html", "Responsive layout", "mobile-screen"),
         link("guides/performance-audit.html", "Performance audit", "gauge-high"),
         link("guides/whats-new-extension.html", "What&apos;s new (extension)", "wand-magic-sparkles"),
@@ -356,6 +367,13 @@ def sidebar_html(rel: str, active_href: str) -> str:
         link("guides/design-tokens.html", "Design tokens", "swatchbook"),
         link("guides/api-reference.html", "API reference", "book"),
         link("guides/velin-meta.html", "Velin-Meta", "robot"),
+        link("guides/ai-skills.html", "AI Skills", "microchip"),
+        link("guides/design-intelligence.html", "Design Intelligence", "brain"),
+        link("guides/cli-ship-surface.html", "CLI ship surface", "terminal"),
+        link("guides/blueprints.html", "Blueprints", "puzzle-piece"),
+        link("guides/faq.html", "FAQ", "circle-question"),
+        link("guides/troubleshooting.html", "Troubleshooting", "wrench"),
+        link("guides/deploy.html", "Deploy", "cloud-arrow-up"),
         link("guides/laravel.html", "Laravel", "php"),
         link("guides/wordpress.html", "WordPress", "wordpress"),
         link("guides/ecommerce.html", "E-commerce", "cart-shopping"),
@@ -367,6 +385,9 @@ def sidebar_html(rel: str, active_href: str) -> str:
         link("about/license.html", "License", "file-contract"),
     ])
     su = "".join([
+        link("guides/faq.html", "FAQ", "circle-question"),
+        link("guides/troubleshooting.html", "Troubleshooting", "wrench"),
+        link("guides/deploy.html", "Deploy", "cloud-arrow-up"),
         link("https://forum.birdapi.de/", "BirdAPI Forum", "comments", external=True),
         link("https://birdapi.de/", "birdapi.de", "globe", external=True),
     ])
@@ -476,16 +497,15 @@ def write_generated_index() -> Path:
 </head>
 <body>
   <a href="#main-content" class="velin-doc-skip">Skip to main content</a>
-  <header class="velin-doc-header"><button class="velin-doc-hamburger" aria-label="Toggle sidebar" id="sidebarToggle"><velin-icon name="menu" size="20"></velin-icon></button><a href="../getting-started/introduction.html" class="velin-doc-header__brand"><img src="../../assets/img/velinstyle-logo.svg" alt="" width="28" height="28"> VelinStyle <span class="velin-doc-header__version">v0.9.0</span></a><div class="velin-doc-header__search"><input type="search" placeholder="Search docs…" aria-label="Search documentation" id="docSearch" autocomplete="off" data-search-index="../search-index.json"></div><div class="velin-doc-header__actions">
-      <a href="../../index.html" aria-label="Home" title="Home" style="display:inline-flex;align-items:center;gap:4px;font-weight:500;text-decoration:none;color:inherit">&#8962; Home</a>
-      <velin-theme-toggle themes-base="../../dist/themes/"></velin-theme-toggle><a href="https://github.com/SkyliteDesign/velinstyle" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub"><velin-icon name="github" size="18"></velin-icon></a></div></header>
+  <header class="velin-doc-header"><button class="velin-doc-hamburger" aria-label="Toggle sidebar" id="sidebarToggle"><velin-icon name="menu" size="20"></velin-icon></button><a href="../getting-started/introduction.html" class="velin-doc-header__brand"><img src="../../assets/img/velinstyle-logo.svg" alt="" width="28" height="28"> VelinStyle <span class="velin-doc-header__version">v{FRAMEWORK_VERSION}</span></a><div class="velin-doc-header__tools"><div class="velin-doc-header__search"><input type="search" placeholder="Search docs…" aria-label="Search documentation" id="docSearch" autocomplete="off" data-search-index="../search-index.json"></div></div><div class="velin-doc-header__actions">
+      <velin-theme-toggle themes-base="../../dist/themes/"></velin-theme-toggle><a class="velin-doc-header__home" href="../../index.html" aria-label="Home" title="Home"><velin-icon name="home" size="18" aria-hidden="true"></velin-icon><span class="velin-doc-header__home-label">Home</span></a><a href="https://github.com/SkyliteDesign/velinstyle" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub"><velin-icon name="github" size="18"></velin-icon></a></div></header>
   <div class="velin-doc-overlay" id="sidebarOverlay"></div>
   <div class="velin-doc-wrapper">
 {sb}
 
         <main class="velin-doc-main" id="main-content">
       <ol class="velin-doc-breadcrumb"><li><a href="../getting-started/introduction.html">Docs</a></li><li><a href="../extend/cli.html">Extend</a></li><li>Generated reference</li></ol>
-      <h1>Auto-generated reference (Markdown) <span class="velin-badge velin-badge--primary">0.9.0</span></h1>
+      <h1>Auto-generated reference (Markdown) <span class="velin-badge velin-badge--primary">{FRAMEWORK_VERSION}</span></h1>
       <p class="lead">Snapshot from <code>npm run docs:generate</code> in the framework repo. Do not edit these files by hand — see the <a href="../guides/api-reference.html">API reference guide</a>.</p>
 
       <div class="velin-alert velin-alert--info" role="note" style="margin-bottom:1.25rem">
@@ -504,7 +524,7 @@ def write_generated_index() -> Path:
           <tr><td><a href="rules/scanner.md">Scanner rules</a></td><td>Security, a11y, PII, performance</td></tr>
           <tr><td><a href="a11y/modules.md">A11y CSS</a></td><td>Modules in <code>src/a11y/</code></td></tr>
           <tr><td><a href="a11y/wcag22-aaa-matrix.md">WCAG 2.2 AAA matrix</a></td><td>AAA conformance mapping for framework helpers</td></tr>
-          <tr><td><a href="attributes/README.md">HTML attributes</a></td><td><code>velin-*</code> declarative extensions (0.9.0 extension)</td></tr>
+          <tr><td><a href="attributes/README.md">HTML attributes</a></td><td><code>velin-*</code> declarative extensions</td></tr>
           <tr><td><a href="meta/README.md">Velin-Meta</a></td><td>Agent bundle docs (<code>velin-agent.json</code>)</td></tr>
         </tbody>
       </table>

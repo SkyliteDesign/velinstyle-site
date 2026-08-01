@@ -315,7 +315,7 @@ function isRegex(value) {
 function createDOMPurify() {
   let window2 = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : getGlobal();
   const DOMPurify = (root) => createDOMPurify(root);
-  DOMPurify.version = "3.4.5";
+  DOMPurify.version = "3.4.12";
   DOMPurify.removed = [];
   if (!window2 || !window2.document || window2.document.nodeType !== NODE_TYPE.document || !window2.Element) {
     DOMPurify.isSupported = false;
@@ -324,14 +324,21 @@ function createDOMPurify() {
   let document2 = window2.document;
   const originalDocument = document2;
   const currentScript = originalDocument.currentScript;
-  const DocumentFragment = window2.DocumentFragment, HTMLTemplateElement = window2.HTMLTemplateElement, Node = window2.Node, Element = window2.Element, NodeFilter = window2.NodeFilter, _window$NamedNodeMap = window2.NamedNodeMap, NamedNodeMap = _window$NamedNodeMap === void 0 ? window2.NamedNodeMap || window2.MozNamedAttrMap : _window$NamedNodeMap, HTMLFormElement = window2.HTMLFormElement, DOMParser2 = window2.DOMParser, trustedTypes = window2.trustedTypes;
+  window2.DocumentFragment;
+  const HTMLTemplateElement = window2.HTMLTemplateElement, Node = window2.Node, Element = window2.Element, NodeFilter = window2.NodeFilter, _window$NamedNodeMap = window2.NamedNodeMap;
+  _window$NamedNodeMap === void 0 ? window2.NamedNodeMap || window2.MozNamedAttrMap : _window$NamedNodeMap;
+  window2.HTMLFormElement;
+  const DOMParser2 = window2.DOMParser, trustedTypes = window2.trustedTypes;
   const ElementPrototype = Element.prototype;
   const cloneNode = lookupGetter(ElementPrototype, "cloneNode");
   const remove = lookupGetter(ElementPrototype, "remove");
   const getNextSibling = lookupGetter(ElementPrototype, "nextSibling");
   const getChildNodes = lookupGetter(ElementPrototype, "childNodes");
   const getParentNode = lookupGetter(ElementPrototype, "parentNode");
+  const getShadowRoot = lookupGetter(ElementPrototype, "shadowRoot");
+  const getAttributes = lookupGetter(ElementPrototype, "attributes");
   const getNodeType = Node && Node.prototype ? lookupGetter(Node.prototype, "nodeType") : null;
+  const getNodeName = Node && Node.prototype ? lookupGetter(Node.prototype, "nodeName") : null;
   if (typeof HTMLTemplateElement === "function") {
     const template = document2.createElement("template");
     if (template.content && template.content.ownerDocument) {
@@ -340,6 +347,39 @@ function createDOMPurify() {
   }
   let trustedTypesPolicy;
   let emptyHTML = "";
+  let defaultTrustedTypesPolicy;
+  let defaultTrustedTypesPolicyResolved = false;
+  let IN_TRUSTED_TYPES_POLICY = 0;
+  const _assertNotInTrustedTypesPolicy = function _assertNotInTrustedTypesPolicy2() {
+    if (IN_TRUSTED_TYPES_POLICY > 0) {
+      throw typeErrorCreate('A configured TRUSTED_TYPES_POLICY callback (createHTML or createScriptURL) must not call DOMPurify.sanitize, as that causes infinite recursion. Do not pass a policy whose callbacks wrap DOMPurify as TRUSTED_TYPES_POLICY; see the "DOMPurify and Trusted Types" section of the README.');
+    }
+  };
+  const _createTrustedHTML = function _createTrustedHTML2(html2) {
+    _assertNotInTrustedTypesPolicy();
+    IN_TRUSTED_TYPES_POLICY++;
+    try {
+      return trustedTypesPolicy.createHTML(html2);
+    } finally {
+      IN_TRUSTED_TYPES_POLICY--;
+    }
+  };
+  const _createTrustedScriptURL = function _createTrustedScriptURL2(scriptUrl) {
+    _assertNotInTrustedTypesPolicy();
+    IN_TRUSTED_TYPES_POLICY++;
+    try {
+      return trustedTypesPolicy.createScriptURL(scriptUrl);
+    } finally {
+      IN_TRUSTED_TYPES_POLICY--;
+    }
+  };
+  const _getDefaultTrustedTypesPolicy = function _getDefaultTrustedTypesPolicy2() {
+    if (!defaultTrustedTypesPolicyResolved) {
+      defaultTrustedTypesPolicy = _createTrustedTypesPolicy(trustedTypes, currentScript);
+      defaultTrustedTypesPolicyResolved = true;
+    }
+    return defaultTrustedTypesPolicy;
+  };
   const _document = document2, implementation = _document.implementation, createNodeIterator = _document.createNodeIterator, createDocumentFragment = _document.createDocumentFragment, getElementsByTagName = _document.getElementsByTagName;
   const importNode = originalDocument.importNode;
   let hooks = _createHooksMap();
@@ -394,6 +434,8 @@ function createDOMPurify() {
   let SAFE_FOR_XML = true;
   let WHOLE_DOCUMENT = false;
   let SET_CONFIG = false;
+  let SET_CONFIG_ALLOWED_TAGS = null;
+  let SET_CONFIG_ALLOWED_ATTR = null;
   let FORCE_BODY = false;
   let RETURN_DOM = false;
   let RETURN_DOM_FRAGMENT = false;
@@ -405,7 +447,43 @@ function createDOMPurify() {
   let IN_PLACE = false;
   let USE_PROFILES = {};
   let FORBID_CONTENTS = null;
-  const DEFAULT_FORBID_CONTENTS = addToSet({}, ["annotation-xml", "audio", "colgroup", "desc", "foreignobject", "head", "iframe", "math", "mi", "mn", "mo", "ms", "mtext", "noembed", "noframes", "noscript", "plaintext", "script", "style", "svg", "template", "thead", "title", "video", "xmp"]);
+  const DEFAULT_FORBID_CONTENTS = addToSet({}, [
+    "annotation-xml",
+    "audio",
+    "colgroup",
+    "desc",
+    "foreignobject",
+    "head",
+    "iframe",
+    "math",
+    "mi",
+    "mn",
+    "mo",
+    "ms",
+    "mtext",
+    "noembed",
+    "noframes",
+    "noscript",
+    "plaintext",
+    "script",
+    // <selectedcontent> mirrors the selected <option>'s subtree, cloned by
+    // the UA (customizable <select>) — including any on* handlers — and the
+    // engine re-mirrors synchronously whenever a removal changes which
+    // option/selectedcontent is current, even inside DOMPurify's inert
+    // DOMParser document. Hoisting its children on removal re-inserts a fresh
+    // mirror target ahead of the walk, which the engine refills, looping
+    // forever (DoS) and amplifying output. Dropping its content on removal
+    // (rather than hoisting) breaks that cascade; the content is a duplicate
+    // of the option, which is sanitized on its own. See campaign-3 F1/F6.
+    "selectedcontent",
+    "style",
+    "svg",
+    "template",
+    "thead",
+    "title",
+    "video",
+    "xmp"
+  ]);
   let DATA_URI_TAGS = null;
   const DEFAULT_DATA_URI_TAGS = addToSet({}, ["audio", "video", "img", "source", "image", "track"]);
   let URI_SAFE_ATTRIBUTES = null;
@@ -417,8 +495,10 @@ function createDOMPurify() {
   let IS_EMPTY_INPUT = false;
   let ALLOWED_NAMESPACES = null;
   const DEFAULT_ALLOWED_NAMESPACES = addToSet({}, [MATHML_NAMESPACE, SVG_NAMESPACE, HTML_NAMESPACE], stringToString);
-  let MATHML_TEXT_INTEGRATION_POINTS = addToSet({}, ["mi", "mo", "mn", "ms", "mtext"]);
-  let HTML_INTEGRATION_POINTS = addToSet({}, ["annotation-xml"]);
+  const DEFAULT_MATHML_TEXT_INTEGRATION_POINTS = freeze(["mi", "mo", "mn", "ms", "mtext"]);
+  let MATHML_TEXT_INTEGRATION_POINTS = addToSet({}, DEFAULT_MATHML_TEXT_INTEGRATION_POINTS);
+  const DEFAULT_HTML_INTEGRATION_POINTS = freeze(["annotation-xml"]);
+  let HTML_INTEGRATION_POINTS = addToSet({}, DEFAULT_HTML_INTEGRATION_POINTS);
   const COMMON_SVG_AND_HTML_ELEMENTS = addToSet({}, ["title", "style", "font", "a", "script"]);
   let PARSER_MEDIA_TYPE = null;
   const SUPPORTED_PARSER_MEDIA_TYPES = ["application/xhtml+xml", "text/html"];
@@ -441,14 +521,32 @@ function createDOMPurify() {
     PARSER_MEDIA_TYPE = // eslint-disable-next-line unicorn/prefer-includes
     SUPPORTED_PARSER_MEDIA_TYPES.indexOf(cfg.PARSER_MEDIA_TYPE) === -1 ? DEFAULT_PARSER_MEDIA_TYPE : cfg.PARSER_MEDIA_TYPE;
     transformCaseFunc = PARSER_MEDIA_TYPE === "application/xhtml+xml" ? stringToString : stringToLowerCase;
-    ALLOWED_TAGS = objectHasOwnProperty(cfg, "ALLOWED_TAGS") && arrayIsArray(cfg.ALLOWED_TAGS) ? addToSet({}, cfg.ALLOWED_TAGS, transformCaseFunc) : DEFAULT_ALLOWED_TAGS;
-    ALLOWED_ATTR = objectHasOwnProperty(cfg, "ALLOWED_ATTR") && arrayIsArray(cfg.ALLOWED_ATTR) ? addToSet({}, cfg.ALLOWED_ATTR, transformCaseFunc) : DEFAULT_ALLOWED_ATTR;
-    ALLOWED_NAMESPACES = objectHasOwnProperty(cfg, "ALLOWED_NAMESPACES") && arrayIsArray(cfg.ALLOWED_NAMESPACES) ? addToSet({}, cfg.ALLOWED_NAMESPACES, stringToString) : DEFAULT_ALLOWED_NAMESPACES;
-    URI_SAFE_ATTRIBUTES = objectHasOwnProperty(cfg, "ADD_URI_SAFE_ATTR") && arrayIsArray(cfg.ADD_URI_SAFE_ATTR) ? addToSet(clone(DEFAULT_URI_SAFE_ATTRIBUTES), cfg.ADD_URI_SAFE_ATTR, transformCaseFunc) : DEFAULT_URI_SAFE_ATTRIBUTES;
-    DATA_URI_TAGS = objectHasOwnProperty(cfg, "ADD_DATA_URI_TAGS") && arrayIsArray(cfg.ADD_DATA_URI_TAGS) ? addToSet(clone(DEFAULT_DATA_URI_TAGS), cfg.ADD_DATA_URI_TAGS, transformCaseFunc) : DEFAULT_DATA_URI_TAGS;
-    FORBID_CONTENTS = objectHasOwnProperty(cfg, "FORBID_CONTENTS") && arrayIsArray(cfg.FORBID_CONTENTS) ? addToSet({}, cfg.FORBID_CONTENTS, transformCaseFunc) : DEFAULT_FORBID_CONTENTS;
-    FORBID_TAGS = objectHasOwnProperty(cfg, "FORBID_TAGS") && arrayIsArray(cfg.FORBID_TAGS) ? addToSet({}, cfg.FORBID_TAGS, transformCaseFunc) : clone({});
-    FORBID_ATTR = objectHasOwnProperty(cfg, "FORBID_ATTR") && arrayIsArray(cfg.FORBID_ATTR) ? addToSet({}, cfg.FORBID_ATTR, transformCaseFunc) : clone({});
+    ALLOWED_TAGS = _resolveSetOption(cfg, "ALLOWED_TAGS", DEFAULT_ALLOWED_TAGS, {
+      transform: transformCaseFunc
+    });
+    ALLOWED_ATTR = _resolveSetOption(cfg, "ALLOWED_ATTR", DEFAULT_ALLOWED_ATTR, {
+      transform: transformCaseFunc
+    });
+    ALLOWED_NAMESPACES = _resolveSetOption(cfg, "ALLOWED_NAMESPACES", DEFAULT_ALLOWED_NAMESPACES, {
+      transform: stringToString
+    });
+    URI_SAFE_ATTRIBUTES = _resolveSetOption(cfg, "ADD_URI_SAFE_ATTR", DEFAULT_URI_SAFE_ATTRIBUTES, {
+      transform: transformCaseFunc,
+      base: DEFAULT_URI_SAFE_ATTRIBUTES
+    });
+    DATA_URI_TAGS = _resolveSetOption(cfg, "ADD_DATA_URI_TAGS", DEFAULT_DATA_URI_TAGS, {
+      transform: transformCaseFunc,
+      base: DEFAULT_DATA_URI_TAGS
+    });
+    FORBID_CONTENTS = _resolveSetOption(cfg, "FORBID_CONTENTS", DEFAULT_FORBID_CONTENTS, {
+      transform: transformCaseFunc
+    });
+    FORBID_TAGS = _resolveSetOption(cfg, "FORBID_TAGS", clone({}), {
+      transform: transformCaseFunc
+    });
+    FORBID_ATTR = _resolveSetOption(cfg, "FORBID_ATTR", clone({}), {
+      transform: transformCaseFunc
+    });
     USE_PROFILES = objectHasOwnProperty(cfg, "USE_PROFILES") ? cfg.USE_PROFILES && typeof cfg.USE_PROFILES === "object" ? clone(cfg.USE_PROFILES) : cfg.USE_PROFILES : false;
     ALLOW_ARIA_ATTR = cfg.ALLOW_ARIA_ATTR !== false;
     ALLOW_DATA_ATTR = cfg.ALLOW_DATA_ATTR !== false;
@@ -467,8 +565,8 @@ function createDOMPurify() {
     IN_PLACE = cfg.IN_PLACE || false;
     IS_ALLOWED_URI$1 = isRegex(cfg.ALLOWED_URI_REGEXP) ? cfg.ALLOWED_URI_REGEXP : IS_ALLOWED_URI;
     NAMESPACE = typeof cfg.NAMESPACE === "string" ? cfg.NAMESPACE : HTML_NAMESPACE;
-    MATHML_TEXT_INTEGRATION_POINTS = objectHasOwnProperty(cfg, "MATHML_TEXT_INTEGRATION_POINTS") && cfg.MATHML_TEXT_INTEGRATION_POINTS && typeof cfg.MATHML_TEXT_INTEGRATION_POINTS === "object" ? clone(cfg.MATHML_TEXT_INTEGRATION_POINTS) : addToSet({}, ["mi", "mo", "mn", "ms", "mtext"]);
-    HTML_INTEGRATION_POINTS = objectHasOwnProperty(cfg, "HTML_INTEGRATION_POINTS") && cfg.HTML_INTEGRATION_POINTS && typeof cfg.HTML_INTEGRATION_POINTS === "object" ? clone(cfg.HTML_INTEGRATION_POINTS) : addToSet({}, ["annotation-xml"]);
+    MATHML_TEXT_INTEGRATION_POINTS = objectHasOwnProperty(cfg, "MATHML_TEXT_INTEGRATION_POINTS") && cfg.MATHML_TEXT_INTEGRATION_POINTS && typeof cfg.MATHML_TEXT_INTEGRATION_POINTS === "object" ? clone(cfg.MATHML_TEXT_INTEGRATION_POINTS) : addToSet({}, DEFAULT_MATHML_TEXT_INTEGRATION_POINTS);
+    HTML_INTEGRATION_POINTS = objectHasOwnProperty(cfg, "HTML_INTEGRATION_POINTS") && cfg.HTML_INTEGRATION_POINTS && typeof cfg.HTML_INTEGRATION_POINTS === "object" ? clone(cfg.HTML_INTEGRATION_POINTS) : addToSet({}, DEFAULT_HTML_INTEGRATION_POINTS);
     const customElementHandling = objectHasOwnProperty(cfg, "CUSTOM_ELEMENT_HANDLING") && cfg.CUSTOM_ELEMENT_HANDLING && typeof cfg.CUSTOM_ELEMENT_HANDLING === "object" ? clone(cfg.CUSTOM_ELEMENT_HANDLING) : create(null);
     CUSTOM_ELEMENT_HANDLING = create(null);
     if (objectHasOwnProperty(customElementHandling, "tagNameCheck") && isRegexOrFunction(customElementHandling.tagNameCheck)) {
@@ -480,6 +578,7 @@ function createDOMPurify() {
     if (objectHasOwnProperty(customElementHandling, "allowCustomizedBuiltInElements") && typeof customElementHandling.allowCustomizedBuiltInElements === "boolean") {
       CUSTOM_ELEMENT_HANDLING.allowCustomizedBuiltInElements = customElementHandling.allowCustomizedBuiltInElements;
     }
+    seal(CUSTOM_ELEMENT_HANDLING);
     if (SAFE_FOR_TEMPLATES) {
       ALLOW_DATA_ATTR = false;
     }
@@ -563,14 +662,23 @@ function createDOMPurify() {
       if (typeof cfg.TRUSTED_TYPES_POLICY.createScriptURL !== "function") {
         throw typeErrorCreate('TRUSTED_TYPES_POLICY configuration option must provide a "createScriptURL" hook.');
       }
+      const previousTrustedTypesPolicy = trustedTypesPolicy;
       trustedTypesPolicy = cfg.TRUSTED_TYPES_POLICY;
-      emptyHTML = trustedTypesPolicy.createHTML("");
+      try {
+        emptyHTML = _createTrustedHTML("");
+      } catch (error) {
+        trustedTypesPolicy = previousTrustedTypesPolicy;
+        throw error;
+      }
+    } else if (cfg.TRUSTED_TYPES_POLICY === null) {
+      trustedTypesPolicy = void 0;
+      emptyHTML = "";
     } else {
       if (trustedTypesPolicy === void 0) {
-        trustedTypesPolicy = _createTrustedTypesPolicy(trustedTypes, currentScript);
+        trustedTypesPolicy = _getDefaultTrustedTypesPolicy();
       }
-      if (trustedTypesPolicy !== null && typeof emptyHTML === "string") {
-        emptyHTML = trustedTypesPolicy.createHTML("");
+      if (trustedTypesPolicy && typeof emptyHTML === "string") {
+        emptyHTML = _createTrustedHTML("");
       }
     }
     if (freeze) {
@@ -580,6 +688,33 @@ function createDOMPurify() {
   };
   const ALL_SVG_TAGS = addToSet({}, [...svg$1, ...svgFilters, ...svgDisallowed]);
   const ALL_MATHML_TAGS = addToSet({}, [...mathMl$1, ...mathMlDisallowed]);
+  const _checkSvgNamespace = function _checkSvgNamespace2(tagName, parent, parentTagName) {
+    if (parent.namespaceURI === HTML_NAMESPACE) {
+      return tagName === "svg";
+    }
+    if (parent.namespaceURI === MATHML_NAMESPACE) {
+      return tagName === "svg" && (parentTagName === "annotation-xml" || MATHML_TEXT_INTEGRATION_POINTS[parentTagName]);
+    }
+    return Boolean(ALL_SVG_TAGS[tagName]);
+  };
+  const _checkMathMlNamespace = function _checkMathMlNamespace2(tagName, parent, parentTagName) {
+    if (parent.namespaceURI === HTML_NAMESPACE) {
+      return tagName === "math";
+    }
+    if (parent.namespaceURI === SVG_NAMESPACE) {
+      return tagName === "math" && HTML_INTEGRATION_POINTS[parentTagName];
+    }
+    return Boolean(ALL_MATHML_TAGS[tagName]);
+  };
+  const _checkHtmlNamespace = function _checkHtmlNamespace2(tagName, parent, parentTagName) {
+    if (parent.namespaceURI === SVG_NAMESPACE && !HTML_INTEGRATION_POINTS[parentTagName]) {
+      return false;
+    }
+    if (parent.namespaceURI === MATHML_NAMESPACE && !MATHML_TEXT_INTEGRATION_POINTS[parentTagName]) {
+      return false;
+    }
+    return !ALL_MATHML_TAGS[tagName] && (COMMON_SVG_AND_HTML_ELEMENTS[tagName] || !ALL_SVG_TAGS[tagName]);
+  };
   const _checkValidNamespace = function _checkValidNamespace2(element) {
     let parent = getParentNode(element);
     if (!parent || !parent.tagName) {
@@ -594,31 +729,13 @@ function createDOMPurify() {
       return false;
     }
     if (element.namespaceURI === SVG_NAMESPACE) {
-      if (parent.namespaceURI === HTML_NAMESPACE) {
-        return tagName === "svg";
-      }
-      if (parent.namespaceURI === MATHML_NAMESPACE) {
-        return tagName === "svg" && (parentTagName === "annotation-xml" || MATHML_TEXT_INTEGRATION_POINTS[parentTagName]);
-      }
-      return Boolean(ALL_SVG_TAGS[tagName]);
+      return _checkSvgNamespace(tagName, parent, parentTagName);
     }
     if (element.namespaceURI === MATHML_NAMESPACE) {
-      if (parent.namespaceURI === HTML_NAMESPACE) {
-        return tagName === "math";
-      }
-      if (parent.namespaceURI === SVG_NAMESPACE) {
-        return tagName === "math" && HTML_INTEGRATION_POINTS[parentTagName];
-      }
-      return Boolean(ALL_MATHML_TAGS[tagName]);
+      return _checkMathMlNamespace(tagName, parent, parentTagName);
     }
     if (element.namespaceURI === HTML_NAMESPACE) {
-      if (parent.namespaceURI === SVG_NAMESPACE && !HTML_INTEGRATION_POINTS[parentTagName]) {
-        return false;
-      }
-      if (parent.namespaceURI === MATHML_NAMESPACE && !MATHML_TEXT_INTEGRATION_POINTS[parentTagName]) {
-        return false;
-      }
-      return !ALL_MATHML_TAGS[tagName] && (COMMON_SVG_AND_HTML_ELEMENTS[tagName] || !ALL_SVG_TAGS[tagName]);
+      return _checkHtmlNamespace(tagName, parent, parentTagName);
     }
     if (PARSER_MEDIA_TYPE === "application/xhtml+xml" && ALLOWED_NAMESPACES[element.namespaceURI]) {
       return true;
@@ -633,6 +750,38 @@ function createDOMPurify() {
       getParentNode(node).removeChild(node);
     } catch (_) {
       remove(node);
+      if (!getParentNode(node)) {
+        throw typeErrorCreate("a node selected for removal could not be detached from its tree and cannot be safely returned; refusing to sanitize in place");
+      }
+    }
+  };
+  const _neutralizeRoot = function _neutralizeRoot2(root) {
+    _neutralizeSubtree(root);
+    const childNodes = getChildNodes(root);
+    if (childNodes) {
+      const snapshot = [];
+      arrayForEach(childNodes, (child) => {
+        arrayPush(snapshot, child);
+      });
+      arrayForEach(snapshot, (child) => {
+        try {
+          remove(child);
+        } catch (_) {
+        }
+      });
+    }
+    const attributes = getAttributes(root);
+    if (attributes) {
+      for (let i = attributes.length - 1; i >= 0; --i) {
+        const attribute = attributes[i];
+        const name = attribute && attribute.name;
+        if (typeof name === "string") {
+          try {
+            root.removeAttribute(name);
+          } catch (_) {
+          }
+        }
+      }
     }
   };
   const _removeAttribute = function _removeAttribute2(name, element) {
@@ -662,6 +811,75 @@ function createDOMPurify() {
       }
     }
   };
+  const _stripDisallowedAttributes = function _stripDisallowedAttributes2(element) {
+    const attributes = getAttributes(element);
+    if (!attributes) {
+      return;
+    }
+    for (let i = attributes.length - 1; i >= 0; --i) {
+      const attribute = attributes[i];
+      const name = attribute && attribute.name;
+      if (typeof name !== "string" || ALLOWED_ATTR[transformCaseFunc(name)]) {
+        continue;
+      }
+      try {
+        element.removeAttribute(name);
+      } catch (_) {
+      }
+    }
+  };
+  const _neutralizeSubtree = function _neutralizeSubtree2(root) {
+    const stack = [root];
+    while (stack.length > 0) {
+      const node = stack.pop();
+      const nodeType = getNodeType ? getNodeType(node) : node.nodeType;
+      if (nodeType === NODE_TYPE.element) {
+        _stripDisallowedAttributes(node);
+      }
+      const childNodes = getChildNodes(node);
+      if (childNodes) {
+        for (let i = childNodes.length - 1; i >= 0; --i) {
+          stack.push(childNodes[i]);
+        }
+      }
+    }
+  };
+  const _neutralizePatchLinkage = function _neutralizePatchLinkage2(root) {
+    if (!SAFE_FOR_XML) {
+      return;
+    }
+    const stack = [root];
+    while (stack.length > 0) {
+      const node = stack.pop();
+      const nodeType = getNodeType ? getNodeType(node) : node.nodeType;
+      if (nodeType === NODE_TYPE.processingInstruction || nodeType === NODE_TYPE.comment && regExpTest(COMMENT_MARKUP_PROBE, node.data)) {
+        try {
+          remove(node);
+        } catch (_) {
+        }
+        continue;
+      }
+      if (nodeType === NODE_TYPE.element) {
+        const element = node;
+        const lcTag = transformCaseFunc(getNodeName ? getNodeName(node) : node.nodeName);
+        try {
+          if (element.hasAttribute && element.hasAttribute("patchsrc")) {
+            element.removeAttribute("patchsrc");
+          }
+          if (element.hasAttribute && element.hasAttribute("for") && lcTag !== "label" && lcTag !== "output") {
+            element.removeAttribute("for");
+          }
+        } catch (_) {
+        }
+      }
+      const childNodes = getChildNodes(node);
+      if (childNodes) {
+        for (let i = childNodes.length - 1; i >= 0; --i) {
+          stack.push(childNodes[i]);
+        }
+      }
+    }
+  };
   const _initDocument = function _initDocument2(dirty) {
     let doc = null;
     let leadingWhitespace = null;
@@ -674,7 +892,7 @@ function createDOMPurify() {
     if (PARSER_MEDIA_TYPE === "application/xhtml+xml" && NAMESPACE === HTML_NAMESPACE) {
       dirty = '<html xmlns="http://www.w3.org/1999/xhtml"><head></head><body>' + dirty + "</body></html>";
     }
-    const dirtyPayload = trustedTypesPolicy ? trustedTypesPolicy.createHTML(dirty) : dirty;
+    const dirtyPayload = trustedTypesPolicy ? _createTrustedHTML(dirty) : dirty;
     if (NAMESPACE === HTML_NAMESPACE) {
       try {
         doc = new DOMParser2().parseFromString(dirtyPayload, PARSER_MEDIA_TYPE);
@@ -706,7 +924,14 @@ function createDOMPurify() {
       null
     );
   };
-  const _scrubTemplateExpressions = function _scrubTemplateExpressions2(node) {
+  const _stripTemplateExpressions = function _stripTemplateExpressions2(value) {
+    value = stringReplace(value, MUSTACHE_EXPR$1, " ");
+    value = stringReplace(value, ERB_EXPR$1, " ");
+    value = stringReplace(value, TMPLIT_EXPR$1, " ");
+    return value;
+  };
+  const _scrubTemplateExpressions2 = function _scrubTemplateExpressions(node) {
+    var _node$querySelectorAl;
     node.normalize();
     const walker = createNodeIterator.call(
       node.ownerDocument || node,
@@ -717,16 +942,60 @@ function createDOMPurify() {
     );
     let currentNode = walker.nextNode();
     while (currentNode) {
-      let data = currentNode.data;
-      arrayForEach([MUSTACHE_EXPR$1, ERB_EXPR$1, TMPLIT_EXPR$1], (expr) => {
-        data = stringReplace(data, expr, " ");
-      });
-      currentNode.data = data;
+      currentNode.data = _stripTemplateExpressions(currentNode.data);
       currentNode = walker.nextNode();
+    }
+    const templates = (_node$querySelectorAl = node.querySelectorAll) === null || _node$querySelectorAl === void 0 ? void 0 : _node$querySelectorAl.call(node, "template");
+    if (templates) {
+      arrayForEach(templates, (tmpl) => {
+        if (_isDocumentFragment(tmpl.content)) {
+          _scrubTemplateExpressions2(tmpl.content);
+        }
+      });
     }
   };
   const _isClobbered = function _isClobbered2(element) {
-    return element instanceof HTMLFormElement && (typeof element.nodeName !== "string" || typeof element.textContent !== "string" || typeof element.removeChild !== "function" || !(element.attributes instanceof NamedNodeMap) || typeof element.removeAttribute !== "function" || typeof element.setAttribute !== "function" || typeof element.namespaceURI !== "string" || typeof element.insertBefore !== "function" || typeof element.hasChildNodes !== "function");
+    const realTagName = getNodeName ? getNodeName(element) : null;
+    if (typeof realTagName !== "string") {
+      return false;
+    }
+    if (transformCaseFunc(realTagName) !== "form") {
+      return false;
+    }
+    return typeof element.nodeName !== "string" || typeof element.textContent !== "string" || typeof element.removeChild !== "function" || // Realm-safe NamedNodeMap detection: equality against the cached
+    // prototype getter. Clobbered .attributes (e.g. <input name="attributes">)
+    // makes the direct read diverge from the cached read; a clean form
+    // (same-realm OR foreign-realm) has both reads pointing at the same
+    // canonical NamedNodeMap.
+    element.attributes !== getAttributes(element) || typeof element.removeAttribute !== "function" || typeof element.setAttribute !== "function" || typeof element.namespaceURI !== "string" || typeof element.insertBefore !== "function" || typeof element.hasChildNodes !== "function" || // NodeType clobbering probe. Cached Node.prototype.nodeType getter
+    // returns the integer 1 for any Element regardless of realm; direct
+    // read on a clobbered form (e.g. <input name="nodeType">) returns
+    // the named child element. Cheap addition — nodeType is read from
+    // an internal slot, no serialization cost — and removes a residual
+    // clobbering surface used by several mXSS / PI / comment branches
+    // in _sanitizeElements that compare currentNode.nodeType directly.
+    element.nodeType !== getNodeType(element) || // HTMLFormElement has [LegacyOverrideBuiltIns]: a descendant named
+    // "childNodes" shadows the prototype getter. Direct reads of
+    // form.childNodes from a clobbered form return the named child
+    // instead of the real NodeList, so any walk that reads it directly
+    // skips the form's real children. Compare the direct read to the
+    // cached Node.prototype getter — when the form's named-property
+    // getter intercepts the read, the two values differ and we flag
+    // the form. This catches every clobbering child type (input,
+    // select, etc.) regardless of whether the named child happens to
+    // carry a numeric .length, which a typeof-based probe would miss
+    // (e.g. HTMLSelectElement.length is a defined unsigned-long).
+    element.childNodes !== getChildNodes(element);
+  };
+  const _isDocumentFragment = function _isDocumentFragment2(value) {
+    if (!getNodeType || typeof value !== "object" || value === null) {
+      return false;
+    }
+    try {
+      return getNodeType(value) === NODE_TYPE.documentFragment;
+    } catch (_) {
+      return false;
+    }
   };
   const _isNode = function _isNode2(value) {
     if (!getNodeType || typeof value !== "object" || value === null) {
@@ -739,74 +1008,90 @@ function createDOMPurify() {
     }
   };
   function _executeHooks(hooks2, currentNode, data) {
+    if (hooks2.length === 0) {
+      return;
+    }
     arrayForEach(hooks2, (hook) => {
       hook.call(DOMPurify, currentNode, data, CONFIG);
     });
   }
-  const _sanitizeElements = function _sanitizeElements2(currentNode) {
-    let content = null;
+  const _isUnsafeNode = function _isUnsafeNode2(currentNode, tagName) {
+    if (SAFE_FOR_XML && currentNode.hasChildNodes() && !_isNode(currentNode.firstElementChild) && regExpTest(ELEMENT_MARKUP_PROBE, currentNode.textContent) && regExpTest(ELEMENT_MARKUP_PROBE, currentNode.innerHTML)) {
+      return true;
+    }
+    if (SAFE_FOR_XML && currentNode.namespaceURI === HTML_NAMESPACE && tagName === "style" && _isNode(currentNode.firstElementChild)) {
+      return true;
+    }
+    if (currentNode.nodeType === NODE_TYPE.processingInstruction) {
+      return true;
+    }
+    if (SAFE_FOR_XML && currentNode.nodeType === NODE_TYPE.comment && regExpTest(COMMENT_MARKUP_PROBE, currentNode.data)) {
+      return true;
+    }
+    return false;
+  };
+  const _sanitizeDisallowedNode = function _sanitizeDisallowedNode2(currentNode, tagName) {
+    if (!FORBID_TAGS[tagName] && _isBasicCustomElement(tagName)) {
+      if (CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof RegExp && regExpTest(CUSTOM_ELEMENT_HANDLING.tagNameCheck, tagName)) {
+        return false;
+      }
+      if (CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof Function && CUSTOM_ELEMENT_HANDLING.tagNameCheck(tagName)) {
+        return false;
+      }
+    }
+    if (KEEP_CONTENT && !FORBID_CONTENTS[tagName]) {
+      const parentNode = getParentNode(currentNode);
+      const childNodes = getChildNodes(currentNode);
+      if (childNodes && parentNode) {
+        const childCount = childNodes.length;
+        for (let i = childCount - 1; i >= 0; --i) {
+          const hoisted = IN_PLACE ? childNodes[i] : cloneNode(childNodes[i], true);
+          parentNode.insertBefore(hoisted, getNextSibling(currentNode));
+        }
+      }
+    }
+    _forceRemove(currentNode);
+    return true;
+  };
+  const _sanitizeElements = function _sanitizeElements2(currentNode, root) {
     _executeHooks(hooks.beforeSanitizeElements, currentNode, null);
+    if (currentNode !== root && getParentNode(currentNode) === null) {
+      return true;
+    }
     if (_isClobbered(currentNode)) {
       _forceRemove(currentNode);
       return true;
     }
-    const tagName = transformCaseFunc(currentNode.nodeName);
+    const tagName = transformCaseFunc(getNodeName ? getNodeName(currentNode) : currentNode.nodeName);
     _executeHooks(hooks.uponSanitizeElement, currentNode, {
       tagName,
       allowedTags: ALLOWED_TAGS
     });
-    if (SAFE_FOR_XML && currentNode.hasChildNodes() && !_isNode(currentNode.firstElementChild) && regExpTest(/<[/\w!]/g, currentNode.innerHTML) && regExpTest(/<[/\w!]/g, currentNode.textContent)) {
-      _forceRemove(currentNode);
+    if (currentNode !== root && getParentNode(currentNode) === null) {
       return true;
     }
-    if (SAFE_FOR_XML && currentNode.namespaceURI === HTML_NAMESPACE && tagName === "style" && _isNode(currentNode.firstElementChild)) {
-      _forceRemove(currentNode);
-      return true;
-    }
-    if (currentNode.nodeType === NODE_TYPE.progressingInstruction) {
-      _forceRemove(currentNode);
-      return true;
-    }
-    if (SAFE_FOR_XML && currentNode.nodeType === NODE_TYPE.comment && regExpTest(/<[/\w]/g, currentNode.data)) {
+    if (_isUnsafeNode(currentNode, tagName)) {
       _forceRemove(currentNode);
       return true;
     }
     if (FORBID_TAGS[tagName] || !(EXTRA_ELEMENT_HANDLING.tagCheck instanceof Function && EXTRA_ELEMENT_HANDLING.tagCheck(tagName)) && !ALLOWED_TAGS[tagName]) {
-      if (!FORBID_TAGS[tagName] && _isBasicCustomElement(tagName)) {
-        if (CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof RegExp && regExpTest(CUSTOM_ELEMENT_HANDLING.tagNameCheck, tagName)) {
-          return false;
-        }
-        if (CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof Function && CUSTOM_ELEMENT_HANDLING.tagNameCheck(tagName)) {
-          return false;
-        }
+      const removed2 = _sanitizeDisallowedNode(currentNode, tagName);
+      if (removed2 === false) {
+        _executeHooks(hooks.afterSanitizeElements, currentNode, null);
       }
-      if (KEEP_CONTENT && !FORBID_CONTENTS[tagName]) {
-        const parentNode = getParentNode(currentNode) || currentNode.parentNode;
-        const childNodes = getChildNodes(currentNode) || currentNode.childNodes;
-        if (childNodes && parentNode) {
-          const childCount = childNodes.length;
-          for (let i = childCount - 1; i >= 0; --i) {
-            const childClone = cloneNode(childNodes[i], true);
-            parentNode.insertBefore(childClone, getNextSibling(currentNode));
-          }
-        }
-      }
+      return removed2;
+    }
+    const nt = getNodeType ? getNodeType(currentNode) : currentNode.nodeType;
+    if (nt === NODE_TYPE.element && !_checkValidNamespace(currentNode)) {
       _forceRemove(currentNode);
       return true;
     }
-    if (currentNode instanceof Element && !_checkValidNamespace(currentNode)) {
-      _forceRemove(currentNode);
-      return true;
-    }
-    if ((tagName === "noscript" || tagName === "noembed" || tagName === "noframes") && regExpTest(/<\/no(script|embed|frames)/i, currentNode.innerHTML)) {
+    if ((tagName === "noscript" || tagName === "noembed" || tagName === "noframes") && regExpTest(FALLBACK_TAG_CLOSE, currentNode.innerHTML)) {
       _forceRemove(currentNode);
       return true;
     }
     if (SAFE_FOR_TEMPLATES && currentNode.nodeType === NODE_TYPE.text) {
-      content = currentNode.textContent;
-      arrayForEach([MUSTACHE_EXPR$1, ERB_EXPR$1, TMPLIT_EXPR$1], (expr) => {
-        content = stringReplace(content, expr, " ");
-      });
+      const content = _stripTemplateExpressions(currentNode.textContent);
       if (currentNode.textContent !== content) {
         arrayPush(DOMPurify.removed, {
           element: currentNode.cloneNode()
@@ -821,13 +1106,19 @@ function createDOMPurify() {
     if (FORBID_ATTR[lcName]) {
       return false;
     }
+    if (SAFE_FOR_XML && lcName === "patchsrc") {
+      return false;
+    }
+    if (SAFE_FOR_XML && lcName === "for" && lcTag !== "label" && lcTag !== "output") {
+      return false;
+    }
     if (SANITIZE_DOM && (lcName === "id" || lcName === "name") && (value in document2 || value in formElement)) {
       return false;
     }
     const nameIsPermitted = ALLOWED_ATTR[lcName] || EXTRA_ELEMENT_HANDLING.attributeCheck instanceof Function && EXTRA_ELEMENT_HANDLING.attributeCheck(lcName, lcTag);
-    if (ALLOW_DATA_ATTR && !FORBID_ATTR[lcName] && regExpTest(DATA_ATTR$1, lcName)) ;
+    if (ALLOW_DATA_ATTR && regExpTest(DATA_ATTR$1, lcName)) ;
     else if (ALLOW_ARIA_ATTR && regExpTest(ARIA_ATTR$1, lcName)) ;
-    else if (!nameIsPermitted || FORBID_ATTR[lcName]) {
+    else if (!nameIsPermitted) {
       if (
         // First condition does a very basic check if a) it's basically a valid custom element tagname AND
         // b) if the tagName passes whatever the user has configured for CUSTOM_ELEMENT_HANDLING.tagNameCheck
@@ -852,6 +1143,35 @@ function createDOMPurify() {
   const _isBasicCustomElement = function _isBasicCustomElement2(tagName) {
     return !RESERVED_CUSTOM_ELEMENT_NAMES[stringToLowerCase(tagName)] && regExpTest(CUSTOM_ELEMENT$1, tagName);
   };
+  const _applyTrustedTypesToAttribute = function _applyTrustedTypesToAttribute2(lcTag, lcName, namespaceURI, value) {
+    if (trustedTypesPolicy && typeof trustedTypes === "object" && typeof trustedTypes.getAttributeType === "function" && !namespaceURI) {
+      switch (trustedTypes.getAttributeType(lcTag, lcName)) {
+        case "TrustedHTML": {
+          return _createTrustedHTML(value);
+        }
+        case "TrustedScriptURL": {
+          return _createTrustedScriptURL(value);
+        }
+      }
+    }
+    return value;
+  };
+  const _setAttributeValue = function _setAttributeValue2(currentNode, name, namespaceURI, value) {
+    try {
+      if (namespaceURI) {
+        currentNode.setAttributeNS(namespaceURI, name, value);
+      } else {
+        currentNode.setAttribute(name, value);
+      }
+      if (_isClobbered(currentNode)) {
+        _forceRemove(currentNode);
+      } else {
+        arrayPop(DOMPurify.removed);
+      }
+    } catch (_) {
+      _removeAttribute(name, currentNode);
+    }
+  };
   const _sanitizeAttributes = function _sanitizeAttributes2(currentNode) {
     _executeHooks(hooks.beforeSanitizeAttributes, currentNode, null);
     const attributes = currentNode.attributes;
@@ -866,6 +1186,7 @@ function createDOMPurify() {
       forceKeepAttr: void 0
     };
     let l = attributes.length;
+    const lcTag = transformCaseFunc(currentNode.nodeName);
     while (l--) {
       const attr = attributes[l];
       const name = attr.name, namespaceURI = attr.namespaceURI, attrValue = attr.value;
@@ -897,50 +1218,20 @@ function createDOMPurify() {
         _removeAttribute(name, currentNode);
         continue;
       }
-      if (!ALLOW_SELF_CLOSE_IN_ATTR && regExpTest(/\/>/i, value)) {
+      if (!ALLOW_SELF_CLOSE_IN_ATTR && regExpTest(SELF_CLOSING_TAG, value)) {
         _removeAttribute(name, currentNode);
         continue;
       }
       if (SAFE_FOR_TEMPLATES) {
-        arrayForEach([MUSTACHE_EXPR$1, ERB_EXPR$1, TMPLIT_EXPR$1], (expr) => {
-          value = stringReplace(value, expr, " ");
-        });
+        value = _stripTemplateExpressions(value);
       }
-      const lcTag = transformCaseFunc(currentNode.nodeName);
       if (!_isValidAttribute(lcTag, lcName, value)) {
         _removeAttribute(name, currentNode);
         continue;
       }
-      if (trustedTypesPolicy && typeof trustedTypes === "object" && typeof trustedTypes.getAttributeType === "function") {
-        if (namespaceURI) ;
-        else {
-          switch (trustedTypes.getAttributeType(lcTag, lcName)) {
-            case "TrustedHTML": {
-              value = trustedTypesPolicy.createHTML(value);
-              break;
-            }
-            case "TrustedScriptURL": {
-              value = trustedTypesPolicy.createScriptURL(value);
-              break;
-            }
-          }
-        }
-      }
+      value = _applyTrustedTypesToAttribute(lcTag, lcName, namespaceURI, value);
       if (value !== initValue) {
-        try {
-          if (namespaceURI) {
-            currentNode.setAttributeNS(namespaceURI, name, value);
-          } else {
-            currentNode.setAttribute(name, value);
-          }
-          if (_isClobbered(currentNode)) {
-            _forceRemove(currentNode);
-          } else {
-            arrayPop(DOMPurify.removed);
-          }
-        } catch (_) {
-          _removeAttribute(name, currentNode);
-        }
+        _setAttributeValue(currentNode, name, namespaceURI, value);
       }
     }
     _executeHooks(hooks.afterSanitizeAttributes, currentNode, null);
@@ -951,30 +1242,69 @@ function createDOMPurify() {
     _executeHooks(hooks.beforeSanitizeShadowDOM, fragment, null);
     while (shadowNode = shadowIterator.nextNode()) {
       _executeHooks(hooks.uponSanitizeShadowNode, shadowNode, null);
-      _sanitizeElements(shadowNode);
+      _sanitizeElements(shadowNode, fragment);
       _sanitizeAttributes(shadowNode);
-      if (shadowNode.content instanceof DocumentFragment) {
+      if (_isDocumentFragment(shadowNode.content)) {
         _sanitizeShadowDOM2(shadowNode.content);
+      }
+      const shadowNodeType = getNodeType ? getNodeType(shadowNode) : shadowNode.nodeType;
+      if (shadowNodeType === NODE_TYPE.element) {
+        const innerSr = getShadowRoot(shadowNode);
+        if (_isDocumentFragment(innerSr)) {
+          _sanitizeAttachedShadowRoots(innerSr);
+          _sanitizeShadowDOM2(innerSr);
+        }
       }
     }
     _executeHooks(hooks.afterSanitizeShadowDOM, fragment, null);
   };
-  const _sanitizeAttachedShadowRoots2 = function _sanitizeAttachedShadowRoots(root) {
-    if (root.nodeType === NODE_TYPE.element && root.shadowRoot instanceof DocumentFragment) {
-      const sr = root.shadowRoot;
-      _sanitizeAttachedShadowRoots2(sr);
-      _sanitizeShadowDOM2(sr);
-    }
-    const childNodes = root.childNodes;
-    if (!childNodes) {
-      return;
-    }
-    const snapshot = [];
-    arrayForEach(childNodes, (child) => {
-      arrayPush(snapshot, child);
-    });
-    for (const child of snapshot) {
-      _sanitizeAttachedShadowRoots2(child);
+  const _sanitizeAttachedShadowRoots = function _sanitizeAttachedShadowRoots2(root) {
+    const stack = [{
+      node: root,
+      shadow: null
+    }];
+    while (stack.length > 0) {
+      const item = stack.pop();
+      if (item.shadow) {
+        _sanitizeShadowDOM2(item.shadow);
+        continue;
+      }
+      const node = item.node;
+      const nodeType = getNodeType ? getNodeType(node) : node.nodeType;
+      const isElement = nodeType === NODE_TYPE.element;
+      const childNodes = getChildNodes(node);
+      if (childNodes) {
+        for (let i = childNodes.length - 1; i >= 0; --i) {
+          stack.push({
+            node: childNodes[i],
+            shadow: null
+          });
+        }
+      }
+      if (isElement) {
+        const rootName = getNodeName ? getNodeName(node) : null;
+        if (typeof rootName === "string" && transformCaseFunc(rootName) === "template") {
+          const content = node.content;
+          if (_isDocumentFragment(content)) {
+            stack.push({
+              node: content,
+              shadow: null
+            });
+          }
+        }
+      }
+      if (isElement) {
+        const sr = getShadowRoot(node);
+        if (_isDocumentFragment(sr)) {
+          stack.push({
+            node: null,
+            shadow: sr
+          }, {
+            node: sr,
+            shadow: null
+          });
+        }
+      }
     }
   };
   DOMPurify.sanitize = function(dirty) {
@@ -996,22 +1326,40 @@ function createDOMPurify() {
     if (!DOMPurify.isSupported) {
       return dirty;
     }
-    if (!SET_CONFIG) {
+    if (SET_CONFIG) {
+      ALLOWED_TAGS = SET_CONFIG_ALLOWED_TAGS;
+      ALLOWED_ATTR = SET_CONFIG_ALLOWED_ATTR;
+    } else {
       _parseConfig(cfg);
     }
-    DOMPurify.removed = [];
-    if (typeof dirty === "string") {
-      IN_PLACE = false;
+    if (hooks.uponSanitizeElement.length > 0 || hooks.uponSanitizeAttribute.length > 0) {
+      ALLOWED_TAGS = clone(ALLOWED_TAGS);
     }
-    if (IN_PLACE) {
-      const nn = dirty.nodeName;
+    if (hooks.uponSanitizeAttribute.length > 0) {
+      ALLOWED_ATTR = clone(ALLOWED_ATTR);
+    }
+    DOMPurify.removed = [];
+    const inPlace = IN_PLACE && typeof dirty !== "string" && _isNode(dirty);
+    if (inPlace) {
+      _neutralizePatchLinkage(dirty);
+      const nn = getNodeName ? getNodeName(dirty) : dirty.nodeName;
       if (typeof nn === "string") {
         const tagName = transformCaseFunc(nn);
         if (!ALLOWED_TAGS[tagName] || FORBID_TAGS[tagName]) {
+          _neutralizeRoot(dirty);
           throw typeErrorCreate("root node is forbidden and cannot be sanitized in-place");
         }
       }
-      _sanitizeAttachedShadowRoots2(dirty);
+      if (_isClobbered(dirty)) {
+        _neutralizeRoot(dirty);
+        throw typeErrorCreate("root node is clobbered and cannot be sanitized in-place");
+      }
+      try {
+        _sanitizeAttachedShadowRoots(dirty);
+      } catch (error) {
+        _neutralizeRoot(dirty);
+        throw error;
+      }
     } else if (_isNode(dirty)) {
       body = _initDocument("<!---->");
       importedNode = body.ownerDocument.importNode(dirty, true);
@@ -1022,11 +1370,11 @@ function createDOMPurify() {
       } else {
         body.appendChild(importedNode);
       }
-      _sanitizeAttachedShadowRoots2(importedNode);
+      _sanitizeAttachedShadowRoots(importedNode);
     } else {
       if (!RETURN_DOM && !SAFE_FOR_TEMPLATES && !WHOLE_DOCUMENT && // eslint-disable-next-line unicorn/prefer-includes
       dirty.indexOf("<") === -1) {
-        return trustedTypesPolicy && RETURN_TRUSTED_TYPE ? trustedTypesPolicy.createHTML(dirty) : dirty;
+        return trustedTypesPolicy && RETURN_TRUSTED_TYPE ? _createTrustedHTML(dirty) : dirty;
       }
       body = _initDocument(dirty);
       if (!body) {
@@ -1036,23 +1384,41 @@ function createDOMPurify() {
     if (body && FORCE_BODY) {
       _forceRemove(body.firstChild);
     }
-    const nodeIterator = _createNodeIterator(IN_PLACE ? dirty : body);
-    while (currentNode = nodeIterator.nextNode()) {
-      _sanitizeElements(currentNode);
-      _sanitizeAttributes(currentNode);
-      if (currentNode.content instanceof DocumentFragment) {
-        _sanitizeShadowDOM2(currentNode.content);
+    const walkRoot = inPlace ? dirty : body;
+    const nodeIterator = _createNodeIterator(walkRoot);
+    try {
+      while (currentNode = nodeIterator.nextNode()) {
+        _sanitizeElements(currentNode, walkRoot);
+        _sanitizeAttributes(currentNode);
+        if (_isDocumentFragment(currentNode.content)) {
+          _sanitizeShadowDOM2(currentNode.content);
+        }
       }
+    } catch (error) {
+      if (inPlace) {
+        _neutralizeRoot(dirty);
+        arrayForEach(DOMPurify.removed, (entry) => {
+          if (entry.element) {
+            _neutralizeSubtree(entry.element);
+          }
+        });
+      }
+      throw error;
     }
-    if (IN_PLACE) {
+    if (inPlace) {
+      arrayForEach(DOMPurify.removed, (entry) => {
+        if (entry.element) {
+          _neutralizeSubtree(entry.element);
+        }
+      });
       if (SAFE_FOR_TEMPLATES) {
-        _scrubTemplateExpressions(dirty);
+        _scrubTemplateExpressions2(dirty);
       }
       return dirty;
     }
     if (RETURN_DOM) {
       if (SAFE_FOR_TEMPLATES) {
-        _scrubTemplateExpressions(body);
+        _scrubTemplateExpressions2(body);
       }
       if (RETURN_DOM_FRAGMENT) {
         returnNode = createDocumentFragment.call(body.ownerDocument);
@@ -1072,20 +1438,24 @@ function createDOMPurify() {
       serializedHTML = "<!DOCTYPE " + body.ownerDocument.doctype.name + ">\n" + serializedHTML;
     }
     if (SAFE_FOR_TEMPLATES) {
-      arrayForEach([MUSTACHE_EXPR$1, ERB_EXPR$1, TMPLIT_EXPR$1], (expr) => {
-        serializedHTML = stringReplace(serializedHTML, expr, " ");
-      });
+      serializedHTML = _stripTemplateExpressions(serializedHTML);
     }
-    return trustedTypesPolicy && RETURN_TRUSTED_TYPE ? trustedTypesPolicy.createHTML(serializedHTML) : serializedHTML;
+    return trustedTypesPolicy && RETURN_TRUSTED_TYPE ? _createTrustedHTML(serializedHTML) : serializedHTML;
   };
   DOMPurify.setConfig = function() {
     let cfg = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : {};
     _parseConfig(cfg);
     SET_CONFIG = true;
+    SET_CONFIG_ALLOWED_TAGS = ALLOWED_TAGS;
+    SET_CONFIG_ALLOWED_ATTR = ALLOWED_ATTR;
   };
   DOMPurify.clearConfig = function() {
     CONFIG = null;
     SET_CONFIG = false;
+    SET_CONFIG_ALLOWED_TAGS = null;
+    SET_CONFIG_ALLOWED_ATTR = null;
+    trustedTypesPolicy = defaultTrustedTypesPolicy;
+    emptyHTML = "";
   };
   DOMPurify.isValidAttribute = function(tag, attr, value) {
     if (!CONFIG) {
@@ -1099,9 +1469,15 @@ function createDOMPurify() {
     if (typeof hookFunction !== "function") {
       return;
     }
+    if (!objectHasOwnProperty(hooks, entryPoint)) {
+      return;
+    }
     arrayPush(hooks[entryPoint], hookFunction);
   };
   DOMPurify.removeHook = function(entryPoint, hookFunction) {
+    if (!objectHasOwnProperty(hooks, entryPoint)) {
+      return void 0;
+    }
     if (hookFunction !== void 0) {
       const index = arrayLastIndexOf(hooks[entryPoint], hookFunction);
       return index === -1 ? void 0 : arraySplice(hooks[entryPoint], index, 1)[0];
@@ -1109,6 +1485,9 @@ function createDOMPurify() {
     return arrayPop(hooks[entryPoint]);
   };
   DOMPurify.removeHooks = function(entryPoint) {
+    if (!objectHasOwnProperty(hooks, entryPoint)) {
+      return;
+    }
     hooks[entryPoint] = [];
   };
   DOMPurify.removeAllHooks = function() {
@@ -1116,7 +1495,7 @@ function createDOMPurify() {
   };
   return DOMPurify;
 }
-var entries, setPrototypeOf, isFrozen, getPrototypeOf, getOwnPropertyDescriptor, freeze, seal, create, _ref, apply, construct, arrayForEach, arrayLastIndexOf, arrayPop, arrayPush, arraySplice, arrayIsArray, stringToLowerCase, stringToString, stringMatch, stringReplace, stringIndexOf, stringTrim, numberToString, booleanToString, bigintToString, symbolToString, objectHasOwnProperty, objectToString, regExpTest, typeErrorCreate, html$1, svg$1, svgFilters, svgDisallowed, mathMl$1, mathMlDisallowed, text, html, svg, mathMl, xml, MUSTACHE_EXPR, ERB_EXPR, TMPLIT_EXPR, DATA_ATTR, ARIA_ATTR, IS_ALLOWED_URI, IS_SCRIPT_OR_DATA, ATTR_WHITESPACE, DOCTYPE_NAME, CUSTOM_ELEMENT, NODE_TYPE, getGlobal, _createTrustedTypesPolicy, _createHooksMap, purify;
+var entries, setPrototypeOf, isFrozen, getPrototypeOf, getOwnPropertyDescriptor, freeze, seal, create, _ref, apply, construct, arrayForEach, arrayLastIndexOf, arrayPop, arrayPush, arraySplice, arrayIsArray, stringToLowerCase, stringToString, stringMatch, stringReplace, stringIndexOf, stringTrim, numberToString, booleanToString, bigintToString, symbolToString, objectHasOwnProperty, objectToString, regExpTest, typeErrorCreate, html$1, svg$1, svgFilters, svgDisallowed, mathMl$1, mathMlDisallowed, text, html, svg, mathMl, xml, MUSTACHE_EXPR, ERB_EXPR, TMPLIT_EXPR, DATA_ATTR, ARIA_ATTR, IS_ALLOWED_URI, IS_SCRIPT_OR_DATA, ATTR_WHITESPACE, DOCTYPE_NAME, CUSTOM_ELEMENT, ELEMENT_MARKUP_PROBE, COMMENT_MARKUP_PROBE, FALLBACK_TAG_CLOSE, SELF_CLOSING_TAG, NODE_TYPE, getGlobal, _createTrustedTypesPolicy, _createHooksMap, _resolveSetOption, purify;
 var init_purify_es = __esm({
   "node_modules/dompurify/dist/purify.es.mjs"() {
     entries = Object.entries;
@@ -1184,7 +1563,7 @@ var init_purify_es = __esm({
     mathMlDisallowed = freeze(["maction", "maligngroup", "malignmark", "mlongdiv", "mscarries", "mscarry", "msgroup", "mstack", "msline", "msrow", "semantics", "annotation", "annotation-xml", "mprescripts", "none"]);
     text = freeze(["#text"]);
     html = freeze(["accept", "action", "align", "alt", "autocapitalize", "autocomplete", "autopictureinpicture", "autoplay", "background", "bgcolor", "border", "capture", "cellpadding", "cellspacing", "checked", "cite", "class", "clear", "color", "cols", "colspan", "command", "commandfor", "controls", "controlslist", "coords", "crossorigin", "datetime", "decoding", "default", "dir", "disabled", "disablepictureinpicture", "disableremoteplayback", "download", "draggable", "enctype", "enterkeyhint", "exportparts", "face", "for", "headers", "height", "hidden", "high", "href", "hreflang", "id", "inert", "inputmode", "integrity", "ismap", "kind", "label", "lang", "list", "loading", "loop", "low", "max", "maxlength", "media", "method", "min", "minlength", "multiple", "muted", "name", "nonce", "noshade", "novalidate", "nowrap", "open", "optimum", "part", "pattern", "placeholder", "playsinline", "popover", "popovertarget", "popovertargetaction", "poster", "preload", "pubdate", "radiogroup", "readonly", "rel", "required", "rev", "reversed", "role", "rows", "rowspan", "spellcheck", "scope", "selected", "shape", "size", "sizes", "slot", "span", "srclang", "start", "src", "srcset", "step", "style", "summary", "tabindex", "title", "translate", "type", "usemap", "valign", "value", "width", "wrap", "xmlns"]);
-    svg = freeze(["accent-height", "accumulate", "additive", "alignment-baseline", "amplitude", "ascent", "attributename", "attributetype", "azimuth", "basefrequency", "baseline-shift", "begin", "bias", "by", "class", "clip", "clippathunits", "clip-path", "clip-rule", "color", "color-interpolation", "color-interpolation-filters", "color-profile", "color-rendering", "cx", "cy", "d", "dx", "dy", "diffuseconstant", "direction", "display", "divisor", "dur", "edgemode", "elevation", "end", "exponent", "fill", "fill-opacity", "fill-rule", "filter", "filterunits", "flood-color", "flood-opacity", "font-family", "font-size", "font-size-adjust", "font-stretch", "font-style", "font-variant", "font-weight", "fx", "fy", "g1", "g2", "glyph-name", "glyphref", "gradientunits", "gradienttransform", "height", "href", "id", "image-rendering", "in", "in2", "intercept", "k", "k1", "k2", "k3", "k4", "kerning", "keypoints", "keysplines", "keytimes", "lang", "lengthadjust", "letter-spacing", "kernelmatrix", "kernelunitlength", "lighting-color", "local", "marker-end", "marker-mid", "marker-start", "markerheight", "markerunits", "markerwidth", "maskcontentunits", "maskunits", "max", "mask", "mask-type", "media", "method", "mode", "min", "name", "numoctaves", "offset", "operator", "opacity", "order", "orient", "orientation", "origin", "overflow", "paint-order", "path", "pathlength", "patterncontentunits", "patterntransform", "patternunits", "points", "preservealpha", "preserveaspectratio", "primitiveunits", "r", "rx", "ry", "radius", "refx", "refy", "repeatcount", "repeatdur", "restart", "result", "rotate", "scale", "seed", "shape-rendering", "slope", "specularconstant", "specularexponent", "spreadmethod", "startoffset", "stddeviation", "stitchtiles", "stop-color", "stop-opacity", "stroke-dasharray", "stroke-dashoffset", "stroke-linecap", "stroke-linejoin", "stroke-miterlimit", "stroke-opacity", "stroke", "stroke-width", "style", "surfacescale", "systemlanguage", "tabindex", "tablevalues", "targetx", "targety", "transform", "transform-origin", "text-anchor", "text-decoration", "text-rendering", "textlength", "type", "u1", "u2", "unicode", "values", "viewbox", "visibility", "version", "vert-adv-y", "vert-origin-x", "vert-origin-y", "width", "word-spacing", "wrap", "writing-mode", "xchannelselector", "ychannelselector", "x", "x1", "x2", "xmlns", "y", "y1", "y2", "z", "zoomandpan"]);
+    svg = freeze(["accent-height", "accumulate", "additive", "alignment-baseline", "amplitude", "ascent", "attributename", "attributetype", "azimuth", "basefrequency", "baseline-shift", "begin", "bias", "by", "class", "clip", "clippathunits", "clip-path", "clip-rule", "color", "color-interpolation", "color-interpolation-filters", "color-profile", "color-rendering", "cx", "cy", "d", "dx", "dy", "diffuseconstant", "direction", "display", "divisor", "dominant-baseline", "dur", "edgemode", "elevation", "end", "exponent", "fill", "fill-opacity", "fill-rule", "filter", "filterunits", "flood-color", "flood-opacity", "font-family", "font-size", "font-size-adjust", "font-stretch", "font-style", "font-variant", "font-weight", "fx", "fy", "g1", "g2", "glyph-name", "glyphref", "gradientunits", "gradienttransform", "height", "href", "id", "image-rendering", "in", "in2", "intercept", "k", "k1", "k2", "k3", "k4", "kerning", "keypoints", "keysplines", "keytimes", "lang", "lengthadjust", "letter-spacing", "kernelmatrix", "kernelunitlength", "lighting-color", "local", "marker-end", "marker-mid", "marker-start", "markerheight", "markerunits", "markerwidth", "maskcontentunits", "maskunits", "max", "mask", "mask-type", "media", "method", "mode", "min", "name", "numoctaves", "offset", "operator", "opacity", "order", "orient", "orientation", "origin", "overflow", "paint-order", "path", "pathlength", "patterncontentunits", "patterntransform", "patternunits", "points", "preservealpha", "preserveaspectratio", "primitiveunits", "r", "rx", "ry", "radius", "refx", "refy", "repeatcount", "repeatdur", "restart", "result", "rotate", "scale", "seed", "shape-rendering", "slope", "specularconstant", "specularexponent", "spreadmethod", "startoffset", "stddeviation", "stitchtiles", "stop-color", "stop-opacity", "stroke-dasharray", "stroke-dashoffset", "stroke-linecap", "stroke-linejoin", "stroke-miterlimit", "stroke-opacity", "stroke", "stroke-width", "style", "surfacescale", "systemlanguage", "tabindex", "tablevalues", "targetx", "targety", "transform", "transform-origin", "text-anchor", "text-decoration", "text-orientation", "text-rendering", "textlength", "type", "u1", "u2", "unicode", "values", "viewbox", "visibility", "version", "vert-adv-y", "vert-origin-x", "vert-origin-y", "width", "word-spacing", "wrap", "writing-mode", "xchannelselector", "ychannelselector", "x", "x1", "x2", "xmlns", "y", "y1", "y2", "z", "zoomandpan"]);
     mathMl = freeze(["accent", "accentunder", "align", "bevelled", "close", "columnalign", "columnlines", "columnspacing", "columnspan", "denomalign", "depth", "dir", "display", "displaystyle", "encoding", "fence", "frame", "height", "href", "id", "largeop", "length", "linethickness", "lquote", "lspace", "mathbackground", "mathcolor", "mathsize", "mathvariant", "maxsize", "minsize", "movablelimits", "notation", "numalign", "open", "rowalign", "rowlines", "rowspacing", "rowspan", "rspace", "rquote", "scriptlevel", "scriptminsize", "scriptsizemultiplier", "selection", "separator", "separators", "stretchy", "subscriptshift", "supscriptshift", "symmetric", "voffset", "width", "xmlns"]);
     xml = freeze(["xlink:href", "xml:id", "xlink:title", "xml:space", "xmlns:xlink"]);
     MUSTACHE_EXPR = seal(/{{[\w\W]*|^[\w\W]*}}/g);
@@ -1203,13 +1582,26 @@ var init_purify_es = __esm({
     );
     DOCTYPE_NAME = seal(/^html$/i);
     CUSTOM_ELEMENT = seal(/^[a-z][.\w]*(-[.\w]+)+$/i);
+    ELEMENT_MARKUP_PROBE = seal(/<[/\w!]/g);
+    COMMENT_MARKUP_PROBE = seal(/<[/\w]/g);
+    FALLBACK_TAG_CLOSE = seal(/<\/no(script|embed|frames)/i);
+    SELF_CLOSING_TAG = seal(/\/>/i);
     NODE_TYPE = {
       element: 1,
+      attribute: 2,
       text: 3,
+      cdataSection: 4,
+      entityReference: 5,
       // Deprecated
-      progressingInstruction: 7,
+      entityNode: 6,
+      // Deprecated
+      processingInstruction: 7,
       comment: 8,
-      document: 9
+      document: 9,
+      documentType: 10,
+      documentFragment: 11,
+      notation: 12
+      // Deprecated
     };
     getGlobal = function getGlobal2() {
       return typeof window === "undefined" ? null : window;
@@ -1250,6 +1642,9 @@ var init_purify_es = __esm({
         uponSanitizeElement: [],
         uponSanitizeShadowNode: []
       };
+    };
+    _resolveSetOption = function _resolveSetOption2(cfg, key, fallback, options) {
+      return objectHasOwnProperty(cfg, key) && arrayIsArray(cfg[key]) ? addToSet(options.base ? clone(options.base) : {}, cfg[key], options.transform) : fallback;
     };
     purify = createDOMPurify();
   }
@@ -1540,7 +1935,6 @@ var init_velin_modal = __esm({
         this._previouslyFocused = saveFocus();
         setBackgroundInert(this);
         document.addEventListener("keydown", this._onKeydown);
-        document.body.style.overflow = "hidden";
         requestAnimationFrame(() => {
           const focusable = getFocusableElements(this.shadowRoot);
           if (focusable.length > 0) focusable[0].focus();
@@ -1548,8 +1942,7 @@ var init_velin_modal = __esm({
       }
       _close() {
         document.removeEventListener("keydown", this._onKeydown);
-        document.body.style.overflow = "";
-        clearBackgroundInert();
+        clearBackgroundInert(this);
         restoreFocus(this._previouslyFocused);
       }
       _onKeydown(event) {
@@ -1561,7 +1954,7 @@ var init_velin_modal = __esm({
       }
       disconnectedCallback() {
         document.removeEventListener("keydown", this._onKeydown);
-        document.body.style.overflow = "";
+        clearBackgroundInert(this);
       }
     };
     customElements.define("velin-modal", VelinModal);
@@ -1750,26 +2143,36 @@ var velin_accordion_exports = {};
 __export(velin_accordion_exports, {
   default: () => velin_accordion_default
 });
-var styles3, VelinAccordion, velin_accordion_default;
+function ensureLightStyles() {
+  if (typeof document === "undefined") return;
+  if (document.getElementById(LIGHT_STYLE_ID)) return;
+  const style = document.createElement("style");
+  style.id = LIGHT_STYLE_ID;
+  style.textContent = lightStyles;
+  document.head.appendChild(style);
+}
+var LIGHT_STYLE_ID, lightStyles, shadowStyles, VelinAccordion, velin_accordion_default;
 var init_velin_accordion = __esm({
   "components/velin-accordion.js"() {
-    styles3 = `
-  :host {
+    LIGHT_STYLE_ID = "velin-accordion-light-css";
+    lightStyles = `
+  velin-accordion {
     display: block;
     border: 1px solid var(--velin-color-border, #ddd);
     border-radius: var(--velin-radius-md, 0.5rem);
     overflow: hidden;
   }
-  ::slotted(details) {
+  velin-accordion details {
     border-bottom: 1px solid var(--velin-color-border, #ddd);
   }
-  ::slotted(details:last-child) {
+  velin-accordion details:last-child {
     border-bottom: none;
   }
-  ::slotted(details > summary) {
+  velin-accordion details > summary {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: var(--velin-space-3, 0.75rem);
     padding: var(--velin-space-4, 1rem);
     min-block-size: 2.75rem;
     font-size: var(--velin-text-base, 1rem);
@@ -1778,20 +2181,38 @@ var init_velin_accordion = __esm({
     user-select: none;
     list-style: none;
   }
-  ::slotted(details > summary::-webkit-details-marker) {
+  velin-accordion details > summary::-webkit-details-marker {
     display: none;
   }
-  ::slotted(details[open] > summary) {
+  velin-accordion details > summary::after {
+    content: "";
+    flex-shrink: 0;
+    inline-size: 0.5rem;
+    block-size: 0.5rem;
+    border-inline-end: 2px solid currentColor;
+    border-block-end: 2px solid currentColor;
+    transform: rotate(45deg);
+    transition: transform 150ms ease;
+  }
+  velin-accordion details[open] > summary {
     background: var(--velin-color-primary-subtle, #eff6ff);
     color: var(--velin-color-primary, #2563eb);
   }
-  ::slotted(details > :not(summary)) {
+  velin-accordion details[open] > summary::after {
+    transform: rotate(225deg);
+  }
+  velin-accordion details > :not(summary) {
     padding: var(--velin-space-4, 1rem) var(--velin-space-5, 1.25rem);
-    background: var(--velin-color-bg-subtle, #f8fafc);
+    background: var(--velin-color-surface-dim, var(--velin-color-bg-subtle, #f8fafc));
     color: var(--velin-color-text-muted, #64748b);
     font-size: var(--velin-text-sm, 0.875rem);
     line-height: 1.6;
     border-block-start: 1px solid var(--velin-color-border, #e2e8f0);
+  }
+`;
+    shadowStyles = `
+  :host {
+    display: block;
   }
 `;
     VelinAccordion = class extends HTMLElement {
@@ -1799,16 +2220,18 @@ var init_velin_accordion = __esm({
         super();
         this.attachShadow({ mode: "open" });
         this._onToggle = this._onToggle.bind(this);
+        this._onKeydown = this._onKeydown.bind(this);
       }
       connectedCallback() {
+        ensureLightStyles();
         this.shadowRoot.innerHTML = `
-      <style>${styles3}</style>
+      <style>${shadowStyles}</style>
       <slot></slot>
     `;
         this._exclusive = this.hasAttribute("exclusive");
         this._wireDetails();
         this.addEventListener("toggle", this._onToggle, true);
-        this.addEventListener("keydown", this._onKeydown.bind(this));
+        this.addEventListener("keydown", this._onKeydown);
       }
       _wireDetails() {
         let panelIndex = 0;
@@ -1819,13 +2242,21 @@ var init_velin_accordion = __esm({
           if (panel && !panel.id) panel.id = panelId;
           if (summary && panel) {
             summary.setAttribute("aria-controls", panelId);
+            summary.setAttribute("aria-expanded", details.open ? "true" : "false");
+          }
+          if (summary && !summary.hasAttribute("tabindex")) {
+            summary.setAttribute("tabindex", "0");
           }
         }
       }
       _onToggle(event) {
-        if (!this._exclusive) return;
         const openedDetail = event.target;
-        if (!openedDetail.open) return;
+        if (!(openedDetail instanceof HTMLDetailsElement)) return;
+        const summary = openedDetail.querySelector("summary");
+        if (summary) {
+          summary.setAttribute("aria-expanded", openedDetail.open ? "true" : "false");
+        }
+        if (!this._exclusive || !openedDetail.open) return;
         const details = [...this.querySelectorAll("details")];
         details.forEach((d) => {
           if (d !== openedDetail && d.open) {
@@ -1855,6 +2286,9 @@ var init_velin_accordion = __esm({
             event.preventDefault();
             nextIndex = summaries.length - 1;
             break;
+          case "Enter":
+          case " ":
+            return;
           default:
             return;
         }
@@ -1862,6 +2296,7 @@ var init_velin_accordion = __esm({
       }
       disconnectedCallback() {
         this.removeEventListener("toggle", this._onToggle, true);
+        this.removeEventListener("keydown", this._onKeydown);
       }
     };
     customElements.define("velin-accordion", VelinAccordion);
@@ -1874,11 +2309,11 @@ var velin_tabs_exports = {};
 __export(velin_tabs_exports, {
   default: () => velin_tabs_default
 });
-var styles4, VelinTabs, velin_tabs_default;
+var styles3, VelinTabs, velin_tabs_default;
 var init_velin_tabs = __esm({
   "components/velin-tabs.js"() {
     init_focus_manager();
-    styles4 = `
+    styles3 = `
   :host {
     display: block;
   }
@@ -1930,7 +2365,7 @@ var init_velin_tabs = __esm({
       }
       connectedCallback() {
         this.shadowRoot.innerHTML = `
-      <style>${styles4}</style>
+      <style>${styles3}</style>
       <div class="tablist" role="tablist" part="tablist">
         <slot name="tab"></slot>
       </div>
@@ -2016,11 +2451,11 @@ var velin_toast_exports = {};
 __export(velin_toast_exports, {
   default: () => velin_toast_default
 });
-var styles5, VelinToast, velin_toast_default;
+var styles4, VelinToast, velin_toast_default;
 var init_velin_toast = __esm({
   "components/velin-toast.js"() {
     init_sanitize();
-    styles5 = `
+    styles4 = `
   :host {
     position: fixed;
     z-index: var(--velin-z-toast, 600);
@@ -2090,7 +2525,7 @@ var init_velin_toast = __esm({
         this._container = null;
       }
       connectedCallback() {
-        this.shadowRoot.innerHTML = `<style>${styles5}</style>`;
+        this.shadowRoot.innerHTML = `<style>${styles4}</style>`;
         this._container = this.shadowRoot;
         this.setAttribute("role", "status");
         this.setAttribute("aria-live", "polite");
@@ -2138,7 +2573,18 @@ function resolveProviderUrl(provider, variant) {
   if (variant && variants?.[variant]) return variants[variant];
   return PROVIDER_CDNS[provider];
 }
-var PROVIDER_CDNS, PROVIDER_VARIANTS, _svgCache, VelinIcon, velin_icon_default;
+function resolveDefaultSpriteUrl() {
+  if (typeof document !== "undefined") {
+    const meta = document.querySelector('meta[name="velin-icon-sprite"]');
+    const fromMeta = meta?.getAttribute("content")?.trim();
+    if (fromMeta) return fromMeta;
+    const fromHtml = document.documentElement?.getAttribute("data-velin-icon-sprite")?.trim();
+    if (fromHtml) return fromHtml;
+  }
+  const configured = typeof VelinIcon.defaultSprite === "string" ? VelinIcon.defaultSprite.trim() : "";
+  return configured || DEFAULT_SPRITE;
+}
+var PROVIDER_CDNS, PROVIDER_VARIANTS, _svgCache, DEFAULT_SPRITE, VelinIcon, velin_icon_default;
 var init_velin_icon = __esm({
   "components/velin-icon.js"() {
     init_sanitize();
@@ -2162,7 +2608,10 @@ var init_velin_icon = __esm({
       }
     };
     _svgCache = /* @__PURE__ */ new Map();
+    DEFAULT_SPRITE = "velin-icons.svg";
     VelinIcon = class extends HTMLElement {
+      /** @type {string} Relative or absolute sprite URL used when `sprite` attribute is omitted. */
+      static defaultSprite = DEFAULT_SPRITE;
       static get observedAttributes() {
         return ["name", "size", "label", "provider", "variant", "sprite"];
       }
@@ -2218,7 +2667,8 @@ var init_velin_icon = __esm({
         if (spriteAttr === "" || spriteAttr == null && isLocalSymbol) {
           href = `#${name}`;
         } else {
-          const spriteUrl = sanitizeURL(spriteAttr || "/dist/velin-icons.svg") || "/dist/velin-icons.svg";
+          const fallback = resolveDefaultSpriteUrl();
+          const spriteUrl = sanitizeURL(spriteAttr || fallback) || fallback || DEFAULT_SPRITE;
           href = `${spriteUrl}#${name}`;
         }
         use.setAttribute("href", href);
@@ -2327,12 +2777,12 @@ var velin_drawer_exports = {};
 __export(velin_drawer_exports, {
   default: () => velin_drawer_default
 });
-var styles6, VelinDrawer, velin_drawer_default;
+var styles5, VelinDrawer, velin_drawer_default;
 var init_velin_drawer = __esm({
   "components/velin-drawer.js"() {
     init_focus_manager();
     init_sanitize();
-    styles6 = `
+    styles5 = `
   :host { display: contents; }
   .overlay {
     position: fixed;
@@ -2393,7 +2843,7 @@ var init_velin_drawer = __esm({
         const safeTitle = escapeHTML(title);
         const titleId = "velin-drawer-title";
         this.shadowRoot.innerHTML = `
-      <style>${styles6}</style>
+      <style>${styles5}</style>
       <div class="overlay" part="overlay"></div>
       <div class="drawer" role="dialog" aria-modal="true" aria-labelledby="${titleId}" part="drawer">
         <div class="header" part="header">
@@ -2420,7 +2870,6 @@ var init_velin_drawer = __esm({
         this._prev = saveFocus();
         setBackgroundInert(this);
         document.addEventListener("keydown", this._onKey);
-        document.body.style.overflow = "hidden";
         requestAnimationFrame(() => {
           const f = getFocusableElements(this.shadowRoot);
           if (f.length) f[0].focus();
@@ -2428,8 +2877,7 @@ var init_velin_drawer = __esm({
       }
       _close() {
         document.removeEventListener("keydown", this._onKey);
-        document.body.style.overflow = "";
-        clearBackgroundInert();
+        clearBackgroundInert(this);
         restoreFocus(this._prev);
       }
       _onKey(e) {
@@ -2441,7 +2889,7 @@ var init_velin_drawer = __esm({
       }
       disconnectedCallback() {
         document.removeEventListener("keydown", this._onKey);
-        document.body.style.overflow = "";
+        clearBackgroundInert(this);
       }
     };
     customElements.define("velin-drawer", VelinDrawer);
@@ -2469,7 +2917,7 @@ function ensureThemeStylesheet(slug, base) {
   document.head.appendChild(link);
   loadedThemeStylesheets.add(slug);
 }
-var THEMES, BUILTIN_THEMES, loadedThemeStylesheets, styles7, VelinThemeToggle, velin_theme_toggle_default;
+var THEMES, BUILTIN_THEMES, loadedThemeStylesheets, styles6, VelinThemeToggle, velin_theme_toggle_default;
 var init_velin_theme_toggle = __esm({
   "components/velin-theme-toggle.js"() {
     THEMES = [
@@ -2491,7 +2939,7 @@ var init_velin_theme_toggle = __esm({
     ];
     BUILTIN_THEMES = /* @__PURE__ */ new Set(["", "dark"]);
     loadedThemeStylesheets = /* @__PURE__ */ new Set();
-    styles7 = `
+    styles6 = `
   :host { display: inline-flex; position: relative; }
   .group {
     display: inline-flex; align-items: stretch;
@@ -2580,7 +3028,7 @@ var init_velin_theme_toggle = __esm({
       }
       connectedCallback() {
         this.shadowRoot.innerHTML = `
-      <style>${styles7}</style>
+      <style>${styles6}</style>
       <div class="group" part="group">
         <button class="toggle" part="button" aria-label="Toggle dark mode" aria-pressed="false">
           <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false">
@@ -2752,12 +3200,12 @@ var velin_popover_exports = {};
 __export(velin_popover_exports, {
   default: () => velin_popover_default
 });
-var styles8, popoverId, VelinPopover, velin_popover_default;
+var styles7, popoverId, VelinPopover, velin_popover_default;
 var init_velin_popover = __esm({
   "components/velin-popover.js"() {
     init_sanitize();
     init_focus_manager();
-    styles8 = `
+    styles7 = `
   :host { position: relative; display: inline-block; }
   .popover {
     position: absolute; z-index: var(--velin-z-dropdown, 200);
@@ -2805,7 +3253,7 @@ var init_velin_popover = __esm({
         this._isDialog = role === "dialog";
         const titleId = title ? `${this._popoverId}-title` : "";
         this.shadowRoot.innerHTML = `
-      <style>${styles8}</style>
+      <style>${styles7}</style>
       <slot name="trigger"></slot>
       <div class="popover popover--${placement}" id="${this._popoverId}" role="${role}" part="popover"${titleId ? ` aria-labelledby="${titleId}"` : ""}>
         ${title ? `<div class="popover__title" id="${titleId}" part="title">${escapeHTML(title)}</div>` : ""}
@@ -2923,11 +3371,11 @@ var velin_copy_exports = {};
 __export(velin_copy_exports, {
   default: () => velin_copy_default
 });
-var styles9, VelinCopy, velin_copy_default;
+var styles8, VelinCopy, velin_copy_default;
 var init_velin_copy = __esm({
   "components/velin-copy.js"() {
     init_sanitize();
-    styles9 = `
+    styles8 = `
   :host { display: inline-flex; }
   button {
     display: inline-flex; align-items: center; justify-content: center; gap: 0.375rem;
@@ -2956,7 +3404,7 @@ var init_velin_copy = __esm({
       connectedCallback() {
         const label = escapeHTML(this.getAttribute("label") || "");
         this.shadowRoot.innerHTML = `
-      <style>${styles9}</style>
+      <style>${styles8}</style>
       <button part="button" aria-label="Copy">
         <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
@@ -3008,10 +3456,10 @@ var velin_scroll_top_exports = {};
 __export(velin_scroll_top_exports, {
   default: () => velin_scroll_top_default
 });
-var styles10, VelinScrollTop, velin_scroll_top_default;
+var styles9, VelinScrollTop, velin_scroll_top_default;
 var init_velin_scroll_top = __esm({
   "components/velin-scroll-top.js"() {
-    styles10 = `
+    styles9 = `
   :host { position: fixed; inset-block-end: var(--velin-scroll-top-bottom, var(--velin-space-4, 1rem)); inset-inline-end: var(--velin-scroll-top-end, var(--velin-space-4, 1rem)); z-index: var(--velin-z-fixed, 300); }
   button {
     display: inline-flex; align-items: center; justify-content: center;
@@ -3038,7 +3486,7 @@ var init_velin_scroll_top = __esm({
         const threshold = parseInt(this.getAttribute("threshold") || "300", 10);
         this._threshold = threshold;
         this.shadowRoot.innerHTML = `
-      <style>${styles10}</style>
+      <style>${styles9}</style>
       <button part="button" aria-label="Scroll to top">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
           <line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/>
@@ -3073,10 +3521,10 @@ var velin_carousel_exports = {};
 __export(velin_carousel_exports, {
   default: () => velin_carousel_default
 });
-var styles11, VelinCarousel, velin_carousel_default;
+var styles10, VelinCarousel, velin_carousel_default;
 var init_velin_carousel = __esm({
   "components/velin-carousel.js"() {
-    styles11 = `
+    styles10 = `
   :host { display: block; position: relative; overflow: hidden; }
   .track {
     display: flex; transition: transform 400ms ease;
@@ -3142,7 +3590,7 @@ var init_velin_carousel = __esm({
       }
       connectedCallback() {
         this.shadowRoot.innerHTML = `
-      <style>${styles11}</style>
+      <style>${styles10}</style>
       <div class="track" role="group" aria-roledescription="carousel" part="track"><slot></slot></div>
       <div class="controls" part="controls">
         <button class="prev" aria-label="Previous slide" part="prev">
@@ -3297,10 +3745,10 @@ function isButtonLike(el) {
   const tag = el.tagName;
   return tag === "BUTTON" || tag === "A" && el.hasAttribute("href") || el.getAttribute("role") === "button";
 }
-var styles12, collapseId, VelinCollapse, velin_collapse_default;
+var styles11, collapseId, VelinCollapse, velin_collapse_default;
 var init_velin_collapse = __esm({
   "components/velin-collapse.js"() {
-    styles12 = `
+    styles11 = `
   :host { display: block; }
   .content {
     overflow: hidden;
@@ -3325,7 +3773,7 @@ var init_velin_collapse = __esm({
       }
       connectedCallback() {
         const panelId = this._contentId;
-        this.shadowRoot.innerHTML = "<style>" + styles12 + '</style><slot name="trigger"></slot><div class="content" id="' + panelId + '" part="content"><div class="inner"><slot></slot></div></div>';
+        this.shadowRoot.innerHTML = "<style>" + styles11 + '</style><slot name="trigger"></slot><div class="content" id="' + panelId + '" part="content"><div class="inner"><slot></slot></div></div>';
         const triggerSlot = this.shadowRoot.querySelector('slot[name="trigger"]');
         triggerSlot.addEventListener("slotchange", () => this._wireTrigger());
         this._wireTrigger();
@@ -3439,11 +3887,11 @@ __export(velin_tooltip_exports, {
   VelinTooltipWC: () => VelinTooltipWC,
   default: () => velin_tooltip_default
 });
-var styles13, tooltipId, VelinTooltip, VelinTooltipWC, velin_tooltip_default;
+var styles12, tooltipId, VelinTooltip, VelinTooltipWC, velin_tooltip_default;
 var init_velin_tooltip = __esm({
   "components/velin-tooltip.js"() {
     init_sanitize();
-    styles13 = `
+    styles12 = `
   :host { position: relative; display: inline-block; }
   .tip {
     position: absolute; z-index: var(--velin-z-tooltip, 700);
@@ -3477,7 +3925,7 @@ var init_velin_tooltip = __esm({
         const placement = this.getAttribute("placement") || "top";
         const D = "div";
         this.shadowRoot.innerHTML = `
-      <style>${styles13}</style>
+      <style>${styles12}</style>
       <slot></slot>
       <${D} class="tip" id="${this._tipId}" role="tooltip" data-placement="${escapeHTML(placement)}" part="tip">${escapeHTML(this.getAttribute("content") || "")}</${D}>
     `;
@@ -3609,13 +4057,13 @@ var velin_lightbox_exports = {};
 __export(velin_lightbox_exports, {
   default: () => velin_lightbox_default
 });
-var styles14, VelinLightbox, velin_lightbox_default;
+var styles13, VelinLightbox, velin_lightbox_default;
 var init_velin_lightbox = __esm({
   "components/velin-lightbox.js"() {
     init_focus_manager();
     init_a11y_utils();
     init_sanitize();
-    styles14 = `
+    styles13 = `
   :host { display: contents; }
   .overlay {
     position: fixed; inset: 0; z-index: var(--velin-z-modal, 500);
@@ -3668,7 +4116,7 @@ var init_velin_lightbox = __esm({
       }
       connectedCallback() {
         this.shadowRoot.innerHTML = `
-      <style>${styles14}</style>
+      <style>${styles13}</style>
       <slot></slot>
       <div class="overlay" role="dialog" aria-modal="true" aria-label="Image lightbox" aria-roledescription="lightbox" part="overlay">
         <button class="nav nav--prev" aria-label="Previous">&#8249;</button>
@@ -3704,7 +4152,6 @@ var init_velin_lightbox = __esm({
         this.setAttribute("open", "");
         setBackgroundInert(this);
         this._render();
-        document.body.style.overflow = "hidden";
         const overlay = this.shadowRoot.querySelector(".overlay");
         overlay.removeEventListener("keydown", this._onTrapKey);
         overlay.addEventListener("keydown", this._onTrapKey);
@@ -3712,13 +4159,15 @@ var init_velin_lightbox = __esm({
       }
       close() {
         this.removeAttribute("open");
-        clearBackgroundInert();
-        document.body.style.overflow = "";
+        clearBackgroundInert(this);
         if (this._previousFocus) {
           this._previousFocus.focus();
           this._previousFocus = null;
         }
         this.dispatchEvent(new CustomEvent("velin-close", { bubbles: true }));
+      }
+      disconnectedCallback() {
+        clearBackgroundInert(this);
       }
       _prev() {
         this._index = (this._index - 1 + this._items.length) % this._items.length;
@@ -3757,11 +4206,11 @@ __export(velin_stepper_exports, {
   VelinStepperWC: () => VelinStepperWC,
   default: () => velin_stepper_default
 });
-var styles15, VelinStepper, VelinStepperWC, velin_stepper_default;
+var styles14, VelinStepper, VelinStepperWC, velin_stepper_default;
 var init_velin_stepper = __esm({
   "components/velin-stepper.js"() {
     init_sanitize();
-    styles15 = `
+    styles14 = `
   :host { display: block; }
   .steps {
     display: flex; gap: var(--velin-space-2, 0.5rem);
@@ -3840,7 +4289,7 @@ var init_velin_stepper = __esm({
           return `<div class="step ${state}" role="listitem" aria-label="${escapeHTML(itemLabel)}"${ariaCurrent}><span class="step__marker">${marker}</span><span class="step__label">${escapeHTML(label)}</span></div>`;
         }).join("");
         this.shadowRoot.innerHTML = `
-      <style>${styles15}</style>
+      <style>${styles14}</style>
       <div class="steps" role="list" aria-label="${escapeHTML(listLabel)}" part="steps">${stepsHTML}</div>
       <div class="panels" part="panels"><slot></slot></div>
     `;
@@ -3907,11 +4356,11 @@ var velin_dialog_exports = {};
 __export(velin_dialog_exports, {
   default: () => velin_dialog_default
 });
-var styles16, VelinDialog, velin_dialog_default;
+var styles15, VelinDialog, velin_dialog_default;
 var init_velin_dialog = __esm({
   "components/velin-dialog.js"() {
     init_sanitize();
-    styles16 = `
+    styles15 = `
   :host { display: contents; }
   dialog {
     border: none; border-radius: var(--velin-radius-lg, 0.75rem);
@@ -3977,7 +4426,7 @@ var init_velin_dialog = __esm({
         this._previousFocus = null;
       }
       connectedCallback() {
-        this.shadowRoot.innerHTML = `<style>${styles16}</style><dialog part="dialog"></dialog>`;
+        this.shadowRoot.innerHTML = `<style>${styles15}</style><dialog part="dialog"></dialog>`;
         const dialog = this.shadowRoot.querySelector("dialog");
         if (dialog) {
           dialog.setAttribute("aria-label", this.getAttribute("aria-label") || "Dialog");
@@ -4050,7 +4499,9 @@ var init_velin_dialog = __esm({
         }
         this._resolve(value);
         this._resolve = null;
-        this.dispatchEvent(new CustomEvent("velin-dialog-close", { bubbles: true, detail: { value } }));
+        const detail = { value };
+        this.dispatchEvent(new CustomEvent("velin-close", { bubbles: true, detail }));
+        this.dispatchEvent(new CustomEvent("velin-dialog-close", { bubbles: true, detail }));
       }
     };
     customElements.define("velin-dialog", VelinDialog);
@@ -4063,11 +4514,11 @@ var velin_countdown_exports = {};
 __export(velin_countdown_exports, {
   default: () => velin_countdown_default
 });
-var styles17, VelinCountdown, velin_countdown_default;
+var styles16, VelinCountdown, velin_countdown_default;
 var init_velin_countdown = __esm({
   "components/velin-countdown.js"() {
     init_sanitize();
-    styles17 = `
+    styles16 = `
   :host { display: inline-flex; font-variant-numeric: tabular-nums; }
   .wrap { display: inline-flex; gap: var(--velin-space-3, 0.75rem); align-items: flex-start; }
   .segment {
@@ -4108,7 +4559,7 @@ var init_velin_countdown = __esm({
         this._timer = null;
       }
       connectedCallback() {
-        this.shadowRoot.innerHTML = `<style>${styles17}</style><div class="wrap"></div>`;
+        this.shadowRoot.innerHTML = `<style>${styles16}</style><div class="wrap"></div>`;
         this._wrap = this.shadowRoot.querySelector(".wrap");
         this.setAttribute("role", "timer");
         this.setAttribute("aria-live", "polite");
@@ -4168,10 +4619,10 @@ var velin_progress_ring_exports = {};
 __export(velin_progress_ring_exports, {
   default: () => velin_progress_ring_default
 });
-var styles18, VelinProgressRing, velin_progress_ring_default;
+var styles17, VelinProgressRing, velin_progress_ring_default;
 var init_velin_progress_ring = __esm({
   "components/velin-progress-ring.js"() {
-    styles18 = `
+    styles17 = `
   :host { display: inline-flex; align-items: center; justify-content: center; }
   svg { transform: rotate(-90deg); }
   .track { fill: none; stroke: var(--velin-color-border, #e5e5e5); }
@@ -4212,7 +4663,7 @@ var init_velin_progress_ring = __esm({
         const colorStyle = color ? `stroke: var(--velin-color-${color}, ${color});` : "";
         const showLabel = this.getAttribute("label") !== "false";
         this.shadowRoot.innerHTML = `
-      <style>${styles18}</style>
+      <style>${styles17}</style>
       <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" part="svg" role="progressbar" aria-valuenow="${value}" aria-valuemin="0" aria-valuemax="100">
         <circle class="track" cx="${size / 2}" cy="${size / 2}" r="${radius}" stroke-width="${strokeWidth}" />
         <circle class="fill" cx="${size / 2}" cy="${size / 2}" r="${radius}" stroke-width="${strokeWidth}"
@@ -4358,12 +4809,12 @@ var velin_combobox_exports = {};
 __export(velin_combobox_exports, {
   default: () => velin_combobox_default
 });
-var styles19, VelinCombobox, velin_combobox_default;
+var styles18, VelinCombobox, velin_combobox_default;
 var init_velin_combobox = __esm({
   "components/velin-combobox.js"() {
     init_focus_manager();
     init_sanitize();
-    styles19 = `
+    styles18 = `
   :host { display: inline-block; position: relative; }
   .listbox {
     position: absolute; z-index: var(--velin-z-dropdown, 100);
@@ -4404,7 +4855,7 @@ var init_velin_combobox = __esm({
         this._listId = listId;
         const listLabel = escapeHTML(this.getAttribute("aria-label") || "Options");
         this.shadowRoot.innerHTML = `
-      <style>${styles19}</style>
+      <style>${styles18}</style>
       <slot name="trigger"></slot>
       <div class="listbox" id="${listId}" role="listbox" aria-label="${listLabel}" part="listbox"><slot></slot></div>
     `;
@@ -4515,11 +4966,11 @@ var velin_bottom_nav_exports = {};
 __export(velin_bottom_nav_exports, {
   default: () => velin_bottom_nav_default
 });
-var styles20, VelinBottomNav, velin_bottom_nav_default;
+var styles19, VelinBottomNav, velin_bottom_nav_default;
 var init_velin_bottom_nav = __esm({
   "components/velin-bottom-nav.js"() {
     init_sanitize();
-    styles20 = `
+    styles19 = `
   :host { display: block; }
   nav {
     display: flex;
@@ -4559,7 +5010,7 @@ var init_velin_bottom_nav = __esm({
       connectedCallback() {
         const label = escapeHTML(this.getAttribute("aria-label") || "Bottom navigation");
         this.shadowRoot.innerHTML = `
-      <style>${styles20}</style>
+      <style>${styles19}</style>
       <nav role="navigation" aria-label="${label}"><slot></slot></nav>
     `;
         const slot = this.shadowRoot.querySelector("slot");
@@ -4581,6 +5032,16 @@ var init_velin_bottom_nav = __esm({
           }
           if (el.tagName === "A" && !el.getAttribute("href")) {
             el.setAttribute("role", "button");
+            if (!el.hasAttribute("tabindex")) el.setAttribute("tabindex", "0");
+            if (!el._velinBottomNavKey) {
+              el._velinBottomNavKey = (e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  el.click();
+                }
+              };
+              el.addEventListener("keydown", el._velinBottomNavKey);
+            }
           }
         });
       }
@@ -4644,13 +5105,13 @@ var velin_sheet_exports = {};
 __export(velin_sheet_exports, {
   default: () => velin_sheet_default
 });
-var styles21, VelinSheet, velin_sheet_default;
+var styles20, VelinSheet, velin_sheet_default;
 var init_velin_sheet = __esm({
   "components/velin-sheet.js"() {
     init_focus_manager();
     init_sanitize();
     init_shadow_a11y_styles();
-    styles21 = `
+    styles20 = `
   ${SHADOW_A11Y_STYLES}
   :host { display: contents; }
   .overlay {
@@ -4696,7 +5157,7 @@ var init_velin_sheet = __esm({
         const title = escapeHTML(this.getAttribute("title") || this.getAttribute("label") || "");
         const titleId = "velin-sheet-title";
         this.shadowRoot.innerHTML = `
-      <style>${styles21}</style>
+      <style>${styles20}</style>
       <div class="overlay" part="overlay"></div>
       <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="${titleId}" part="sheet">
         <div class="header" part="header">
@@ -4724,7 +5185,6 @@ var init_velin_sheet = __esm({
         this._prev = saveFocus();
         setBackgroundInert(this);
         document.addEventListener("keydown", this._onKey);
-        document.body.style.overflow = "hidden";
         requestAnimationFrame(() => {
           const f = getFocusableElements(this.shadowRoot);
           if (f.length) f[0].focus();
@@ -4732,8 +5192,7 @@ var init_velin_sheet = __esm({
       }
       _close() {
         document.removeEventListener("keydown", this._onKey);
-        document.body.style.overflow = "";
-        clearBackgroundInert();
+        clearBackgroundInert(this);
         restoreFocus(this._prev);
       }
       _onKey(e) {
@@ -4745,7 +5204,7 @@ var init_velin_sheet = __esm({
       }
       disconnectedCallback() {
         document.removeEventListener("keydown", this._onKey);
-        document.body.style.overflow = "";
+        clearBackgroundInert(this);
       }
     };
     customElements.define("velin-sheet", VelinSheet);
@@ -4758,13 +5217,13 @@ var velin_segmented_control_exports = {};
 __export(velin_segmented_control_exports, {
   default: () => velin_segmented_control_default
 });
-var styles22, VelinSegmentedControl, velin_segmented_control_default;
+var styles21, VelinSegmentedControl, velin_segmented_control_default;
 var init_velin_segmented_control = __esm({
   "components/velin-segmented-control.js"() {
     init_focus_manager();
     init_sanitize();
     init_shadow_a11y_styles();
-    styles22 = `
+    styles21 = `
   ${SHADOW_A11Y_STYLES}
   :host { display: block; }
   .group {
@@ -4802,7 +5261,7 @@ var init_velin_segmented_control = __esm({
       connectedCallback() {
         const label = escapeHTML(this.getAttribute("aria-label") || "Segmented control");
         this.shadowRoot.innerHTML = `
-      <style>${styles22}</style>
+      <style>${styles21}</style>
       <div class="group" role="group" aria-label="${label}"><slot></slot></div>
     `;
         this.addEventListener("click", this._onClick);
@@ -4867,13 +5326,13 @@ var velin_rating_exports = {};
 __export(velin_rating_exports, {
   default: () => velin_rating_default
 });
-var styles23, MAX, VelinRating, velin_rating_default;
+var styles22, MAX, VelinRating, velin_rating_default;
 var init_velin_rating = __esm({
   "components/velin-rating.js"() {
     init_focus_manager();
     init_sanitize();
     init_shadow_a11y_styles();
-    styles23 = `
+    styles22 = `
   ${SHADOW_A11Y_STYLES}
   :host { display: inline-block; }
   .stars { display: inline-flex; gap: var(--velin-space-1, 0.25rem); }
@@ -4896,7 +5355,7 @@ var init_velin_rating = __esm({
         this._onKey = this._onKey.bind(this);
       }
       connectedCallback() {
-        this.shadowRoot.innerHTML = `<style>${styles23}</style><div class="stars" role="radiogroup"></div>`;
+        this.shadowRoot.innerHTML = `<style>${styles22}</style><div class="stars" role="radiogroup"></div>`;
         this._render();
         this.shadowRoot.querySelector(".stars").addEventListener("click", this._onClick);
         this.shadowRoot.querySelector(".stars").addEventListener("keydown", this._onKey);
@@ -4958,13 +5417,13 @@ var velin_menubar_exports = {};
 __export(velin_menubar_exports, {
   default: () => velin_menubar_default
 });
-var styles24, VelinMenubar, velin_menubar_default;
+var styles23, VelinMenubar, velin_menubar_default;
 var init_velin_menubar = __esm({
   "components/velin-menubar.js"() {
     init_focus_manager();
     init_sanitize();
     init_shadow_a11y_styles();
-    styles24 = `
+    styles23 = `
   ${SHADOW_A11Y_STYLES}
   :host { display: block; }
   .menubar {
@@ -4999,7 +5458,7 @@ var init_velin_menubar = __esm({
       connectedCallback() {
         const label = escapeHTML(this.getAttribute("aria-label") || "Menu bar");
         this.shadowRoot.innerHTML = `
-      <style>${styles24}</style>
+      <style>${styles23}</style>
       <div class="menubar" role="menubar" aria-label="${label}"><slot></slot></div>
     `;
         this.addEventListener("keydown", this._onKey);
@@ -5044,13 +5503,13 @@ var velin_command_exports = {};
 __export(velin_command_exports, {
   default: () => velin_command_default
 });
-var styles25, VelinCommand, velin_command_default;
+var styles24, VelinCommand, velin_command_default;
 var init_velin_command = __esm({
   "components/velin-command.js"() {
     init_focus_manager();
     init_sanitize();
     init_shadow_a11y_styles();
-    styles25 = `
+    styles24 = `
   ${SHADOW_A11Y_STYLES}
   :host { display: contents; }
   .overlay {
@@ -5059,9 +5518,14 @@ var init_velin_command = __esm({
     padding: 10vh var(--velin-space-4, 1rem) var(--velin-space-4, 1rem);
     background: var(--velin-color-overlay, rgba(0,0,0,0.4));
     opacity: 0; visibility: hidden;
+    pointer-events: none;
     transition: opacity 150ms ease, visibility 150ms ease;
   }
-  :host([open]) .overlay { opacity: 1; visibility: visible; }
+  :host([open]) .overlay {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
   .panel {
     inline-size: min(32rem, 100%);
     background: var(--velin-color-surface-bright, #fff);
@@ -5104,7 +5568,7 @@ var init_velin_command = __esm({
       connectedCallback() {
         const placeholder = escapeHTML(this.getAttribute("placeholder") || "Search commands\u2026");
         this.shadowRoot.innerHTML = `
-      <style>${styles25}</style>
+      <style>${styles24}</style>
       <div class="overlay" part="overlay">
         <div class="panel" role="dialog" aria-modal="true" aria-label="Command palette" part="panel">
           <input class="search" type="search" autocomplete="off" placeholder="${placeholder}" aria-label="Search" part="search" />
@@ -5113,6 +5577,7 @@ var init_velin_command = __esm({
       </div>
     `;
         this.shadowRoot.querySelector(".search").addEventListener("input", this._onInput);
+        this.shadowRoot.querySelector(".overlay")?.addEventListener("click", this._onOverlayClick);
         this.shadowRoot.querySelector("slot")?.addEventListener("slotchange", () => this._filter(""));
         this._filter("");
       }
@@ -5126,6 +5591,13 @@ var init_velin_command = __esm({
         this.removeAttribute("open");
         this.dispatchEvent(new CustomEvent("velin-close", { bubbles: true }));
       }
+      toggle() {
+        if (this.hasAttribute("open")) this.close();
+        else this.open();
+      }
+      _onOverlayClick = (event) => {
+        if (event.target === event.currentTarget) this.close();
+      };
       _open() {
         this._prev = saveFocus();
         setBackgroundInert(this);
@@ -5137,7 +5609,7 @@ var init_velin_command = __esm({
       }
       _close() {
         document.removeEventListener("keydown", this._onKey);
-        clearBackgroundInert();
+        clearBackgroundInert(this);
         restoreFocus(this._prev);
         const input = this.shadowRoot.querySelector(".search");
         if (input) input.value = "";
@@ -5176,6 +5648,8 @@ var init_velin_command = __esm({
       }
       disconnectedCallback() {
         document.removeEventListener("keydown", this._onKey);
+        this.shadowRoot?.querySelector(".overlay")?.removeEventListener("click", this._onOverlayClick);
+        if (this.hasAttribute("open")) clearBackgroundInert(this);
       }
     };
     customElements.define("velin-command", VelinCommand);
@@ -5188,17 +5662,17 @@ var velin_announcer_exports = {};
 __export(velin_announcer_exports, {
   default: () => velin_announcer_default
 });
-var styles26, VelinAnnouncer, velin_announcer_default;
+var styles25, VelinAnnouncer, velin_announcer_default;
 var init_velin_announcer = __esm({
   "components/velin-announcer.js"() {
-    styles26 = `
+    styles25 = `
   :host { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 `;
     VelinAnnouncer = class extends HTMLElement {
       connectedCallback() {
         if (!this.shadowRoot) this.attachShadow({ mode: "open" });
         const live = this.getAttribute("polite") === "false" ? "assertive" : "polite";
-        this.shadowRoot.innerHTML = "<style>" + styles26 + '</style><div role="status" aria-live="' + live + '" aria-atomic="true" part="region"></div>';
+        this.shadowRoot.innerHTML = "<style>" + styles25 + '</style><div role="status" aria-live="' + live + '" aria-atomic="true" part="region"></div>';
         this._region = this.shadowRoot.querySelector('[role="status"]');
       }
       announce(message, { assertive = false } = {}) {
@@ -5242,11 +5716,11 @@ function decodeObfuscated(raw, method) {
     return raw;
   }
 }
-var styles27, VelinEmail, velin_email_default;
+var styles26, VelinEmail, velin_email_default;
 var init_velin_email = __esm({
   "components/velin-email.js"() {
     init_sanitize();
-    styles27 = `
+    styles26 = `
   :host { display: inline; }
   button {
     font: inherit;
@@ -5293,13 +5767,13 @@ var init_velin_email = __esm({
         const safeEmail = escapeHTML(email);
         if (this._revealed) {
           this.shadowRoot.innerHTML = `
-        <style>${styles27}</style>
+        <style>${styles26}</style>
         <span class="revealed" part="email"><a href="mailto:${escapeHTMLAttribute(email)}">${safeEmail}</a></span>
       `;
           return;
         }
         this.shadowRoot.innerHTML = `
-      <style>${styles27}</style>
+      <style>${styles26}</style>
       <button type="button" part="reveal" aria-label="${escapeHTMLAttribute(label)}">${escapeHTML(label)}</button>
     `;
         this.shadowRoot.querySelector("button").addEventListener("click", () => {
@@ -5313,6 +5787,227 @@ var init_velin_email = __esm({
       customElements.define("velin-email", VelinEmail);
     }
     velin_email_default = VelinEmail;
+  }
+});
+
+// components/velin-calendar.js
+var velin_calendar_exports = {};
+__export(velin_calendar_exports, {
+  default: () => velin_calendar_default
+});
+function iso(d) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+function parseISO(v) {
+  if (!v) return null;
+  const m = String(v).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!m) return null;
+  const d = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+  return Number.isNaN(d.getTime()) ? null : d;
+}
+var styles27, VelinCalendar, velin_calendar_default;
+var init_velin_calendar = __esm({
+  "components/velin-calendar.js"() {
+    init_sanitize();
+    styles27 = `
+  :host { display: block; max-inline-size: 100%; }
+  .cal {
+    box-sizing: border-box;
+    border: 1px solid var(--velin-color-border, #ddd);
+    border-radius: var(--velin-radius-md, 0.5rem);
+    background: var(--velin-color-surface, #fff);
+    color: var(--velin-color-text, #111);
+    padding: var(--velin-space-3, 0.75rem);
+    max-inline-size: min(20rem, 100%);
+    inline-size: 100%;
+  }
+  .head {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: var(--velin-space-2, 0.5rem); margin-block-end: var(--velin-space-3, 0.75rem);
+  }
+  .title { font-weight: var(--velin-weight-semibold, 600); margin: 0; font-size: var(--velin-text-base, 1rem); }
+  .nav {
+    display: inline-flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    min-inline-size: 2.5rem; min-block-size: 2.5rem;
+    border: 1px solid var(--velin-color-border, #ddd);
+    border-radius: var(--velin-radius-sm, 0.25rem);
+    background: var(--velin-color-surface-bright, #fff);
+    color: inherit; cursor: pointer;
+  }
+  .nav:focus-visible { outline: 2px solid var(--velin-color-focus, #2563eb); outline-offset: 2px; }
+  .grid {
+    display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 0.25rem;
+  }
+  .dow {
+    text-align: center; font-size: var(--velin-text-xs, 0.75rem);
+    color: var(--velin-color-text-muted, #64748b); padding-block: 0.25rem;
+  }
+  .day {
+    inline-size: 100%;
+    min-inline-size: 0;
+    min-block-size: 2.25rem;
+    aspect-ratio: 1;
+    border: none; border-radius: var(--velin-radius-sm, 0.25rem);
+    background: transparent; color: inherit; cursor: pointer;
+    font: inherit;
+    padding: 0;
+  }
+  .day[aria-disabled="true"] { opacity: 0.35; cursor: not-allowed; }
+  .day[aria-selected="true"] {
+    background: var(--velin-color-primary, #2563eb);
+    color: var(--velin-color-on-primary, #fff);
+  }
+  .day:not([aria-disabled="true"]):hover {
+    background: var(--velin-color-primary-subtle, #eff6ff);
+  }
+  .day:focus-visible { outline: 2px solid var(--velin-color-focus, #2563eb); outline-offset: 1px; }
+  .out { color: var(--velin-color-text-muted, #94a3b8); }
+`;
+    VelinCalendar = class extends HTMLElement {
+      static get observedAttributes() {
+        return ["value", "min", "max", "label"];
+      }
+      constructor() {
+        super();
+        this.attachShadow({ mode: "open" });
+        this._view = /* @__PURE__ */ new Date();
+        this._view.setDate(1);
+        this._onKey = this._onKey.bind(this);
+      }
+      connectedCallback() {
+        const selected = parseISO(this.getAttribute("value")) || /* @__PURE__ */ new Date();
+        this._view = new Date(selected.getFullYear(), selected.getMonth(), 1);
+        this._render();
+      }
+      attributeChangedCallback(name, prev, next) {
+        if (prev === next || !this.shadowRoot?.querySelector(".cal")) return;
+        if (name === "value" && next) {
+          const d = parseISO(next);
+          if (d) this._view = new Date(d.getFullYear(), d.getMonth(), 1);
+        }
+        this._render();
+      }
+      get value() {
+        return this.getAttribute("value") || "";
+      }
+      set value(v) {
+        if (v) this.setAttribute("value", v);
+        else this.removeAttribute("value");
+      }
+      _inRange(d) {
+        const min = parseISO(this.getAttribute("min"));
+        const max = parseISO(this.getAttribute("max"));
+        if (min && d < min) return false;
+        if (max && d > max) return false;
+        return true;
+      }
+      _select(d) {
+        if (!this._inRange(d)) return;
+        const v = iso(d);
+        this.setAttribute("value", v);
+        this.dispatchEvent(new CustomEvent("velin-change", { bubbles: true, detail: { value: v, date: d } }));
+        this._render();
+      }
+      _shiftMonth(delta) {
+        this._view = new Date(this._view.getFullYear(), this._view.getMonth() + delta, 1);
+        this._render();
+      }
+      _onKey(e) {
+        const selected = parseISO(this.getAttribute("value")) || /* @__PURE__ */ new Date();
+        let next = new Date(selected);
+        switch (e.key) {
+          case "ArrowLeft":
+            next.setDate(next.getDate() - 1);
+            break;
+          case "ArrowRight":
+            next.setDate(next.getDate() + 1);
+            break;
+          case "ArrowUp":
+            next.setDate(next.getDate() - 7);
+            break;
+          case "ArrowDown":
+            next.setDate(next.getDate() + 7);
+            break;
+          case "Home":
+            next = new Date(next.getFullYear(), next.getMonth(), 1);
+            break;
+          case "End":
+            next = new Date(next.getFullYear(), next.getMonth() + 1, 0);
+            break;
+          case "PageUp":
+            next = new Date(next.getFullYear(), next.getMonth() - 1, next.getDate());
+            break;
+          case "PageDown":
+            next = new Date(next.getFullYear(), next.getMonth() + 1, next.getDate());
+            break;
+          case "Enter":
+          case " ":
+            e.preventDefault();
+            this._select(selected);
+            return;
+          default:
+            return;
+        }
+        e.preventDefault();
+        if (!this._inRange(next)) return;
+        this._view = new Date(next.getFullYear(), next.getMonth(), 1);
+        this.setAttribute("value", iso(next));
+        this.dispatchEvent(new CustomEvent("velin-change", { bubbles: true, detail: { value: iso(next), date: next } }));
+        this._render();
+        this.shadowRoot.querySelector(`[data-iso="${iso(next)}"]`)?.focus();
+      }
+      _render() {
+        const label = escapeHTML(this.getAttribute("label") || "Choose date");
+        const selected = parseISO(this.getAttribute("value"));
+        const y = this._view.getFullYear();
+        const m = this._view.getMonth();
+        const title = this._view.toLocaleString(void 0, { month: "long", year: "numeric" });
+        const start = new Date(y, m, 1);
+        const startDow = (start.getDay() + 6) % 7;
+        const daysInMonth = new Date(y, m + 1, 0).getDate();
+        const dows = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
+        let cells = dows.map((d) => `<div class="dow" aria-hidden="true">${d}</div>`).join("");
+        for (let i = 0; i < startDow; i += 1) {
+          const d = new Date(y, m, -startDow + i + 1);
+          cells += `<button type="button" class="day out" tabindex="-1" data-iso="${iso(d)}" aria-label="${iso(d)}">${d.getDate()}</button>`;
+        }
+        for (let day = 1; day <= daysInMonth; day += 1) {
+          const d = new Date(y, m, day);
+          const id = iso(d);
+          const sel = selected && iso(selected) === id;
+          const disabled = !this._inRange(d);
+          cells += `<button type="button" class="day" data-iso="${id}" aria-label="${id}" aria-selected="${sel ? "true" : "false"}" aria-disabled="${disabled ? "true" : "false"}" tabindex="${sel ? "0" : "-1"}">${day}</button>`;
+        }
+        this.shadowRoot.innerHTML = `
+      <style>${styles27}</style>
+      <div class="cal" role="group" aria-label="${label}">
+        <div class="head">
+          <button type="button" class="nav" data-nav="-1" aria-label="Previous month">\u2039</button>
+          <p class="title" id="cal-title">${escapeHTML(title)}</p>
+          <button type="button" class="nav" data-nav="1" aria-label="Next month">\u203A</button>
+        </div>
+        <div class="grid" role="grid" aria-labelledby="cal-title">${cells}</div>
+      </div>
+    `;
+        this.shadowRoot.querySelectorAll("[data-nav]").forEach((btn) => {
+          btn.addEventListener("click", () => this._shiftMonth(Number(btn.getAttribute("data-nav"))));
+        });
+        this.shadowRoot.querySelectorAll(".day").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            if (btn.getAttribute("aria-disabled") === "true") return;
+            const d = parseISO(btn.getAttribute("data-iso"));
+            if (d) this._select(d);
+          });
+          btn.addEventListener("keydown", this._onKey);
+        });
+      }
+    };
+    customElements.define("velin-calendar", VelinCalendar);
+    velin_calendar_default = VelinCalendar;
   }
 });
 
@@ -6484,7 +7179,7 @@ var init_velin_data_table = __esm({
     warnedMissingName = false;
     VelinDataTable = class extends HTMLElement {
       static get observedAttributes() {
-        return ["page-size", "filter-input", "empty-text", "label"];
+        return ["page-size", "filter-input", "empty-text", "label", "editable"];
       }
       constructor() {
         super();
@@ -6611,6 +7306,7 @@ var init_velin_data_table = __esm({
         if (!this._table || !this._table.tBodies.length) return;
         this._ensureAccessibleName();
         this._setupSorting();
+        this._setupEditable();
         this._bindFilterInput();
         this._render();
       }
@@ -6664,6 +7360,75 @@ var init_velin_data_table = __esm({
           header.textContent = "";
           header.appendChild(button);
         });
+      }
+      /**
+       * Inline edit: double-click or Enter on focused cell with data-editable / host editable.
+       * Enter saves, Escape cancels. Dispatches velin-data-table-edit.
+       */
+      _setupEditable() {
+        if (!this.hasAttribute("editable") && !this.querySelector("[data-editable]")) return;
+        const body = this._table.tBodies[0];
+        if (!body || body.dataset.velinEditBound) return;
+        body.dataset.velinEditBound = "true";
+        body.addEventListener("dblclick", (e) => {
+          const cell = e.target.closest("td");
+          if (!cell || !body.contains(cell)) return;
+          if (!this.hasAttribute("editable") && !cell.hasAttribute("data-editable")) return;
+          this._beginEdit(cell);
+        });
+        body.addEventListener("keydown", (e) => {
+          const cell = e.target.closest("td");
+          if (!cell || e.target !== cell) return;
+          if (e.key === "Enter" || e.key === "F2") {
+            if (!this.hasAttribute("editable") && !cell.hasAttribute("data-editable")) return;
+            e.preventDefault();
+            this._beginEdit(cell);
+          }
+        });
+        for (const cell of body.querySelectorAll("td[data-editable], td")) {
+          if (!this.hasAttribute("editable") && !cell.hasAttribute("data-editable")) continue;
+          if (!cell.hasAttribute("tabindex")) cell.setAttribute("tabindex", "0");
+        }
+      }
+      /** @param {HTMLTableCellElement} cell */
+      _beginEdit(cell) {
+        if (cell.querySelector("input")) return;
+        const previous = cell.textContent.trim();
+        const input = document.createElement("input");
+        input.className = "velin-input velin-data-table__edit";
+        input.value = previous;
+        input.setAttribute("aria-label", "Edit cell");
+        cell.textContent = "";
+        cell.appendChild(input);
+        input.focus();
+        input.select();
+        const commit = (save) => {
+          const next = save ? input.value.trim() : previous;
+          cell.textContent = next;
+          if (save && next !== previous) {
+            this.dispatchEvent(new CustomEvent("velin-data-table-edit", {
+              bubbles: true,
+              detail: {
+                cell,
+                row: cell.parentElement,
+                previous,
+                value: next,
+                columnIndex: cell.cellIndex
+              }
+            }));
+            announce("Cell updated");
+          }
+        };
+        input.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            commit(true);
+          } else if (e.key === "Escape") {
+            e.preventDefault();
+            commit(false);
+          }
+        });
+        input.addEventListener("blur", () => commit(true));
       }
       _syncSortState() {
         this._headers().forEach((header, index) => {
@@ -6761,6 +7526,164 @@ var init_velin_data_table = __esm({
     };
     customElements.define("velin-data-table", VelinDataTable);
     velin_data_table_default = VelinDataTable;
+  }
+});
+
+// components/velin-file-dropzone.js
+var velin_file_dropzone_exports = {};
+__export(velin_file_dropzone_exports, {
+  default: () => velin_file_dropzone_default
+});
+var styles28, VelinFileDropzone, velin_file_dropzone_default;
+var init_velin_file_dropzone = __esm({
+  "components/velin-file-dropzone.js"() {
+    init_sanitize();
+    styles28 = `
+  :host { display: block; }
+  .zone {
+    border: 2px dashed var(--velin-color-border, #cbd5e1);
+    border-radius: var(--velin-radius-md, 0.5rem);
+    padding: var(--velin-space-6, 1.5rem);
+    background: var(--velin-color-surface-dim, var(--velin-color-bg-subtle, #f8fafc));
+    color: var(--velin-color-text, #111);
+    text-align: center;
+    transition: border-color 150ms ease, background 150ms ease;
+  }
+  :host([dragging]) .zone {
+    border-color: var(--velin-color-primary, #2563eb);
+    background: var(--velin-color-primary-subtle, #eff6ff);
+  }
+  .hint { margin: 0 0 var(--velin-space-3, 0.75rem); color: var(--velin-color-text-muted, #64748b); }
+  .browse {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-block-size: 2.75rem; padding-inline: var(--velin-space-4, 1rem);
+    border-radius: var(--velin-radius-md, 0.5rem);
+    border: none; cursor: pointer;
+    background: var(--velin-color-primary, #2563eb);
+    color: var(--velin-color-on-primary, #fff);
+    font: inherit;
+  }
+  .browse:focus-visible { outline: 2px solid var(--velin-color-focus, #2563eb); outline-offset: 2px; }
+  input[type="file"] {
+    position: absolute; inline-size: 1px; block-size: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0,0,0,0); border: 0;
+  }
+  .list { list-style: none; padding: 0; margin: var(--velin-space-4, 1rem) 0 0; text-align: start; }
+  .list li {
+    display: flex; justify-content: space-between; gap: var(--velin-space-3, 0.75rem);
+    padding: var(--velin-space-2, 0.5rem) 0;
+    border-block-end: 1px solid var(--velin-color-border, #e2e8f0);
+    font-size: var(--velin-text-sm, 0.875rem);
+  }
+  .progress {
+    margin-block-start: var(--velin-space-3, 0.75rem);
+    block-size: 0.5rem; border-radius: 999px;
+    background: var(--velin-color-border, #e2e8f0); overflow: hidden;
+  }
+  .bar {
+    block-size: 100%; inline-size: 0%;
+    background: var(--velin-color-primary, #2563eb);
+    transition: inline-size 150ms ease;
+  }
+  .status { margin: var(--velin-space-2, 0.5rem) 0 0; font-size: var(--velin-text-sm, 0.875rem); }
+  .status[data-tone="error"] { color: var(--velin-color-danger, #b91c1c); }
+`;
+    VelinFileDropzone = class extends HTMLElement {
+      static get observedAttributes() {
+        return ["accept", "multiple", "label", "progress"];
+      }
+      constructor() {
+        super();
+        this.attachShadow({ mode: "open" });
+        this._files = [];
+      }
+      connectedCallback() {
+        this._render();
+      }
+      attributeChangedCallback() {
+        if (this.shadowRoot?.querySelector(".zone")) this._render();
+      }
+      get files() {
+        return this._files.slice();
+      }
+      _emitFiles(fileList) {
+        const accept = this.getAttribute("accept");
+        const files = [...fileList];
+        if (accept) {
+          const parts = accept.split(",").map((s) => s.trim().toLowerCase());
+          const bad = files.find((f) => {
+            const name = f.name.toLowerCase();
+            const type = (f.type || "").toLowerCase();
+            return !parts.some((p) => p.startsWith(".") ? name.endsWith(p) : type === p || type.startsWith(p.replace("/*", "/")));
+          });
+          if (bad) {
+            this._setStatus(`File type not allowed: ${bad.name}`, "error");
+            this.dispatchEvent(new CustomEvent("velin-error", { bubbles: true, detail: { message: "accept", file: bad } }));
+            return;
+          }
+        }
+        this._files = files;
+        this._setStatus(files.length ? `${files.length} file(s) ready` : "", "ok");
+        this.dispatchEvent(new CustomEvent("velin-files", { bubbles: true, detail: { files } }));
+        this._renderList();
+      }
+      _setStatus(text2, tone = "ok") {
+        const el = this.shadowRoot?.querySelector(".status");
+        if (!el) return;
+        el.textContent = text2;
+        el.dataset.tone = tone;
+      }
+      _renderList() {
+        const ul = this.shadowRoot?.querySelector(".list");
+        if (!ul) return;
+        ul.innerHTML = this._files.map((f) => `<li><span>${escapeHTML(f.name)}</span><span>${Math.round(f.size / 1024)} KB</span></li>`).join("");
+      }
+      _render() {
+        const label = escapeHTML(this.getAttribute("label") || "Upload files");
+        const accept = this.getAttribute("accept") || "";
+        const multiple = this.hasAttribute("multiple");
+        const progress = Math.max(0, Math.min(100, Number(this.getAttribute("progress") || 0)));
+        this.shadowRoot.innerHTML = `
+      <style>${styles28}</style>
+      <div class="zone" role="group" aria-label="${label}">
+        <p class="hint">Drag and drop files here, or browse. Client-side only \u2014 wire <code>velin-files</code> to your upload API.</p>
+        <button type="button" class="browse">Browse files</button>
+        <input type="file" ${accept ? `accept="${escapeHTML(accept)}"` : ""} ${multiple ? "multiple" : ""} />
+        <div class="progress" hidden="${progress <= 0 ? "true" : "false"}" aria-hidden="${progress <= 0 ? "true" : "false"}">
+          <div class="bar" style="inline-size:${progress}%"></div>
+        </div>
+        <p class="status" role="status" aria-live="polite"></p>
+        <ul class="list"></ul>
+      </div>
+    `;
+        const input = this.shadowRoot.querySelector("input");
+        const browse = this.shadowRoot.querySelector(".browse");
+        const zone = this.shadowRoot.querySelector(".zone");
+        browse.addEventListener("click", () => input.click());
+        input.addEventListener("change", () => {
+          if (input.files?.length) this._emitFiles(input.files);
+        });
+        ["dragenter", "dragover"].forEach((ev) => {
+          zone.addEventListener(ev, (e) => {
+            e.preventDefault();
+            this.setAttribute("dragging", "");
+          });
+        });
+        ["dragleave", "drop"].forEach((ev) => {
+          zone.addEventListener(ev, (e) => {
+            e.preventDefault();
+            this.removeAttribute("dragging");
+          });
+        });
+        zone.addEventListener("drop", (e) => {
+          const list = e.dataTransfer?.files;
+          if (list?.length) this._emitFiles(list);
+        });
+        this._renderList();
+      }
+    };
+    customElements.define("velin-file-dropzone", VelinFileDropzone);
+    velin_file_dropzone_default = VelinFileDropzone;
   }
 });
 
@@ -7046,7 +7969,7 @@ var velin_live_dot_exports = {};
 __export(velin_live_dot_exports, {
   default: () => velin_live_dot_default
 });
-var STATUS_COLORS, styles28, KEYFRAMES_FALLBACK, VelinLiveDot, velin_live_dot_default;
+var STATUS_COLORS, styles29, KEYFRAMES_FALLBACK, VelinLiveDot, velin_live_dot_default;
 var init_velin_live_dot = __esm({
   "components/velin-live-dot.js"() {
     init_a11y_utils();
@@ -7057,7 +7980,7 @@ var init_velin_live_dot = __esm({
       error: "var(--velin-color-danger, oklch(60% 0.2 25))",
       muted: "var(--velin-color-border, oklch(85% 0.01 240))"
     };
-    styles28 = `
+    styles29 = `
   :host {
     display: inline-flex;
     align-items: center;
@@ -7107,7 +8030,7 @@ var init_velin_live_dot = __esm({
         this.setAttribute("aria-label", label);
         this.style.setProperty("--velin-live-color", color);
         this.shadowRoot.innerHTML = `
-      <style>${styles28}${KEYFRAMES_FALLBACK}</style>
+      <style>${styles29}${KEYFRAMES_FALLBACK}</style>
       <span class="dot" aria-hidden="true"></span><slot></slot>
     `;
       }
@@ -7725,7 +8648,7 @@ var init_velin_search = __esm({
           return;
         }
         if (!this._indexLoaded) await this._loadIndex();
-        const { groups } = this._search.query(q, {
+        const { groups } = await this._search.query(q, {
           minChars: this.minChars,
           fuzzy: this.fuzzy,
           categories: this.categories || void 0,
@@ -7856,11 +8779,11 @@ async function encryptValue(plain, mode) {
     cipher: Array.from(new Uint8Array(cipher))
   });
 }
-var styles29, VelinSecureField, velin_secure_field_default;
+var styles30, VelinSecureField, velin_secure_field_default;
 var init_velin_secure_field = __esm({
   "components/velin-secure-field.js"() {
     init_sanitize();
-    styles29 = `
+    styles30 = `
   :host { display: block; }
   label { display: block; font-size: var(--velin-text-sm); margin-block-end: var(--velin-space-1); }
   input {
@@ -7910,7 +8833,7 @@ var init_velin_secure_field = __esm({
         const input = this.shadowRoot?.querySelector("input");
         if (input && this._onChange) input.removeEventListener("change", this._onChange);
         this.shadowRoot.innerHTML = `
-      <style>${styles29}</style>
+      <style>${styles30}</style>
       <label for="${id}">${escapeHTML(label)}</label>
       <input id="${id}" type="${type}" autocomplete="${autocomplete}" part="input" />
       <p class="velin-field-help">Demo-only client encoding \u2014 use HTTPS and server-side crypto for real secrets.</p>
@@ -8130,6 +9053,7 @@ var init_component_loaders = __esm({
       "velin-accordion": () => Promise.resolve().then(() => (init_velin_accordion(), velin_accordion_exports)),
       "velin-announcer": () => Promise.resolve().then(() => (init_velin_announcer(), velin_announcer_exports)),
       "velin-bottom-nav": () => Promise.resolve().then(() => (init_velin_bottom_nav(), velin_bottom_nav_exports)),
+      "velin-calendar": () => Promise.resolve().then(() => (init_velin_calendar(), velin_calendar_exports)),
       "velin-carousel": () => Promise.resolve().then(() => (init_velin_carousel(), velin_carousel_exports)),
       "velin-code-block": () => Promise.resolve().then(() => (init_velin_code_block(), velin_code_block_exports)),
       "velin-collapse": () => Promise.resolve().then(() => (init_velin_collapse(), velin_collapse_exports)),
@@ -8143,6 +9067,7 @@ var init_component_loaders = __esm({
       "velin-drawer": () => Promise.resolve().then(() => (init_velin_drawer(), velin_drawer_exports)),
       "velin-dropdown": () => Promise.resolve().then(() => (init_velin_dropdown(), velin_dropdown_exports)),
       "velin-email": () => Promise.resolve().then(() => (init_velin_email(), velin_email_exports)),
+      "velin-file-dropzone": () => Promise.resolve().then(() => (init_velin_file_dropzone(), velin_file_dropzone_exports)),
       "velin-form-summary": () => Promise.resolve().then(() => (init_velin_form_summary(), velin_form_summary_exports)),
       "velin-icon": () => Promise.resolve().then(() => (init_velin_icon(), velin_icon_exports)),
       "velin-lightbox": () => Promise.resolve().then(() => (init_velin_lightbox(), velin_lightbox_exports)),
@@ -8761,6 +9686,8 @@ init_velin_live_dot();
 init_velin_code_block();
 init_velin_data_table();
 init_velin_form_summary();
+init_velin_calendar();
+init_velin_file_dropzone();
 init_velin_search();
 init_velin_search();
 
@@ -8984,6 +9911,7 @@ export {
   velin_accordion_default as VelinAccordion,
   velin_announcer_default as VelinAnnouncer,
   velin_bottom_nav_default as VelinBottomNav,
+  velin_calendar_default as VelinCalendar,
   velin_carousel_default as VelinCarousel,
   velin_code_block_default as VelinCodeBlock,
   velin_collapse_default as VelinCollapse,
@@ -8997,6 +9925,7 @@ export {
   velin_drawer_default as VelinDrawer,
   velin_dropdown_default as VelinDropdown,
   velin_email_default as VelinEmail,
+  velin_file_dropzone_default as VelinFileDropzone,
   velin_form_summary_default as VelinFormSummary,
   VelinHapticObserver,
   velin_icon_default as VelinIcon,
@@ -9067,5 +9996,5 @@ export {
 /*! Bundled license information:
 
 dompurify/dist/purify.es.mjs:
-  (*! @license DOMPurify 3.4.5 | (c) Cure53 and other contributors | Released under the Apache license 2.0 and Mozilla Public License 2.0 | github.com/cure53/DOMPurify/blob/3.4.5/LICENSE *)
+  (*! @license DOMPurify 3.4.12 | (c) Cure53 and other contributors | Released under the Apache license 2.0 and Mozilla Public License 2.0 | github.com/cure53/DOMPurify/blob/3.4.12/LICENSE *)
 */

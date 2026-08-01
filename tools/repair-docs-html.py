@@ -87,6 +87,12 @@ META_FIXES: dict[str, str] = {
     "guides/api-reference.html": (
         "Generated API reference from velinstyle docs generate — components, tokens, utilities, and CLI."
     ),
+    "guides/ai-skills.html": (
+        "VelinStyle AI Skills: registry-first skill engine, workflow graphs, packs, bundles, templates, and CLI."
+    ),
+    "guides/ai-skills-leitfaden.html": (
+        "VelinStyle AI Skills Leitfaden: Registry-first Skill Engine, Workflow Graphs, Packs und Bundles."
+    ),
     "components/email.html": (
         "velin-email Web Component — reveal obfuscated addresses on click with accessible mailto links."
     ),

@@ -1,0 +1,836 @@
+﻿<!DOCTYPE html>
+<html lang="de" data-velin-themes-base="../../dist/themes">
+<head>
+  <script>(function(){var p=location.pathname;if(!/\/$/.test(p)&&!/\.html?$/i.test(p))p+="/";if(!p.startsWith("/"))p="/"+p;document.write('<base href="'+p+'">');})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- velin-seo -->
+  <link rel="canonical" href="https://velinstyle.info/docs/getting-started/a11y-dashboard-de.html">
+  <meta name="description" content="VelinStyle ist das WCAG-2.2-AAA-CSS-Framework mit nativer JavaScript-Runtime und Web Components.">
+  <link rel="alternate" type="text/plain" href="../../dist/llms.txt" title="VelinStyle llms.txt">
+  <script type="application/ld+json">{"@context": "https://schema.org","@type": "SoftwareApplication","name": "VelinStyle","applicationCategory": "DeveloperApplication","operatingSystem": "Web","description": "VelinStyle ist das WCAG-2.2-AAA-CSS-Framework mit nativer JavaScript-Runtime und Web Components.","url": "https://velinstyle.info/docs/getting-started/a11y-dashboard-de.html","softwareVersion": "1.2.0","license": "https://opensource.org/licenses/MIT","isAccessibleForFree": true,"publisher": {"@type": "Organization","name": "SkyliteDesign"}}</script>
+  <!-- /velin-seo -->
+
+<title>A11y Dashboard · VelinStyle</title>
+<!-- VelinStyle core -->
+  <link rel="alternate" type="application/vnd.velinstyle.meta+json" href="../dist/velin-agent.json" title="VelinStyle agent metadata">
+  <link rel="stylesheet" href="../../dist/velinstyle.min.css">
+  <!-- Documentation styles -->
+  <link rel="stylesheet" href="../docs.css">
+  <!-- Prism.js syntax highlighting -->
+<link rel="icon" href="../../favicon.ico" type="image/x-icon">
+  <link rel="icon" href="../../assets/img/velinstyle-logo.svg" type="image/svg+xml">
+
+  <style>
+    /* ---- Dashboard-specific styles ---- */
+    .a11y-section { margin-bottom: 3rem; }
+    .a11y-section h2 { scroll-margin-top: 5rem; }
+
+    /* ARIA Inspector */
+    .aria-inspector-zone {
+      display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: flex-start;
+    }
+    .aria-inspector-target {
+      flex: 1 1 320px; padding: 1.5rem; border: 2px dashed var(--velin-border-color, #dee2e6);
+      border-radius: .5rem; display: flex; flex-wrap: wrap; gap: .75rem; align-items: center;
+      min-height: 160px;
+    }
+    .aria-inspector-panel {
+      flex: 1 1 280px; position: sticky; top: 5rem;
+      background: var(--velin-body-bg, #fff); border: 1px solid var(--velin-border-color, #dee2e6);
+      border-radius: .5rem; padding: 1rem 1.25rem; font-family: monospace; font-size: .85rem;
+      max-height: 340px; overflow-y: auto;
+    }
+    .aria-inspector-panel .aria-row { display: flex; gap: .5rem; padding: .25rem 0; border-bottom: 1px solid var(--velin-border-color, #dee2e6); flex-wrap: wrap; }
+    .aria-inspector-panel .aria-key { font-weight: 700; min-width: 110px; color: var(--velin-primary, #6366f1); }
+    .aria-inspector-panel .aria-val { word-break: break-all; }
+    .aria-inspector-panel .aria-empty { color: var(--velin-secondary, #6c757d); font-style: italic; }
+
+    /* Keyboard nav visualizer */
+    .kbd-nav-container {
+      position: relative; padding: 1.5rem; border: 2px solid var(--velin-border-color, #dee2e6);
+      border-radius: .5rem;
+    }
+    .kbd-nav-container .focus-step-badge {
+      position: absolute; width: 22px; height: 22px; border-radius: 50%;
+      background: var(--velin-primary, #6366f1); color: #fff; font-size: .7rem;
+      display: flex; align-items: center; justify-content: center; font-weight: 700;
+      pointer-events: none; z-index: 10; transform: translate(-50%, -110%);
+      opacity: 0; transition: opacity .2s;
+    }
+    .kbd-nav-container .focus-step-badge.visible { opacity: 1; }
+    .kbd-nav-container [data-focus-step].is-current-step {
+      outline: 3px solid var(--velin-primary, #6366f1);
+      outline-offset: 3px;
+    }
+
+    /* Contrast checker */
+    .contrast-inputs { display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: flex-end; }
+    .contrast-inputs label { display: flex; flex-direction: column; gap: .35rem; font-weight: 600; font-size: .875rem; }
+    .contrast-inputs input[type="color"] {
+      width: 56px; height: 40px; border: 1px solid var(--velin-border-color, #dee2e6);
+      border-radius: .375rem; cursor: pointer; padding: 2px;
+    }
+    .contrast-inputs input[type="text"] { width: 100px; font-family: monospace; }
+    .contrast-result {
+      margin-top: 1rem; padding: 1.25rem; border-radius: .5rem;
+      border: 1px solid var(--velin-border-color, #dee2e6);
+    }
+    .contrast-preview {
+      padding: 1rem 1.5rem; border-radius: .375rem; font-size: 1.125rem;
+      font-weight: 600; text-align: center; margin-bottom: 1rem;
+    }
+    .contrast-ratio-value { font-size: 2rem; font-weight: 800; }
+    .contrast-badges { display: flex; gap: .75rem; flex-wrap: wrap; margin-top: .75rem; }
+    .contrast-badge {
+      padding: .35rem .75rem; border-radius: .375rem; font-weight: 700; font-size: .875rem;
+    }
+    .contrast-pass { background: #16a34a; color: #fff; }
+    .contrast-fail { background: #dc2626; color: #fff; }
+
+    /* Screen reader table */
+    .sr-preview-table { width: 100%; }
+    .sr-preview-table th { white-space: nowrap; }
+    .sr-preview-table code { font-size: .8rem; }
+
+    /* User preferences demo */
+    .prefs-controls { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .prefs-controls label { display: flex; align-items: center; gap: .5rem; font-weight: 600; cursor: pointer; font-size: .875rem; }
+    .prefs-demo-box {
+      padding: 1.5rem; border: 2px solid var(--velin-border-color, #dee2e6);
+      border-radius: .5rem; transition: all .3s ease;
+    }
+    .prefs-demo-box .demo-animated {
+      width: 80px; height: 80px; border-radius: .5rem;
+      background: linear-gradient(135deg, var(--velin-primary, #6366f1), #a855f7);
+      animation: prefsDemoBounce 1.5s ease-in-out infinite;
+    }
+    .prefs-demo-box .demo-transparent {
+      background: rgba(99,102,241,.15); padding: 1rem; border-radius: .375rem; margin-top: 1rem;
+    }
+    @keyframes prefsDemoBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-18px); }
+    }
+
+    /* Reduced motion simulation */
+    .sim-reduced-motion .demo-animated { animation: none !important; }
+    /* High contrast simulation */
+    .sim-high-contrast {
+      filter: contrast(1.5); border-color: #000 !important;
+    }
+    .sim-high-contrast .demo-transparent {
+      background: rgba(99,102,241,.35);
+    }
+    /* Reduced transparency simulation */
+    .sim-reduced-transparency .demo-transparent {
+      background: rgba(99,102,241,.85);
+    }
+  </style>
+  <script src="../../assets/js/velin-theme-init.js"></script>
+</head>
+<body>
+
+  <a href="#main-content" class="velin-doc-skip">Zum Hauptinhalt springen</a>
+
+  <!-- ============================================================
+       HEADER
+       ============================================================ -->
+  <header class="velin-doc-header">
+    <button class="velin-doc-hamburger" aria-label="Toggle sidebar" id="sidebarToggle">
+      <velin-icon name="menu" size="20"></velin-icon>
+    </button>
+    <a href="../getting-started/introduction.html" class="velin-doc-header__brand">
+      <img src="../../assets/img/velinstyle-logo.svg" alt="" width="28" height="28" aria-hidden="true">
+      VelinStyle
+      <span class="velin-doc-header__version">v1.2.0</span>
+    </a>
+    <div class="velin-doc-header__search">
+      <input type="search" placeholder="Search docs…" aria-label="Search documentation" id="docSearch" autocomplete="off" data-search-index="../search-index.json">
+    </div>
+    <div class="velin-doc-header__actions">
+      <velin-theme-toggle themes-base="../../dist/themes/"></velin-theme-toggle>
+      <a href="https://github.com/SkyliteDesign/velinstyle" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub">
+        <velin-icon name="github" size="18"></velin-icon>
+      </a>
+    </div>
+  </header>
+
+  <div class="velin-doc-overlay" id="sidebarOverlay"></div>
+
+  <!-- ============================================================
+       3-COLUMN LAYOUT
+       ============================================================ -->
+  <div class="velin-doc-wrapper">
+
+    <!-- ========================================================
+         SIDEBAR
+         ======================================================== -->
+                                                                                                                                                                                                                                                                                                            <nav class="velin-doc-sidebar" id="sidebar" aria-label="Documentation navigation">
+<div class="velin-doc-sidebar__pinned" data-cat="pinned"><p class="velin-doc-sidebar__pinned-label">Switch quickly</p><ul class="velin-doc-sidebar__links velin-doc-sidebar__links--prominent"><li><a href="../guides/feature-scope.html" data-cat="guides"><velin-icon name="layer-group" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Feature scope</span></a></li><li><a href="../changelog.html" data-cat="about"><velin-icon name="clock-rotate-left" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Changelog</span></a></li><li><a href="../migration.html" data-cat="migration"><velin-icon name="right-left" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Migration Guide</span></a></li><li><a href="../getting-started/upgrading.html" data-cat="getting-started"><velin-icon name="arrow-up" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Upgrading to 1.2.0</span></a></li></ul><p class="velin-doc-sidebar__pinned-label velin-doc-sidebar__pinned-label--sub">Framework guides</p><ul class="velin-doc-sidebar__links velin-doc-sidebar__links--prominent"><li><a href="../guides/index.html" data-cat="guides"><velin-icon name="map" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Guides overview</span></a></li><li><a href="../guides/whats-new-extension.html" data-cat="guides"><velin-icon name="wand-magic-sparkles" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Search &amp; Motion</span></a></li><li><a href="../guides/velin-search.html" data-cat="guides"><velin-icon name="magnifying-glass" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">VelinSearch</span></a></li><li><a href="../guides/motion-attributes.html" data-cat="guides"><velin-icon name="bolt" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Motion &amp; attributes</span></a></li><li><a href="../guides/syntax-highlight.html" data-cat="guides"><velin-icon name="code" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Syntax highlighting</span></a></li><li><a href="../guides/existing-project.html" data-cat="guides"><velin-icon name="folder-open" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Existing project</span></a></li><li><a href="../guides/react-vite-starter.html" data-cat="guides"><velin-icon name="code-branch" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Vite &amp; React</span></a></li><li><a href="../guides/prompt-scaffolding.html" data-cat="guides"><velin-icon name="wand-magic-sparkles" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Prompt scaffolding</span></a></li><li><a href="../guides/landing-15-min.html" data-cat="guides"><velin-icon name="rocket" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Landing in 15 min</span></a></li><li><a href="../guides/marketing-lite-css.html" data-cat="guides"><velin-icon name="gauge-simple" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Marketing lite CSS</span></a></li><li><a href="../guides/responsive-layout.html" data-cat="guides"><velin-icon name="mobile-screen" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Responsive layout</span></a></li><li><a href="../guides/performance-audit.html" data-cat="guides"><velin-icon name="gauge-high" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Performance audit</span></a></li><li><a href="../guides/design-tokens.html" data-cat="guides"><velin-icon name="swatchbook" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Design tokens</span></a></li><li><a href="../guides/api-reference.html" data-cat="guides"><velin-icon name="book" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">API reference</span></a></li><li><a href="../guides/velin-meta.html" data-cat="guides"><velin-icon name="robot" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Velin-Meta</span></a></li><li><a href="../guides/ai-skills.html" data-cat="guides"><velin-icon name="microchip" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">AI Skills</span></a></li><li><a href="../guides/design-intelligence.html" data-cat="guides"><velin-icon name="brain" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Design Intelligence</span></a></li><li><a href="../guides/cli-ship-surface.html" data-cat="guides"><velin-icon name="terminal" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">CLI ship surface</span></a></li><li><a href="../guides/blueprints.html" data-cat="guides"><velin-icon name="puzzle-piece" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Blueprints</span></a></li><li><a href="../guides/faq.html" data-cat="guides"><velin-icon name="circle-question" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">FAQ</span></a></li><li><a href="../guides/troubleshooting.html" data-cat="guides"><velin-icon name="wrench" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Troubleshooting</span></a></li><li><a href="../guides/deploy.html" data-cat="guides"><velin-icon name="cloud-arrow-up" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Deploy</span></a></li><li><a href="../guides/ecommerce.html" data-cat="guides"><velin-icon name="cart-shopping" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">E-commerce</span></a></li><li><a href="../guides/forum-update.html" data-cat="guides"><velin-icon name="comments" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Forum update</span></a></li><li><a href="../generated/index.html" data-cat="extend"><velin-icon name="file-lines" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Generated Markdown</span></a></li><li><a href="../extend/cli.html" data-cat="extend"><velin-icon name="terminal" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">CLI reference</span></a></li><li><a href="../layout/patterns.html" data-cat="layout"><velin-icon name="table-columns" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Layout patterns</span></a></li><li><a href="../getting-started/introduction.html" data-cat="getting-started"><velin-icon name="house" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Introduction</span></a></li></ul></div><div class="velin-doc-sidebar__category collapsed" data-cat="getting-started"><button class="velin-doc-sidebar__category-header" aria-expanded="false" type="button"><velin-icon name="rocket" provider="fontawesome" variant="solid" size="12" class="velin-doc-sidebar__cat-icon" aria-hidden="true"></velin-icon><span>Getting Started</span> <span class="chevron" aria-hidden="true">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../getting-started/introduction.html"><velin-icon name="house" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Introduction</span></a></li><li><a href="../getting-started/download.html"><velin-icon name="download" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Download</span></a></li><li><a href="../getting-started/contents.html"><velin-icon name="list" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Contents</span></a></li><li><a href="../getting-started/editor-setup.html"><velin-icon name="laptop-code" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Editor setup</span></a></li><li><a href="../getting-started/browser-compatibility.html"><velin-icon name="globe" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Compatibility</span></a></li><li><a href="../getting-started/upgrading.html"><velin-icon name="arrow-up" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Upgrading</span></a></li><li><a href="../getting-started/states-and-variants.html"><velin-icon name="sliders" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">States &amp; variants</span></a></li><li><a href="../getting-started/accessibility.html"><velin-icon name="wheelchair" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Accessibility</span></a></li><li><a href="../getting-started/rtl.html"><velin-icon name="align-right" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">RTL</span></a></li><li><a href="../getting-started/a11y-patterns.html"><velin-icon name="clipboard-list" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">A11y patterns</span></a></li><li><a href="../getting-started/a11y-dashboard.html"><velin-icon name="gauge-high" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">A11y Dashboard</span></a></li></ul></div><div class="velin-doc-sidebar__category collapsed" data-cat="customize"><button class="velin-doc-sidebar__category-header" aria-expanded="false" type="button"><velin-icon name="palette" provider="fontawesome" variant="solid" size="12" class="velin-doc-sidebar__cat-icon" aria-hidden="true"></velin-icon><span>Customize</span> <span class="chevron" aria-hidden="true">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../customize/overview.html"><velin-icon name="palette" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Overview</span></a></li><li><a href="../customize/color.html"><velin-icon name="droplet" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Color</span></a></li><li><a href="../customize/color-modes.html"><velin-icon name="circle-half-stroke" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Color Modes</span></a></li><li><a href="../customize/css-variables.html"><velin-icon name="code" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">CSS Variables</span></a></li><li><a href="../customize/components.html"><velin-icon name="cubes" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Components</span></a></li><li><a href="../customize/optimize.html"><velin-icon name="gauge-simple" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Optimize</span></a></li></ul></div><div class="velin-doc-sidebar__category collapsed" data-cat="layout"><button class="velin-doc-sidebar__category-header" aria-expanded="false" type="button"><velin-icon name="table-cells" provider="fontawesome" variant="solid" size="12" class="velin-doc-sidebar__cat-icon" aria-hidden="true"></velin-icon><span>Layout</span> <span class="chevron" aria-hidden="true">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../layout/breakpoints.html"><velin-icon name="mobile-screen" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Breakpoints</span></a></li><li><a href="../layout/containers.html"><velin-icon name="box" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Containers</span></a></li><li><a href="../layout/grid.html"><velin-icon name="table-cells" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Grid</span></a></li><li><a href="../layout/patterns.html"><velin-icon name="table-columns" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Patterns</span></a></li><li><a href="../layout/columns.html"><velin-icon name="table-columns" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Columns</span></a></li><li><a href="../layout/gutters.html"><velin-icon name="grip-lines" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Gutters</span></a></li><li><a href="../layout/utilities.html"><velin-icon name="ruler-combined" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Utilities</span></a></li><li><a href="../layout/z-index.html"><velin-icon name="layer-group" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Z-index</span></a></li></ul></div><div class="velin-doc-sidebar__category collapsed" data-cat="content"><button class="velin-doc-sidebar__category-header" aria-expanded="false" type="button"><velin-icon name="file-lines" provider="fontawesome" variant="solid" size="12" class="velin-doc-sidebar__cat-icon" aria-hidden="true"></velin-icon><span>Content</span> <span class="chevron" aria-hidden="true">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../content/reboot.html"><velin-icon name="rotate" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Reboot</span></a></li><li><a href="../content/typography.html"><velin-icon name="font" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Typography</span></a></li><li><a href="../content/images.html"><velin-icon name="image" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Images</span></a></li><li><a href="../content/tables.html"><velin-icon name="table" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Tables</span></a></li><li><a href="../content/figures.html"><velin-icon name="images" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Figures</span></a></li></ul></div><div class="velin-doc-sidebar__category collapsed" data-cat="forms"><button class="velin-doc-sidebar__category-header" aria-expanded="false" type="button"><velin-icon name="keyboard" provider="fontawesome" variant="solid" size="12" class="velin-doc-sidebar__cat-icon" aria-hidden="true"></velin-icon><span>Forms</span> <span class="chevron" aria-hidden="true">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../forms/overview.html"><velin-icon name="keyboard" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Overview</span></a></li><li><a href="../forms/form-control.html"><velin-icon name="keyboard" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Form Control</span></a></li><li><a href="../forms/select.html"><velin-icon name="caret-down" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Select</span></a></li><li><a href="../forms/checks-radios.html"><velin-icon name="square-check" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Checks &amp; Radios</span></a></li><li><a href="../forms/range.html"><velin-icon name="sliders" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Range</span></a></li><li><a href="../forms/input-group.html"><velin-icon name="object-group" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Input Group</span></a></li><li><a href="../forms/floating-labels.html"><velin-icon name="tag" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Floating Labels</span></a></li><li><a href="../forms/layout.html"><velin-icon name="table-list" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Layout</span></a></li><li><a href="../forms/validation.html"><velin-icon name="circle-check" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Validation</span></a></li></ul></div><div class="velin-doc-sidebar__category collapsed" data-cat="components"><button class="velin-doc-sidebar__category-header" aria-expanded="false" type="button"><velin-icon name="cubes" provider="fontawesome" variant="solid" size="12" class="velin-doc-sidebar__cat-icon" aria-hidden="true"></velin-icon><span>Components</span> <span class="chevron" aria-hidden="true">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../components/accordion.html"><velin-icon name="bars-staggered" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Accordion</span></a></li><li><a href="../components/alerts.html"><velin-icon name="triangle-exclamation" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Alerts</span></a></li><li><a href="../components/avatar.html"><velin-icon name="circle-user" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Avatar</span></a></li><li><a href="../components/badge.html"><velin-icon name="certificate" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Badge</span></a></li><li><a href="../components/breadcrumb.html"><velin-icon name="ellipsis" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Breadcrumb</span></a></li><li><a href="../components/buttons.html"><velin-icon name="square" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Buttons</span></a></li><li><a href="../components/button-group.html"><velin-icon name="object-group" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Button Group</span></a></li><li><a href="../components/card.html"><velin-icon name="id-card" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Card</span></a></li><li><a href="../components/carousel.html"><velin-icon name="images" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Carousel</span></a></li><li><a href="../components/chip.html"><velin-icon name="tags" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Chip</span></a></li><li><a href="../components/velin-code-block.html"><velin-icon name="code" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Code block</span></a></li><li><a href="../components/close-button.html"><velin-icon name="xmark" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Close Button</span></a></li><li><a href="../components/collapse.html"><velin-icon name="compress" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Collapse</span></a></li><li><a href="../components/announcer.html"><velin-icon name="bullhorn" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Announcer</span></a></li><li><a href="../components/bottom-nav.html"><velin-icon name="bars" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Bottom nav</span></a></li><li><a href="../components/calendar.html"><velin-icon name="calendar-days" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Calendar</span></a></li><li><a href="../components/combobox.html"><velin-icon name="list" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Combobox</span></a></li><li><a href="../components/command.html"><velin-icon name="terminal" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Command palette</span></a></li><li><a href="../components/velin-search.html"><velin-icon name="magnifying-glass" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Velin Search</span></a></li><li><a href="../components/menubar.html"><velin-icon name="bars-progress" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Menubar</span></a></li><li><a href="../components/rating.html"><velin-icon name="star" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Rating</span></a></li><li><a href="../components/segmented-control.html"><velin-icon name="table-cells-large" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Segmented control</span></a></li><li><a href="../components/sheet.html"><velin-icon name="sheet-plastic" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Sheet</span></a></li><li><a href="../components/secure-field.html"><velin-icon name="lock" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Secure field</span></a></li><li><a href="../components/dialog.html"><velin-icon name="comment-dots" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Dialog</span></a></li><li><a href="../components/divider.html"><velin-icon name="minus" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Divider</span></a></li><li><a href="../components/drawer.html"><velin-icon name="bars" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Drawer</span></a></li><li><a href="../components/dropdown.html"><velin-icon name="caret-down" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Dropdown</span></a></li><li><a href="../components/email.html"><velin-icon name="envelope" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Email</span></a></li><li><a href="../components/file-dropzone.html"><velin-icon name="cloud-arrow-up" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">File dropzone</span></a></li><li><a href="../components/lightbox.html"><velin-icon name="expand" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Lightbox</span></a></li><li><a href="../components/list-group.html"><velin-icon name="list-ul" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">List Group</span></a></li><li><a href="../components/modal.html"><velin-icon name="window-maximize" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Modal</span></a></li><li><a href="../components/navbar.html"><velin-icon name="bars" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Navbar</span></a></li><li><a href="../components/navs-tabs.html"><velin-icon name="folder" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Navs &amp; Tabs</span></a></li><li><a href="../components/pagination.html"><velin-icon name="ellipsis" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Pagination</span></a></li><li><a href="../components/popover.html"><velin-icon name="comment" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Popover</span></a></li><li><a href="../components/progress.html"><velin-icon name="bars-progress" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Progress</span></a></li><li><a href="../components/progress-ring.html"><velin-icon name="circle-notch" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Progress Ring</span></a></li><li><a href="../components/scrollspy.html"><velin-icon name="binoculars" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Scrollspy</span></a></li><li><a href="../components/spinners.html"><velin-icon name="spinner" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Spinners</span></a></li><li><a href="../components/stat.html"><velin-icon name="chart-simple" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Stat</span></a></li><li><a href="../components/stepper.html"><velin-icon name="shoe-prints" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Stepper</span></a></li><li><a href="../components/timeline.html"><velin-icon name="timeline" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Timeline</span></a></li><li><a href="../components/toasts.html"><velin-icon name="bell" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Toasts</span></a></li><li><a href="../components/tooltips.html"><velin-icon name="circle-info" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Tooltips</span></a></li><li><a href="../components/sparkline.html"><velin-icon name="chart-line" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Sparkline</span></a></li><li><a href="../components/counter.html"><velin-icon name="stopwatch" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Counter</span></a></li><li><a href="../components/copy.html"><velin-icon name="copy" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Copy</span></a></li><li><a href="../components/countdown.html"><velin-icon name="hourglass-half" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Countdown</span></a></li><li><a href="../components/data-table.html"><velin-icon name="table" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Data table</span></a></li><li><a href="../components/form-summary.html"><velin-icon name="circle-exclamation" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Form summary</span></a></li><li><a href="../components/persist.html"><velin-icon name="floppy-disk" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Persist</span></a></li><li><a href="../components/scroll-top.html"><velin-icon name="arrow-up" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Scroll to top</span></a></li><li><a href="../components/live-dot.html"><velin-icon name="tower-broadcast" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Live dot</span></a></li></ul></div><div class="velin-doc-sidebar__category collapsed" data-cat="helpers"><button class="velin-doc-sidebar__category-header" aria-expanded="false" type="button"><velin-icon name="toolbox" provider="fontawesome" variant="solid" size="12" class="velin-doc-sidebar__cat-icon" aria-hidden="true"></velin-icon><span>Helpers</span> <span class="chevron" aria-hidden="true">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../helpers/clearfix.html"><velin-icon name="broom" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Clearfix</span></a></li><li><a href="../helpers/colored-links.html"><velin-icon name="link" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Colored Links</span></a></li><li><a href="../helpers/focus-ring.html"><velin-icon name="bullseye" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Focus Ring</span></a></li><li><a href="../helpers/icon-link.html"><velin-icon name="icons" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Icon Link</span></a></li><li><a href="../helpers/ratios.html"><velin-icon name="crop" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Ratios</span></a></li><li><a href="../helpers/stacks.html"><velin-icon name="layer-group" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Stacks</span></a></li><li><a href="../helpers/stretched-link.html"><velin-icon name="up-right-and-down-left-from-center" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Stretched Link</span></a></li><li><a href="../helpers/text-truncation.html"><velin-icon name="ellipsis" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Text Truncation</span></a></li><li><a href="../helpers/vertical-rule.html"><velin-icon name="grip-lines-vertical" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Vertical Rule</span></a></li><li><a href="../helpers/visually-hidden.html"><velin-icon name="eye-slash" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Visually Hidden</span></a></li></ul></div><div class="velin-doc-sidebar__category collapsed" data-cat="utilities"><button class="velin-doc-sidebar__category-header" aria-expanded="false" type="button"><velin-icon name="ruler-combined" provider="fontawesome" variant="solid" size="12" class="velin-doc-sidebar__cat-icon" aria-hidden="true"></velin-icon><span>Utilities</span> <span class="chevron" aria-hidden="true">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../utilities/api.html"><velin-icon name="book" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">API</span></a></li><li><a href="../utilities/background.html"><velin-icon name="fill-drip" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Background</span></a></li><li><a href="../utilities/borders.html"><velin-icon name="border-all" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Borders</span></a></li><li><a href="../utilities/colors.html"><velin-icon name="palette" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Colors</span></a></li><li><a href="../utilities/color-mix.html"><velin-icon name="swatchbook" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Color Mix</span></a></li><li><a href="../utilities/display.html"><velin-icon name="eye" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Display</span></a></li><li><a href="../utilities/divide.html"><velin-icon name="grip-lines" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Divide</span></a></li><li><a href="../utilities/flex.html"><velin-icon name="arrows-up-down-left-right" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Flex</span></a></li><li><a href="../utilities/float.html"><velin-icon name="water" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Float</span></a></li><li><a href="../utilities/filters.html"><velin-icon name="filter" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Filters</span></a></li><li><a href="../utilities/interactions.html"><velin-icon name="hand-pointer" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Interactions</span></a></li><li><a href="../utilities/object-fit.html"><velin-icon name="object-ungroup" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Object Fit</span></a></li><li><a href="../utilities/opacity.html"><velin-icon name="circle-half-stroke" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Opacity</span></a></li><li><a href="../utilities/overflow.html"><velin-icon name="expand" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Overflow</span></a></li><li><a href="../utilities/position.html"><velin-icon name="location-dot" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Position</span></a></li><li><a href="../utilities/print.html"><velin-icon name="print" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Print</span></a></li><li><a href="../utilities/scroll.html"><velin-icon name="scroll" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Scroll</span></a></li><li><a href="../utilities/shadows.html"><velin-icon name="cloud" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Shadows</span></a></li><li><a href="../utilities/sizing.html"><velin-icon name="maximize" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Sizing</span></a></li><li><a href="../utilities/spacing.html"><velin-icon name="arrows-left-right" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Spacing</span></a></li><li><a href="../utilities/text.html"><velin-icon name="font" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Text</span></a></li><li><a href="../utilities/transitions.html"><velin-icon name="timeline" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Transitions</span></a></li><li><a href="../utilities/transforms.html"><velin-icon name="shapes" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Transforms</span></a></li><li><a href="../utilities/motion.html"><velin-icon name="stopwatch" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Motion tokens</span></a></li><li><a href="../utilities/filter-effects.html"><velin-icon name="wand-magic-sparkles" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Filter effects</span></a></li><li><a href="../utilities/chart-animation.html"><velin-icon name="chart-line" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Chart animation</span></a></li><li><a href="../utilities/vertical-align.html"><velin-icon name="align-center" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Vertical Align</span></a></li><li><a href="../utilities/visibility.html"><velin-icon name="eye-slash" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Visibility</span></a></li><li><a href="../utilities/safe-area.html"><velin-icon name="mobile-screen-button" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Safe area</span></a></li><li><a href="../utilities/z-index.html"><velin-icon name="layer-group" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Z-index</span></a></li></ul></div><div class="velin-doc-sidebar__category collapsed" data-cat="animations"><button class="velin-doc-sidebar__category-header" aria-expanded="false" type="button"><velin-icon name="bolt" provider="fontawesome" variant="solid" size="12" class="velin-doc-sidebar__cat-icon" aria-hidden="true"></velin-icon><span>Animations</span> <span class="chevron" aria-hidden="true">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../animations/overview.html"><velin-icon name="bolt" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Overview</span></a></li><li><a href="../animations/entrance.html"><velin-icon name="door-open" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Entrance</span></a></li><li><a href="../animations/attention.html"><velin-icon name="bell" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Attention</span></a></li><li><a href="../animations/exit.html"><velin-icon name="door-closed" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Exit</span></a></li><li><a href="../animations/scroll-driven.html"><velin-icon name="scroll" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Scroll-driven</span></a></li><li><a href="../animations/view-transitions.html"><velin-icon name="film" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">View Transitions</span></a></li></ul></div><div class="velin-doc-sidebar__category collapsed" data-cat="extend"><button class="velin-doc-sidebar__category-header" aria-expanded="false" type="button"><velin-icon name="puzzle-piece" provider="fontawesome" variant="solid" size="12" class="velin-doc-sidebar__cat-icon" aria-hidden="true"></velin-icon><span>Extend</span> <span class="chevron" aria-hidden="true">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../extend/approach.html"><velin-icon name="compass" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Approach</span></a></li><li><a href="../extend/utility-coverage.html"><velin-icon name="list-check" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Utility coverage</span></a></li><li><a href="../extend/icons.html"><velin-icon name="icons" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Icons</span></a></li><li><a href="../extend/cli.html"><velin-icon name="terminal" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">CLI</span></a></li><li><a href="../generated/index.html"><velin-icon name="file-lines" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Generated reference</span></a></li><li><a href="../extend/security.html"><velin-icon name="shield-halved" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Security</span></a></li><li><a href="../extend/repo-tools.html"><velin-icon name="screwdriver-wrench" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Repo tools</span></a></li><li><a href="../extend/web-components.html"><velin-icon name="puzzle-piece" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Web Components</span></a></li><li><a href="../extend/javascript-api.html"><velin-icon name="code" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">JavaScript API</span></a></li><li><a href="../extend/core-modules.html"><velin-icon name="cubes" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Core modules</span></a></li></ul></div><div class="velin-doc-sidebar__category collapsed" data-cat="guides"><button class="velin-doc-sidebar__category-header" aria-expanded="false" type="button"><velin-icon name="book" provider="fontawesome" variant="solid" size="12" class="velin-doc-sidebar__cat-icon" aria-hidden="true"></velin-icon><span>Guides</span> <span class="chevron" aria-hidden="true">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../guides/index.html"><velin-icon name="map" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Overview</span></a></li><li><a href="../guides/feature-scope.html"><velin-icon name="layer-group" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Feature scope</span></a></li><li><a href="../guides/existing-project.html"><velin-icon name="folder-open" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Existing project</span></a></li><li><a href="../guides/react-vite-starter.html"><velin-icon name="code-branch" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Vite &amp; React</span></a></li><li><a href="../guides/prompt-scaffolding.html"><velin-icon name="wand-magic-sparkles" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Prompt scaffolding</span></a></li><li><a href="../guides/landing-15-min.html"><velin-icon name="rocket" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Landing in 15 min</span></a></li><li><a href="../guides/marketing-lite-css.html"><velin-icon name="gauge-simple" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Marketing lite CSS</span></a></li><li><a href="../guides/responsive-layout.html"><velin-icon name="mobile-screen" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Responsive layout</span></a></li><li><a href="../guides/performance-audit.html"><velin-icon name="gauge-high" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Performance audit</span></a></li><li><a href="../guides/whats-new-extension.html"><velin-icon name="wand-magic-sparkles" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">What&apos;s new (extension)</span></a></li><li><a href="../guides/velin-search.html"><velin-icon name="magnifying-glass" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">VelinSearch</span></a></li><li><a href="../guides/motion-attributes.html"><velin-icon name="bolt" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Motion &amp; attributes</span></a></li><li><a href="../guides/syntax-highlight.html"><velin-icon name="code" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Syntax highlighting</span></a></li><li><a href="../guides/html-attributes.html"><velin-icon name="code" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">HTML attributes</span></a></li><li><a href="../guides/design-tokens.html"><velin-icon name="swatchbook" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Design tokens</span></a></li><li><a href="../guides/api-reference.html"><velin-icon name="book" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">API reference</span></a></li><li><a href="../guides/velin-meta.html"><velin-icon name="robot" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Velin-Meta</span></a></li><li><a href="../guides/ai-skills.html"><velin-icon name="microchip" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">AI Skills</span></a></li><li><a href="../guides/design-intelligence.html"><velin-icon name="brain" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Design Intelligence</span></a></li><li><a href="../guides/cli-ship-surface.html"><velin-icon name="terminal" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">CLI ship surface</span></a></li><li><a href="../guides/blueprints.html"><velin-icon name="puzzle-piece" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Blueprints</span></a></li><li><a href="../guides/faq.html"><velin-icon name="circle-question" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">FAQ</span></a></li><li><a href="../guides/troubleshooting.html"><velin-icon name="wrench" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Troubleshooting</span></a></li><li><a href="../guides/deploy.html"><velin-icon name="cloud-arrow-up" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Deploy</span></a></li><li><a href="../guides/laravel.html"><velin-icon name="php" provider="fontawesome" variant="brands" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Laravel</span></a></li><li><a href="../guides/wordpress.html"><velin-icon name="wordpress" provider="fontawesome" variant="brands" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">WordPress</span></a></li><li><a href="../guides/ecommerce.html"><velin-icon name="cart-shopping" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">E-commerce</span></a></li><li><a href="../guides/forum-update.html"><velin-icon name="comments" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Forum update</span></a></li></ul></div><div class="velin-doc-sidebar__category collapsed" data-cat="about"><button class="velin-doc-sidebar__category-header" aria-expanded="false" type="button"><velin-icon name="circle-info" provider="fontawesome" variant="solid" size="12" class="velin-doc-sidebar__cat-icon" aria-hidden="true"></velin-icon><span>About</span> <span class="chevron" aria-hidden="true">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../about/overview.html"><velin-icon name="circle-info" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Overview</span></a></li><li><a href="../about/brand.html"><velin-icon name="gem" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Brand</span></a></li><li><a href="../about/license.html"><velin-icon name="file-contract" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">License</span></a></li></ul></div><div class="velin-doc-sidebar__category collapsed" data-cat="support"><button class="velin-doc-sidebar__category-header" aria-expanded="false" type="button"><velin-icon name="life-ring" provider="fontawesome" variant="solid" size="12" class="velin-doc-sidebar__cat-icon" aria-hidden="true"></velin-icon><span>Support &amp; Community</span> <span class="chevron" aria-hidden="true">▼</span></button><ul class="velin-doc-sidebar__links"><li><a href="../guides/faq.html"><velin-icon name="circle-question" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">FAQ</span></a></li><li><a href="../guides/troubleshooting.html"><velin-icon name="wrench" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Troubleshooting</span></a></li><li><a href="../guides/deploy.html"><velin-icon name="cloud-arrow-up" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">Deploy</span></a></li><li><a href="https://forum.birdapi.de/" target="_blank" rel="noopener noreferrer" data-external><velin-icon name="comments" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">BirdAPI Forum</span></a></li><li><a href="https://birdapi.de/" target="_blank" rel="noopener noreferrer" data-external><velin-icon name="globe" provider="fontawesome" variant="solid" size="14" class="velin-doc-sidebar__icon" aria-hidden="true"></velin-icon><span class="velin-doc-sidebar__label">birdapi.de</span></a></li></ul></div>    </nav>
+
+    <!-- ========================================================
+         MAIN CONTENT
+         ======================================================== -->
+    <main class="velin-doc-main" id="main-content">
+
+      <ol class="velin-doc-breadcrumb">
+        <li><a href="../getting-started/introduction.html">Docs</a></li>
+        <li><a href="../getting-started/einfuehrung.html">Erste Schritte</a></li>
+        <li>A11y Dashboard</li>
+      </ol>
+
+      <h1>Accessibility Dashboard <span class="velin-badge">demo</span></h1>
+      <p class="lead">
+        Interaktives <strong>Demo-Playground</strong> zum Prüfen von ARIA-Attributen, Visualisieren der Tastaturnavigation,
+        Kontrastverhältnissen, Screenreader-Ankündigungen und Nutzer-Präferenz-Media-Queries.
+        Kein Konformitätszertifikat und keine App-AAA-Zertifizierung.
+        <a href="a11y-dashboard.html" hreflang="en">English: A11y Dashboard</a>
+      </p>
+      <div class="velin-alert velin-alert--warning" role="status" style="margin-block-end:1rem">
+        <div class="velin-alert__content">
+          <p class="velin-alert__title">Demo-Playground</p>
+          <p>Zum Lernen und Erkunden — nicht als CI-Nachweis oder WCAG-Zertifizierung.</p>
+          <p>Contracts und Matrix: <a href="barrierefreiheit.html">Barrierefreiheit</a> und <code>npm run test:a11y:coverage</code>.</p>
+        </div>
+      </div>
+      <h2 id="when-to-use">Wann nutzen</h2>
+      <ul>
+        <li>Lernen, wie ARIA / Fokus / Kontrast auf Live-Markup erscheinen.</li>
+        <li>Präferenz-Media-Queries (Reduced Motion, Forced Colors) visuell vergleichen.</li>
+      </ul>
+      <h2 id="when-not">Wann nicht</h2>
+      <ul>
+        <li>Playground-Ausgabe nicht als Konformitätsnachweis für Ihr Produkt behandeln.</li>
+        <li>Für Shipping von Overlays und Formularen Komponenten-Docs + echte AT bevorzugen.</li>
+      </ul>
+
+      <!-- ================================================================
+           1. ARIA INSPECTOR
+           ================================================================ -->
+      <section class="a11y-section" id="aria-inspector">
+        <h2 id="aria-inspector">ARIA-Inspector</h2>
+        <p>
+          Hover oder Fokus auf ein Element im linken Panel. Rechts erscheinen Tag-Name,
+          ARIA-Rolle, alle <code>aria-*</code>-Attribute, <code>tabindex</code> und Accessible Name in Echtzeit.
+        </p>
+
+        <div class="aria-inspector-zone">
+          <div class="aria-inspector-target" id="ariaTarget">
+            <button class="velin-btn velin-btn--primary" aria-label="Dokument speichern" role="button">Speichern</button>
+            <button class="velin-btn velin-btn--outline" aria-disabled="true" disabled>Löschen</button>
+            <a href="#" role="link" aria-describedby="linkHelp">Hilfe-Link</a>
+            <span id="linkHelp" class="velin-sr-only">Öffnet die Hilfe-Dokumentation</span>
+            <input type="text" class="velin-input" placeholder="Ihr Name" aria-required="true" style="max-width:180px">
+            <select class="velin-select" aria-label="Farbe wählen" style="max-width:140px">
+              <option>Rot</option><option>Blau</option><option>Grün</option>
+            </select>
+            <div role="alert" aria-live="assertive" style="padding:.5rem .75rem;border-radius:.375rem;background:var(--velin-warning-bg-subtle,#fff3cd);font-size:.85rem;">
+              ⚠ Alert-Region
+            </div>
+            <nav aria-label="Paginierungsbeispiel">
+              <ul style="display:flex;gap:.25rem;list-style:none;padding:0;margin:0;">
+                <li><a href="#" aria-label="Seite 1" aria-current="page" style="padding:.25rem .5rem;border-radius:.25rem;background:var(--velin-primary,#6366f1);color:#fff;text-decoration:none;font-size:.85rem;">1</a></li>
+                <li><a href="#" aria-label="Seite 2" style="padding:.25rem .5rem;font-size:.85rem;">2</a></li>
+                <li><a href="#" aria-label="Seite 3" style="padding:.25rem .5rem;font-size:.85rem;">3</a></li>
+              </ul>
+            </nav>
+          </div>
+
+          <div class="aria-inspector-panel" id="ariaPanel" aria-live="polite" aria-atomic="true">
+            <p class="aria-empty">Hover oder Fokus auf ein Element links zum Inspizieren.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           2. KEYBOARD NAVIGATION VISUALIZER
+           ================================================================ -->
+      <section class="a11y-section" id="keyboard-nav">
+        <h2 id="tastatur-navigations-visualizer">Tastatur-Navigations-Visualizer</h2>
+        <p>
+          Klicken Sie <strong>Tour starten</strong>, dann <kbd>Tab</kbd>, um die
+          interaktiven Komponenten unten zu durchlaufen. Jedes fokussierbare Element ist nummeriert (Tab-Reihenfolge).
+        </p>
+
+        <button class="velin-btn velin-btn--primary velin-mbe-3" id="kbdStartTour">Tour starten</button>
+        <button class="velin-btn velin-btn--outline velin-mbe-3" id="kbdReset" style="display:none;">Zurücksetzen</button>
+        <span id="kbdStatus" class="velin-mis-2" style="font-size:.875rem;color:var(--velin-secondary,#6c757d)"></span>
+
+        <div class="kbd-nav-container" id="kbdContainer">
+          <!-- Button -->
+          <div style="margin-bottom:1rem;">
+            <strong style="display:block;margin-bottom:.5rem;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;color:var(--velin-secondary,#6c757d);">Button</strong>
+            <button class="velin-btn velin-btn--primary" data-focus-step="1">Primäre Aktion</button>
+            <button class="velin-btn velin-btn--outline" data-focus-step="2">Sekundär</button>
+          </div>
+
+          <!-- Dropdown -->
+          <div style="margin-bottom:1rem;">
+            <strong style="display:block;margin-bottom:.5rem;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;color:var(--velin-secondary,#6c757d);">Dropdown</strong>
+            <div style="position:relative;display:inline-block;">
+              <button class="velin-btn velin-btn--outline" data-focus-step="3" aria-haspopup="true" aria-expanded="false" id="demoDropdownBtn">
+                Optionen ▾
+              </button>
+              <ul id="demoDropdownMenu" role="menu" style="display:none;position:absolute;top:100%;left:0;background:var(--velin-body-bg,#fff);border:1px solid var(--velin-border-color,#dee2e6);border-radius:.375rem;padding:.25rem 0;min-width:140px;z-index:20;box-shadow:0 4px 12px rgba(0,0,0,.1);">
+                <li role="none"><a href="#" role="menuitem" data-focus-step="4" style="display:block;padding:.375rem .75rem;text-decoration:none;">Bearbeiten</a></li>
+                <li role="none"><a href="#" role="menuitem" data-focus-step="5" style="display:block;padding:.375rem .75rem;text-decoration:none;">Duplizieren</a></li>
+                <li role="none"><a href="#" role="menuitem" data-focus-step="6" style="display:block;padding:.375rem .75rem;text-decoration:none;">Archivieren</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Tabs -->
+          <div style="margin-bottom:1rem;">
+            <strong style="display:block;margin-bottom:.5rem;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;color:var(--velin-secondary,#6c757d);">Tabs</strong>
+            <div role="tablist" aria-label="Demo-Tabs" style="display:flex;gap:0;border-bottom:2px solid var(--velin-border-color,#dee2e6);">
+              <button role="tab" aria-selected="true" data-focus-step="7" class="velin-btn velin-btn--ghost" style="border-bottom:2px solid var(--velin-primary,#6366f1);border-radius:0;margin-bottom:-2px;">Tab 1</button>
+              <button role="tab" aria-selected="false" data-focus-step="8" class="velin-btn velin-btn--ghost" style="border-radius:0;margin-bottom:-2px;">Tab 2</button>
+              <button role="tab" aria-selected="false" data-focus-step="9" class="velin-btn velin-btn--ghost" style="border-radius:0;margin-bottom:-2px;">Tab 3</button>
+            </div>
+          </div>
+
+          <!-- Accordion -->
+          <div style="margin-bottom:.5rem;">
+            <strong style="display:block;margin-bottom:.5rem;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;color:var(--velin-secondary,#6c757d);">Accordion</strong>
+            <div style="border:1px solid var(--velin-border-color,#dee2e6);border-radius:.375rem;overflow:hidden;">
+              <button data-focus-step="10" aria-expanded="false" style="display:block;width:100%;text-align:left;padding:.625rem .75rem;background:transparent;border:none;border-bottom:1px solid var(--velin-border-color,#dee2e6);font-weight:600;cursor:pointer;">Abschnitt A ▸</button>
+              <button data-focus-step="11" aria-expanded="false" style="display:block;width:100%;text-align:left;padding:.625rem .75rem;background:transparent;border:none;border-bottom:1px solid var(--velin-border-color,#dee2e6);font-weight:600;cursor:pointer;">Abschnitt B ▸</button>
+              <button data-focus-step="12" aria-expanded="false" style="display:block;width:100%;text-align:left;padding:.625rem .75rem;background:transparent;border:none;font-weight:600;cursor:pointer;">Abschnitt C ▸</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           3. CONTRAST CHECKER
+           ================================================================ -->
+      <section class="a11y-section" id="contrast-checker">
+        <h2 id="kontrast-checker">Kontrast-Checker</h2>
+        <p>
+          Vorder- und Hintergrundfarbe wählen, um das WCAG-Kontrastverhältnis zu berechnen.
+          Ergebnisse zeigen Pass/Fail für AA und AAA bei normalem und großem Text.
+        </p>
+
+        <div class="contrast-inputs">
+          <label>
+            Vordergrund
+            <div style="display:flex;gap:.5rem;align-items:center;">
+              <input type="color" id="contrastFg" value="#1e293b">
+              <input type="text" class="velin-input" id="contrastFgHex" value="#1e293b" maxlength="7">
+            </div>
+          </label>
+          <label>
+            Hintergrund
+            <div style="display:flex;gap:.5rem;align-items:center;">
+              <input type="color" id="contrastBg" value="#f8fafc">
+              <input type="text" class="velin-input" id="contrastBgHex" value="#f8fafc" maxlength="7">
+            </div>
+          </label>
+          <button class="velin-btn velin-btn--outline velin-btn--sm" id="contrastSwap" style="align-self:flex-end;" aria-label="Farben tauschen">⇄ Tauschen</button>
+        </div>
+
+        <div class="contrast-result" id="contrastResult">
+          <div class="contrast-preview" id="contrastPreview" style="color:#1e293b;background:#f8fafc;">
+            Franz jagt im komplett verwahrlosten Taxi quer durch Bayern
+          </div>
+          <div style="display:flex;align-items:baseline;gap:.75rem;flex-wrap:wrap;">
+            <span>Kontrastverhältnis:</span>
+            <span class="contrast-ratio-value" id="contrastRatioValue">—</span>
+            <span>: 1</span>
+          </div>
+          <div class="contrast-badges" id="contrastBadges">
+            <span class="contrast-badge" id="badgeAANormal">AA Normal: —</span>
+            <span class="contrast-badge" id="badgeAALarge">AA Groß: —</span>
+            <span class="contrast-badge" id="badgeAAANormal">AAA Normal: —</span>
+            <span class="contrast-badge" id="badgeAAALarge">AAA Groß: —</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           4. SCREEN READER PREVIEW
+           ================================================================ -->
+      <section class="a11y-section" id="screen-reader-preview">
+        <h2 id="screenreader-vorschau">Screenreader-Vorschau</h2>
+        <p>
+          Referenz, wie VelinStyle-Komponenten von Screenreadern angekündigt werden —
+          inklusive ARIA-Rollen und erwarteter Tastaturkürzel.
+        </p>
+
+        <div style="overflow-x:auto;">
+          <table class="velin-table velin-table--striped sr-preview-table">
+            <thead>
+              <tr>
+                <th scope="col">Komponente</th>
+                <th scope="col">ARIA-Rolle</th>
+                <th scope="col">Angekündigt als</th>
+                <th scope="col">Tastaturkürzel</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>velin-btn velin-btn--primary</code></td>
+                <td><code>button</code></td>
+                <td>"Speichern, button"</td>
+                <td><kbd>Enter</kbd> / <kbd>Space</kbd></td>
+              </tr>
+              <tr>
+                <td><code>velin-btn velin-btn--ghost</code></td>
+                <td><code>link</code> (when <code>&lt;a&gt;</code>)</td>
+                <td>"Mehr erfahren, link"</td>
+                <td><kbd>Enter</kbd></td>
+              </tr>
+              <tr>
+                <td><code>velin-input</code></td>
+                <td><code>textbox</code></td>
+                <td>"E-Mail, edit text, required"</td>
+                <td>Eingeben</td>
+              </tr>
+              <tr>
+                <td><code>velin-select</code></td>
+                <td><code>combobox / listbox</code></td>
+                <td>"Land, combo box, collapsed"</td>
+                <td><kbd>Alt+↓</kbd> zum Öffnen, <kbd>↑↓</kbd> zum Navigieren</td>
+              </tr>
+              <tr>
+                <td><code>form-check-input</code></td>
+                <td><code>checkbox</code></td>
+                <td>"Bedingungen akzeptieren, checkbox, not checked"</td>
+                <td><kbd>Space</kbd> zum Umschalten</td>
+              </tr>
+              <tr>
+                <td><code>accordion-button</code></td>
+                <td><code>button</code> with <code>aria-expanded</code></td>
+                <td>"Abschnitt 1, collapsed, button"</td>
+                <td><kbd>Enter</kbd> / <kbd>Space</kbd></td>
+              </tr>
+              <tr>
+                <td><code>nav-link</code> (tab)</td>
+                <td><code>tab</code></td>
+                <td>"Einstellungen, tab, selected, 2 of 4"</td>
+                <td><kbd>←→</kbd> zwischen Tabs, <kbd>Enter</kbd> zum Aktivieren</td>
+              </tr>
+              <tr>
+                <td><code>dropdown-toggle</code></td>
+                <td><code>button</code> with <code>aria-haspopup</code></td>
+                <td>"Aktionen, menu button, collapsed"</td>
+                <td><kbd>Enter</kbd> / <kbd>Space</kbd> / <kbd>↓</kbd> zum Öffnen</td>
+              </tr>
+              <tr>
+                <td><code>dropdown-item</code></td>
+                <td><code>menuitem</code></td>
+                <td>"Bearbeiten, menu item"</td>
+                <td><kbd>↑↓</kbd> zum Navigieren, <kbd>Enter</kbd> zum Auswählen</td>
+              </tr>
+              <tr>
+                <td><code>modal</code></td>
+                <td><code>dialog</code></td>
+                <td>"Löschen bestätigen, dialog"</td>
+                <td><kbd>Esc</kbd> zum Schließen, <kbd>Tab</kbd> im Dialog gefangen</td>
+              </tr>
+              <tr>
+                <td><code>alert</code></td>
+                <td><code>alert</code></td>
+                <td>"Erfolg! Datei gespeichert, alert"</td>
+                <td>Automatisch angekündigt</td>
+              </tr>
+              <tr>
+                <td><code>progress</code></td>
+                <td><code>progressbar</code></td>
+                <td>"Fortschritt, 65%"</td>
+                <td>n. a. (nur lesen)</td>
+              </tr>
+              <tr>
+                <td><code>toast</code></td>
+                <td><code>status</code> / <code>alert</code></td>
+                <td>"Benachrichtigung: Eintrag hinzugefügt, status"</td>
+                <td>Über Live Region angekündigt</td>
+              </tr>
+              <tr>
+                <td><code>breadcrumb</code></td>
+                <td><code>navigation</code> (<code>aria-label="Breadcrumb"</code>)</td>
+                <td>"Breadcrumb, navigation"</td>
+                <td>Standard-Linknavigation</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           5. USER PREFERENCES DEMO
+           ================================================================ -->
+      <section class="a11y-section" id="user-preferences">
+        <h2 id="nutzer-präferenzen-demo">Nutzer-Präferenzen-Demo</h2>
+        <p>
+          Schalter unten umlegen, um CSS-Media-Query-basierte Nutzer-Präferenzen zu simulieren.
+          Der Demo-Container aktualisiert sich in Echtzeit.
+        </p>
+
+        <div class="prefs-controls">
+          <label>
+            <input type="checkbox" class="form-check-input" id="prefReducedMotion">
+            <code>prefers-reduced-motion</code>
+          </label>
+          <label>
+            <input type="checkbox" class="form-check-input" id="prefHighContrast">
+            <code>prefers-contrast: more</code>
+          </label>
+          <label>
+            <input type="checkbox" class="form-check-input" id="prefReducedTransparency">
+            <code>prefers-reduced-transparency</code>
+          </label>
+        </div>
+
+        <div class="prefs-demo-box" id="prefsDemoBox">
+          <div style="display:flex;gap:1.5rem;align-items:flex-start;flex-wrap:wrap;">
+            <div>
+              <p style="font-size:.8rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--velin-secondary,#6c757d);margin-bottom:.5rem;">Animation</p>
+              <div class="demo-animated"></div>
+            </div>
+            <div style="flex:1;min-width:200px;">
+              <p style="font-size:.8rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--velin-secondary,#6c757d);margin-bottom:.5rem;">Transparenz</p>
+              <div class="demo-transparent">
+                <p style="margin:0;">Dieses Panel nutzt einen halbtransparenten Hintergrund. <em>Reduced transparency</em> erhöht die Decazität für bessere Lesbarkeit.</p>
+              </div>
+              <div style="margin-top:1rem;">
+                <p style="font-size:.8rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--velin-secondary,#6c757d);margin-bottom:.5rem;">Komponenten</p>
+                <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+                  <button class="velin-btn velin-btn--primary velin-btn--sm">Button</button>
+                  <button class="velin-btn velin-btn--outline velin-btn--sm">Outline</button>
+                  <span class="velin-badge">Badge</span>
+                  <span class="badge bg-warning text-dark">Warnung</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="prefsStatus" role="status" aria-live="polite" style="margin-top:1rem;font-size:.85rem;color:var(--velin-secondary,#6c757d);min-height:1.25em;"></div>
+        </div>
+      </section>
+
+      <!-- ---- Prev / Next ---- -->
+      <nav class="velin-doc-prevnext" aria-label="Seitennavigation">
+        <a href="../getting-started/a11y-muster.html" class="prev">
+          <span class="velin-doc-prevnext__label">Zurück</span>
+          <span class="velin-doc-prevnext__title">A11y-Muster</span>
+        </a>
+        <a href="../customize/overview.html" class="next">
+          <span class="velin-doc-prevnext__label">Weiter</span>
+          <span class="velin-doc-prevnext__title">Customize · Überblick</span>
+        </a>
+      </nav>
+
+    </main>
+
+    <!-- ========================================================
+         RIGHT TOC
+         ======================================================== -->
+    <aside class="velin-doc-toc" aria-label="Auf dieser Seite">
+      <div class="velin-doc-toc__title">Auf dieser Seite</div>
+      <ul class="velin-doc-toc__list">
+        <li><a href="#when-to-use">Wann nutzen</a></li>
+        <li><a href="#when-not">Wann nicht</a></li>
+        <li><a href="#aria-inspector">ARIA-Inspector</a></li>
+        <li><a href="#tastatur-navigations-visualizer">Tastatur-Navigations-Visualizer</a></li>
+        <li><a href="#kontrast-checker">Kontrast-Checker</a></li>
+        <li><a href="#screenreader-vorschau">Screenreader-Vorschau</a></li>
+        <li><a href="#nutzer-präferenzen-demo">Nutzer-Präferenzen-Demo</a></li>
+      </ul>
+    </aside>
+
+  </div><!-- /.velin-doc-wrapper -->
+
+  <!-- ============================================================
+       SCRIPTS
+       ============================================================ -->
+  <script src="../../dist/velinstyle-components.iife.js"></script>
+  <script src="../assets/doc-search.iife.js" defer></script>
+  <script src="../doc-examples.js" defer></script>
+  <script src="../doc-icons-init.js"></script>
+  <script src="../assets/doc-highlight.iife.js" defer></script>
+  <script src="../doc-chrome.js"></script>
+  <script src="../doc-theme.js"></script>
+  <script>
+    /* ---- Sidebar toggle (mobile) ---- */
+    /* ---- Category collapse ---- */
+    /* ---- Theme toggle ---- */
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) {
+      function applyTheme(theme) {
+        document.documentElement.setAttribute('data-velin-theme', theme);
+        localStorage.setItem('velin-theme', theme);
+      }
+      themeToggle.addEventListener('click', () => {
+        const next = document.documentElement.getAttribute('data-velin-theme') === 'dark' ? 'light' : 'dark';
+        applyTheme(next);
+      });
+      const saved = localStorage.getItem('velin-theme');
+      if (saved) applyTheme(saved);
+      else if (window.matchMedia('(prefers-color-scheme: dark)').matches) applyTheme('dark');
+    }
+
+    /* ---- Active TOC highlight on scroll ---- */
+    const tocLinks = document.querySelectorAll('.velin-doc-toc__list a');
+    const headings = Array.from(tocLinks).map(a => document.querySelector(a.getAttribute('href')));
+
+    function updateToc() {
+      const scrollY = window.scrollY + 100;
+      let current = null;
+      headings.forEach(h => { if (h && h.offsetTop <= scrollY) current = h; });
+      tocLinks.forEach(a => {
+        a.classList.toggle('active', current && a.getAttribute('href') === '#' + current.id);
+      });
+    }
+    window.addEventListener('scroll', updateToc, { passive: true });
+    updateToc();
+
+    /* ================================================================
+       1. ARIA INSPECTOR
+       ================================================================ */
+    (function() {
+      const target = document.getElementById('ariaTarget');
+      const panel  = document.getElementById('ariaPanel');
+
+      function inspect(el) {
+        if (!el || el === target) {
+          panel.innerHTML = '<p class="aria-empty">Hover oder Fokus auf ein Element links zum Inspizieren.</p>';
+          return;
+        }
+        const attrs = [];
+        attrs.push({ key: 'Tag', val: el.tagName.toLowerCase() });
+
+        const role = el.getAttribute('role') || el.closest('[role]')?.getAttribute('role');
+        attrs.push({ key: 'Rolle', val: role || '(implizit)' });
+
+        const name = el.getAttribute('aria-label')
+                  || el.getAttribute('aria-labelledby')
+                  || el.getAttribute('title')
+                  || el.textContent?.trim().slice(0, 60);
+        attrs.push({ key: 'Accessible name', val: name || '(keine)' });
+
+        for (const a of el.attributes) {
+          if (a.name.startsWith('aria-')) {
+            attrs.push({ key: a.name, val: a.value });
+          }
+        }
+
+        const ti = el.getAttribute('tabindex');
+        attrs.push({ key: 'tabindex', val: ti !== null ? ti : '(Standard)' });
+        attrs.push({ key: 'Fokussierbar', val: el.tabIndex >= 0 ? 'ja' : 'nein' });
+        attrs.push({ key: 'Disabled', val: el.disabled ? 'ja' : 'nein' });
+
+        panel.innerHTML = attrs.map(a =>
+          `<div class="aria-row"><span class="aria-key">${a.key}</span><span class="aria-val">${a.val}</span></div>`
+        ).join('');
+      }
+
+      target.addEventListener('mouseover', e => inspect(e.target));
+      target.addEventListener('focusin',   e => inspect(e.target));
+      target.addEventListener('mouseleave', () => inspect(null));
+    })();
+
+    /* ================================================================
+       2. KEYBOARD NAVIGATION VISUALIZER
+       ================================================================ */
+    (function() {
+      const container  = document.getElementById('kbdContainer');
+      const startBtn   = document.getElementById('kbdStartTour');
+      const resetBtn   = document.getElementById('kbdReset');
+      const statusEl   = document.getElementById('kbdStatus');
+      const steps      = container.querySelectorAll('[data-focus-step]');
+      const badges     = [];
+      let tourActive   = false;
+      let currentStep  = 0;
+
+      steps.forEach((el, i) => {
+        const badge = document.createElement('div');
+        badge.className = 'focus-step-badge';
+        badge.textContent = i + 1;
+        container.appendChild(badge);
+        badges.push(badge);
+      });
+
+      function positionBadges() {
+        steps.forEach((el, i) => {
+          const rect = el.getBoundingClientRect();
+          const containerRect = container.getBoundingClientRect();
+          badges[i].style.left = (rect.left - containerRect.left + rect.width / 2) + 'px';
+          badges[i].style.top  = (rect.top  - containerRect.top) + 'px';
+        });
+      }
+
+      function showBadges() {
+        positionBadges();
+        badges.forEach(b => b.classList.add('visible'));
+      }
+      function hideBadges() {
+        badges.forEach(b => b.classList.remove('visible'));
+      }
+      function clearHighlights() {
+        steps.forEach(el => el.classList.remove('is-current-step'));
+      }
+
+      function updateStatus() {
+        if (!tourActive) { statusEl.textContent = ''; return; }
+        statusEl.textContent = currentStep === 0
+          ? 'Tab drücken, um durch die Elemente zu steppen.'
+          : `Schritt ${currentStep} von ${steps.length}`;
+      }
+
+      startBtn.addEventListener('click', () => {
+        tourActive = true;
+        currentStep = 0;
+        startBtn.style.display = 'none';
+        resetBtn.style.display = '';
+        const menu = document.getElementById('demoDropdownMenu');
+        menu.style.display = 'block';
+        document.getElementById('demoDropdownBtn').setAttribute('aria-expanded', 'true');
+        showBadges();
+        clearHighlights();
+        updateStatus();
+        steps[0].focus();
+      });
+
+      resetBtn.addEventListener('click', () => {
+        tourActive = false;
+        currentStep = 0;
+        startBtn.style.display = '';
+        resetBtn.style.display = 'none';
+        const menu = document.getElementById('demoDropdownMenu');
+        menu.style.display = 'none';
+        document.getElementById('demoDropdownBtn').setAttribute('aria-expanded', 'false');
+        hideBadges();
+        clearHighlights();
+        updateStatus();
+      });
+
+      container.addEventListener('focusin', e => {
+        if (!tourActive) return;
+        const step = e.target.getAttribute('data-focus-step');
+        if (step) {
+          currentStep = parseInt(step, 10);
+          clearHighlights();
+          e.target.classList.add('is-current-step');
+          updateStatus();
+        }
+      });
+
+      window.addEventListener('resize', () => { if (tourActive) positionBadges(); });
+    })();
+
+    /* ================================================================
+       3. CONTRAST CHECKER
+       ================================================================ */
+    (function() {
+      const fgPicker  = document.getElementById('contrastFg');
+      const bgPicker  = document.getElementById('contrastBg');
+      const fgHex     = document.getElementById('contrastFgHex');
+      const bgHex     = document.getElementById('contrastBgHex');
+      const preview   = document.getElementById('contrastPreview');
+      const ratioEl   = document.getElementById('contrastRatioValue');
+      const swapBtn   = document.getElementById('contrastSwap');
+      const badgeAAN  = document.getElementById('badgeAANormal');
+      const badgeAAL  = document.getElementById('badgeAALarge');
+      const badgeAAAN = document.getElementById('badgeAAANormal');
+      const badgeAAAL = document.getElementById('badgeAAALarge');
+
+      function hexToSrgb(hex) {
+        hex = hex.replace('#', '');
+        if (hex.length === 3) hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+        return [
+          parseInt(hex.substring(0,2), 16) / 255,
+          parseInt(hex.substring(2,4), 16) / 255,
+          parseInt(hex.substring(4,6), 16) / 255
+        ];
+      }
+
+      function srgbToLinear(c) {
+        return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+      }
+
+      function relativeLuminance(hex) {
+        const [r, g, b] = hexToSrgb(hex).map(srgbToLinear);
+        return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+      }
+
+      function contrastRatio(hex1, hex2) {
+        const l1 = relativeLuminance(hex1);
+        const l2 = relativeLuminance(hex2);
+        const lighter = Math.max(l1, l2);
+        const darker  = Math.min(l1, l2);
+        return (lighter + 0.05) / (darker + 0.05);
+      }
+
+      function setBadge(el, label, pass) {
+        el.textContent = label + (pass ? ' Pass' : ' Fail');
+        el.className = 'contrast-badge ' + (pass ? 'contrast-pass' : 'contrast-fail');
+      }
+
+      function update() {
+        const fg = fgPicker.value;
+        const bg = bgPicker.value;
+        fgHex.value = fg;
+        bgHex.value = bg;
+        preview.style.color = fg;
+        preview.style.background = bg;
+        const ratio = contrastRatio(fg, bg);
+        ratioEl.textContent = ratio.toFixed(2);
+        setBadge(badgeAAN,  'AA Normal:', ratio >= 4.5);
+        setBadge(badgeAAL,  'AA Groß:',  ratio >= 3);
+        setBadge(badgeAAAN, 'AAA Normal:', ratio >= 7);
+        setBadge(badgeAAAL, 'AAA Groß:', ratio >= 4.5);
+      }
+
+      function syncFromHex(hexInput, picker) {
+        let v = hexInput.value.trim();
+        if (/^#?[0-9a-f]{3,6}$/i.test(v)) {
+          if (!v.startsWith('#')) v = '#' + v;
+          if (v.length === 4) v = '#' + v[1]+v[1]+v[2]+v[2]+v[3]+v[3];
+          picker.value = v;
+          update();
+        }
+      }
+
+      fgPicker.addEventListener('input', update);
+      bgPicker.addEventListener('input', update);
+      fgHex.addEventListener('input', () => syncFromHex(fgHex, fgPicker));
+      bgHex.addEventListener('input', () => syncFromHex(bgHex, bgPicker));
+      swapBtn.addEventListener('click', () => {
+        const tmp = fgPicker.value;
+        fgPicker.value = bgPicker.value;
+        bgPicker.value = tmp;
+        update();
+      });
+
+      update();
+    })();
+
+    /* ================================================================
+       5. USER PREFERENCES DEMO
+       ================================================================ */
+    (function() {
+      const box    = document.getElementById('prefsDemoBox');
+      const status = document.getElementById('prefsStatus');
+
+      const prefs = [
+        { id: 'prefReducedMotion',       cls: 'sim-reduced-motion',       label: 'prefers-reduced-motion' },
+        { id: 'prefHighContrast',        cls: 'sim-high-contrast',        label: 'prefers-contrast: more' },
+        { id: 'prefReducedTransparency', cls: 'sim-reduced-transparency', label: 'prefers-reduced-transparency' },
+      ];
+
+      prefs.forEach(p => {
+        const cb = document.getElementById(p.id);
+        cb.addEventListener('change', () => {
+          box.classList.toggle(p.cls, cb.checked);
+          const active = prefs.filter(x => document.getElementById(x.id).checked).map(x => x.label);
+          status.textContent = active.length
+            ? 'Aktiv: ' + active.join(', ')
+            : 'Keine Präferenzen simuliert.';
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>

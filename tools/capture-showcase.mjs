@@ -1,14 +1,15 @@
 #!/usr/bin/env node
 /**
  * Capture WebP screenshots for showcase/projects.json.
+ * Modes: desktop light, desktop dark, mobile (per project).
  *
  * Usage: node tools/capture-showcase.mjs
  * Env:   SHOWCASE_ONLY=inselsorglos  — capture a single project id
+ *        SHOWCASE_MODES=light,dark,mobile  — subset (default: all)
  *
- * Playwright and sharp are resolved from the sibling velinstyle package
- * (already installed for framework E2E / README captures).
+ * Playwright and sharp are resolved from the sibling velinstyle package.
  */
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, readFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -19,8 +20,30 @@ const FRAMEWORK = path.resolve(SITE, '..', 'velinstyle');
 const PROJECTS_PATH = path.join(SITE, 'showcase', 'projects.json');
 const OUT_DIR = path.join(SITE, 'assets', 'img', 'showcase');
 const ONLY = (process.env.SHOWCASE_ONLY || '').trim();
+const MODE_LIST = (process.env.SHOWCASE_MODES || 'light,dark,mobile')
+  .split(',')
+  .map((s) => s.trim())
+  .filter(Boolean);
 
 const requireFromFramework = createRequire(path.join(FRAMEWORK, 'package.json'));
+
+const MODES = {
+  light: {
+    suffix: '',
+    viewport: { width: 1440, height: 900 },
+    colorScheme: 'light',
+  },
+  dark: {
+    suffix: '-dark',
+    viewport: { width: 1440, height: 900 },
+    colorScheme: 'dark',
+  },
+  mobile: {
+    suffix: '-mobile',
+    viewport: { width: 390, height: 844 },
+    colorScheme: 'light',
+  },
+};
 
 async function loadPlaywright() {
   try {
@@ -48,11 +71,25 @@ async function loadSharp() {
   }
 }
 
+async function captureOne(page, sharp, outPath, resize) {
+  const png = await page.screenshot({ type: 'png', fullPage: false });
+  await sharp(png)
+    .resize(resize.width, resize.height, { fit: 'cover', position: 'top' })
+    .webp({ quality: 82 })
+    .toFile(outPath);
+}
+
 async function main() {
   const projects = JSON.parse(await readFile(PROJECTS_PATH, 'utf-8'));
-  const list = ONLY ? projects.filter((p) => p.id === ONLY) : projects;
+  const list = ONLY ? projects.filter((p) => p.id === ONLY) : projects.filter((p) => !p.meta);
   if (!list.length) {
     console.error(ONLY ? `No project with id "${ONLY}"` : 'projects.json is empty');
+    process.exit(1);
+  }
+
+  const modes = MODE_LIST.filter((m) => MODES[m]);
+  if (!modes.length) {
+    console.error('No valid SHOWCASE_MODES');
     process.exit(1);
   }
 
@@ -63,33 +100,43 @@ async function main() {
   const browser = await chromium.launch();
 
   for (const project of list) {
-    const url = project.url;
-    const outPath = path.join(OUT_DIR, `${project.id}.webp`);
-    console.log(`Capture ${project.id} ← ${url}`);
-    const context = await browser.newContext({
-      viewport: { width: 1440, height: 900 },
-      deviceScaleFactor: 1,
-      ignoreHTTPSErrors: true,
-    });
-    const page = await context.newPage();
-    try {
-      await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 90_000 });
+    for (const modeName of modes) {
+      const mode = MODES[modeName];
+      const fileName = `${project.id}${mode.suffix}.webp`;
+      const outPath = path.join(OUT_DIR, fileName);
+      console.log(`Capture ${project.id} [${modeName}] ← ${project.url}`);
+      const context = await browser.newContext({
+        viewport: mode.viewport,
+        colorScheme: mode.colorScheme,
+        deviceScaleFactor: 1,
+        ignoreHTTPSErrors: true,
+      });
+      const page = await context.newPage();
       try {
-        await page.waitForLoadState('networkidle', { timeout: 15_000 });
-      } catch {
-        /* some SPAs never go idle — screenshot anyway */
+        await page.emulateMedia({ colorScheme: mode.colorScheme });
+        await page.goto(project.url, { waitUntil: 'domcontentloaded', timeout: 90_000 });
+        try {
+          await page.waitForLoadState('networkidle', { timeout: 15_000 });
+        } catch {
+          /* some SPAs never go idle */
+        }
+        await page.waitForTimeout(1500);
+        const resize =
+          modeName === 'mobile'
+            ? { width: 390, height: 844 }
+            : { width: 1280, height: 800 };
+        await captureOne(page, sharp, outPath, resize);
+        // Canonical light file without suffix for gallery / walk default
+        if (modeName === 'light') {
+          console.log(`  → ${path.relative(SITE, outPath)}`);
+        } else {
+          console.log(`  → ${path.relative(SITE, outPath)}`);
+        }
+      } catch (err) {
+        console.error(`  ✗ ${project.id} [${modeName}]: ${err.message.split('\n')[0]}`);
+      } finally {
+        await context.close();
       }
-      await page.waitForTimeout(1500);
-      const png = await page.screenshot({ type: 'png', fullPage: false });
-      await sharp(png)
-        .resize(1280, 800, { fit: 'cover', position: 'top' })
-        .webp({ quality: 82 })
-        .toFile(outPath);
-      console.log(`  → ${path.relative(SITE, outPath)}`);
-    } catch (err) {
-      console.error(`  ✗ ${project.id}: ${err.message.split('\n')[0]}`);
-    } finally {
-      await context.close();
     }
   }
 

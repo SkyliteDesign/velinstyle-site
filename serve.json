@@ -1,7 +1,13 @@
 {
   "cleanUrls": false,
-  "trailingSlash": true,
+  "trailingSlash": false,
+  "directoryListing": false,
+  "rewrites": [
+    { "source": "/", "destination": "/index.html" }
+  ],
   "redirects": [
+    { "source": "/docs", "destination": "/docs/getting-started/introduction.html", "type": 301 },
+    { "source": "/docs/", "destination": "/docs/getting-started/introduction.html", "type": 301 },
     { "source": "/docs/guides", "destination": "/docs/guides/", "type": 301 },
     { "source": "/docs/generated", "destination": "/docs/generated/", "type": 301 }
   ]

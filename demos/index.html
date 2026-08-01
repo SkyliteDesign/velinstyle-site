@@ -8,7 +8,7 @@
   <meta name="description" content="VelinStyle is the WCAG 2.2 AAA CSS framework with native JavaScript runtime and Web Components.">
   <link rel="alternate" type="application/vnd.velinstyle.meta+json" href="../dist/velin-agent.json" title="VelinStyle agent metadata">
   <link rel="alternate" type="text/plain" href="../dist/llms.txt" title="VelinStyle llms.txt">
-  <script type="application/ld+json">{"@context": "https://schema.org","@type": "SoftwareApplication","name": "VelinStyle","applicationCategory": "DeveloperApplication","operatingSystem": "Web","description": "VelinStyle is the WCAG 2.2 AAA CSS framework with native JavaScript runtime and Web Components.","url": "https://velinstyle.info/demos/index.html","softwareVersion": "1.1.0","license": "https://opensource.org/licenses/MIT","isAccessibleForFree": true,"publisher": {"@type": "Organization","name": "SkyliteDesign"}}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org","@type": "SoftwareApplication","name": "VelinStyle","applicationCategory": "DeveloperApplication","operatingSystem": "Web","description": "VelinStyle is the WCAG 2.2 AAA CSS framework with native JavaScript runtime and Web Components.","url": "https://velinstyle.info/demos/index.html","softwareVersion": "1.2.0","license": "https://opensource.org/licenses/MIT","isAccessibleForFree": true,"publisher": {"@type": "Organization","name": "SkyliteDesign"}}</script>
   <!-- /velin-seo -->
 
 <title>Live demos — VelinStyle</title>
@@ -46,6 +46,7 @@
       margin: 0 0 var(--velin-space-3);
     }
     .demo-hero p { color: var(--velin-color-text-muted); font-size: var(--velin-text-lg); margin: 0; }
+    .demo-hero__back { display:inline-block; margin-block-end: var(--velin-space-4); font-weight:600; }
     .demo-grid {
       max-width: 72rem;
       margin: 0 auto;
@@ -60,7 +61,11 @@
       height: 100%;
       text-decoration: none;
       color: inherit;
-      background: var(--velin-color-surface-bright);
+      position: relative;
+      overflow: hidden;
+      background:
+        linear-gradient(160deg, oklch(from var(--velin-color-primary) l c h / 0.08), transparent 42%),
+        var(--velin-color-surface-bright);
       border: 1px solid var(--velin-color-border);
       border-radius: var(--velin-radius-lg);
       padding: var(--velin-space-6);
@@ -70,6 +75,9 @@
       border-color: var(--velin-color-primary);
       box-shadow: var(--velin-shadow-lg);
       transform: translateY(-3px);
+    }
+    .demo-hero h1 {
+      letter-spacing: -0.03em;
     }
     @media (prefers-reduced-motion: reduce) {
       .demo-card:hover { transform: none; }
@@ -128,25 +136,21 @@
   <link rel="icon" href="../assets/img/velinstyle-logo.svg" type="image/svg+xml">
   <main id="main">
     <div class="demo-hero">
-      <h1>Live demos</h1>
-      <p>Full pages for VelinStyle <strong>1.1.0</strong> — CSS, Web Components, motion, search, highlight, and agent metadata. Open source and copy-friendly.</p>
+      <a class="demo-hero__back" href="../index.html">← VelinStyle home</a>
+      <h1>Premium demo gallery</h1>
+      <p>Immersive product pages for VelinStyle <strong>1.2.0</strong> — open a moment, not a folder of examples.</p>
       <p style="margin-top:var(--velin-space-4);font-size:var(--velin-text-sm)">
-        <strong>Fork on GitHub:</strong>
-        <a href="https://github.com/SkyliteDesign/velinstyle-demos" target="_blank" rel="noopener noreferrer">velinstyle-demos</a>
-        — static HTML, unpkg CDN, zero build.
-        · <a href="https://skylitedesign.github.io/velinstyle-demos/" target="_blank" rel="noopener noreferrer">GitHub Pages mirror</a>
-      </p>
-      <p style="margin-top:var(--velin-space-4);font-size:var(--velin-text-sm)">
-        Looking for real production sites?
-        <a href="../showcase/index.html"><strong>Built with VelinStyle → Showcase</strong></a>
+        <a href="../index.html#act-handoff"><strong>Begin on the homepage →</strong></a>
+        · <a href="../showcase/index.html">Live projects showcase</a>
+        · <a href="https://github.com/SkyliteDesign/velinstyle-demos" target="_blank" rel="noopener noreferrer">Fork demos</a>
       </p>
     </div>
     <div class="demo-overview">
-      <h2>Start here</h2>
+      <h2>Product moments</h2>
     </div>
     <div class="demo-grid">
       <a class="demo-card" href="showcase-runtime.html">
-        <span class="demo-card__tag">1.0.0</span>
+        <span class="demo-card__tag">1.2.0</span>
         <h2>Runtime lab</h2>
         <p>Motion, VelinSearch, syntax highlighting, copy/email helpers, and Velin-Meta — with in-page sections and doc links.</p>
         <div class="demo-card__features">

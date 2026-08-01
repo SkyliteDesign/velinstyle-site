@@ -15,6 +15,7 @@ declare global {
     'velin-accordion': HTMLElement;
     'velin-announcer': HTMLElement;
     'velin-bottom-nav': HTMLElement;
+    'velin-calendar': HTMLElement;
     'velin-carousel': HTMLElement;
     'velin-code-block': HTMLElement;
     'velin-collapse': HTMLElement;
@@ -28,6 +29,7 @@ declare global {
     'velin-drawer': HTMLElement;
     'velin-dropdown': HTMLElement;
     'velin-email': HTMLElement;
+    'velin-file-dropzone': HTMLElement;
     'velin-form-summary': HTMLElement;
     'velin-icon': HTMLElement;
     'velin-lightbox': HTMLElement;
