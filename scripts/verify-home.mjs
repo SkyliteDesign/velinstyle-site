@@ -1,9 +1,9 @@
-import { existsSync, readFileSync } from 'node:fs';
+﻿import { existsSync, readFileSync } from 'node:fs';
 
 const h = readFileSync('index.html', 'utf8');
 const de = existsSync('index.de.html') ? readFileSync('index.de.html', 'utf8') : '';
 const js = readFileSync('assets/js/home.js', 'utf8');
-const boot = readFileSync('assets/js/expo-boot.mjs', 'utf8');
+const boot = readFileSync('assets/js/expo-boot.js', 'utf8');
 const build = readFileSync('scripts/build-expo-home.mjs', 'utf8');
 const polish = readFileSync('scripts/polish-expo.mjs', 'utf8');
 const polishCss = readFileSync('assets/css/home-polish.css', 'utf8');

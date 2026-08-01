@@ -1,6 +1,6 @@
-# Expo homepage scripts
+﻿# Expo homepage scripts
 
-**Source of truth:** `../index.html` (plus `assets/js/home.js`, `assets/js/expo-boot.mjs`, `assets/css/home*.css`).
+**Source of truth:** `../index.html` (plus `assets/js/home.js`, `assets/js/expo-boot.js`, `assets/css/home*.css`).
 
 ## Safe commands
 

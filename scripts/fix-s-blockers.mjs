@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Apply Priority-S release blockers to the Component Expo homepage.
  */
 import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs';
@@ -184,7 +184,7 @@ html = html.replace('<option value="#compare">Compare</option>', '<option value=
 // ─── S3: selective ESM boot instead of full IIFE ───
 html = html.replace(
   '<script src="assets/js/home.js"></script>\n  <script src="dist/velinstyle-components.iife.js"></script>',
-  '<script src="assets/js/home.js"></script>\n  <script type="module" src="assets/js/expo-boot.mjs"></script>',
+  '<script src="assets/js/home.js"></script>\n  <script type="module" src="assets/js/expo-boot.js"></script>',
 );
 
 writeFileSync(htmlPath, html);

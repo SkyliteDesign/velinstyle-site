@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Builds the Component Expo index.html for VelinStyle 1.2.0
  *
  * DEPRECATED: `index.html` is the source of truth after the S/A/B release pass.
@@ -1117,7 +1117,7 @@ bootFromDOM(document, { attributes: true, motion: true, highlight: true });</vel
   </footer>
 
   <script src="assets/js/home.js"></script>
-  <script type="module" src="assets/js/expo-boot.mjs"></script>
+  <script type="module" src="assets/js/expo-boot.js"></script>
 </body>
 </html>
 `;
