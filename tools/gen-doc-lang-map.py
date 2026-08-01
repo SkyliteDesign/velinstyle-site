@@ -40,8 +40,9 @@ for p in docs.rglob("*.html"):
 
 en_to_de = {}
 for src, dst in sorted(pairs.items()):
-    head = (docs / src).read_text(encoding="utf-8", errors="ignore")[:500]
-    if 'lang="en"' in head:
+    head = (docs / src).read_text(encoding="utf-8", errors="ignore")[:800]
+    lm = lang_re.search(head)
+    if lm and lm.group(1).lower() == "en":
         en_to_de[src] = dst
 
 body = json.dumps(en_to_de, indent=2, ensure_ascii=False)

@@ -4,9 +4,18 @@ from __future__ import annotations
 
 import json
 import re
+import sys
 from pathlib import Path
 
 SITE = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(SITE / "tools"))
+from doc_sidebar_de import (  # noqa: E402
+    localize_cat,
+    localize_href,
+    localize_label,
+    page_lang,
+)
+
 DOCS = SITE / "docs"
 FRAMEWORK = SITE.parent / "velinstyle"
 
@@ -205,11 +214,19 @@ def icon_tag(name: str, size: str, css: str) -> str:
     )
 
 
-def sidebar_html(rel: str, active_href: str) -> str:
+def sidebar_html(rel: str, active_href: str, lang: str = "en") -> str:
     def link(href: str, label: str, icon: str | None = None, *, cat: str | None = None, external: bool = False) -> str:
+        en_href = href
+        if not external:
+            label = localize_label(en_href, label, lang)
+            href = localize_href(en_href, lang)
         full = href if external or href.startswith("http") else f"{rel}{href}"
         cls = ""
-        if not external and href == active_href:
+        if not external and (
+            href == active_href
+            or en_href == active_href
+            or localize_href(en_href, "de") == active_href
+        ):
             cls = ' class="active"'
         extra = ' target="_blank" rel="noopener noreferrer" data-external' if external else ""
         dcat = f' data-cat="{cat}"' if cat else ""
@@ -221,12 +238,14 @@ def sidebar_html(rel: str, active_href: str) -> str:
 
     quick = "".join(link(h, l, i, cat=c) for h, l, i, c in PINNED_QUICK)
     guides = "".join(link(h, l, i, cat=c) for h, l, i, c in PINNED_GUIDES)
+    pinned_quick_label = "Schnell wechseln" if lang == "de" else "Switch quickly"
+    pinned_guides_label = "Framework-Guides" if lang == "de" else "Framework guides"
     pinned = (
         '<div class="velin-doc-sidebar__pinned" data-cat="pinned">'
-        '<p class="velin-doc-sidebar__pinned-label">Switch quickly</p>'
+        f'<p class="velin-doc-sidebar__pinned-label">{pinned_quick_label}</p>'
         f'<ul class="velin-doc-sidebar__links velin-doc-sidebar__links--prominent">{quick}</ul>'
         '<p class="velin-doc-sidebar__pinned-label velin-doc-sidebar__pinned-label--sub">'
-        "Framework guides</p>"
+        f"{pinned_guides_label}</p>"
         f'<ul class="velin-doc-sidebar__links velin-doc-sidebar__links--prominent">{guides}</ul>'
         "</div>"
     )
@@ -400,6 +419,7 @@ def sidebar_html(rel: str, active_href: str) -> str:
         collapsed_cls = "" if expanded else " collapsed"
         aria = "true" if expanded else "false"
         hi = icon_tag(icon, "12", "velin-doc-sidebar__cat-icon")
+        title = localize_cat(cat_id, title, lang)
         return (
             f'<div class="velin-doc-sidebar__category{collapsed_cls}" data-cat="{cat_id}">'
             f'<button class="velin-doc-sidebar__category-header" aria-expanded="{aria}" type="button">'
@@ -414,8 +434,9 @@ def sidebar_html(rel: str, active_href: str) -> str:
     body += cat("Animations", an, "animations", "bolt") + cat("Extend", ex, "extend", "puzzle-piece")
     body += cat("Guides", gu, "guides", "book") + cat("About", ab, "about", "circle-info")
     body += cat("Support &amp; Community", su, "support", "life-ring")
+    nav_label = "Dokumentationsnavigation" if lang == "de" else "Documentation navigation"
     return (
-        '    <nav class="velin-doc-sidebar" id="sidebar" aria-label="Documentation navigation">\n'
+        f'    <nav class="velin-doc-sidebar" id="sidebar" aria-label="{nav_label}">\n'
         + body + "    </nav>"
     )
 
@@ -737,7 +758,8 @@ def patch_file(path: Path) -> bool:
     text = path.read_text(encoding="utf-8")
     rel = rel_prefix(path)
     active = path.relative_to(DOCS).as_posix()
-    new_sb = sidebar_html(rel, active)
+    lang = page_lang(text, active)
+    new_sb = sidebar_html(rel, active, lang=lang)
     if not SIDEBAR_RE.search(text):
         return False
     text = SIDEBAR_RE.sub(new_sb, text, count=1)
@@ -747,10 +769,16 @@ def patch_file(path: Path) -> bool:
     text = inject_meta_alternate(text, rel)
     text = inject_doc_chrome(text, rel)
     idx = rel + "search-index.json"
-    search_input = (
-        '<input type="search" placeholder="Search docs…" aria-label="Search documentation" '
-        f'id="docSearch" autocomplete="off" data-search-index="{idx}">'
-    )
+    if lang == "de":
+        search_input = (
+            '<input type="search" placeholder="Docs durchsuchen…" aria-label="Dokumentation durchsuchen" '
+            f'id="docSearch" autocomplete="off" data-search-index="{idx}">'
+        )
+    else:
+        search_input = (
+            '<input type="search" placeholder="Search docs…" aria-label="Search documentation" '
+            f'id="docSearch" autocomplete="off" data-search-index="{idx}">'
+        )
     text = SEARCH_INPUT_RE.sub(search_input, text, count=1)
     text = inject_doc_scripts(text, rel)
     text = inject_icons_init(text, rel)
