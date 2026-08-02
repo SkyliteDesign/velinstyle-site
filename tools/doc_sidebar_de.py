@@ -179,6 +179,7 @@ SIDEBAR_LABEL_DE: dict[str, str] = {
     "guides/api-reference.html": "API-Referenz",
     "guides/velin-meta.html": "Velin-Meta",
     "guides/ai-skills.html": "AI Skills",
+    "guides/transparency.html": "Transparenz",
     "guides/design-intelligence.html": "Design Intelligence",
     "guides/cli-ship-surface.html": "CLI Ship Surface",
     "guides/blueprints.html": "Blueprints",

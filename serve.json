@@ -3,7 +3,12 @@
   "trailingSlash": false,
   "directoryListing": false,
   "rewrites": [
-    { "source": "/", "destination": "/index.html" }
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/atelier", "destination": "/atelier/index.html" },
+    { "source": "/atelier/", "destination": "/atelier/index.html" },
+    { "source": "/atelier/library", "destination": "/showcase-reihe/04-premium-ui-showcase-collection/index.html" },
+    { "source": "/atelier/library/", "destination": "/showcase-reihe/04-premium-ui-showcase-collection/index.html" },
+    { "source": "/atelier/library/:path*", "destination": "/showcase-reihe/04-premium-ui-showcase-collection/:path*" }
   ],
   "redirects": [
     { "source": "/docs", "destination": "/docs/getting-started/introduction.html", "type": 301 },
@@ -11,6 +16,8 @@
     { "source": "/docs/a11y.html", "destination": "/docs/getting-started/accessibility.html", "type": 301 },
     { "source": "/docs/a11y", "destination": "/docs/getting-started/accessibility.html", "type": 301 },
     { "source": "/docs/guides", "destination": "/docs/guides/", "type": 301 },
-    { "source": "/docs/generated", "destination": "/docs/generated/", "type": 301 }
+    { "source": "/docs/generated", "destination": "/docs/generated/", "type": 301 },
+    { "source": "/showcase-reihe/04-premium-ui-showcase-collection", "destination": "/atelier/library/", "type": 301 },
+    { "source": "/showcase-reihe/04-premium-ui-showcase-collection/", "destination": "/atelier/library/", "type": 301 }
   ]
 }

@@ -1,0 +1,26 @@
+{
+  "policy": {
+    "media": {
+      "images": "required",
+      "videos": "required",
+      "audio": "optional",
+      "text": "optional",
+      "pdf": "optional"
+    },
+    "rules": {
+      "requireReview": true,
+      "allowGenerated": true,
+      "minimumStatus": "human-reviewed",
+      "staleDays": 730
+    },
+    "provenance": {
+      "required": [],
+      "recommended": ["approvedBy", "source", "version"],
+      "images": { "required": ["createdAt", "license", "source"] },
+      "videos": { "required": ["createdAt", "source"] }
+    },
+    "providers": {
+      "priority": ["api", "json", "meta", "html"]
+    }
+  }
+}

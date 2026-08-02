@@ -9,6 +9,15 @@ const root = document;
 bootFromDOM(root, {
   attributes: true,
   highlight: true,
-}).catch((err) => {
-  console.error('[expo-boot] bootFromDOM failed', err);
-});
+})
+  .then(async () => {
+    try {
+      const { VelinTransparency } = await import('../../dist/transparency/index.js');
+      VelinTransparency.enhanceAll(root);
+    } catch (err) {
+      console.error('[expo-boot] VelinTransparency.enhanceAll failed', err);
+    }
+  })
+  .catch((err) => {
+    console.error('[expo-boot] bootFromDOM failed', err);
+  });

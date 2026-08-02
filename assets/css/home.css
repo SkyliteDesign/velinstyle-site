@@ -1,5 +1,5 @@
 /**
- * VelinStyle Homepage — Component Expo 1.2.0
+ * VelinStyle Homepage — Component Expo 1.2.1
  * Layout chrome only. Visuals come from VelinStyle tokens/components.
  */
 :root {
@@ -435,12 +435,29 @@ body.expo-body {
 }
 
 .expo-hero__live-video-wrap {
+  position: relative;
   width: 100%;
   overflow: hidden;
   border-radius: var(--velin-radius-lg);
   aspect-ratio: 16 / 9;
   min-height: clamp(16rem, 36vh, 28rem);
   background: var(--velin-color-surface-dim, #0f1218);
+}
+
+.expo-hero__live-video-wrap > .velin-transparency {
+  z-index: 6;
+  pointer-events: none;
+  /* Readable over dark hero footage */
+  --velin-tx-bg: color-mix(in oklab, #0c0b0a 72%, transparent);
+  --velin-tx-fg: #f5f2ea;
+  --velin-tx-border: color-mix(in oklab, var(--velin-color-primary) 55%, #f5f2ea);
+  box-shadow: 0 2px 12px rgb(0 0 0 / 0.45);
+}
+
+.expo-hero__live-video-wrap > .velin-transparency .velin-transparency__label {
+  color: var(--velin-tx-fg);
+  font-weight: 650;
+  letter-spacing: 0.01em;
 }
 
 .expo-hero__live-video {

@@ -1,15 +1,17 @@
 # velinstyle.info
 
-Marketing website and documentation for **[VelinStyle](https://github.com/SkyliteDesign/velinstyle)** **v1.2.0** — accessibility-first CSS & Web Components with plan-first AI scaffolding, design tokens, and WCAG 2.2 AAA-oriented defaults.
+Marketing website and documentation for **[VelinStyle](https://github.com/SkyliteDesign/velinstyle)** **v1.2.1** — accessibility-first CSS & Web Components with Transparency Framework, plan-first AI scaffolding, design tokens, and WCAG 2.2 AAA-oriented defaults.
 
 **Target URL:** [https://velinstyle.info](https://velinstyle.info)
 
 ## What is in this repo
 
-- `index.html` — Component Expo landing (live galleries, playground, tokens, utilities, testing, comparisons for v1.2.0)
-- `docs/` — documentation (relative paths, live theme picker)
+- `index.html` / `index.de.html` — Component Expo landing (live galleries, playground, tokens, utilities, testing, Transparency demo on the hero video)
+- `docs/` — documentation (relative paths, live theme picker), including EN/DE Transparency guides
 - `demos/` — live showcases
-- `dist/` — **built assets copied from the main `velinstyle` repo** (CSS, JS, themes, `velin-agent.json`, `llms.txt`)
+- `dist/` — **built assets copied from the main `velinstyle` repo** (CSS, JS, themes, `transparency/`, `velin-agent.json`, `llms.txt`)
+- `transparency.policy.json` — site policy for `transparency doctor` / `report` on the homepage
+- `transparency-report/` — generated doctor/report artifacts (local)
 - `assets/js/demo-presets.js` — scaffold outputs for homepage playground (regenerate via `node scripts/build-demo-presets.mjs`)
 
 ## Run locally
@@ -22,8 +24,16 @@ npx serve . -l 4000
 
 ```bash
 npm run build          # full site build + sync
-npm run sync:dist      # dist + generated docs + meta + changelog only
+npm run sync:dist      # dist + generated docs + meta + changelog + transparency module
 npm run sync:check     # release sync gate vs ../velinstyle
+```
+
+### Transparency tools (homepage)
+
+```bash
+npm run transparency:home      # doctor EN+DE + report
+npm run transparency:doctor
+npm run transparency:report
 ```
 
 Regenerate homepage demo HTML after CLI/blueprint changes:
@@ -36,9 +46,13 @@ node scripts/build-demo-presets.mjs
 
 ## Consistency with the framework
 
-Keep counts aligned with `dist/velin-agent.json`: **40** canonical Web Components, **42** lazy loaders, **27** attribute bridges. npm/CDN pin: **`@birdapi/velinstyle@1.2.0`** (registry latest may still be 1.1.0 until the cut).
+Keep counts aligned with `dist/velin-agent.json`: **40** canonical Web Components, **42** lazy loaders, **27** attribute bridges. npm/CDN pin: **`@birdapi/velinstyle@1.2.1`**.
 
-Homepage narrative: **live Component Expo** — show the framework with real components (80% UI / 20% text), no roadmap essay.
+Homepage narrative: **live Component Expo** — show the framework with real components (80% UI / 20% text), including the **Transparency Framework** (beta) badge on the hero video.
+
+**Not published:** `atelier/` and `showcase-reihe/` (local-only; listed in `.gitignore`).
+
+Docs: [Transparency (EN)](docs/guides/transparency.html) · [Transparenz (DE)](docs/guides/transparency-leitfaden.html)
 
 **[Deutsch](README.de.md)**
 

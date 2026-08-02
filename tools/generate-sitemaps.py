@@ -34,7 +34,7 @@ REDIRECT_INDEX_SUFFIXES = {
     "docs/utilities/index.html",
 }
 
-EXCLUDE_DIR_PARTS = {"tools", "node_modules", ".git", "dist"}
+EXCLUDE_DIR_PARTS = {"tools", "node_modules", ".git", "dist", "atelier", "showcase-reihe", "transparency-report"}
 
 PRIORITY_RULES: list[tuple[str, str, str]] = [
     ("index.html", "1.0", "weekly"),
@@ -44,6 +44,8 @@ PRIORITY_RULES: list[tuple[str, str, str]] = [
     ("/docs/getting-started/introduction.html", "0.95", "weekly"),
     ("/docs/getting-started/einfuehrung.html", "0.95", "weekly"),
     ("/docs/guides/feature-scope.html", "0.9", "weekly"),
+    ("/docs/guides/transparency.html", "0.9", "weekly"),
+    ("/docs/guides/transparency-leitfaden.html", "0.9", "weekly"),
     ("/docs/guides/velin-search.html", "0.88", "monthly"),
     ("/docs/guides/html-attributes.html", "0.88", "monthly"),
     ("/docs/extend/web-components.html", "0.88", "monthly"),

@@ -27468,12 +27468,12 @@
     },
     {
       "id": "site:generated/index.html",
-      "title": "Auto-generated reference (Markdown) 1.2.0",
-      "excerpt": "Auto-generated Markdown API reference — Web Components, tokens, utilities, CLI, scanner rules.",
+      "title": "Auto-generated reference (Markdown) 1.2.1",
+      "excerpt": "VelinStyle is the WCAG 2.2 AAA CSS framework with native JavaScript runtime and Web Components.",
       "url": "generated/index.html",
       "category": "docs",
       "keywords": [
-        "Auto-generated reference (Markdown) 1.2.0",
+        "Auto-generated reference (Markdown) 1.2.1",
         "generated index.html",
         "Generated"
       ],
@@ -27482,14 +27482,14 @@
     {
       "id": "site:generated/index.html#sections",
       "title": "Sections",
-      "section": "Auto-generated reference (Markdown) 1.2.0",
-      "excerpt": "Auto-generated Markdown API reference — Web Components, tokens, utilities, CLI, scanner rules.",
+      "section": "Auto-generated reference (Markdown) 1.2.1",
+      "excerpt": "VelinStyle is the WCAG 2.2 AAA CSS framework with native JavaScript runtime and Web Components.",
       "url": "generated/index.html#sections",
       "category": "docs",
       "keywords": [
         "Sections",
         "sections",
-        "Auto-generated reference (Markdown) 1.2.0",
+        "Auto-generated reference (Markdown) 1.2.1",
         "generated index.html"
       ],
       "weight": 1.12
@@ -27497,14 +27497,14 @@
     {
       "id": "site:generated/index.html#regenerate",
       "title": "Regenerate",
-      "section": "Auto-generated reference (Markdown) 1.2.0",
-      "excerpt": "Auto-generated Markdown API reference — Web Components, tokens, utilities, CLI, scanner rules.",
+      "section": "Auto-generated reference (Markdown) 1.2.1",
+      "excerpt": "VelinStyle is the WCAG 2.2 AAA CSS framework with native JavaScript runtime and Web Components.",
       "url": "generated/index.html#regenerate",
       "category": "docs",
       "keywords": [
         "Regenerate",
         "regenerate",
-        "Auto-generated reference (Markdown) 1.2.0",
+        "Auto-generated reference (Markdown) 1.2.1",
         "generated index.html"
       ],
       "weight": 1.12
@@ -27512,14 +27512,14 @@
     {
       "id": "site:generated/index.html#online",
       "title": "Online",
-      "section": "Auto-generated reference (Markdown) 1.2.0",
-      "excerpt": "Auto-generated Markdown API reference — Web Components, tokens, utilities, CLI, scanner rules.",
+      "section": "Auto-generated reference (Markdown) 1.2.1",
+      "excerpt": "VelinStyle is the WCAG 2.2 AAA CSS framework with native JavaScript runtime and Web Components.",
       "url": "generated/index.html#online",
       "category": "docs",
       "keywords": [
         "Online",
         "online",
-        "Auto-generated reference (Markdown) 1.2.0",
+        "Auto-generated reference (Markdown) 1.2.1",
         "generated index.html"
       ],
       "weight": 1.12
@@ -27527,14 +27527,14 @@
     {
       "id": "site:generated/index.html#catalog",
       "title": "All generated pages",
-      "section": "Auto-generated reference (Markdown) 1.2.0",
-      "excerpt": "Auto-generated Markdown API reference — Web Components, tokens, utilities, CLI, scanner rules.",
+      "section": "Auto-generated reference (Markdown) 1.2.1",
+      "excerpt": "VelinStyle is the WCAG 2.2 AAA CSS framework with native JavaScript runtime and Web Components.",
       "url": "generated/index.html#catalog",
       "category": "docs",
       "keywords": [
         "All generated pages",
         "catalog",
-        "Auto-generated reference (Markdown) 1.2.0",
+        "Auto-generated reference (Markdown) 1.2.1",
         "generated index.html"
       ],
       "weight": 1.12
@@ -35603,6 +35603,497 @@
         "component",
         "Syntax-Highlighting 1.2.0",
         "guides syntax-highlighting-leitfaden.html"
+      ],
+      "weight": 1.12
+    },
+    {
+      "id": "site:guides/transparency-leitfaden.html",
+      "title": "Velin Transparency Framework 1.2.1 beta",
+      "excerpt": "VelinStyle ist das WCAG-2.2-AAA-CSS-Framework mit nativer JavaScript-Runtime und Web Components.",
+      "url": "guides/transparency-leitfaden.html",
+      "category": "docs",
+      "keywords": [
+        "Velin Transparency Framework 1.2.1 beta",
+        "guides transparency-leitfaden.html",
+        "Guides"
+      ],
+      "weight": 1.05
+    },
+    {
+      "id": "site:guides/transparency-leitfaden.html#when-to-use",
+      "title": "Wann nutzen",
+      "section": "Velin Transparency Framework 1.2.1 beta",
+      "excerpt": "VelinStyle ist das WCAG-2.2-AAA-CSS-Framework mit nativer JavaScript-Runtime und Web Components.",
+      "url": "guides/transparency-leitfaden.html#when-to-use",
+      "category": "docs",
+      "keywords": [
+        "Wann nutzen",
+        "when-to-use",
+        "Velin Transparency Framework 1.2.1 beta",
+        "guides transparency-leitfaden.html"
+      ],
+      "weight": 1.12
+    },
+    {
+      "id": "site:guides/transparency-leitfaden.html#when-not",
+      "title": "Wann nicht",
+      "section": "Velin Transparency Framework 1.2.1 beta",
+      "excerpt": "VelinStyle ist das WCAG-2.2-AAA-CSS-Framework mit nativer JavaScript-Runtime und Web Components.",
+      "url": "guides/transparency-leitfaden.html#when-not",
+      "category": "docs",
+      "keywords": [
+        "Wann nicht",
+        "when-not",
+        "Velin Transparency Framework 1.2.1 beta",
+        "guides transparency-leitfaden.html"
+      ],
+      "weight": 1.12
+    },
+    {
+      "id": "site:guides/transparency-leitfaden.html#examples",
+      "title": "Live-Beispiele",
+      "section": "Velin Transparency Framework 1.2.1 beta",
+      "excerpt": "VelinStyle ist das WCAG-2.2-AAA-CSS-Framework mit nativer JavaScript-Runtime und Web Components.",
+      "url": "guides/transparency-leitfaden.html#examples",
+      "category": "docs",
+      "keywords": [
+        "Live-Beispiele",
+        "examples",
+        "Velin Transparency Framework 1.2.1 beta",
+        "guides transparency-leitfaden.html"
+      ],
+      "weight": 1.12
+    },
+    {
+      "id": "site:guides/transparency-leitfaden.html#example-ai",
+      "title": "KI-generierte Medien",
+      "section": "Velin Transparency Framework 1.2.1 beta",
+      "excerpt": "VelinStyle ist das WCAG-2.2-AAA-CSS-Framework mit nativer JavaScript-Runtime und Web Components.",
+      "url": "guides/transparency-leitfaden.html#example-ai",
+      "category": "docs",
+      "keywords": [
+        "KI-generierte Medien",
+        "example-ai",
+        "Velin Transparency Framework 1.2.1 beta",
+        "guides transparency-leitfaden.html"
+      ],
+      "weight": 1.12
+    },
+    {
+      "id": "site:guides/transparency-leitfaden.html#example-trust",
+      "title": "Trust &amp; offiziell",
+      "section": "Velin Transparency Framework 1.2.1 beta",
+      "excerpt": "VelinStyle ist das WCAG-2.2-AAA-CSS-Framework mit nativer JavaScript-Runtime und Web Components.",
+      "url": "guides/transparency-leitfaden.html#example-trust",
+      "category": "docs",
+      "keywords": [
+        "Trust &amp; offiziell",
+        "example-trust",
+        "Velin Transparency Framework 1.2.1 beta",
+        "guides transparency-leitfaden.html"
+      ],
+      "weight": 1.12
+    },
+    {
+      "id": "site:guides/transparency-leitfaden.html#example-renderers",
+      "title": "Renderer-Varianten",
+      "section": "Velin Transparency Framework 1.2.1 beta",
+      "excerpt": "VelinStyle ist das WCAG-2.2-AAA-CSS-Framework mit nativer JavaScript-Runtime und Web Components.",
+      "url": "guides/transparency-leitfaden.html#example-renderers",
+      "category": "docs",
+      "keywords": [
+        "Renderer-Varianten",
+        "example-renderers",
+        "Velin Transparency Framework 1.2.1 beta",
+        "guides transparency-leitfaden.html"
+      ],
+      "weight": 1.12
+    },
+    {
+      "id": "site:guides/transparency-leitfaden.html#example-boot",
+      "title": "Marken booten",
+      "section": "Velin Transparency Framework 1.2.1 beta",
+      "excerpt": "VelinStyle ist das WCAG-2.2-AAA-CSS-Framework mit nativer JavaScript-Runtime und Web Components.",
+      "url": "guides/transparency-leitfaden.html#example-boot",
+      "category": "docs",
+      "keywords": [
+        "Marken booten",
+        "example-boot",
+        "Velin Transparency Framework 1.2.1 beta",
+        "guides transparency-leitfaden.html"
+      ],
+      "weight": 1.12
+    },
+    {
+      "id": "site:guides/transparency-leitfaden.html#vision",
+      "title": "Vision",
+      "section": "Velin Transparency Framework 1.2.1 beta",
+      "excerpt": "VelinStyle ist das WCAG-2.2-AAA-CSS-Framework mit nativer JavaScript-Runtime und Web Components.",
+      "url": "guides/transparency-leitfaden.html#vision",
+      "category": "docs",
+      "keywords": [
+        "Vision",
+        "vision",
+        "Velin Transparency Framework 1.2.1 beta",
+        "guides transparency-leitfaden.html"
+      ],
+      "weight": 1.12
+    },
+    {
+      "id": "site:guides/transparency-leitfaden.html#architecture",
+      "title": "Architektur",
+      "section": "Velin Transparency Framework 1.2.1 beta",
+      "excerpt": "VelinStyle ist das WCAG-2.2-AAA-CSS-Framework mit nativer JavaScript-Runtime und Web Components.",
+      "url": "guides/transparency-leitfaden.html#architecture",
+      "category": "docs",
+      "keywords": [
+        "Architektur",
+        "architecture",
+        "Velin Transparency Framework 1.2.1 beta",
+        "guides transparency-leitfaden.html"
+      ],
+      "weight": 1.12
+    },
+    {
+      "id": "site:guides/transparency-leitfaden.html#html",
+      "title": "HTML-Schnellstart",
+      "section": "Velin Transparency Framework 1.2.1 beta",
+      "excerpt": "VelinStyle ist das WCAG-2.2-AAA-CSS-Framework mit nativer JavaScript-Runtime und Web Components.",
+      "url": "guides/transparency-leitfaden.html#html",
+      "category": "docs",
+      "keywords": [
+        "HTML-Schnellstart",
+        "html",
+        "Velin Transparency Framework 1.2.1 beta",
+        "guides transparency-leitfaden.html"
+      ],
+      "weight": 1.12
+    },
+    {
+      "id": "site:guides/transparency-leitfaden.html#cli",
+      "title": "CLI",
+      "section": "Velin Transparency Framework 1.2.1 beta",
+      "excerpt": "VelinStyle ist das WCAG-2.2-AAA-CSS-Framework mit nativer JavaScript-Runtime und Web Components.",
+      "url": "guides/transparency-leitfaden.html#cli",
+      "category": "docs",
+      "keywords": [
+        "CLI",
+        "cli",
+        "Velin Transparency Framework 1.2.1 beta",
+        "guides transparency-leitfaden.html"
+      ],
+      "weight": 1.12
+    },
+    {
+      "id": "site:guides/transparency-leitfaden.html#policy",
+      "title": "Policy",
+      "section": "Velin Transparency Framework 1.2.1 beta",
+      "excerpt": "VelinStyle ist das WCAG-2.2-AAA-CSS-Framework mit nativer JavaScript-Runtime und Web Components.",
+      "url": "guides/transparency-leitfaden.html#policy",
+      "category": "docs",
+      "keywords": [
+        "Policy",
+        "policy",
+        "Velin Transparency Framework 1.2.1 beta",
+        "guides transparency-leitfaden.html"
+      ],
+      "weight": 1.12
+    },
+    {
+      "id": "site:guides/transparency-leitfaden.html#renderer",
+      "title": "Renderer",
+      "section": "Velin Transparency Framework 1.2.1 beta",
+      "excerpt": "VelinStyle ist das WCAG-2.2-AAA-CSS-Framework mit nativer JavaScript-Runtime und Web Components.",
+      "url": "guides/transparency-leitfaden.html#renderer",
+      "category": "docs",
+      "keywords": [
+        "Renderer",
+        "renderer",
+        "Velin Transparency Framework 1.2.1 beta",
+        "guides transparency-leitfaden.html"
+      ],
+      "weight": 1.12
+    },
+    {
+      "id": "site:guides/transparency.html",
+      "title": "Velin Transparency Framework 1.2.1 beta",
+      "excerpt": "VelinStyle is the WCAG 2.2 AAA CSS framework with native JavaScript runtime and Web Components.",
+      "url": "guides/transparency.html",
+      "category": "docs",
+      "keywords": [
+        "Velin Transparency Framework 1.2.1 beta",
+        "guides transparency.html",
+        "Guides"
+      ],
+      "weight": 1.05
+    },
+    {
+      "id": "site:guides/transparency.html#when-to-use",
+      "title": "When to use",
+      "section": "Velin Transparency Framework 1.2.1 beta",
+      "excerpt": "VelinStyle is the WCAG 2.2 AAA CSS framework with native JavaScript runtime and Web Components.",
+      "url": "guides/transparency.html#when-to-use",
+      "category": "docs",
+      "keywords": [
+        "When to use",
+        "when-to-use",
+        "Velin Transparency Framework 1.2.1 beta",
+        "guides transparency.html"
+      ],
+      "weight": 1.12
+    },
+    {
+      "id": "site:guides/transparency.html#when-not",
+      "title": "When not",
+      "section": "Velin Transparency Framework 1.2.1 beta",
+      "excerpt": "VelinStyle is the WCAG 2.2 AAA CSS framework with native JavaScript runtime and Web Components.",
+      "url": "guides/transparency.html#when-not",
+      "category": "docs",
+      "keywords": [
+        "When not",
+        "when-not",
+        "Velin Transparency Framework 1.2.1 beta",
+        "guides transparency.html"
+      ],
+      "weight": 1.12
+    },
+    {
+      "id": "site:guides/transparency.html#examples",
+      "title": "Live examples",
+      "section": "Velin Transparency Framework 1.2.1 beta",
+      "excerpt": "VelinStyle is the WCAG 2.2 AAA CSS framework with native JavaScript runtime and Web Components.",
+      "url": "guides/transparency.html#examples",
+      "category": "docs",
+      "keywords": [
+        "Live examples",
+        "examples",
+        "Velin Transparency Framework 1.2.1 beta",
+        "guides transparency.html"
+      ],
+      "weight": 1.12
+    },
+    {
+      "id": "site:guides/transparency.html#example-ai",
+      "title": "AI-generated media",
+      "section": "Velin Transparency Framework 1.2.1 beta",
+      "excerpt": "VelinStyle is the WCAG 2.2 AAA CSS framework with native JavaScript runtime and Web Components.",
+      "url": "guides/transparency.html#example-ai",
+      "category": "docs",
+      "keywords": [
+        "AI-generated media",
+        "example-ai",
+        "Velin Transparency Framework 1.2.1 beta",
+        "guides transparency.html"
+      ],
+      "weight": 1.12
+    },
+    {
+      "id": "site:guides/transparency.html#example-trust",
+      "title": "Trust &amp; official",
+      "section": "Velin Transparency Framework 1.2.1 beta",
+      "excerpt": "VelinStyle is the WCAG 2.2 AAA CSS framework with native JavaScript runtime and Web Components.",
+      "url": "guides/transparency.html#example-trust",
+      "category": "docs",
+      "keywords": [
+        "Trust &amp; official",
+        "example-trust",
+        "Velin Transparency Framework 1.2.1 beta",
+        "guides transparency.html"
+      ],
+      "weight": 1.12
+    },
+    {
+      "id": "site:guides/transparency.html#example-renderers",
+      "title": "Renderer variants",
+      "section": "Velin Transparency Framework 1.2.1 beta",
+      "excerpt": "VelinStyle is the WCAG 2.2 AAA CSS framework with native JavaScript runtime and Web Components.",
+      "url": "guides/transparency.html#example-renderers",
+      "category": "docs",
+      "keywords": [
+        "Renderer variants",
+        "example-renderers",
+        "Velin Transparency Framework 1.2.1 beta",
+        "guides transparency.html"
+      ],
+      "weight": 1.12
+    },
+    {
+      "id": "site:guides/transparency.html#example-boot",
+      "title": "Boot the marks",
+      "section": "Velin Transparency Framework 1.2.1 beta",
+      "excerpt": "VelinStyle is the WCAG 2.2 AAA CSS framework with native JavaScript runtime and Web Components.",
+      "url": "guides/transparency.html#example-boot",
+      "category": "docs",
+      "keywords": [
+        "Boot the marks",
+        "example-boot",
+        "Velin Transparency Framework 1.2.1 beta",
+        "guides transparency.html"
+      ],
+      "weight": 1.12
+    },
+    {
+      "id": "site:guides/transparency.html#vision",
+      "title": "Vision",
+      "section": "Velin Transparency Framework 1.2.1 beta",
+      "excerpt": "VelinStyle is the WCAG 2.2 AAA CSS framework with native JavaScript runtime and Web Components.",
+      "url": "guides/transparency.html#vision",
+      "category": "docs",
+      "keywords": [
+        "Vision",
+        "vision",
+        "Velin Transparency Framework 1.2.1 beta",
+        "guides transparency.html"
+      ],
+      "weight": 1.12
+    },
+    {
+      "id": "site:guides/transparency.html#architecture",
+      "title": "Architecture",
+      "section": "Velin Transparency Framework 1.2.1 beta",
+      "excerpt": "VelinStyle is the WCAG 2.2 AAA CSS framework with native JavaScript runtime and Web Components.",
+      "url": "guides/transparency.html#architecture",
+      "category": "docs",
+      "keywords": [
+        "Architecture",
+        "architecture",
+        "Velin Transparency Framework 1.2.1 beta",
+        "guides transparency.html"
+      ],
+      "weight": 1.12
+    },
+    {
+      "id": "site:guides/transparency.html#html",
+      "title": "HTML quickstart",
+      "section": "Velin Transparency Framework 1.2.1 beta",
+      "excerpt": "VelinStyle is the WCAG 2.2 AAA CSS framework with native JavaScript runtime and Web Components.",
+      "url": "guides/transparency.html#html",
+      "category": "docs",
+      "keywords": [
+        "HTML quickstart",
+        "html",
+        "Velin Transparency Framework 1.2.1 beta",
+        "guides transparency.html"
+      ],
+      "weight": 1.12
+    },
+    {
+      "id": "site:guides/transparency.html#api",
+      "title": "JS API",
+      "section": "Velin Transparency Framework 1.2.1 beta",
+      "excerpt": "VelinStyle is the WCAG 2.2 AAA CSS framework with native JavaScript runtime and Web Components.",
+      "url": "guides/transparency.html#api",
+      "category": "docs",
+      "keywords": [
+        "JS API",
+        "api",
+        "Velin Transparency Framework 1.2.1 beta",
+        "guides transparency.html"
+      ],
+      "weight": 1.12
+    },
+    {
+      "id": "site:guides/transparency.html#policy",
+      "title": "Policy",
+      "section": "Velin Transparency Framework 1.2.1 beta",
+      "excerpt": "VelinStyle is the WCAG 2.2 AAA CSS framework with native JavaScript runtime and Web Components.",
+      "url": "guides/transparency.html#policy",
+      "category": "docs",
+      "keywords": [
+        "Policy",
+        "policy",
+        "Velin Transparency Framework 1.2.1 beta",
+        "guides transparency.html"
+      ],
+      "weight": 1.12
+    },
+    {
+      "id": "site:guides/transparency.html#claims",
+      "title": "Claims",
+      "section": "Velin Transparency Framework 1.2.1 beta",
+      "excerpt": "VelinStyle is the WCAG 2.2 AAA CSS framework with native JavaScript runtime and Web Components.",
+      "url": "guides/transparency.html#claims",
+      "category": "docs",
+      "keywords": [
+        "Claims",
+        "claims",
+        "Velin Transparency Framework 1.2.1 beta",
+        "guides transparency.html"
+      ],
+      "weight": 1.12
+    },
+    {
+      "id": "site:guides/transparency.html#cli",
+      "title": "CLI",
+      "section": "Velin Transparency Framework 1.2.1 beta",
+      "excerpt": "VelinStyle is the WCAG 2.2 AAA CSS framework with native JavaScript runtime and Web Components.",
+      "url": "guides/transparency.html#cli",
+      "category": "docs",
+      "keywords": [
+        "CLI",
+        "cli",
+        "Velin Transparency Framework 1.2.1 beta",
+        "guides transparency.html"
+      ],
+      "weight": 1.12
+    },
+    {
+      "id": "site:guides/transparency.html#providers",
+      "title": "Providers &amp; priority",
+      "section": "Velin Transparency Framework 1.2.1 beta",
+      "excerpt": "VelinStyle is the WCAG 2.2 AAA CSS framework with native JavaScript runtime and Web Components.",
+      "url": "guides/transparency.html#providers",
+      "category": "docs",
+      "keywords": [
+        "Providers &amp; priority",
+        "providers",
+        "Velin Transparency Framework 1.2.1 beta",
+        "guides transparency.html"
+      ],
+      "weight": 1.12
+    },
+    {
+      "id": "site:guides/transparency.html#renderer",
+      "title": "Renderer",
+      "section": "Velin Transparency Framework 1.2.1 beta",
+      "excerpt": "VelinStyle is the WCAG 2.2 AAA CSS framework with native JavaScript runtime and Web Components.",
+      "url": "guides/transparency.html#renderer",
+      "category": "docs",
+      "keywords": [
+        "Renderer",
+        "renderer",
+        "Velin Transparency Framework 1.2.1 beta",
+        "guides transparency.html"
+      ],
+      "weight": 1.12
+    },
+    {
+      "id": "site:guides/transparency.html#a11y",
+      "title": "Accessibility",
+      "section": "Velin Transparency Framework 1.2.1 beta",
+      "excerpt": "VelinStyle is the WCAG 2.2 AAA CSS framework with native JavaScript runtime and Web Components.",
+      "url": "guides/transparency.html#a11y",
+      "category": "docs",
+      "keywords": [
+        "Accessibility",
+        "a11y",
+        "Velin Transparency Framework 1.2.1 beta",
+        "guides transparency.html"
+      ],
+      "weight": 1.12
+    },
+    {
+      "id": "site:guides/transparency.html#roadmap",
+      "title": "Roadmap",
+      "section": "Velin Transparency Framework 1.2.1 beta",
+      "excerpt": "VelinStyle is the WCAG 2.2 AAA CSS framework with native JavaScript runtime and Web Components.",
+      "url": "guides/transparency.html#roadmap",
+      "category": "docs",
+      "keywords": [
+        "Roadmap",
+        "roadmap",
+        "Velin Transparency Framework 1.2.1 beta",
+        "guides transparency.html"
       ],
       "weight": 1.12
     },
@@ -46993,6 +47484,21 @@
       "weight": 1.08
     },
     {
+      "id": "gen:generated/attributes/velin-disclosure.md",
+      "title": "velin disclosure",
+      "excerpt": "Generated reference (generated)",
+      "url": "generated/attributes/velin-disclosure.md",
+      "category": "api",
+      "keywords": [
+        "velin disclosure",
+        "generated attributes velin-disclosure.md",
+        "generated",
+        "generated",
+        "markdown"
+      ],
+      "weight": 1.08
+    },
+    {
       "id": "gen:generated/attributes/velin-fade.md",
       "title": "velin fade",
       "excerpt": "Generated reference (generated)",
@@ -47316,6 +47822,21 @@
       "keywords": [
         "velin tooltip",
         "generated attributes velin-tooltip.md",
+        "generated",
+        "generated",
+        "markdown"
+      ],
+      "weight": 1.08
+    },
+    {
+      "id": "gen:generated/attributes/velin-transparency.md",
+      "title": "velin transparency",
+      "excerpt": "Generated reference (generated)",
+      "url": "generated/attributes/velin-transparency.md",
+      "category": "api",
+      "keywords": [
+        "velin transparency",
+        "generated attributes velin-transparency.md",
         "generated",
         "generated",
         "markdown"
@@ -48598,7 +49119,7 @@
     {
       "id": "api:commands",
       "title": "CLI commands",
-      "excerpt": "VelinStyle CLI v1.2.0. Run velinstyle --help for full usage.",
+      "excerpt": "VelinStyle CLI v1.2.1. Run velinstyle --help for full usage.",
       "url": "extend/cli.html",
       "category": "api",
       "keywords": [

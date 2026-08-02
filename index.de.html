@@ -8,13 +8,13 @@
   <meta name="description" content="VelinStyle ist das WCAG-2.2-AAA-CSS-Framework mit nativer JavaScript-Runtime und Web Components.">
   <link rel="alternate" type="application/vnd.velinstyle.meta+json" href="/dist/velin-agent.json" title="VelinStyle agent metadata">
   <link rel="alternate" type="text/plain" href="/dist/llms.txt" title="VelinStyle llms.txt">
-  <script type="application/ld+json">{"@context": "https://schema.org","@type": "SoftwareApplication","name": "VelinStyle","applicationCategory": "DeveloperApplication","operatingSystem": "Web","description": "VelinStyle ist das WCAG-2.2-AAA-CSS-Framework mit nativer JavaScript-Runtime und Web Components.","url": "https://velinstyle.info/index.de.html","softwareVersion": "1.2.0","license": "https://opensource.org/licenses/MIT","isAccessibleForFree": true,"publisher": {"@type": "Organization","name": "SkyliteDesign"}}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org","@type": "SoftwareApplication","name": "VelinStyle","applicationCategory": "DeveloperApplication","operatingSystem": "Web","description": "VelinStyle ist das WCAG-2.2-AAA-CSS-Framework mit nativer JavaScript-Runtime und Web Components.","url": "https://velinstyle.info/index.de.html","softwareVersion": "1.2.1","license": "https://opensource.org/licenses/MIT","isAccessibleForFree": true,"publisher": {"@type": "Organization","name": "SkyliteDesign"}}</script>
   <!-- /velin-seo -->
 
 <link rel="alternate" hreflang="en" href="https://velinstyle.info/">
   <link rel="alternate" hreflang="de" href="https://velinstyle.info/index.de.html">
   <link rel="alternate" hreflang="x-default" href="https://velinstyle.info/">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","name":"VelinStyle","url":"https://velinstyle.info/index.de.html","description":"Accessibility-first CSS und Web Components mit plan-first Scaffolding.","inLanguage":"de"},{"@type":"SoftwareApplication","name":"VelinStyle","applicationCategory":"DeveloperApplication","operatingSystem":"Web","softwareVersion":"1.2.0","url":"https://velinstyle.info/","license":"https://opensource.org/licenses/MIT","isAccessibleForFree":true,"publisher":{"@type":"Organization","name":"SkyliteDesign"}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","name":"VelinStyle","url":"https://velinstyle.info/index.de.html","description":"Accessibility-first CSS und Web Components mit plan-first Scaffolding.","inLanguage":"de"},{"@type":"SoftwareApplication","name":"VelinStyle","applicationCategory":"DeveloperApplication","operatingSystem":"Web","softwareVersion": "1.2.1","url":"https://velinstyle.info/","license":"https://opensource.org/licenses/MIT","isAccessibleForFree":true,"publisher":{"@type":"Organization","name":"SkyliteDesign"}}]}</script>
   <title>VelinStyle — CSS + Web Components</title>
   <meta name="theme-color" content="#0c0b0a" media="(prefers-color-scheme: dark)">
   <meta name="theme-color" content="#0c0b0a">
@@ -34,6 +34,53 @@
   <link rel="icon" href="assets/img/velinstyle-logo.svg" type="image/svg+xml">
   <script>document.documentElement.setAttribute('data-velin-themes-base','dist/themes');document.documentElement.classList.add('expo-motion');</script>
   <script src="assets/js/velin-theme-init.js"></script>
+  <script type="application/vnd.velinstyle.transparency+json">
+  {
+    "items": [
+      {
+        "id": "site-brand-logo",
+        "type": "trust",
+        "status": "verified",
+        "review": "human-reviewed",
+        "claims": ["trust.official", "license.mit", "accessibility.checked"],
+        "label": "Offizielles VelinStyle-Markenzeichen",
+        "src": "assets/img/velinstyle-logo.svg",
+        "tag": "IMG",
+        "provenance": {
+          "createdBy": "SkyliteDesign",
+          "createdAt": "2025-01-01",
+          "approvedBy": "SkyliteDesign",
+          "source": "assets/img/velinstyle-logo.svg",
+          "license": "MIT",
+          "version": "1.2.1"
+        }
+      },
+      {
+        "id": "home-hero-live",
+        "type": "ai",
+        "status": "generated",
+        "review": "human-reviewed",
+        "claims": ["ai.generated", "review.human", "license.mit", "version.current"],
+        "label": "KI-generiert",
+        "description": "Hero-Livevorschau-Video mit KI erstellt, für die VelinStyle-Homepage menschlich geprüft.",
+        "src": "assets/videos/hero-live.mp4",
+        "tag": "DIV",
+        "selector": "[velin-transparency-id='home-hero-live']",
+        "overlay": "badge",
+        "tone": "generated",
+        "position": "top-right",
+        "provenance": {
+          "createdBy": "SkyliteDesign",
+          "createdAt": "2026-07-01",
+          "approvedBy": "SkyliteDesign",
+          "source": "assets/videos/hero-live.mp4",
+          "license": "MIT",
+          "version": "1.2.1"
+        }
+      }
+    ]
+  }
+  </script>
 </head>
 <body class="expo-body" data-velin-reveal-auto>
   <a href="#main" class="velin-skip-link expo-skip">Zur Component Expo springen</a>
@@ -43,7 +90,7 @@
     <a class="expo-nav__brand" href="#hero">
       <img src="assets/img/velinstyle-logo.svg" alt="" width="22" height="22" aria-hidden="true">
       <span>VelinStyle</span>
-      <span class="velin-badge velin-badge--primary">1.2.0</span>
+      <span class="velin-badge velin-badge--primary">1.2.1</span>
     </a>
         <nav class="expo-nav__menu" aria-label="Hauptnavigation" role="menubar">
       <div class="expo-nav__group">
@@ -88,8 +135,9 @@
           <a role="menuitem" href="docs/getting-started/accessibility.html"><velin-icon class="expo-nav__ico" name="eye" provider="heroicons" size="16" aria-hidden="true"></velin-icon><span>Accessibility</span></a>
           <a role="menuitem" href="docs/extend/javascript-api.html"><velin-icon class="expo-nav__ico" name="code-bracket" provider="heroicons" size="16" aria-hidden="true"></velin-icon><span>API</span></a>
           <a role="menuitem" href="docs/guides/ai-skills-leitfaden.html"><velin-icon class="expo-nav__ico" name="cpu-chip" provider="heroicons" size="16" aria-hidden="true"></velin-icon><span>AI Skills</span></a>
+          <a role="menuitem" href="docs/guides/transparency-leitfaden.html"><velin-icon class="expo-nav__ico" name="shield-check" provider="heroicons" size="16" aria-hidden="true"></velin-icon><span>Transparenz</span></a>
           <a role="menuitem" href="docs/generated/index.html"><velin-icon class="expo-nav__ico" name="document-text" provider="heroicons" size="16" aria-hidden="true"></velin-icon><span>Generierte Referenz</span></a>
-          <a role="menuitem" href="CHANGELOG.md"><velin-icon class="expo-nav__ico" name="clock" provider="heroicons" size="16" aria-hidden="true"></velin-icon><span>Changelog 1.2.0</span></a>
+          <a role="menuitem" href="CHANGELOG.md"><velin-icon class="expo-nav__ico" name="clock" provider="heroicons" size="16" aria-hidden="true"></velin-icon><span>Changelog 1.2.1</span></a>
         </div>
       </div>
       <div class="expo-nav__group">
@@ -134,8 +182,8 @@
         <p class="expo-hero__lede">OKLCH-Tokens, Utilities, Themes und 38 Custom Elements — nur laden, was im DOM liegt.</p>
         <div class="expo-hero__cta">
           <div class="expo-install-cmd expo-hero__install" aria-label="Installationsbefehl">
-            <code>npm i @birdapi/velinstyle@1.2.0</code>
-            <button type="button" class="velin-btn velin-btn--primary velin-btn--sm" data-copy="npm i @birdapi/velinstyle@1.2.0">Kopieren</button>
+            <code>npm i @birdapi/velinstyle@1.2.1</code>
+            <button type="button" class="velin-btn velin-btn--primary velin-btn--sm" data-copy="npm i @birdapi/velinstyle@1.2.1">Kopieren</button>
           </div>
           <div class="expo-hero__actions">
             <a class="velin-btn velin-btn--primary" href="docs/getting-started/einfuehrung.html">Loslegen</a>
@@ -148,21 +196,38 @@
       </div>
       <div class="expo-preview expo-hero__live" id="heroLivePreview">
         <nav class="velin-nav" aria-label="Hero Live-Navigation">
-          <a class="velin-nav__brand" href="#hero">VelinStyle <span class="velin-badge velin-badge--primary">1.2.0</span></a>
+          <a class="velin-nav__brand" href="#hero">VelinStyle <span class="velin-badge velin-badge--primary">1.2.1</span></a>
           <ul class="velin-nav__list">
             <li><a class="velin-nav__link" href="#hero" aria-current="page">Übersicht</a></li>
             <li><a class="velin-nav__link" href="#playground">Tokens</a></li>
           </ul>
           <velin-theme-toggle themes-base="dist/themes/"></velin-theme-toggle>
         </nav>
-        <div class="expo-hero__live-video-wrap" aria-hidden="true">
+        <div
+          class="expo-hero__live-video-wrap"
+          velin-transparency
+          velin-transparency-id="home-hero-live"
+          velin-type="ai"
+          velin-status="generated"
+          velin-review="human-reviewed"
+          velin-created-at="2026-07-01"
+          velin-approved-by="SkyliteDesign"
+          velin-license="MIT"
+          velin-source="assets/videos/hero-live.mp4"
+          velin-version="1.2.1"
+          velin-label="KI-generiert"
+          velin-description="Hero-Livevorschau-Video mit KI erstellt, für die VelinStyle-Homepage menschlich geprüft."
+          velin-overlay="badge"
+          velin-position="top-right"
+          velin-tone="generated">
           <video
             class="expo-hero__live-video"
             src="assets/videos/hero-live.mp4"
             autoplay
             muted
             playsinline
-            preload="auto"></video>
+            preload="auto"
+            aria-hidden="true"></video>
         </div>
       </div>
     </section>
@@ -170,8 +235,8 @@
     <section class="expo-section" id="facts" data-expo-fx="pulse-lines" data-surface="raised" data-stage="compact" data-expo-entry aria-labelledby="facts-title">
       <header class="expo-section__header" data-expo-reveal>
         <p class="expo-kicker">Framework-Fakten</p>
-        <h2 id="facts-title">Was in 1.2.0 mitkommt</h2>
-        <p class="expo-section__lede">Stabiles CSS + Web Components plus <strong>beta Design-Intelligence-Foundation</strong> (Plan/Review, Knowledge-Graph-Seed, Agent-Metadata). Studio und komplette Utility Engine bleiben geplant.</p>
+        <h2 id="facts-title">Was in 1.2.1 mitkommt</h2>
+        <p class="expo-section__lede">Stabiles CSS + Web Components, <strong>Transparency Framework</strong> (Kennzeichnung + Nachweis), plus <strong>beta Design-Intelligence-Foundation</strong> (Plan/Review, Knowledge-Graph-Seed, Agent-Metadata). Studio und komplette Utility Engine bleiben geplant.</p>
       </header>
       <div class="expo-facts-grid" role="list" data-expo-stagger data-expo-spotlight>
         <a class="expo-fact" href="docs/components/index.html" role="listitem">
@@ -190,12 +255,18 @@
           <span class="expo-fact__value">13</span>
           <span class="expo-fact__label">Themes</span>
         </a>
+        <a class="expo-fact" href="docs/guides/transparency-leitfaden.html" role="listitem">
+          <span class="expo-fact__value">5</span>
+          <span class="expo-fact__label">Transparenz-Säulen</span>
+        </a>
       </div>
       <ul class="expo-fact-chips" aria-label="Capabilities" data-expo-reveal>
         <li><a class="velin-badge velin-badge--success" href="docs/getting-started/accessibility.html">WCAG 2.2 AAA-orientiert</a></li>
         <li><a class="velin-badge" href="docs/extend/javascript-api.html">Native Runtime</a></li>
         <li><a class="velin-badge" href="docs/guides/design-tokens.html">OKLCH</a></li>
         <li><a class="velin-badge" href="docs/layout/containers.html">Container Queries</a></li>
+        <li><a class="velin-badge velin-badge--primary" href="docs/guides/transparency-leitfaden.html">Transparenz (beta)</a></li>
+        <li><a class="velin-badge" href="docs/guides/transparency-leitfaden.html">doctor · report · migrate</a></li>
         <li><a class="velin-badge" href="docs/extend/javascript-api.html">Subpath APIs</a></li>
         <li><a class="velin-badge" href="dist/velin-agent.json">velin-agent.json</a></li>
         <li><a class="velin-badge" href="dist/llms.txt">llms.txt</a></li>
@@ -204,7 +275,7 @@
         <li><a class="velin-badge" href="docs/guides/motion-attributes.html">Motion</a></li>
         <li><a class="velin-badge" href="docs/guides/syntax-highlight.html">Highlight</a></li>
         <li><a class="velin-badge" href="docs/guides/velin-meta.html">Velin Meta (beta)</a></li>
-        <li><a class="velin-badge velin-badge--primary" href="docs/guides/ai-skills-leitfaden.html">AI Skills (beta)</a></li>
+        <li><a class="velin-badge" href="docs/guides/ai-skills-leitfaden.html">AI Skills (beta)</a></li>
       </ul>
     </section>
 
@@ -552,30 +623,31 @@
     <section class="expo-section expo-band" id="whats-new" data-band="whats-new" data-surface="feature" data-expo-entry data-stage="wide" aria-labelledby="whats-new-title">
       <header class="expo-section__header" data-expo-reveal>
         <p class="expo-kicker">Release</p>
-        <h2 id="whats-new-title">Neu in VelinStyle 1.2.0</h2>
-        <p><strong>Stable:</strong> CSS, Web Components, Runtime. <strong>Beta / Foundation:</strong> Plan/Review-CLI, Knowledge Graph, Page/Section Registry, Agent-Metadata. <strong>Planned:</strong> Studio, komplette Utility Engine.</p>
+        <h2 id="whats-new-title">Neu in VelinStyle 1.2.1</h2>
+        <p><strong>Neu in 1.2.1:</strong> Transparency Framework (Kennzeichnung + Nachweis). <strong>Stable:</strong> CSS, Web Components, Runtime. <strong>Beta / Foundation:</strong> Plan/Review-CLI, Knowledge Graph, Agent-Metadata. <strong>Planned:</strong> Studio, komplette Utility Engine.</p>
       </header>
       <div class="expo-whats-new" data-expo-stagger>
-        <article class="expo-release-card"><div class="expo-release-card__meta"><span class="velin-badge velin-badge--primary">1.2.0</span><span class="velin-badge">Runtime</span><span class="velin-badge velin-badge--success expo-badge-new">NEU</span></div><h3>Motion Runtime</h3><p>Reveal, Stagger und Reduced-Motion-Contracts in der Attribute-Schicht.</p><div class="expo-release-card__links"><a href="#animations">Live Demo</a><a href="docs/guides/motion-attributes.html">Docs</a><a href="docs/extend/javascript-api.html">API</a></div></article>
-        <article class="expo-release-card"><div class="expo-release-card__meta"><span class="velin-badge velin-badge--primary">1.2.0</span><span class="velin-badge">Search</span><span class="velin-badge velin-badge--success expo-badge-new">NEU</span></div><h3>Suche</h3><p>Fuzzy-Dokumentationssuche als velin-search auf der Homepage.</p><div class="expo-release-card__links"><a href="#hero">Live Demo</a><a href="docs/guides/velin-search.html">Docs</a><a href="docs/components/index.html">API</a></div></article>
-        <article class="expo-release-card"><div class="expo-release-card__meta"><span class="velin-badge velin-badge--primary">1.2.0</span><span class="velin-badge">Docs</span></div><h3>Highlight</h3><p>Selektives Syntax-Highlighting für Galerien und Code-Blöcke.</p><div class="expo-release-card__links"><a href="#habits">Live Demo</a><a href="docs/guides/syntax-highlight.html">Docs</a><a href="docs/extend/javascript-api.html">API</a></div></article>
-        <article class="expo-release-card"><div class="expo-release-card__meta"><span class="velin-badge velin-badge--primary">1.2.0</span><span class="velin-badge">CLI</span><span class="velin-badge">beta</span><span class="velin-badge velin-badge--success expo-badge-new">NEU</span></div><h3>CLI Plan und Review</h3><p>Plan-first Scaffolding und heuristische Review-Gates für A11y, SEO und Design — <strong>beta</strong>, Schemas wachsen weiter.</p><div class="expo-release-card__links"><a href="#install">Live Demo</a><a href="docs/generated/cli/commands.md">Docs</a><a href="docs/generated/cli/commands.md">API</a></div></article>
-        <article class="expo-release-card"><div class="expo-release-card__meta"><span class="velin-badge velin-badge--primary">1.2.0</span><span class="velin-badge">AI</span><span class="velin-badge">beta</span><span class="velin-badge velin-badge--success expo-badge-new">NEU</span></div><h3>Agent-Metadaten</h3><p>Reicheres velin-agent.json und llms.txt mit Knowledge Graph, Pages, Sections — <strong>beta</strong>-Seed.</p><div class="expo-release-card__links"><a href="dist/velin-agent.json">Live Demo</a><a href="docs/guides/velin-meta.html">Docs</a><a href="dist/llms.txt">API</a></div></article>
+        <article class="expo-release-card"><div class="expo-release-card__meta"><span class="velin-badge velin-badge--primary">1.2.1</span><span class="velin-badge">Transparenz</span><span class="velin-badge">beta</span><span class="velin-badge velin-badge--success expo-badge-new">NEU</span></div><h3>Transparency Framework</h3><p>Kennzeichnung <strong>und</strong> Nachweis — KI, Trust, Compliance, Metadaten. HTML-Bridge, Claim-Taxonomie, CLI <code>doctor</code> / <code>report</code> / <code>migrate</code>.</p><div class="expo-release-card__links"><a href="#hero">Live Demo</a><a href="docs/guides/transparency-leitfaden.html">Docs</a><a href="docs/guides/transparency-leitfaden.html#cli">CLI</a></div></article>
+        <article class="expo-release-card"><div class="expo-release-card__meta"><span class="velin-badge velin-badge--primary">1.2.1</span><span class="velin-badge">Runtime</span><span class="velin-badge velin-badge--success expo-badge-new">NEU</span></div><h3>Motion Runtime</h3><p>Reveal, Stagger und Reduced-Motion-Contracts in der Attribute-Schicht.</p><div class="expo-release-card__links"><a href="#animations">Live Demo</a><a href="docs/guides/motion-attributes.html">Docs</a><a href="docs/extend/javascript-api.html">API</a></div></article>
+        <article class="expo-release-card"><div class="expo-release-card__meta"><span class="velin-badge velin-badge--primary">1.2.1</span><span class="velin-badge">Search</span><span class="velin-badge velin-badge--success expo-badge-new">NEU</span></div><h3>Suche</h3><p>Fuzzy-Dokumentationssuche als velin-search auf der Homepage.</p><div class="expo-release-card__links"><a href="#hero">Live Demo</a><a href="docs/guides/velin-search.html">Docs</a><a href="docs/components/index.html">API</a></div></article>
+        <article class="expo-release-card"><div class="expo-release-card__meta"><span class="velin-badge velin-badge--primary">1.2.1</span><span class="velin-badge">Docs</span></div><h3>Highlight</h3><p>Selektives Syntax-Highlighting für Galerien und Code-Blöcke.</p><div class="expo-release-card__links"><a href="#habits">Live Demo</a><a href="docs/guides/syntax-highlight.html">Docs</a><a href="docs/extend/javascript-api.html">API</a></div></article>
+        <article class="expo-release-card"><div class="expo-release-card__meta"><span class="velin-badge velin-badge--primary">1.2.1</span><span class="velin-badge">CLI</span><span class="velin-badge">beta</span><span class="velin-badge velin-badge--success expo-badge-new">NEU</span></div><h3>CLI Plan und Review</h3><p>Plan-first Scaffolding und heuristische Review-Gates für A11y, SEO und Design — <strong>beta</strong>, Schemas wachsen weiter.</p><div class="expo-release-card__links"><a href="#install">Live Demo</a><a href="docs/generated/cli/commands.md">Docs</a><a href="docs/generated/cli/commands.md">API</a></div></article>
+        <article class="expo-release-card"><div class="expo-release-card__meta"><span class="velin-badge velin-badge--primary">1.2.1</span><span class="velin-badge">AI</span><span class="velin-badge">beta</span><span class="velin-badge velin-badge--success expo-badge-new">NEU</span></div><h3>Agent-Metadaten</h3><p>Reicheres velin-agent.json und llms.txt mit Knowledge Graph, Pages, Sections — <strong>beta</strong>-Seed.</p><div class="expo-release-card__links"><a href="dist/velin-agent.json">Live Demo</a><a href="docs/guides/velin-meta.html">Docs</a><a href="dist/llms.txt">API</a></div></article>
         <article class="expo-release-card"><div class="expo-release-card__meta"><span class="velin-badge velin-badge--primary">1.2.x</span><span class="velin-badge">AI Skills</span><span class="velin-badge">beta</span><span class="velin-badge velin-badge--success expo-badge-new">NEU</span></div><h3>Skill Engine + Registry</h3><p>Offizielle Skills mit Capabilities, Workflow-Graphs, Packs, Bundles und Projekt-Templates für Agent-Ausführung.</p><div class="expo-release-card__links"><a href="#ai-skills">Live Demo</a><a href="docs/guides/ai-skills-leitfaden.html">Docs</a><a href="docs/generated/cli/commands.md">CLI</a></div></article>
-        <article class="expo-release-card"><div class="expo-release-card__meta"><span class="velin-badge velin-badge--primary">1.2.0</span><span class="velin-badge">Meta</span><span class="velin-badge">beta</span></div><h3>Knowledge + Blueprints</h3><p>Page Types, Section Graphs und Design Constraints — Seed-Coverage, kein fertiges AI Design System.</p><div class="expo-release-card__links"><a href="docs/guides/velin-meta.html">Docs</a><a href="dist/velin-agent.json">API</a></div></article>
-        <article class="expo-release-card"><div class="expo-release-card__meta"><span class="velin-badge velin-badge--primary">1.2.0</span><span class="velin-badge">Runtime</span></div><h3>Subpath APIs</h3><p>Selektive ESM-Entry-Points — nur die Chunks booten, die dein DOM braucht.</p><div class="expo-release-card__links"><a href="#install">Live Demo</a><a href="docs/extend/javascript-api.html">Docs</a><a href="docs/extend/javascript-api.html">API</a></div></article>
-        <article class="expo-release-card"><div class="expo-release-card__meta"><span class="velin-badge velin-badge--primary">1.2.0</span><span class="velin-badge">A11y</span></div><h3>Accessibility</h3><p>AAA-orientierte Defaults, Focus-Manager-Overlays und live Test-Center-Checks.</p><div class="expo-release-card__links"><a href="#testing">Live Demo</a><a href="docs/getting-started/accessibility.html">Docs</a><a href="#contracts">API</a></div></article>
-        <article class="expo-release-card"><div class="expo-release-card__meta"><span class="velin-badge velin-badge--primary">1.2.0</span><span class="velin-badge">Themes</span></div><h3>Theme Runtime</h3><p>Attribute- und System-Dark-Parität, dichterer Surface-Stack, 13 Themes.</p><div class="expo-release-card__links"><a href="#tokens">Live Demo</a><a href="docs/guides/design-tokens.html">Docs</a><a href="docs/guides/design-tokens.html">API</a></div></article>
-        <article class="expo-release-card"><div class="expo-release-card__meta"><span class="velin-badge velin-badge--primary">1.2.0</span><span class="velin-badge">Perf</span></div><h3>Performance</h3><p>Selektive Loader und Audit-CLI — kein Full-IIFE auf der Homepage.</p><div class="expo-release-card__links"><a href="docs/guides/performance-audit.html">Docs</a><a href="#install">Live Demo</a></div></article>
-        <article class="expo-release-card"><div class="expo-release-card__meta"><span class="velin-badge velin-badge--primary">1.2.0</span><span class="velin-badge">CSS</span></div><h3>Container Queries</h3><p>Komponentenlokales Layout mit Container-Query-Utilities und Docs.</p><div class="expo-release-card__links"><a href="docs/layout/containers.html">Docs</a><a href="#capabilities">Live Demo</a></div></article>
-        <article class="expo-release-card"><div class="expo-release-card__meta"><span class="velin-badge velin-badge--primary">1.2.0</span><span class="velin-badge">Components</span><span class="velin-badge velin-badge--success expo-badge-new">NEU</span></div><h3>Neue Komponenten</h3><p>38 Web Components und 35+ CSS Components — Overlays, Suche, Charts, Forms.</p><div class="expo-release-card__links"><a href="docs/components/index.html">Docs</a><a href="#contracts">Live Demo</a><a href="docs/components/index.html">API</a></div></article>
-        <article class="expo-release-card"><div class="expo-release-card__meta"><span class="velin-badge velin-badge--primary">1.2.0</span><span class="velin-badge">Utilities</span><span class="velin-badge velin-badge--success expo-badge-new">NEU</span></div><h3>Neue Utilities</h3><p>Layout-, Display-, Spacing- und Position-Utilities auf dem gemeinsamen Token-Vertrag.</p><div class="expo-release-card__links"><a href="docs/utilities/index.html">Docs</a><a href="#capabilities">Live Demo</a><a href="docs/utilities/index.html">API</a></div></article>
-        <article class="expo-release-card"><div class="expo-release-card__meta"><span class="velin-badge velin-badge--primary">1.2.0</span><span class="velin-badge">Attributes</span><span class="velin-badge velin-badge--success expo-badge-new">NEU</span></div><h3>Neue HTML Attributes</h3><p>27 HTML Attributes für Motion, Density und Progressive Enhancement.</p><div class="expo-release-card__links"><a href="docs/guides/html-attributes.html">Docs</a><a href="#animations">Live Demo</a><a href="docs/guides/html-attributes.html">API</a></div></article>
-        <article class="expo-release-card"><div class="expo-release-card__meta"><span class="velin-badge velin-badge--primary">1.2.0</span><span class="velin-badge">Themes</span><span class="velin-badge velin-badge--success expo-badge-new">NEU</span></div><h3>Neue Themes</h3><p>Dreizehn Themes auf einem Token-Vertrag — live im Nav umschaltbar.</p><div class="expo-release-card__links"><a href="docs/guides/design-tokens.html">Docs</a><a href="#tokens">Live Demo</a><a href="docs/guides/design-tokens.html">API</a></div></article>
+        <article class="expo-release-card"><div class="expo-release-card__meta"><span class="velin-badge velin-badge--primary">1.2.1</span><span class="velin-badge">Meta</span><span class="velin-badge">beta</span></div><h3>Knowledge + Blueprints</h3><p>Page Types, Section Graphs und Design Constraints — Seed-Coverage, kein fertiges AI Design System.</p><div class="expo-release-card__links"><a href="docs/guides/velin-meta.html">Docs</a><a href="dist/velin-agent.json">API</a></div></article>
+        <article class="expo-release-card"><div class="expo-release-card__meta"><span class="velin-badge velin-badge--primary">1.2.1</span><span class="velin-badge">Runtime</span></div><h3>Subpath APIs</h3><p>Selektive ESM-Entry-Points — nur die Chunks booten, die dein DOM braucht.</p><div class="expo-release-card__links"><a href="#install">Live Demo</a><a href="docs/extend/javascript-api.html">Docs</a><a href="docs/extend/javascript-api.html">API</a></div></article>
+        <article class="expo-release-card"><div class="expo-release-card__meta"><span class="velin-badge velin-badge--primary">1.2.1</span><span class="velin-badge">A11y</span></div><h3>Accessibility</h3><p>AAA-orientierte Defaults, Focus-Manager-Overlays und live Test-Center-Checks.</p><div class="expo-release-card__links"><a href="#testing">Live Demo</a><a href="docs/getting-started/accessibility.html">Docs</a><a href="#contracts">API</a></div></article>
+        <article class="expo-release-card"><div class="expo-release-card__meta"><span class="velin-badge velin-badge--primary">1.2.1</span><span class="velin-badge">Themes</span></div><h3>Theme Runtime</h3><p>Attribute- und System-Dark-Parität, dichterer Surface-Stack, 13 Themes.</p><div class="expo-release-card__links"><a href="#tokens">Live Demo</a><a href="docs/guides/design-tokens.html">Docs</a><a href="docs/guides/design-tokens.html">API</a></div></article>
+        <article class="expo-release-card"><div class="expo-release-card__meta"><span class="velin-badge velin-badge--primary">1.2.1</span><span class="velin-badge">Perf</span></div><h3>Performance</h3><p>Selektive Loader und Audit-CLI — kein Full-IIFE auf der Homepage.</p><div class="expo-release-card__links"><a href="docs/guides/performance-audit.html">Docs</a><a href="#install">Live Demo</a></div></article>
+        <article class="expo-release-card"><div class="expo-release-card__meta"><span class="velin-badge velin-badge--primary">1.2.1</span><span class="velin-badge">CSS</span></div><h3>Container Queries</h3><p>Komponentenlokales Layout mit Container-Query-Utilities und Docs.</p><div class="expo-release-card__links"><a href="docs/layout/containers.html">Docs</a><a href="#capabilities">Live Demo</a></div></article>
+        <article class="expo-release-card"><div class="expo-release-card__meta"><span class="velin-badge velin-badge--primary">1.2.1</span><span class="velin-badge">Components</span><span class="velin-badge velin-badge--success expo-badge-new">NEU</span></div><h3>Neue Komponenten</h3><p>38 Web Components und 35+ CSS Components — Overlays, Suche, Charts, Forms.</p><div class="expo-release-card__links"><a href="docs/components/index.html">Docs</a><a href="#contracts">Live Demo</a><a href="docs/components/index.html">API</a></div></article>
+        <article class="expo-release-card"><div class="expo-release-card__meta"><span class="velin-badge velin-badge--primary">1.2.1</span><span class="velin-badge">Utilities</span><span class="velin-badge velin-badge--success expo-badge-new">NEU</span></div><h3>Neue Utilities</h3><p>Layout-, Display-, Spacing- und Position-Utilities auf dem gemeinsamen Token-Vertrag.</p><div class="expo-release-card__links"><a href="docs/utilities/index.html">Docs</a><a href="#capabilities">Live Demo</a><a href="docs/utilities/index.html">API</a></div></article>
+        <article class="expo-release-card"><div class="expo-release-card__meta"><span class="velin-badge velin-badge--primary">1.2.1</span><span class="velin-badge">Attributes</span><span class="velin-badge velin-badge--success expo-badge-new">NEU</span></div><h3>Neue HTML Attributes</h3><p>27 HTML Attributes für Motion, Density und Progressive Enhancement.</p><div class="expo-release-card__links"><a href="docs/guides/html-attributes.html">Docs</a><a href="#animations">Live Demo</a><a href="docs/guides/html-attributes.html">API</a></div></article>
+        <article class="expo-release-card"><div class="expo-release-card__meta"><span class="velin-badge velin-badge--primary">1.2.1</span><span class="velin-badge">Themes</span><span class="velin-badge velin-badge--success expo-badge-new">NEU</span></div><h3>Neue Themes</h3><p>Dreizehn Themes auf einem Token-Vertrag — live im Nav umschaltbar.</p><div class="expo-release-card__links"><a href="docs/guides/design-tokens.html">Docs</a><a href="#tokens">Live Demo</a><a href="docs/guides/design-tokens.html">API</a></div></article>
       </div>
       <footer class="expo-links">
         <a class="velin-btn velin-btn--outline velin-btn--sm" href="CHANGELOG.md">Vollständiger Changelog</a>
-        <a class="velin-btn velin-btn--ghost velin-btn--sm" href="#install">1.2.0 installieren</a>
+        <a class="velin-btn velin-btn--ghost velin-btn--sm" href="#install">1.2.1 installieren</a>
       </footer>
     </section>
 
@@ -709,11 +781,11 @@
       <div class="expo-quick-install__row">
         <div class="expo-quick-install__copy">
           <p class="expo-kicker">Schnell installieren</p>
-          <p class="expo-quick-install__lede">VelinStyle 1.2.0 hinzufügen — danach die Component Contracts.</p>
+          <p class="expo-quick-install__lede">VelinStyle 1.2.1 hinzufügen — danach die Component Contracts.</p>
         </div>
         <div class="expo-install-cmd" aria-label="Installationsbefehl">
-          <code>npm i @birdapi/velinstyle@1.2.0</code>
-          <button type="button" class="velin-btn velin-btn--primary velin-btn--sm" data-copy="npm i @birdapi/velinstyle@1.2.0">Kopieren</button>
+          <code>npm i @birdapi/velinstyle@1.2.1</code>
+          <button type="button" class="velin-btn velin-btn--primary velin-btn--sm" data-copy="npm i @birdapi/velinstyle@1.2.1">Kopieren</button>
         </div>
         <a class="velin-btn velin-btn--outline velin-btn--sm" href="#install">Volle Installation</a>
       </div>
@@ -1264,16 +1336,16 @@
     <section class="expo-section expo-band" id="install" data-band="install" data-surface="feature" data-stage="wide" aria-labelledby="install-title">
       <header class="expo-section__header" data-expo-reveal>
         <p class="expo-kicker">Install</p>
-        <h2 id="install-title">Wie startest du mit VelinStyle 1.2.0?</h2>
+        <h2 id="install-title">Wie startest du mit VelinStyle 1.2.1?</h2>
         <p>npm-Pin, CDN, Runtime-Exports, Docs, Playground, Source — kopieren und shippen.</p>
       </header>
-      <div class="expo-terminal" id="expoTerminal" data-cmd="npm i @birdapi/velinstyle@1.2.0" aria-label="Install-Terminal-Demo">
+      <div class="expo-terminal" id="expoTerminal" data-cmd="npm i @birdapi/velinstyle@1.2.1" aria-label="Install-Terminal-Demo">
         <div class="expo-terminal__chrome">
           <span class="expo-terminal__dot" aria-hidden="true"></span>
           <span class="expo-terminal__dot" aria-hidden="true"></span>
           <span class="expo-terminal__dot" aria-hidden="true"></span>
           <span class="expo-terminal__title">velinstyle — install</span>
-          <button type="button" class="velin-btn velin-btn--primary velin-btn--sm expo-terminal__copy" data-copy="npm i @birdapi/velinstyle@1.2.0">Kopieren</button>
+          <button type="button" class="velin-btn velin-btn--primary velin-btn--sm expo-terminal__copy" data-copy="npm i @birdapi/velinstyle@1.2.1">Kopieren</button>
         </div>
         <pre class="expo-terminal__body" id="expoTerminalBody" aria-live="polite"><span class="expo-terminal__line expo-terminal__line--muted">$ <span class="expo-terminal__cursor" aria-hidden="true"></span></span></pre>
       </div>
@@ -1425,13 +1497,13 @@ bootFromDOM(document, { attributes: true, motion: true, highlight: true });</vel
             <a class="expo-footer__logo" href="#hero">
               <img src="assets/img/velinstyle-logo.svg" alt="" width="28" height="28" aria-hidden="true">
               <span>VelinStyle</span>
-              <span class="velin-badge velin-badge--primary">1.2.0</span>
+              <span class="velin-badge velin-badge--primary">1.2.1</span>
             </a>
             <p class="expo-footer__tagline">Accessibility-first CSS Design System mit live Web Components.</p>
           </div>
           <div class="expo-footer__status-list" aria-label="Framework-Status">
             <div><span>Framework</span><strong>VelinStyle</strong></div>
-            <div><span>Version</span><strong>1.2.0</strong></div>
+            <div><span>Version</span><strong>1.2.1</strong></div>
             <div><span>Status</span><strong class="velin-badge velin-badge--success">stable</strong></div>
             <div><span>Build</span><strong class="velin-badge velin-badge--success">passing</strong></div>
           </div>
@@ -1473,7 +1545,7 @@ bootFromDOM(document, { attributes: true, motion: true, highlight: true });</vel
             <div><span>CLI</span><strong>ready</strong></div>
             <div><span>Accessibility</span><strong>AAA-oriented</strong></div>
             <div><span>Components</span><strong id="footerCompCount" data-count-to="73">73+</strong></div>
-            <div><span>Release</span><strong>1.2.0</strong></div>
+            <div><span>Release</span><strong>1.2.1</strong></div>
             <div><span>Motion</span><strong>ready</strong></div>
             <div><span>Search</span><strong>ready</strong></div>
             <div><span>Theme</span><strong>live</strong></div>
@@ -1488,7 +1560,7 @@ bootFromDOM(document, { attributes: true, motion: true, highlight: true });</vel
       </div>
     </div>
     <div class="expo-footer__bar">
-      <p>© SkyliteDesign · BirdAPI · VelinStyle 1.2.0</p>
+      <p>© SkyliteDesign · BirdAPI · VelinStyle 1.2.1</p>
       <a class="velin-btn velin-btn--ghost velin-btn--sm" href="https://birdapi.de/impressum" target="_blank" rel="noopener noreferrer">Impressum</a>
     </div>
   </footer>

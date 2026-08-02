@@ -45,6 +45,19 @@ def sync_meta_artifacts() -> None:
             print(f"Meta: {name} -> {dst_dir / name}")
 
 
+def sync_transparency_module() -> None:
+    """Publish Transparency ESM entry for site boot (homepage enhanceAll)."""
+    src = FRAMEWORK / "core" / "transparency"
+    if not src.is_dir():
+        print("Skip transparency module (missing in framework)")
+        return
+    dest = SITE_DIST / "transparency"
+    if dest.exists():
+        shutil.rmtree(dest)
+    shutil.copytree(src, dest)
+    print(f"Transparency module -> {dest}")
+
+
 def sync_changelog() -> None:
     src = FRAMEWORK / "CHANGELOG.md"
     if not src.is_file():
@@ -74,6 +87,7 @@ def main() -> None:
     copy_tree(FRAMEWORK_DIST, SITE_DIST)
     prune_test_artifacts()
     sync_meta_artifacts()
+    sync_transparency_module()
     sync_changelog()
     if FRAMEWORK_GENERATED.is_dir():
         copy_tree(FRAMEWORK_GENERATED, SITE_GENERATED)

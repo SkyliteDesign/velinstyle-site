@@ -1,6 +1,6 @@
 {
   "name": "velinstyle-site",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Official marketing website for VelinStyle CSS framework",
   "private": true,
   "scripts": {
@@ -18,6 +18,10 @@
     "bundle:chrome": "python tools/bundle-doc-chrome.py",
     "capture:showcase": "node tools/capture-showcase.mjs",
     "build:showcase": "python tools/build-showcase.py",
+    "transparency:doctor": "node ../velinstyle/cli/index.js transparency doctor index.html --policy transparency.policy.json && node ../velinstyle/cli/index.js transparency doctor index.de.html --policy transparency.policy.json",
+    "transparency:report": "node ../velinstyle/cli/index.js transparency report index.html --policy transparency.policy.json --out transparency-report && node ../velinstyle/cli/index.js transparency report index.de.html --policy transparency.policy.json --out transparency-report",
+    "transparency:validate": "node ../velinstyle/cli/index.js transparency validate index.html --policy transparency.policy.json && node ../velinstyle/cli/index.js transparency validate index.de.html --policy transparency.policy.json",
+    "transparency:home": "npm run transparency:doctor && npm run transparency:report",
     "sync:check": "node ../velinstyle/scripts/check-release-sync.mjs",
     "sync:fix": "node ../velinstyle/scripts/check-release-sync.mjs --fix",
     "toc:rebuild": "python tools/rebuild-doc-tocs.py",

@@ -109,6 +109,31 @@ body.expo-body {
   min-width: 12rem;
 }
 
+.expo-nav__panel--wide {
+  grid-template-columns: 1fr;
+  min-width: 16rem;
+  max-width: 20rem;
+}
+
+.expo-nav__blurb {
+  margin: 0 0 0.35rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: var(--velin-radius-md, 0.5rem);
+  border: 1px solid var(--velin-color-border);
+  background: color-mix(in oklab, var(--velin-color-surface-dim) 70%, transparent);
+  color: var(--velin-color-text-muted);
+  font-size: 0.78rem;
+  line-height: 1.45;
+  font-weight: 500;
+}
+
+.expo-nav__blurb strong {
+  display: block;
+  margin-block-end: 0.25rem;
+  color: var(--velin-color-text);
+  font-weight: 700;
+}
+
 .expo-nav__panel[hidden] {
   display: none !important;
 }

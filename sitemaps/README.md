@@ -10,7 +10,7 @@ Run `npm run generate:sitemaps` or `python tools/generate-sitemaps.py` from the 
 
 | Domain | Google Search Console — Sitemap-URL |
 | --- | --- |
-| velinstyle.info | `https://velinstyle.info/sitemap.xml` (380 URLs) |
+| velinstyle.info | `https://velinstyle.info/sitemap.xml` (382 URLs) |
 | velinstyle.de | `https://velinstyle.de/sitemaps/velinstyle.de.xml` (after deploy) |
 | velinstyle.eu | `https://velinstyle.eu/sitemaps/velinstyle.eu.xml` |
 | velinstyle.org | `https://velinstyle.org/sitemaps/velinstyle.org.xml` |

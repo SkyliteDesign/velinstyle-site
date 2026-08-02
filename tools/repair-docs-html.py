@@ -93,6 +93,12 @@ META_FIXES: dict[str, str] = {
     "guides/ai-skills-leitfaden.html": (
         "VelinStyle AI Skills Leitfaden: Registry-first Skill Engine, Workflow Graphs, Packs und Bundles."
     ),
+    "guides/transparency.html": (
+        "Velin Transparency Framework — labeling and provenance for AI, trust, compliance, and content metadata."
+    ),
+    "guides/transparency-leitfaden.html": (
+        "Velin Transparenz-Framework — Kennzeichnung und Nachweis für KI, Trust, Compliance und Content-Metadaten."
+    ),
     "components/email.html": (
         "velin-email Web Component — reveal obfuscated addresses on click with accessible mailto links."
     ),

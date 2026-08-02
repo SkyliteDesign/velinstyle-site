@@ -21,3 +21,12 @@ assets/img_demo/
 # Editor
 .cursor/
 .vscode/
+
+# Private / local-only (never publish to GitHub)
+atelier/
+showcase-reihe/
+**/atelier/**
+**/showcase-reihe/**
+
+# Local transparency audit outputs
+transparency-report/

@@ -9261,6 +9261,402 @@
     }
   });
 
+  // core/transparency/claims.js
+  function deriveClaims({ status, review, license, claims = [] } = {}) {
+    const out = new Set(Array.isArray(claims) ? claims.filter(Boolean) : []);
+    const statusClaim = STATUS_TO_CLAIM[String(status || "").toLowerCase()];
+    if (statusClaim) out.add(statusClaim);
+    const reviewClaim = REVIEW_TO_CLAIM[String(review || "").toLowerCase()];
+    if (reviewClaim) out.add(reviewClaim);
+    if (license) {
+      const key = String(license).toLowerCase().trim();
+      const mapped = LICENSE_TO_CLAIM[key] || (key.startsWith("cc") ? "license.cc-by" : null);
+      if (mapped) out.add(mapped);
+    }
+    return [...out];
+  }
+  function claimLabel(claim, lang = "en") {
+    const entry = CLAIM_CATALOG[claim];
+    if (!entry) return claim;
+    return entry.label[lang] || entry.label.en || claim;
+  }
+  function primaryLabel(claims = [], lang = "en") {
+    const order = ["ai.generated", "ai.assisted", "review.human", "review.verified", "trust.official", "license.cc-by", "license.mit"];
+    for (const c of order) {
+      if (claims.includes(c)) return claimLabel(c, lang);
+    }
+    if (claims[0]) return claimLabel(claims[0], lang);
+    return lang === "de" ? "Transparenz" : "Transparency";
+  }
+  var CLAIM_CATALOG, STATUS_TO_CLAIM, REVIEW_TO_CLAIM, LICENSE_TO_CLAIM;
+  var init_claims = __esm({
+    "core/transparency/claims.js"() {
+      CLAIM_CATALOG = {
+        "ai.generated": { pillar: "ai", label: { en: "AI generated", de: "KI-generiert" } },
+        "ai.assisted": { pillar: "ai", label: { en: "AI assisted", de: "KI-unterst\xFCtzt" } },
+        "review.human": { pillar: "ai", label: { en: "Human reviewed", de: "Mensch gepr\xFCft" } },
+        "review.verified": { pillar: "trust", label: { en: "Verified", de: "Verifiziert" } },
+        "security.checked": { pillar: "trust", label: { en: "Security checked", de: "Security gepr\xFCft" } },
+        "accessibility.checked": { pillar: "trust", label: { en: "Accessibility checked", de: "Barrierefreiheit gepr\xFCft" } },
+        "trust.official": { pillar: "trust", label: { en: "Official", de: "Offiziell" } },
+        "trust.signed": { pillar: "trust", label: { en: "Signed", de: "Signiert" } },
+        "trust.opensource": { pillar: "trust", label: { en: "Open source", de: "Open Source" } },
+        "privacy.gdpr": { pillar: "compliance", label: { en: "GDPR", de: "DSGVO" } },
+        "license.cc-by": { pillar: "compliance", label: { en: "CC BY", de: "CC BY" } },
+        "license.mit": { pillar: "compliance", label: { en: "MIT", de: "MIT" } },
+        "license.apache-2": { pillar: "compliance", label: { en: "Apache-2.0", de: "Apache-2.0" } },
+        "content.updated": { pillar: "metadata", label: { en: "Updated", de: "Aktualisiert" } },
+        "content.author": { pillar: "metadata", label: { en: "Author", de: "Autor" } },
+        "content.source": { pillar: "metadata", label: { en: "Source", de: "Quelle" } },
+        "content.language": { pillar: "metadata", label: { en: "Language", de: "Sprache" } },
+        "version.current": { pillar: "metadata", label: { en: "Version", de: "Version" } },
+        "provenance.complete": { pillar: "provenance", label: { en: "Provenance complete", de: "Nachweis vollst\xE4ndig" } }
+      };
+      STATUS_TO_CLAIM = {
+        generated: "ai.generated",
+        assisted: "ai.assisted",
+        "ai-assisted": "ai.assisted",
+        "human-reviewed": "review.human",
+        "human-edited": "review.human",
+        verified: "review.verified",
+        edited: "review.human",
+        draft: null
+      };
+      REVIEW_TO_CLAIM = {
+        human: "review.human",
+        "human-reviewed": "review.human",
+        verified: "review.verified",
+        none: null
+      };
+      LICENSE_TO_CLAIM = {
+        "cc by 4.0": "license.cc-by",
+        "cc-by": "license.cc-by",
+        "cc-by-4.0": "license.cc-by",
+        mit: "license.mit",
+        "apache-2.0": "license.apache-2",
+        apache: "license.apache-2"
+      };
+    }
+  });
+
+  // core/transparency/registry.js
+  function createRegistry() {
+    const map = /* @__PURE__ */ new Map();
+    return {
+      register(record) {
+        if (!record?.id) throw new Error("DisclosureRecord requires id");
+        map.set(record.id, structuredCloneSafe(record));
+        return map.get(record.id);
+      },
+      get(id) {
+        return map.get(id) || null;
+      },
+      has(id) {
+        return map.has(id);
+      },
+      remove(id) {
+        return map.delete(id);
+      },
+      list() {
+        return [...map.values()].map((r) => structuredCloneSafe(r));
+      },
+      query(predicate) {
+        return this.list().filter(predicate);
+      },
+      clear() {
+        map.clear();
+      },
+      size() {
+        return map.size;
+      },
+      export() {
+        return { schema: "velinstyle.transparency.registry", version: 1, items: this.list() };
+      },
+      diff(otherList = []) {
+        const other = new Map(otherList.map((r) => [r.id, r]));
+        const added = [];
+        const removed2 = [];
+        const changed = [];
+        for (const r of map.values()) {
+          if (!other.has(r.id)) added.push(r.id);
+          else if (JSON.stringify(r) !== JSON.stringify(other.get(r.id))) changed.push(r.id);
+        }
+        for (const id of other.keys()) {
+          if (!map.has(id)) removed2.push(id);
+        }
+        return { added, removed: removed2, changed };
+      }
+    };
+  }
+  function structuredCloneSafe(obj) {
+    return JSON.parse(JSON.stringify(obj));
+  }
+  function stableDisclosureId(parts = {}) {
+    if (parts.id) return String(parts.id).trim();
+    const raw = [parts.file || "", parts.selector || "", parts.src || "", parts.tag || "", parts.type || ""].join("|").toLowerCase();
+    let h = 2166136261;
+    for (let i = 0; i < raw.length; i += 1) {
+      h ^= raw.charCodeAt(i);
+      h = Math.imul(h, 16777619);
+    }
+    return `tx-${(h >>> 0).toString(16)}`;
+  }
+  var init_registry2 = __esm({
+    "core/transparency/registry.js"() {
+    }
+  });
+
+  // core/transparency/normalize.js
+  function normalizeDisclosure(draft = {}, ctx = {}) {
+    const provider = String(draft.provider || ctx.provider || "api");
+    const type = String(draft.type || "ai").toLowerCase();
+    const status = draft.status != null ? String(draft.status).toLowerCase() : void 0;
+    const review = draft.review != null ? String(draft.review).toLowerCase() : void 0;
+    const provenance = normalizeProvenance(draft.provenance || draft);
+    if (draft.license && !provenance.license) provenance.license = String(draft.license);
+    if (draft.model && !provenance.source) provenance.source = `model:${draft.model}`;
+    if (draft.generated === true && !status) {
+    }
+    const resolvedStatus = status || (draft.generated === true ? "generated" : void 0);
+    const claims = deriveClaims({
+      status: resolvedStatus,
+      review,
+      license: provenance.license,
+      claims: draft.claims
+    });
+    const target = {
+      selector: draft.target?.selector || draft.selector || void 0,
+      tag: draft.target?.tag || draft.tag || void 0,
+      src: draft.target?.src || draft.src || void 0,
+      file: draft.target?.file || ctx.file || draft.file || void 0
+    };
+    const id = stableDisclosureId({
+      id: draft.id || draft.velinTransparencyId,
+      selector: target.selector,
+      src: target.src,
+      tag: target.tag,
+      type,
+      file: target.file
+    });
+    const lang = ctx.lang === "de" ? "de" : "en";
+    const label = draft.label ? String(draft.label) : primaryLabel(claims, lang);
+    const updated = draft.updated || provenance.publishedAt || provenance.reviewedAt || provenance.createdAt || void 0;
+    return {
+      id,
+      type,
+      status: resolvedStatus,
+      review,
+      provider,
+      claims,
+      provenance,
+      updated,
+      label,
+      description: draft.description ? String(draft.description) : void 0,
+      renderer: draft.renderer || draft.overlay || "badge",
+      tone: draft.tone || toneFromClaims(claims),
+      position: draft.position || "top-right",
+      target,
+      meta: draft.meta && typeof draft.meta === "object" ? draft.meta : void 0
+    };
+  }
+  function normalizeProvenance(src = {}) {
+    const out = {};
+    for (const key of PROVENANCE_KEYS) {
+      const v = src[key] ?? src[key.replace(/[A-Z]/g, (m) => `-${m.toLowerCase()}`)];
+      if (v != null && String(v).trim()) out[key] = String(v).trim();
+    }
+    if (src["created-by"]) out.createdBy = String(src["created-by"]);
+    if (src["created-at"]) out.createdAt = String(src["created-at"]);
+    if (src["reviewed-at"]) out.reviewedAt = String(src["reviewed-at"]);
+    if (src["approved-by"]) out.approvedBy = String(src["approved-by"]);
+    if (src["published-at"]) out.publishedAt = String(src["published-at"]);
+    return out;
+  }
+  function toneFromClaims(claims) {
+    if (claims.includes("ai.generated")) return "generated";
+    if (claims.includes("review.verified") || claims.includes("trust.official")) return "verified";
+    if (claims.includes("review.human")) return "human";
+    if (claims.includes("ai.assisted")) return "mixed";
+    return "neutral";
+  }
+  var PROVENANCE_KEYS;
+  var init_normalize = __esm({
+    "core/transparency/normalize.js"() {
+      init_claims();
+      init_registry2();
+      PROVENANCE_KEYS = [
+        "createdBy",
+        "createdAt",
+        "reviewedAt",
+        "approvedBy",
+        "source",
+        "license",
+        "version",
+        "publishedAt"
+      ];
+    }
+  });
+
+  // core/transparency/renderer.js
+  function registerTransparencyRenderer(name, fn) {
+    renderers.set(name, fn);
+  }
+  function renderDisclosure(el, record) {
+    if (typeof document === "undefined" || !el) return null;
+    const name = record.renderer || "badge";
+    const custom = renderers.get(name);
+    if (custom) {
+      custom(el, record);
+      return el.querySelector(".velin-transparency");
+    }
+    return defaultRender(el, record);
+  }
+  function defaultRender(el, record) {
+    const cs = getComputedStyle(el);
+    if (cs.position === "static") el.style.position = "relative";
+    let mark = el.querySelector(":scope > .velin-transparency");
+    if (!mark) {
+      mark = document.createElement("div");
+      el.prepend(mark);
+    }
+    const renderer = record.renderer || "badge";
+    const tone = record.tone || "neutral";
+    const position = record.position || "top-right";
+    mark.className = [
+      "velin-transparency",
+      `velin-transparency--${renderer}`,
+      `velin-transparency--tone-${tone}`,
+      `velin-transparency--pos-${position}`
+    ].join(" ");
+    mark.setAttribute("data-velin-transparency-id", record.id);
+    mark.setAttribute("role", "note");
+    const claimsText = (record.claims || []).join(", ");
+    const prov = record.provenance || {};
+    const sr = document.createElement("span");
+    sr.className = "velin-sr-only";
+    const lang = (el.closest("[lang]")?.getAttribute("lang") || document.documentElement.lang || "en").startsWith("de") ? "de" : "en";
+    sr.textContent = lang === "de" ? `Transparenzhinweis: ${record.label}. ${claimsText}. ${provenanceSr(prov, "de")}` : `Transparency notice: ${record.label}. ${claimsText}. ${provenanceSr(prov, "en")}`;
+    const visible = document.createElement("span");
+    visible.className = "velin-transparency__label";
+    visible.textContent = record.label || "Transparency";
+    const details = document.createElement("span");
+    details.className = "velin-transparency__details";
+    details.hidden = renderer === "badge" || renderer === "icon";
+    details.textContent = formatDetails(record, lang);
+    mark.replaceChildren(sr, visible, details);
+    if (record.description) mark.title = record.description;
+    else if (details.textContent) mark.title = details.textContent;
+    el.setAttribute("data-velin-transparency", record.id);
+    return mark;
+  }
+  function provenanceSr(p, lang) {
+    const parts = [];
+    if (p.createdBy) parts.push(lang === "de" ? `Erstellt von ${p.createdBy}` : `Created by ${p.createdBy}`);
+    if (p.createdAt) parts.push(lang === "de" ? `am ${p.createdAt}` : `on ${p.createdAt}`);
+    if (p.approvedBy) parts.push(lang === "de" ? `Freigegeben von ${p.approvedBy}` : `Approved by ${p.approvedBy}`);
+    if (p.license) parts.push(p.license);
+    if (p.version) parts.push(`v${p.version}`);
+    return parts.join(". ");
+  }
+  function formatDetails(record, lang) {
+    const p = record.provenance || {};
+    const bits = [];
+    if (p.approvedBy) bits.push(lang === "de" ? `Freigabe: ${p.approvedBy}` : `Approved: ${p.approvedBy}`);
+    if (p.license) bits.push(p.license);
+    if (p.version) bits.push(`v${p.version}`);
+    if (p.updated || record.updated) bits.push(record.updated || p.publishedAt || "");
+    return bits.filter(Boolean).join(" \xB7 ");
+  }
+  function normalizeRendererName(name) {
+    if (name === "corner-badge" || name === "stamp") return "badge";
+    if (name === "floating-card" || name === "sidebar") return "panel";
+    if (name === "banner") return "footer";
+    return name;
+  }
+  var renderers;
+  var init_renderer = __esm({
+    "core/transparency/renderer.js"() {
+      renderers = /* @__PURE__ */ new Map();
+      for (const name of ["overlay", "badge", "inline", "tooltip", "footer", "ribbon", "panel", "icon", "corner-badge", "stamp", "sidebar", "floating-card", "banner"]) {
+        registerTransparencyRenderer(name, (el, record) => {
+          defaultRender(el, { ...record, renderer: normalizeRendererName(name) });
+        });
+      }
+    }
+  });
+
+  // core/transparency/attach.js
+  var attach_exports = {};
+  __export(attach_exports, {
+    VelinTransparency: () => VelinTransparency,
+    attach: () => attach,
+    enhanceAll: () => enhanceAll,
+    getDefaultRegistry: () => getDefaultRegistry
+  });
+  function attach(el, options = {}, ctx = {}) {
+    if (!el) throw new Error("VelinTransparency.attach requires an element");
+    const registry3 = ctx.registry || defaultRegistry;
+    const draft = {
+      ...options,
+      tag: el.tagName,
+      src: el.getAttribute?.("src") || el.getAttribute?.("href") || options.src,
+      selector: el.id ? `#${el.id}` : options.selector,
+      id: options.id || el.getAttribute?.("velin-transparency-id") || el.id,
+      provider: options.provider || "api"
+    };
+    if (el.hasAttribute?.("velin-transparency") || el.hasAttribute?.("velin-disclosure")) {
+      draft.type = draft.type || el.getAttribute("velin-type") || "ai";
+      draft.status = draft.status || el.getAttribute("velin-status");
+      draft.review = draft.review || el.getAttribute("velin-review");
+      draft.license = draft.license || el.getAttribute("velin-license");
+      draft.label = draft.label || el.getAttribute("velin-label");
+      draft.description = draft.description || el.getAttribute("velin-description");
+      draft.overlay = draft.overlay || el.getAttribute("velin-overlay") || el.getAttribute("velin-renderer");
+      draft.provenance = {
+        createdBy: el.getAttribute("velin-created-by"),
+        createdAt: el.getAttribute("velin-created-at"),
+        reviewedAt: el.getAttribute("velin-reviewed-at"),
+        approvedBy: el.getAttribute("velin-approved-by"),
+        source: el.getAttribute("velin-source"),
+        license: el.getAttribute("velin-license"),
+        version: el.getAttribute("velin-version"),
+        publishedAt: el.getAttribute("velin-published-at"),
+        ...options.provenance || {}
+      };
+    }
+    const record = normalizeDisclosure(draft, { provider: draft.provider, lang: ctx.lang });
+    registry3.register(record);
+    if (!el.hasAttribute("velin-transparency")) el.setAttribute("velin-transparency", "");
+    if (!el.hasAttribute("velin-transparency-id")) el.setAttribute("velin-transparency-id", record.id);
+    renderDisclosure(el, record);
+    return record;
+  }
+  function enhanceAll(root = typeof document !== "undefined" ? document : null) {
+    if (!root?.querySelectorAll) return [];
+    const out = [];
+    root.querySelectorAll("[velin-transparency], [velin-disclosure]").forEach((el) => {
+      out.push(attach(el, {}, { registry: defaultRegistry }));
+    });
+    return out;
+  }
+  function getDefaultRegistry() {
+    return defaultRegistry;
+  }
+  var defaultRegistry, VelinTransparency;
+  var init_attach = __esm({
+    "core/transparency/attach.js"() {
+      init_normalize();
+      init_renderer();
+      init_registry2();
+      defaultRegistry = createRegistry();
+      VelinTransparency = {
+        attach,
+        enhanceAll,
+        getRegistry: getDefaultRegistry
+      };
+    }
+  });
+
   // core/attributes/registry.js
   function registerAttribute(name, handler) {
     registry.set(name, handler);
@@ -9471,6 +9867,19 @@
         el.classList.add("velin-highlight");
       }
     });
+    registerAttribute("velin-transparency", {
+      async enhance(el) {
+        const { attach: attach2 } = await Promise.resolve().then(() => (init_attach(), attach_exports));
+        attach2(el);
+      }
+    });
+    registerAttribute("velin-disclosure", {
+      async enhance(el) {
+        const { attach: attach2 } = await Promise.resolve().then(() => (init_attach(), attach_exports));
+        if (!el.hasAttribute("velin-transparency")) el.setAttribute("velin-transparency", "");
+        attach2(el);
+      }
+    });
     for (const motion of ["velin-reveal", "velin-fade", "velin-slide", "velin-scale", "velin-parallax", "velin-hover", "velin-stagger", "velin-scroll"]) {
       registerAttribute(motion, { enhance() {
       } });
@@ -9502,7 +9911,7 @@
     return [...registry.keys()];
   }
   var registry, enhanced;
-  var init_registry2 = __esm({
+  var init_registry3 = __esm({
     "core/attributes/registry.js"() {
       init_runtime();
       init_motion();
@@ -9522,7 +9931,7 @@
   });
   var init_attributes = __esm({
     "core/attributes/index.js"() {
-      init_registry2();
+      init_registry3();
     }
   });
 

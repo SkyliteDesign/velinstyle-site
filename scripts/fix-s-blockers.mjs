@@ -46,8 +46,8 @@ const heroNew = `      <div class="expo-hero__copy">
         <h1 id="hero-title">VelinStyle is an accessibility-first CSS design system with live Web Components.</h1>
         <p>OKLCH tokens, utilities, themes, and 38 custom elements — boot only what the DOM needs. This page is the demo.</p>
         <div class="expo-install-cmd expo-hero__install" aria-label="Install command">
-          <code>npm i @birdapi/velinstyle@1.2.0</code>
-          <button type="button" class="velin-btn velin-btn--primary velin-btn--sm" data-copy="npm i @birdapi/velinstyle@1.2.0">Copy</button>
+          <code>npm i @birdapi/velinstyle@1.2.1</code>
+          <button type="button" class="velin-btn velin-btn--primary velin-btn--sm" data-copy="npm i @birdapi/velinstyle@1.2.1">Copy</button>
         </div>
         <div class="expo-hero__actions">
           <a class="velin-btn velin-btn--primary" href="docs/getting-started/introduction.html">Read Docs</a>
