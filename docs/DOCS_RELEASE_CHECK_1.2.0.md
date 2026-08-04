@@ -2,7 +2,7 @@
 
 **Date:** 2026-07-28  
 **Scope:** `velinstyle-site/docs` modernization (phases 1–9) + release follow-ups  
-**Sync:** `npm run sync:check` → **OK** (`@birdapi/velinstyle@1.2.1`)  
+**Sync:** `npm run sync:check` → **OK** (`@birdapi/velinstyle@1.2.2`)  
 **Search:** `docs/search-index.json` rebuilt (2009 entries); home index synced (1896)
 
 ---

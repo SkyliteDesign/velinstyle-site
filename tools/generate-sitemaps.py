@@ -36,8 +36,19 @@ REDIRECT_INDEX_SUFFIXES = {
 
 EXCLUDE_DIR_PARTS = {"tools", "node_modules", ".git", "dist", "atelier", "showcase-reihe", "transparency-report"}
 
+# Atelier is excluded from the walk (thousands of SEO landings) — index these hubs explicitly.
+ATELIER_SITEMAP_PATHS = [
+    "atelier/index.html",
+    "atelier/index.de.html",
+    "atelier/library/index.html",
+]
+
 PRIORITY_RULES: list[tuple[str, str, str]] = [
     ("index.html", "1.0", "weekly"),
+    ("/atelier/index.html", "0.95", "weekly"),
+    ("/atelier/index.de.html", "0.95", "weekly"),
+    ("/atelier/library/", "0.92", "weekly"),
+    ("/atelier/", "0.9", "weekly"),
     ("/showcase/", "0.9", "weekly"),
     ("/demos/index.html", "0.9", "weekly"),
     ("/demos/", "0.85", "weekly"),
@@ -94,15 +105,21 @@ def collect_paths() -> list[str]:
                 continue
             paths.append(rel)
 
+    for rel in ATELIER_SITEMAP_PATHS:
+        if (SITE / rel.replace("/", os.sep)).is_file():
+            paths.append(rel)
+
     # Stable sort: home first, then alphabetical
     def sort_key(p: str) -> tuple:
         if p == "index.html":
             return (0, p)
-        if p.startswith("demos/"):
+        if p.startswith("atelier/"):
             return (1, p)
-        if p.startswith("docs/getting-started/"):
+        if p.startswith("demos/"):
             return (2, p)
-        return (3, p)
+        if p.startswith("docs/getting-started/"):
+            return (3, p)
+        return (4, p)
 
     return sorted(set(paths), key=sort_key)
 

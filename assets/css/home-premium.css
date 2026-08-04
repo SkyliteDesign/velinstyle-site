@@ -319,6 +319,7 @@ html[data-velin-theme="dark"] {
 /* Card hover depth (shared) */
 .expo-section[data-expo-fx] .expo-why-card,
 .expo-section[data-expo-fx] .expo-fact,
+.expo-section[data-expo-fx] .expo-surface-card,
 .expo-section[data-expo-fx] .expo-gallery-card,
 .expo-section[data-expo-fx] .expo-ai-runtime__step,
 .expo-section[data-expo-fx] .expo-variant-card {
@@ -330,6 +331,7 @@ html[data-velin-theme="dark"] {
 
 .expo-section[data-expo-fx] .expo-why-card:hover,
 .expo-section[data-expo-fx] .expo-fact:hover,
+.expo-section[data-expo-fx] .expo-surface-card:hover,
 .expo-section[data-expo-fx] .expo-gallery-card:hover,
 .expo-section[data-expo-fx] .expo-ai-runtime__step:hover,
 .expo-section[data-expo-fx] .expo-variant-card:hover {
@@ -747,6 +749,7 @@ html[data-velin-theme="dark"] {
   .expo-section[data-expo-fx]:hover,
   .expo-section[data-expo-fx] .expo-why-card:hover,
   .expo-section[data-expo-fx] .expo-fact:hover,
+  .expo-section[data-expo-fx] .expo-surface-card:hover,
   .expo-section[data-expo-fx] .expo-gallery-card:hover,
   .expo-section[data-expo-fx] .expo-ai-runtime__step:hover,
   .expo-section[data-expo-fx] .expo-variant-card:hover,

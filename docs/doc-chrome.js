@@ -128,6 +128,7 @@ window.__VELIN_DOC_LANG__ = {
   "guides/marketing-lite-css.html": "guides/marketing-lite-css-leitfaden.html",
   "guides/motion-attributes.html": "guides/motion-attribute-leitfaden.html",
   "guides/performance-audit.html": "guides/performance-audit-leitfaden.html",
+  "guides/production-build.html": "guides/production-build-leitfaden.html",
   "guides/prompt-scaffolding.html": "guides/prompt-vorlagen.html",
   "guides/react-vite-starter.html": "guides/react-vite-starter-de.html",
   "guides/responsive-layout.html": "guides/responsive-layout-audit.html",
@@ -507,7 +508,8 @@ window.__VELIN_DOC_LANG__ = {
     'customize/color-modes.html': 'Farbmodi',
     'customize/css-variables.html': 'CSS-Variablen',
     'customize/components.html': 'Komponenten',
-    'customize/optimize.html': 'Optimieren',
+    'customize/optimize.html': 'Production-Build',
+    'guides/production-build.html': 'Production Builder',
     'layout/breakpoints.html': 'Breakpoints',
     'layout/containers.html': 'Container',
     'layout/grid.html': 'Raster',
@@ -1460,6 +1462,19 @@ window.__VELIN_DOC_LANG__ = {
     return h;
   }
 
+  /** Only auto-append README.md under docs/generated (not atelier/, demos/, etc.). */
+  function isGeneratedDocsAutoPath(pathOnly) {
+    const p = String(pathOnly || '').replace(/\\/g, '/').replace(/^\.\//, '');
+    if (/\/docs\/generated\//i.test(p) || /^docs\/generated\//i.test(p) || /^generated\//i.test(p)) {
+      return true;
+    }
+    // Relative section folders while browsing generated docs pages
+    if (/\/docs\/generated\//i.test(location.pathname)) {
+      return /^(components|tokens|utilities|attributes|cli|rules|a11y|meta)(\/|$)/i.test(p);
+    }
+    return false;
+  }
+
   /** Map generated/ section folders to README.md */
   function canonicalMdHref(href) {
     const h = normalizeMdHref(href);
@@ -1471,6 +1486,7 @@ window.__VELIN_DOC_LANG__ = {
     const file = pathOnly.split('/').pop() || '';
 
     if (/\.html?$/i.test(file)) return h;
+    if (!isGeneratedDocsAutoPath(pathOnly)) return h;
     if (pathOnly.endsWith('/')) return `${pathOnly}README.md${hashQuery}`;
     if (!/\.[a-z0-9]+$/i.test(file)) return `${pathOnly}/README.md${hashQuery}`;
     return h;
@@ -1568,10 +1584,25 @@ window.__VELIN_DOC_LANG__ = {
     return true;
   }
 
+  function isProductSurfaceHref(raw) {
+    const cleaned = String(raw || '').replace(/^\.\//, '');
+    if (/^(?:\.\.\/)*(atelier|showcase-reihe|demos|showcase)(\/|$)/i.test(cleaned)) return true;
+    if (/^\/(atelier|showcase-reihe|demos|showcase)(\/|$)/i.test(cleaned)) return true;
+    try {
+      const path = new URL(cleaned, 'https://velinstyle.info/').pathname;
+      return /^\/(atelier|showcase-reihe|demos|showcase)(\/|$)/i.test(path);
+    } catch {
+      return false;
+    }
+  }
+
   function shouldOpenInViewer(a) {
     const raw = a.getAttribute('href');
     if (!raw || raw.startsWith('#')) return false;
     if (a.dataset.external != null || a.hasAttribute('download')) return false;
+    // Site chrome / product surfaces must navigate normally (never MD dialog)
+    if (a.closest('.expo-nav, .expo-site-nav, .expo-nav__panel, .at-top, .at-top__nav')) return false;
+    if (isProductSurfaceHref(raw)) return false;
 
     const href = canonicalMdHref(raw);
     const inDialog = !!a.closest('#velinDocMdBody');

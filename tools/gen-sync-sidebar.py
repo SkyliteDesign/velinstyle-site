@@ -138,7 +138,7 @@ def sidebar_html(rel: str, active_href: str) -> str:
         link("customize/color-modes.html", "Color Modes", "circle-half-stroke"),
         link("customize/css-variables.html", "CSS Variables", "code"),
         link("customize/components.html", "Components", "cubes"),
-        link("customize/optimize.html", "Optimize", "gauge-simple"),
+        link("customize/optimize.html", "Production build", "gauge-simple"),
     ])
     lo = "".join([
         link("layout/breakpoints.html", "Breakpoints", "mobile-screen"),

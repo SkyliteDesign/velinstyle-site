@@ -49,6 +49,27 @@ KERNEL_DE = (
     "und Web Components."
 )
 
+# Distinct titles/blurbs so scrapers/agents do not conflate Atelier home with the library hub.
+PAGE_TITLES = {
+    "atelier/index.html": "VelinStyle Atelier – 2638 Production-Ready Interfaces",
+    "atelier/index.de.html": "VelinStyle Atelier – 2638 produktionsreife Interfaces",
+    "atelier/library/index.html": "VelinStyle Atelier Library – Browse 2638 UI Templates",
+}
+PAGE_DESCRIPTIONS = {
+    "atelier/index.html": (
+        "Explore more than 2638 production-ready interfaces built with VelinStyle. "
+        "Authentication, dashboards, shops, forums, SaaS, marketing pages, forms and more."
+    ),
+    "atelier/index.de.html": (
+        "Entdecke über 2638 produktionsreife Interfaces mit VelinStyle. "
+        "Authentication, Dashboards, Shops, Foren, SaaS, Marketing-Seiten, Formulare und mehr."
+    ),
+    "atelier/library/index.html": (
+        "Browse 2638 production-ready UI templates in the VelinStyle Atelier library — "
+        "Studio, Apps, Recipes, quality tiers, tags, and WebP previews."
+    ),
+}
+
 REDIRECT_CANONICAL = {
     "docs/about/index.html": "docs/about/overview.html",
     "docs/animations/index.html": "docs/animations/overview.html",
@@ -63,6 +84,20 @@ REDIRECT_CANONICAL = {
     "docs/utilities/index.html": "docs/utilities/api.html",
 }
 
+# atelier/library is a junction → showcase-reihe/04-…; public canonical must stay /atelier/library/
+SHOWCASE_LIBRARY_PREFIX = "showcase-reihe/04-premium-ui-showcase-collection/"
+ATELIER_LIBRARY_PREFIX = "atelier/library/"
+
+
+def public_rel(rel: str) -> str:
+    """Map on-disk showcase library paths to the public Atelier library URL."""
+    rel = rel.replace("\\", "/")
+    if rel.startswith(SHOWCASE_LIBRARY_PREFIX):
+        return ATELIER_LIBRARY_PREFIX + rel[len(SHOWCASE_LIBRARY_PREFIX) :]
+    if rel.rstrip("/") == SHOWCASE_LIBRARY_PREFIX.rstrip("/"):
+        return ATELIER_LIBRARY_PREFIX.rstrip("/") + "/"
+    return rel
+
 SEO_BLOCK_START = "<!-- velin-seo -->"
 SEO_BLOCK_END = "<!-- /velin-seo -->"
 
@@ -70,8 +105,8 @@ EXCLUDE_DIRS = {"tools", "node_modules", ".git"}
 
 
 def canonical_url(rel: str) -> str:
+    rel = public_rel(rel.replace("\\", "/"))
     rel = REDIRECT_CANONICAL.get(rel, rel)
-    rel = rel.replace("\\", "/")
     if rel == "index.html":
         return f"{CANONICAL_BASE}/"
     return f"{CANONICAL_BASE}/{rel}"
@@ -150,6 +185,11 @@ def llms_txt() -> str:
 - [Syntax highlighting]({CANONICAL_BASE}/docs/guides/syntax-highlight.html)
 - [API reference (generated)]({CANONICAL_BASE}/docs/guides/api-reference.html)
 
+## Atelier (do not conflate)
+- [Atelier home]({CANONICAL_BASE}/atelier/index.html) — 2638 production-ready interfaces + showcases (NOT the template grid)
+- [Atelier library]({CANONICAL_BASE}/atelier/library/index.html) — browse/filter the 2638-template hub
+- Canonical library URL is always `/atelier/library/` (not `showcase-reihe/04-…`)
+
 ## Generated reference
 - [Components index]({CANONICAL_BASE}/docs/generated/components/README.md)
 - [Tokens]({CANONICAL_BASE}/docs/generated/tokens/README.md)
@@ -223,7 +263,12 @@ def patch_html(path: Path, rel: str) -> bool:
         return False
 
     lang = page_lang(rel, text)
-    description = KERNEL_DE if lang == "de" else KERNEL_EN
+    public = public_rel(rel)
+    description = (
+        PAGE_DESCRIPTIONS.get(public)
+        or PAGE_DESCRIPTIONS.get(rel)
+        or (KERNEL_DE if lang == "de" else KERNEL_EN)
+    )
     url = canonical_url(rel)
 
     text = re.sub(r"\s*<link rel=\"canonical\"[^>]*>\s*", "\n", text, flags=re.I)
@@ -282,7 +327,15 @@ def patch_html(path: Path, rel: str) -> bool:
             count=1,
         )
 
-    if rel == "index.html":
+    page_title = PAGE_TITLES.get(public) or PAGE_TITLES.get(rel)
+    if page_title:
+        text = re.sub(
+            r"<title>[^<]*</title>",
+            f"<title>{html.escape(page_title)}</title>",
+            text,
+            count=1,
+        )
+    elif rel == "index.html":
         text = re.sub(
             r"<title>[^<]*</title>",
             "<title>VelinStyle — WCAG 2.2 AAA CSS Framework with Web Components</title>",

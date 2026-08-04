@@ -1,18 +1,22 @@
 /docs/a11y.html  /docs/getting-started/accessibility.html  301
 /docs/a11y       /docs/getting-started/accessibility.html  301
 
-# Atelier brand home
-/atelier  /atelier/index.html  200
-/atelier/  /atelier/index.html  200
+# Atelier — always land on trailing-slash URLs so relative assets resolve
+/atelier  /atelier/  301
+/atelier/library  /atelier/library/  301
 
 # Pretty showcase paths (before catch-all)
 /atelier/library/showcases/:slug  /showcase-reihe/04-premium-ui-showcase-collection/showcases/:slug/index.html  200
 /atelier/library/showcases/:slug/  /showcase-reihe/04-premium-ui-showcase-collection/showcases/:slug/index.html  200
 
 # Library URL → real showcase-reihe tree (works on Netlify without Windows junction)
-/atelier/library  /showcase-reihe/04-premium-ui-showcase-collection/index.html  200
 /atelier/library/  /showcase-reihe/04-premium-ui-showcase-collection/index.html  200
 /atelier/library/*  /showcase-reihe/04-premium-ui-showcase-collection/:splat  200
+
+# SEO landings under /atelier/{seo-slug}/ (static files you upload under atelier/)
+# Must stay AFTER /atelier/library/* so library is not swallowed.
+/atelier/:slug  /atelier/:slug/index.html  200
+/atelier/:slug/  /atelier/:slug/index.html  200
 
 # Old collection path → Atelier library URL
 /showcase-reihe/04-premium-ui-showcase-collection  /atelier/library/  301

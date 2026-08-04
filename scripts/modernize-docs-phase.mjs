@@ -86,7 +86,7 @@ function inferWhen(rel, title) {
     return {
       use: [
         `Follow this guide when integrating or extending VelinStyle (${title}).`,
-        'Pin <code>@birdapi/velinstyle@1.2.1</code> and check maturity badges for beta surfaces.',
+        'Pin <code>@birdapi/velinstyle@1.2.2</code> and check maturity badges for beta surfaces.',
       ],
       not: [
         'Do not treat beta plan/review/meta as a finished AI design system.',

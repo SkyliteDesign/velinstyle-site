@@ -179,6 +179,7 @@ PINNED_GUIDES = [
     ("guides/prompt-scaffolding.html", "Prompt scaffolding", "wand-magic-sparkles", "guides"),
     ("guides/landing-15-min.html", "Landing in 15 min", "rocket", "guides"),
     ("guides/marketing-lite-css.html", "Marketing lite CSS", "gauge-simple", "guides"),
+    ("guides/production-build.html", "Production Builder", "rocket", "guides"),
     ("guides/responsive-layout.html", "Responsive layout", "mobile-screen", "guides"),
     ("guides/performance-audit.html", "Performance audit", "gauge-high", "guides"),
     ("guides/design-tokens.html", "Design tokens", "swatchbook", "guides"),
@@ -270,7 +271,7 @@ def sidebar_html(rel: str, active_href: str, lang: str = "en") -> str:
         link("customize/color-modes.html", "Color Modes", "circle-half-stroke"),
         link("customize/css-variables.html", "CSS Variables", "code"),
         link("customize/components.html", "Components", "cubes"),
-        link("customize/optimize.html", "Optimize", "gauge-simple"),
+        link("customize/optimize.html", "Production build", "gauge-simple"),
     ])
     lo = "".join([
         link("layout/breakpoints.html", "Breakpoints", "mobile-screen"),
@@ -377,6 +378,7 @@ def sidebar_html(rel: str, active_href: str, lang: str = "en") -> str:
         link("guides/prompt-scaffolding.html", "Prompt scaffolding", "wand-magic-sparkles"),
         link("guides/landing-15-min.html", "Landing in 15 min", "rocket"),
         link("guides/marketing-lite-css.html", "Marketing lite CSS", "gauge-simple"),
+        link("guides/production-build.html", "Production Builder", "rocket"),
         link("guides/responsive-layout.html", "Responsive layout", "mobile-screen"),
         link("guides/performance-audit.html", "Performance audit", "gauge-high"),
         link("guides/whats-new-extension.html", "What&apos;s new (extension)", "wand-magic-sparkles"),

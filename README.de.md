@@ -72,7 +72,7 @@ Docs: [Transparenz-Leitfaden](docs/guides/transparency-leitfaden.html) · [Trans
 - **Sidebar:** viele HTML-Dateien duplizieren die Sidebar — bei neuen Top-Level-Seiten alle betroffenen Dateien oder `tools/sync-sidebar.py` nutzen.
 - **Sprachen:** Englisch `docs/getting-started/introduction.html` · Deutsch `docs/getting-started/einfuehrung.html`
 - **GitHub:** überall `https://github.com/SkyliteDesign/velinstyle`
-- **npm/CDN:** `@birdapi/velinstyle@1.2.1` für Releases
+- **npm/CDN:** `@birdapi/velinstyle@1.2.2` für Releases
 
 ## Lizenz
 

@@ -1,4 +1,4 @@
-# VelinStyle 1.2.1
+# VelinStyle 1.2.2
 
 > VelinStyle is the WCAG 2.2 AAA CSS framework with native JavaScript runtime and Web Components.
 > Full machine context: https://velinstyle.info/dist/velin-agent.json
@@ -7,7 +7,7 @@
 ## Framework
 - npm: @birdapi/velinstyle
 - VelinStyle is the WCAG 2.2 AAA CSS framework with native JavaScript runtime and Web Components.
-- Components: 40 canonical Web Components (`velin-*`); 42 lazy-loader entries
+- Components: 43 canonical Web Components (`velin-*`); 45 lazy-loader entries
 - HTML attributes: 27 `velin-*` bridges
 - CSS: utility-first `velin-*` classes + OKLCH tokens (WCAG 2.2 AAA defaults)
 - Runtime: native JavaScript modules (search, motion, highlight, attributes, meta, a11y)
@@ -29,6 +29,11 @@
 - [VelinSearch](https://velinstyle.info/docs/guides/velin-search.html)
 - [Syntax highlighting](https://velinstyle.info/docs/guides/syntax-highlight.html)
 - [API reference (generated)](https://velinstyle.info/docs/guides/api-reference.html)
+
+## Atelier (do not conflate)
+- [Atelier home](https://velinstyle.info/atelier/index.html) — 2638 production-ready interfaces + showcases (NOT the template grid)
+- [Atelier library](https://velinstyle.info/atelier/library/index.html) — browse/filter the 2638-template hub
+- Canonical library URL is always `/atelier/library/` (not `showcase-reihe/04-…`)
 
 ## Generated reference
 - [Components index](https://velinstyle.info/docs/generated/components/README.md)

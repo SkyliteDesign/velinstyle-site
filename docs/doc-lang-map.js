@@ -127,6 +127,7 @@ window.__VELIN_DOC_LANG__ = {
   "guides/marketing-lite-css.html": "guides/marketing-lite-css-leitfaden.html",
   "guides/motion-attributes.html": "guides/motion-attribute-leitfaden.html",
   "guides/performance-audit.html": "guides/performance-audit-leitfaden.html",
+  "guides/production-build.html": "guides/production-build-leitfaden.html",
   "guides/prompt-scaffolding.html": "guides/prompt-vorlagen.html",
   "guides/react-vite-starter.html": "guides/react-vite-starter-de.html",
   "guides/responsive-layout.html": "guides/responsive-layout-audit.html",

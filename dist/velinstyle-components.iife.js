@@ -137,6 +137,720 @@
     }
   });
 
+  // components/velin-modal.js
+  var velin_modal_exports = {};
+  __export(velin_modal_exports, {
+    default: () => velin_modal_default
+  });
+  var styles, VelinModal, velin_modal_default;
+  var init_velin_modal = __esm({
+    "components/velin-modal.js"() {
+      init_focus_manager();
+      styles = `
+  :host {
+    display: contents;
+  }
+  .sr-only {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  .overlay {
+    position: fixed;
+    inset: 0;
+    z-index: var(--velin-z-modal, 500);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--velin-space-4, 1rem);
+    background: var(--velin-color-overlay, rgba(0,0,0,0.4));
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 200ms ease, visibility 200ms ease;
+  }
+  :host([open]) .overlay {
+    opacity: 1;
+    visibility: visible;
+  }
+  .dialog {
+    position: relative;
+    inline-size: min(90vw, 32rem);
+    max-block-size: 85vh;
+    background: var(--velin-color-surface-bright, #fff);
+    border-radius: var(--velin-radius-lg, 0.75rem);
+    box-shadow: var(--velin-shadow-xl, 0 20px 25px rgba(0,0,0,0.1));
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transform: scale(0.95) translateY(1rem);
+    transition: transform 200ms ease;
+  }
+  :host([open]) .dialog {
+    transform: scale(1) translateY(0);
+  }
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--velin-space-4, 1rem) var(--velin-space-6, 1.5rem);
+    border-bottom: 1px solid var(--velin-color-border, #ddd);
+  }
+  .title {
+    font-size: var(--velin-text-lg, 1.25rem);
+    font-weight: var(--velin-weight-semibold, 600);
+    margin: 0;
+  }
+  .close-btn {
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    border-radius: var(--velin-radius-md, 0.5rem);
+    cursor: pointer;
+    color: var(--velin-color-text-muted, #666);
+    font-size: 1.5rem;
+    line-height: 1;
+  }
+  .close-btn:hover {
+    background: var(--velin-color-surface-dim, #eee);
+    color: var(--velin-color-text, #111);
+  }
+  .body {
+    padding: var(--velin-space-6, 1.5rem);
+    overflow-y: auto;
+    flex-grow: 1;
+  }
+  .footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--velin-space-3, 0.75rem);
+    padding: var(--velin-space-4, 1rem) var(--velin-space-6, 1.5rem);
+    border-top: 1px solid var(--velin-color-border, #ddd);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .overlay, .dialog { transition: none; }
+  }
+`;
+      VelinModal = class extends HTMLElement {
+        static get observedAttributes() {
+          return ["open", "title"];
+        }
+        constructor() {
+          super();
+          this.attachShadow({ mode: "open", delegatesFocus: true });
+          this._previouslyFocused = null;
+          this._onKeydown = this._onKeydown.bind(this);
+          this._onTitleSlot = this._onTitleSlot.bind(this);
+        }
+        connectedCallback() {
+          if (this.shadowRoot.querySelector(".dialog")) return;
+          this.shadowRoot.innerHTML = `
+      <style>${styles}</style>
+      <div class="overlay" part="overlay">
+        <div class="dialog" role="dialog" aria-modal="true" part="dialog">
+          <div class="header" part="header">
+            <h2 class="title" id="velin-modal-title" part="title">
+              <slot name="title"></slot>
+              <span class="title-fallback"></span>
+            </h2>
+            <button class="close-btn" aria-label="Close" part="close">&#215;</button>
+          </div>
+          <div class="body" part="body"><slot></slot></div>
+          <div class="footer" part="footer"><slot name="footer"></slot></div>
+        </div>
+      </div>
+    `;
+          this.shadowRoot.querySelector(".close-btn").addEventListener("click", () => this.close());
+          this.shadowRoot.querySelector(".overlay").addEventListener("click", (e) => {
+            if (e.target === e.currentTarget) this.close();
+          });
+          this.shadowRoot.querySelector('slot[name="title"]').addEventListener("slotchange", this._onTitleSlot);
+          this._syncTitle();
+        }
+        attributeChangedCallback(name) {
+          if (name === "open") {
+            if (this.hasAttribute("open")) this._open();
+            else this._close();
+          }
+          if (name === "title") this._syncTitle();
+        }
+        open() {
+          this.setAttribute("open", "");
+        }
+        close() {
+          this.removeAttribute("open");
+          this.dispatchEvent(new CustomEvent("velin-close", { bubbles: true }));
+        }
+        _syncTitle() {
+          const fallback = this.shadowRoot?.querySelector(".title-fallback");
+          const heading = this.shadowRoot?.querySelector(".title");
+          const dialog = this.shadowRoot?.querySelector('[role="dialog"]');
+          if (!fallback || !heading || !dialog) return;
+          if (this._hasTitleSlot()) {
+            fallback.hidden = true;
+            heading.classList.remove("sr-only");
+            return;
+          }
+          fallback.hidden = false;
+          const title = (this.getAttribute("title") || "").trim();
+          fallback.textContent = title || "Dialog";
+          heading.classList.toggle("sr-only", !title);
+          if (title) {
+            dialog.setAttribute("aria-labelledby", "velin-modal-title");
+            dialog.removeAttribute("aria-label");
+          } else {
+            dialog.removeAttribute("aria-labelledby");
+            dialog.setAttribute("aria-label", this.getAttribute("aria-label") || "Dialog");
+          }
+        }
+        _hasTitleSlot() {
+          const slot = this.shadowRoot?.querySelector('slot[name="title"]');
+          if (!slot) return false;
+          return slot.assignedNodes({ flatten: true }).some((n) => {
+            if (n.nodeType === Node.TEXT_NODE) return Boolean(n.textContent.trim());
+            return n.nodeType === Node.ELEMENT_NODE;
+          });
+        }
+        _onTitleSlot() {
+          const slot = this.shadowRoot?.querySelector('slot[name="title"]');
+          const dialog = this.shadowRoot?.querySelector('[role="dialog"]');
+          const heading = this.shadowRoot?.querySelector(".title");
+          const fallback = this.shadowRoot?.querySelector(".title-fallback");
+          if (!slot || !dialog || !heading || !fallback) return;
+          if (this._hasTitleSlot()) {
+            fallback.hidden = true;
+            heading.classList.remove("sr-only");
+            dialog.removeAttribute("aria-labelledby");
+            const label = slot.assignedNodes({ flatten: true }).map((n) => n.textContent || "").join(" ").trim();
+            if (label) dialog.setAttribute("aria-label", label);
+          } else {
+            this._syncTitle();
+          }
+        }
+        _open() {
+          this._previouslyFocused = saveFocus();
+          setBackgroundInert(this);
+          document.addEventListener("keydown", this._onKeydown);
+          requestAnimationFrame(() => {
+            const focusable = getFocusableElements(this.shadowRoot);
+            if (focusable.length > 0) focusable[0].focus();
+          });
+        }
+        _close() {
+          document.removeEventListener("keydown", this._onKeydown);
+          clearBackgroundInert(this);
+          restoreFocus(this._previouslyFocused);
+        }
+        _onKeydown(event) {
+          if (event.key === "Escape") {
+            this.close();
+            return;
+          }
+          trapFocus(this.shadowRoot, event);
+        }
+        disconnectedCallback() {
+          document.removeEventListener("keydown", this._onKeydown);
+          clearBackgroundInert(this);
+        }
+      };
+      customElements.define("velin-modal", VelinModal);
+      velin_modal_default = VelinModal;
+    }
+  });
+
+  // components/velin-dropdown.js
+  var velin_dropdown_exports = {};
+  __export(velin_dropdown_exports, {
+    default: () => velin_dropdown_default
+  });
+  var styles2, VelinDropdown, velin_dropdown_default;
+  var init_velin_dropdown = __esm({
+    "components/velin-dropdown.js"() {
+      init_focus_manager();
+      styles2 = `
+  :host {
+    display: inline-block;
+    position: relative;
+  }
+  .menu {
+    position: absolute;
+    z-index: var(--velin-z-dropdown, 100);
+    inset-block-start: 100%;
+    inset-inline-start: 0;
+    min-inline-size: 12rem;
+    padding-block: var(--velin-space-1, 0.25rem);
+    background: var(--velin-color-surface-bright, #fff);
+    border: 1px solid var(--velin-color-border, #ddd);
+    border-radius: var(--velin-radius-md, 0.5rem);
+    box-shadow: var(--velin-shadow-lg, 0 10px 15px rgba(0,0,0,0.08));
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-0.25rem);
+    transition: opacity 150ms ease, transform 150ms ease, visibility 150ms ease;
+  }
+  :host([open]) .menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  .menu-end {
+    inset-inline-start: auto;
+    inset-inline-end: 0;
+  }
+  ::slotted([role="menuitem"]),
+  ::slotted(a),
+  ::slotted(button) {
+    display: flex;
+    align-items: center;
+    gap: var(--velin-space-2, 0.5rem);
+    inline-size: 100%;
+    padding: var(--velin-space-2, 0.5rem) var(--velin-space-4, 1rem);
+    min-block-size: 2.5rem;
+    font-size: var(--velin-text-base, 1rem);
+    color: var(--velin-color-text, #111);
+    background: none;
+    border: none;
+    text-align: start;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .menu { transition: none; }
+  }
+`;
+      VelinDropdown = class extends HTMLElement {
+        static get observedAttributes() {
+          return ["open"];
+        }
+        constructor() {
+          super();
+          this.attachShadow({ mode: "open", delegatesFocus: true });
+          this._onDocClick = this._onDocClick.bind(this);
+          this._onKeydown = this._onKeydown.bind(this);
+          this._typeahead = "";
+          this._typeaheadTimer = null;
+        }
+        connectedCallback() {
+          const align = this.getAttribute("align") || "start";
+          this.shadowRoot.innerHTML = `
+      <style>${styles2}</style>
+      <slot name="trigger"></slot>
+      <div class="menu ${align === "end" ? "menu-end" : ""}" role="menu" part="menu">
+        <slot></slot>
+      </div>
+    `;
+          const triggerSlot = this.shadowRoot.querySelector('slot[name="trigger"]');
+          const menuSlot = this.shadowRoot.querySelector("slot:not([name])");
+          triggerSlot.addEventListener("click", () => this.toggle());
+          triggerSlot.addEventListener("slotchange", () => {
+            const trigger = triggerSlot.assignedElements()[0];
+            if (trigger) {
+              trigger.setAttribute("aria-haspopup", "menu");
+              trigger.setAttribute("aria-expanded", this.hasAttribute("open") ? "true" : "false");
+              const menuId = this._menuId || (this._menuId = `velin-dropdown-menu-${Math.random().toString(36).slice(2, 9)}`);
+              trigger.setAttribute("aria-controls", menuId);
+              this.shadowRoot.querySelector(".menu")?.setAttribute("id", menuId);
+            }
+          });
+          menuSlot?.addEventListener("slotchange", () => this._normalizeMenuItems());
+          this._normalizeMenuItems();
+          this.addEventListener("keydown", this._onKeydown);
+        }
+        _normalizeMenuItems() {
+          const items = this._getMenuItems();
+          items.forEach((el, i) => {
+            if (!el.hasAttribute("role")) el.setAttribute("role", "menuitem");
+            el.setAttribute("tabindex", i === 0 ? "0" : "-1");
+          });
+        }
+        toggle() {
+          if (this.hasAttribute("open")) {
+            this.close();
+          } else {
+            this.open();
+          }
+        }
+        open() {
+          this.setAttribute("open", "");
+          const trigger = this.querySelector('[slot="trigger"]');
+          if (trigger) trigger.setAttribute("aria-expanded", "true");
+          document.addEventListener("click", this._onDocClick, true);
+          requestAnimationFrame(() => {
+            const items = this._getMenuItems();
+            if (items.length > 0) {
+              items[0].focus();
+            }
+          });
+        }
+        close() {
+          this.removeAttribute("open");
+          const trigger = this.querySelector('[slot="trigger"]');
+          if (trigger) trigger.setAttribute("aria-expanded", "false");
+          document.removeEventListener("click", this._onDocClick, true);
+          this.dispatchEvent(new CustomEvent("velin-close", { bubbles: true }));
+        }
+        _getMenuItems() {
+          const slot = this.shadowRoot.querySelector("slot:not([name])");
+          return slot ? slot.assignedElements().filter((el) => !el.hasAttribute("disabled")) : [];
+        }
+        _onDocClick(event) {
+          if (!this.contains(event.target)) {
+            this.close();
+          }
+        }
+        _onKeydown(event) {
+          if (event.key === "Escape") {
+            this.close();
+            const trigger = this.querySelector('[slot="trigger"]');
+            if (trigger) trigger.focus();
+            return;
+          }
+          const items = this._getMenuItems();
+          if (items.length === 0) return;
+          if (event.key.length === 1 && /[a-z0-9]/i.test(event.key)) {
+            clearTimeout(this._typeaheadTimer);
+            this._typeahead += event.key.toLowerCase();
+            this._typeaheadTimer = setTimeout(() => {
+              this._typeahead = "";
+            }, 500);
+            const match = items.find(
+              (el) => (el.textContent?.trim().toLowerCase() || "").startsWith(this._typeahead)
+            );
+            if (match) {
+              event.preventDefault();
+              items.forEach((item) => item.setAttribute("tabindex", item === match ? "0" : "-1"));
+              match.focus();
+            }
+            return;
+          }
+          rovingTabindex(this, items, event);
+        }
+        disconnectedCallback() {
+          document.removeEventListener("click", this._onDocClick, true);
+        }
+      };
+      customElements.define("velin-dropdown", VelinDropdown);
+      velin_dropdown_default = VelinDropdown;
+    }
+  });
+
+  // components/velin-accordion.js
+  var velin_accordion_exports = {};
+  __export(velin_accordion_exports, {
+    default: () => velin_accordion_default
+  });
+  function ensureLightStyles() {
+    if (typeof document === "undefined") return;
+    if (document.getElementById(LIGHT_STYLE_ID)) return;
+    const style = document.createElement("style");
+    style.id = LIGHT_STYLE_ID;
+    style.textContent = lightStyles;
+    document.head.appendChild(style);
+  }
+  var LIGHT_STYLE_ID, lightStyles, shadowStyles, VelinAccordion, velin_accordion_default;
+  var init_velin_accordion = __esm({
+    "components/velin-accordion.js"() {
+      LIGHT_STYLE_ID = "velin-accordion-light-css";
+      lightStyles = `
+  velin-accordion {
+    display: block;
+    border: 1px solid var(--velin-color-border, #ddd);
+    border-radius: var(--velin-radius-md, 0.5rem);
+    overflow: hidden;
+  }
+  velin-accordion details {
+    border-bottom: 1px solid var(--velin-color-border, #ddd);
+  }
+  velin-accordion details:last-child {
+    border-bottom: none;
+  }
+  velin-accordion details > summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--velin-space-3, 0.75rem);
+    padding: var(--velin-space-4, 1rem);
+    min-block-size: 2.75rem;
+    font-size: var(--velin-text-base, 1rem);
+    font-weight: var(--velin-weight-medium, 500);
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+  }
+  velin-accordion details > summary::-webkit-details-marker {
+    display: none;
+  }
+  velin-accordion details > summary::after {
+    content: "";
+    flex-shrink: 0;
+    inline-size: 0.5rem;
+    block-size: 0.5rem;
+    border-inline-end: 2px solid currentColor;
+    border-block-end: 2px solid currentColor;
+    transform: rotate(45deg);
+    transition: transform 150ms ease;
+  }
+  velin-accordion details[open] > summary {
+    background: var(--velin-color-primary-subtle, #eff6ff);
+    color: var(--velin-color-primary, #2563eb);
+  }
+  velin-accordion details[open] > summary::after {
+    transform: rotate(225deg);
+  }
+  velin-accordion details > :not(summary) {
+    padding: var(--velin-space-4, 1rem) var(--velin-space-5, 1.25rem);
+    background: var(--velin-color-surface-dim, var(--velin-color-bg-subtle, #f8fafc));
+    color: var(--velin-color-text-muted, #64748b);
+    font-size: var(--velin-text-sm, 0.875rem);
+    line-height: 1.6;
+    border-block-start: 1px solid var(--velin-color-border, #e2e8f0);
+  }
+`;
+      shadowStyles = `
+  :host {
+    display: block;
+  }
+`;
+      VelinAccordion = class extends HTMLElement {
+        constructor() {
+          super();
+          this.attachShadow({ mode: "open" });
+          this._onToggle = this._onToggle.bind(this);
+          this._onKeydown = this._onKeydown.bind(this);
+        }
+        connectedCallback() {
+          ensureLightStyles();
+          this.shadowRoot.innerHTML = `
+      <style>${shadowStyles}</style>
+      <slot></slot>
+    `;
+          this._exclusive = this.hasAttribute("exclusive");
+          this._wireDetails();
+          this.addEventListener("toggle", this._onToggle, true);
+          this.addEventListener("keydown", this._onKeydown);
+        }
+        _wireDetails() {
+          let panelIndex = 0;
+          for (const details of this.querySelectorAll("details")) {
+            const summary = details.querySelector("summary");
+            const panel = details.querySelector(":scope > :not(summary)");
+            const panelId = panel?.id || `velin-accordion-panel-${++panelIndex}`;
+            if (panel && !panel.id) panel.id = panelId;
+            if (summary && panel) {
+              summary.setAttribute("aria-controls", panelId);
+              summary.setAttribute("aria-expanded", details.open ? "true" : "false");
+            }
+            if (summary && !summary.hasAttribute("tabindex")) {
+              summary.setAttribute("tabindex", "0");
+            }
+          }
+        }
+        _onToggle(event) {
+          const openedDetail = event.target;
+          if (!(openedDetail instanceof HTMLDetailsElement)) return;
+          const summary = openedDetail.querySelector("summary");
+          if (summary) {
+            summary.setAttribute("aria-expanded", openedDetail.open ? "true" : "false");
+          }
+          if (!this._exclusive || !openedDetail.open) return;
+          const details = [...this.querySelectorAll("details")];
+          details.forEach((d) => {
+            if (d !== openedDetail && d.open) {
+              d.open = false;
+            }
+          });
+        }
+        _onKeydown(event) {
+          const summaries = [...this.querySelectorAll("summary")];
+          const currentIndex = summaries.indexOf(event.target);
+          if (currentIndex === -1) return;
+          let nextIndex;
+          switch (event.key) {
+            case "ArrowDown":
+              event.preventDefault();
+              nextIndex = (currentIndex + 1) % summaries.length;
+              break;
+            case "ArrowUp":
+              event.preventDefault();
+              nextIndex = (currentIndex - 1 + summaries.length) % summaries.length;
+              break;
+            case "Home":
+              event.preventDefault();
+              nextIndex = 0;
+              break;
+            case "End":
+              event.preventDefault();
+              nextIndex = summaries.length - 1;
+              break;
+            case "Enter":
+            case " ":
+              return;
+            default:
+              return;
+          }
+          summaries[nextIndex].focus();
+        }
+        disconnectedCallback() {
+          this.removeEventListener("toggle", this._onToggle, true);
+          this.removeEventListener("keydown", this._onKeydown);
+        }
+      };
+      customElements.define("velin-accordion", VelinAccordion);
+      velin_accordion_default = VelinAccordion;
+    }
+  });
+
+  // components/velin-tabs.js
+  var velin_tabs_exports = {};
+  __export(velin_tabs_exports, {
+    default: () => velin_tabs_default
+  });
+  var styles3, VelinTabs, velin_tabs_default;
+  var init_velin_tabs = __esm({
+    "components/velin-tabs.js"() {
+      init_focus_manager();
+      styles3 = `
+  :host {
+    display: block;
+  }
+  .tablist {
+    display: flex;
+    gap: var(--velin-space-1, 0.25rem);
+    border-bottom: 2px solid var(--velin-color-border, #ddd);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  ::slotted([role="tab"]) {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--velin-space-2, 0.5rem);
+    padding: var(--velin-space-3, 0.75rem) var(--velin-space-4, 1rem);
+    min-block-size: 2.75rem;
+    font-size: var(--velin-text-base, 1rem);
+    font-weight: var(--velin-weight-medium, 500);
+    color: var(--velin-color-text-muted, #666);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color 150ms ease, border-color 150ms ease;
+  }
+  ::slotted([role="tab"][aria-selected="true"]) {
+    color: var(--velin-color-primary, #2563eb);
+    border-bottom-color: var(--velin-color-primary, #2563eb);
+    font-weight: var(--velin-weight-semibold, 600);
+  }
+  ::slotted([role="tab"]:hover) {
+    color: var(--velin-color-text, #111);
+  }
+  .panels {
+    padding-block-start: var(--velin-space-4, 1rem);
+  }
+  ::slotted([role="tabpanel"][hidden]) {
+    display: none;
+  }
+`;
+      VelinTabs = class extends HTMLElement {
+        constructor() {
+          super();
+          this.attachShadow({ mode: "open", delegatesFocus: true });
+          this._onTabClick = this._onTabClick.bind(this);
+          this._onKeydown = this._onKeydown.bind(this);
+        }
+        connectedCallback() {
+          this.shadowRoot.innerHTML = `
+      <style>${styles3}</style>
+      <div class="tablist" role="tablist" part="tablist">
+        <slot name="tab"></slot>
+      </div>
+      <div class="panels" part="panels">
+        <slot name="panel"></slot>
+      </div>
+    `;
+          this.addEventListener("click", this._onTabClick);
+          this.addEventListener("keydown", this._onKeydown);
+          requestAnimationFrame(() => this._initTabs());
+        }
+        _initTabs() {
+          const tabs = this._getTabs();
+          const panels = this._getPanels();
+          tabs.forEach((tab, i) => {
+            tab.setAttribute("role", "tab");
+            tab.setAttribute("slot", "tab");
+            if (!tab.id) tab.id = `velin-tab-${i}`;
+            const panel = panels[i];
+            if (panel) {
+              panel.setAttribute("role", "tabpanel");
+              panel.setAttribute("slot", "panel");
+              if (!panel.id) panel.id = `velin-panel-${i}`;
+              tab.setAttribute("aria-controls", panel.id);
+              panel.setAttribute("aria-labelledby", tab.id);
+            }
+          });
+          const selectedTab = tabs.find((t) => t.getAttribute("aria-selected") === "true") || tabs[0];
+          if (selectedTab) this._selectTab(selectedTab);
+        }
+        _getTabs() {
+          return [...this.querySelectorAll('[role="tab"], [slot="tab"]')];
+        }
+        _getPanels() {
+          return [...this.querySelectorAll('[role="tabpanel"], [slot="panel"]')];
+        }
+        _onTabClick(event) {
+          const tab = event.target.closest('[role="tab"]');
+          if (tab && this.contains(tab)) {
+            this._selectTab(tab);
+          }
+        }
+        _selectTab(selectedTab) {
+          const tabs = this._getTabs();
+          const panels = this._getPanels();
+          tabs.forEach((tab, i) => {
+            const isSelected = tab === selectedTab;
+            tab.setAttribute("aria-selected", String(isSelected));
+            tab.setAttribute("tabindex", isSelected ? "0" : "-1");
+            if (panels[i]) {
+              panels[i].hidden = !isSelected;
+            }
+          });
+          this.dispatchEvent(
+            new CustomEvent("velin-tab-change", {
+              bubbles: true,
+              detail: { tab: selectedTab }
+            })
+          );
+        }
+        _onKeydown(event) {
+          const tabs = this._getTabs();
+          if (tabs.includes(event.target)) {
+            rovingTabindex(this, tabs, event);
+            if (event.key === "ArrowRight" || event.key === "ArrowLeft" || event.key === "Home" || event.key === "End") {
+              const focused = tabs.find((t) => t.getAttribute("tabindex") === "0");
+              if (focused) this._selectTab(focused);
+            }
+          }
+        }
+        disconnectedCallback() {
+          this.removeEventListener("click", this._onTabClick);
+          this.removeEventListener("keydown", this._onKeydown);
+        }
+      };
+      customElements.define("velin-tabs", VelinTabs);
+      velin_tabs_default = VelinTabs;
+    }
+  });
+
   // node_modules/dompurify/dist/purify.es.mjs
   function _arrayLikeToArray(r, a) {
     (null == a || a > r.length) && (a = r.length);
@@ -326,7 +1040,7 @@
     const originalDocument = document2;
     const currentScript = originalDocument.currentScript;
     window2.DocumentFragment;
-    const HTMLTemplateElement = window2.HTMLTemplateElement, Node = window2.Node, Element = window2.Element, NodeFilter = window2.NodeFilter, _window$NamedNodeMap = window2.NamedNodeMap;
+    const HTMLTemplateElement = window2.HTMLTemplateElement, Node2 = window2.Node, Element = window2.Element, NodeFilter = window2.NodeFilter, _window$NamedNodeMap = window2.NamedNodeMap;
     _window$NamedNodeMap === void 0 ? window2.NamedNodeMap || window2.MozNamedAttrMap : _window$NamedNodeMap;
     window2.HTMLFormElement;
     const DOMParser2 = window2.DOMParser, trustedTypes = window2.trustedTypes;
@@ -338,8 +1052,8 @@
     const getParentNode = lookupGetter(ElementPrototype, "parentNode");
     const getShadowRoot = lookupGetter(ElementPrototype, "shadowRoot");
     const getAttributes = lookupGetter(ElementPrototype, "attributes");
-    const getNodeType = Node && Node.prototype ? lookupGetter(Node.prototype, "nodeType") : null;
-    const getNodeName = Node && Node.prototype ? lookupGetter(Node.prototype, "nodeName") : null;
+    const getNodeType = Node2 && Node2.prototype ? lookupGetter(Node2.prototype, "nodeType") : null;
+    const getNodeName = Node2 && Node2.prototype ? lookupGetter(Node2.prototype, "nodeName") : null;
     if (typeof HTMLTemplateElement === "function") {
       const template = document2.createElement("template");
       if (template.content && template.content.ownerDocument) {
@@ -1791,662 +2505,6 @@
     }
   });
 
-  // components/velin-modal.js
-  var velin_modal_exports = {};
-  __export(velin_modal_exports, {
-    default: () => velin_modal_default
-  });
-  var styles, VelinModal, velin_modal_default;
-  var init_velin_modal = __esm({
-    "components/velin-modal.js"() {
-      init_focus_manager();
-      init_sanitize();
-      styles = `
-  :host {
-    display: contents;
-  }
-  .overlay {
-    position: fixed;
-    inset: 0;
-    z-index: var(--velin-z-modal, 500);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: var(--velin-space-4, 1rem);
-    background: var(--velin-color-overlay, rgba(0,0,0,0.4));
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 200ms ease, visibility 200ms ease;
-  }
-  :host([open]) .overlay {
-    opacity: 1;
-    visibility: visible;
-  }
-  .dialog {
-    position: relative;
-    inline-size: min(90vw, 32rem);
-    max-block-size: 85vh;
-    background: var(--velin-color-surface-bright, #fff);
-    border-radius: var(--velin-radius-lg, 0.75rem);
-    box-shadow: var(--velin-shadow-xl, 0 20px 25px rgba(0,0,0,0.1));
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    transform: scale(0.95) translateY(1rem);
-    transition: transform 200ms ease;
-  }
-  :host([open]) .dialog {
-    transform: scale(1) translateY(0);
-  }
-  .header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: var(--velin-space-4, 1rem) var(--velin-space-6, 1.5rem);
-    border-bottom: 1px solid var(--velin-color-border, #ddd);
-  }
-  .title {
-    font-size: var(--velin-text-lg, 1.25rem);
-    font-weight: var(--velin-weight-semibold, 600);
-    margin: 0;
-  }
-  .close-btn {
-    min-width: 2.75rem;
-    min-height: 2.75rem;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: none;
-    border: none;
-    border-radius: var(--velin-radius-md, 0.5rem);
-    cursor: pointer;
-    color: var(--velin-color-text-muted, #666);
-    font-size: 1.5rem;
-    line-height: 1;
-  }
-  .close-btn:hover {
-    background: var(--velin-color-surface-dim, #eee);
-    color: var(--velin-color-text, #111);
-  }
-  .body {
-    padding: var(--velin-space-6, 1.5rem);
-    overflow-y: auto;
-    flex-grow: 1;
-  }
-  .footer {
-    display: flex;
-    justify-content: flex-end;
-    gap: var(--velin-space-3, 0.75rem);
-    padding: var(--velin-space-4, 1rem) var(--velin-space-6, 1.5rem);
-    border-top: 1px solid var(--velin-color-border, #ddd);
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .overlay, .dialog { transition: none; }
-  }
-`;
-      VelinModal = class extends HTMLElement {
-        static get observedAttributes() {
-          return ["open"];
-        }
-        constructor() {
-          super();
-          this.attachShadow({ mode: "open", delegatesFocus: true });
-          this._previouslyFocused = null;
-          this._onKeydown = this._onKeydown.bind(this);
-        }
-        connectedCallback() {
-          const title = (this.getAttribute("title") || "").trim();
-          const safeTitle = escapeHTML(title);
-          const dialogLabel = title ? 'aria-labelledby="velin-modal-title"' : `aria-label="${escapeHTML(this.getAttribute("aria-label") || "Dialog")}"`;
-          this.shadowRoot.innerHTML = `
-      <style>${styles}</style>
-      <div class="overlay" part="overlay">
-        <div class="dialog" role="dialog" aria-modal="true" ${dialogLabel} part="dialog">
-          <div class="header" part="header">
-            <h2 class="title" id="velin-modal-title"${title ? "" : ' class="velin-sr-only"'}>${safeTitle || "Dialog"}</h2>
-            <button class="close-btn" aria-label="Close" part="close">&#215;</button>
-          </div>
-          <div class="body" part="body"><slot></slot></div>
-          <div class="footer" part="footer"><slot name="footer"></slot></div>
-        </div>
-      </div>
-    `;
-          this.shadowRoot.querySelector(".close-btn").addEventListener("click", () => this.close());
-          this.shadowRoot.querySelector(".overlay").addEventListener("click", (e) => {
-            if (e.target === e.currentTarget) this.close();
-          });
-        }
-        attributeChangedCallback(name, oldVal, newVal) {
-          if (name === "open") {
-            if (newVal !== null) {
-              this._open();
-            } else {
-              this._close();
-            }
-          }
-        }
-        open() {
-          this.setAttribute("open", "");
-        }
-        close() {
-          this.removeAttribute("open");
-          this.dispatchEvent(new CustomEvent("velin-close", { bubbles: true }));
-        }
-        _open() {
-          this._previouslyFocused = saveFocus();
-          setBackgroundInert(this);
-          document.addEventListener("keydown", this._onKeydown);
-          requestAnimationFrame(() => {
-            const focusable = getFocusableElements(this.shadowRoot);
-            if (focusable.length > 0) focusable[0].focus();
-          });
-        }
-        _close() {
-          document.removeEventListener("keydown", this._onKeydown);
-          clearBackgroundInert(this);
-          restoreFocus(this._previouslyFocused);
-        }
-        _onKeydown(event) {
-          if (event.key === "Escape") {
-            this.close();
-            return;
-          }
-          trapFocus(this.shadowRoot, event);
-        }
-        disconnectedCallback() {
-          document.removeEventListener("keydown", this._onKeydown);
-          clearBackgroundInert(this);
-        }
-      };
-      customElements.define("velin-modal", VelinModal);
-      velin_modal_default = VelinModal;
-    }
-  });
-
-  // components/velin-dropdown.js
-  var velin_dropdown_exports = {};
-  __export(velin_dropdown_exports, {
-    default: () => velin_dropdown_default
-  });
-  var styles2, VelinDropdown, velin_dropdown_default;
-  var init_velin_dropdown = __esm({
-    "components/velin-dropdown.js"() {
-      init_focus_manager();
-      styles2 = `
-  :host {
-    display: inline-block;
-    position: relative;
-  }
-  .menu {
-    position: absolute;
-    z-index: var(--velin-z-dropdown, 100);
-    inset-block-start: 100%;
-    inset-inline-start: 0;
-    min-inline-size: 12rem;
-    padding-block: var(--velin-space-1, 0.25rem);
-    background: var(--velin-color-surface-bright, #fff);
-    border: 1px solid var(--velin-color-border, #ddd);
-    border-radius: var(--velin-radius-md, 0.5rem);
-    box-shadow: var(--velin-shadow-lg, 0 10px 15px rgba(0,0,0,0.08));
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-0.25rem);
-    transition: opacity 150ms ease, transform 150ms ease, visibility 150ms ease;
-  }
-  :host([open]) .menu {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-  }
-  .menu-end {
-    inset-inline-start: auto;
-    inset-inline-end: 0;
-  }
-  ::slotted([role="menuitem"]),
-  ::slotted(a),
-  ::slotted(button) {
-    display: flex;
-    align-items: center;
-    gap: var(--velin-space-2, 0.5rem);
-    inline-size: 100%;
-    padding: var(--velin-space-2, 0.5rem) var(--velin-space-4, 1rem);
-    min-block-size: 2.5rem;
-    font-size: var(--velin-text-base, 1rem);
-    color: var(--velin-color-text, #111);
-    background: none;
-    border: none;
-    text-align: start;
-    cursor: pointer;
-    text-decoration: none;
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .menu { transition: none; }
-  }
-`;
-      VelinDropdown = class extends HTMLElement {
-        static get observedAttributes() {
-          return ["open"];
-        }
-        constructor() {
-          super();
-          this.attachShadow({ mode: "open", delegatesFocus: true });
-          this._onDocClick = this._onDocClick.bind(this);
-          this._onKeydown = this._onKeydown.bind(this);
-          this._typeahead = "";
-          this._typeaheadTimer = null;
-        }
-        connectedCallback() {
-          const align = this.getAttribute("align") || "start";
-          this.shadowRoot.innerHTML = `
-      <style>${styles2}</style>
-      <slot name="trigger"></slot>
-      <div class="menu ${align === "end" ? "menu-end" : ""}" role="menu" part="menu">
-        <slot></slot>
-      </div>
-    `;
-          const triggerSlot = this.shadowRoot.querySelector('slot[name="trigger"]');
-          const menuSlot = this.shadowRoot.querySelector("slot:not([name])");
-          triggerSlot.addEventListener("click", () => this.toggle());
-          triggerSlot.addEventListener("slotchange", () => {
-            const trigger = triggerSlot.assignedElements()[0];
-            if (trigger) {
-              trigger.setAttribute("aria-haspopup", "menu");
-              trigger.setAttribute("aria-expanded", this.hasAttribute("open") ? "true" : "false");
-              const menuId = this._menuId || (this._menuId = `velin-dropdown-menu-${Math.random().toString(36).slice(2, 9)}`);
-              trigger.setAttribute("aria-controls", menuId);
-              this.shadowRoot.querySelector(".menu")?.setAttribute("id", menuId);
-            }
-          });
-          menuSlot?.addEventListener("slotchange", () => this._normalizeMenuItems());
-          this._normalizeMenuItems();
-          this.addEventListener("keydown", this._onKeydown);
-        }
-        _normalizeMenuItems() {
-          const items = this._getMenuItems();
-          items.forEach((el, i) => {
-            if (!el.hasAttribute("role")) el.setAttribute("role", "menuitem");
-            el.setAttribute("tabindex", i === 0 ? "0" : "-1");
-          });
-        }
-        toggle() {
-          if (this.hasAttribute("open")) {
-            this.close();
-          } else {
-            this.open();
-          }
-        }
-        open() {
-          this.setAttribute("open", "");
-          const trigger = this.querySelector('[slot="trigger"]');
-          if (trigger) trigger.setAttribute("aria-expanded", "true");
-          document.addEventListener("click", this._onDocClick, true);
-          requestAnimationFrame(() => {
-            const items = this._getMenuItems();
-            if (items.length > 0) {
-              items[0].focus();
-            }
-          });
-        }
-        close() {
-          this.removeAttribute("open");
-          const trigger = this.querySelector('[slot="trigger"]');
-          if (trigger) trigger.setAttribute("aria-expanded", "false");
-          document.removeEventListener("click", this._onDocClick, true);
-          this.dispatchEvent(new CustomEvent("velin-close", { bubbles: true }));
-        }
-        _getMenuItems() {
-          const slot = this.shadowRoot.querySelector("slot:not([name])");
-          return slot ? slot.assignedElements().filter((el) => !el.hasAttribute("disabled")) : [];
-        }
-        _onDocClick(event) {
-          if (!this.contains(event.target)) {
-            this.close();
-          }
-        }
-        _onKeydown(event) {
-          if (event.key === "Escape") {
-            this.close();
-            const trigger = this.querySelector('[slot="trigger"]');
-            if (trigger) trigger.focus();
-            return;
-          }
-          const items = this._getMenuItems();
-          if (items.length === 0) return;
-          if (event.key.length === 1 && /[a-z0-9]/i.test(event.key)) {
-            clearTimeout(this._typeaheadTimer);
-            this._typeahead += event.key.toLowerCase();
-            this._typeaheadTimer = setTimeout(() => {
-              this._typeahead = "";
-            }, 500);
-            const match = items.find(
-              (el) => (el.textContent?.trim().toLowerCase() || "").startsWith(this._typeahead)
-            );
-            if (match) {
-              event.preventDefault();
-              items.forEach((item) => item.setAttribute("tabindex", item === match ? "0" : "-1"));
-              match.focus();
-            }
-            return;
-          }
-          rovingTabindex(this, items, event);
-        }
-        disconnectedCallback() {
-          document.removeEventListener("click", this._onDocClick, true);
-        }
-      };
-      customElements.define("velin-dropdown", VelinDropdown);
-      velin_dropdown_default = VelinDropdown;
-    }
-  });
-
-  // components/velin-accordion.js
-  var velin_accordion_exports = {};
-  __export(velin_accordion_exports, {
-    default: () => velin_accordion_default
-  });
-  function ensureLightStyles() {
-    if (typeof document === "undefined") return;
-    if (document.getElementById(LIGHT_STYLE_ID)) return;
-    const style = document.createElement("style");
-    style.id = LIGHT_STYLE_ID;
-    style.textContent = lightStyles;
-    document.head.appendChild(style);
-  }
-  var LIGHT_STYLE_ID, lightStyles, shadowStyles, VelinAccordion, velin_accordion_default;
-  var init_velin_accordion = __esm({
-    "components/velin-accordion.js"() {
-      LIGHT_STYLE_ID = "velin-accordion-light-css";
-      lightStyles = `
-  velin-accordion {
-    display: block;
-    border: 1px solid var(--velin-color-border, #ddd);
-    border-radius: var(--velin-radius-md, 0.5rem);
-    overflow: hidden;
-  }
-  velin-accordion details {
-    border-bottom: 1px solid var(--velin-color-border, #ddd);
-  }
-  velin-accordion details:last-child {
-    border-bottom: none;
-  }
-  velin-accordion details > summary {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--velin-space-3, 0.75rem);
-    padding: var(--velin-space-4, 1rem);
-    min-block-size: 2.75rem;
-    font-size: var(--velin-text-base, 1rem);
-    font-weight: var(--velin-weight-medium, 500);
-    cursor: pointer;
-    user-select: none;
-    list-style: none;
-  }
-  velin-accordion details > summary::-webkit-details-marker {
-    display: none;
-  }
-  velin-accordion details > summary::after {
-    content: "";
-    flex-shrink: 0;
-    inline-size: 0.5rem;
-    block-size: 0.5rem;
-    border-inline-end: 2px solid currentColor;
-    border-block-end: 2px solid currentColor;
-    transform: rotate(45deg);
-    transition: transform 150ms ease;
-  }
-  velin-accordion details[open] > summary {
-    background: var(--velin-color-primary-subtle, #eff6ff);
-    color: var(--velin-color-primary, #2563eb);
-  }
-  velin-accordion details[open] > summary::after {
-    transform: rotate(225deg);
-  }
-  velin-accordion details > :not(summary) {
-    padding: var(--velin-space-4, 1rem) var(--velin-space-5, 1.25rem);
-    background: var(--velin-color-surface-dim, var(--velin-color-bg-subtle, #f8fafc));
-    color: var(--velin-color-text-muted, #64748b);
-    font-size: var(--velin-text-sm, 0.875rem);
-    line-height: 1.6;
-    border-block-start: 1px solid var(--velin-color-border, #e2e8f0);
-  }
-`;
-      shadowStyles = `
-  :host {
-    display: block;
-  }
-`;
-      VelinAccordion = class extends HTMLElement {
-        constructor() {
-          super();
-          this.attachShadow({ mode: "open" });
-          this._onToggle = this._onToggle.bind(this);
-          this._onKeydown = this._onKeydown.bind(this);
-        }
-        connectedCallback() {
-          ensureLightStyles();
-          this.shadowRoot.innerHTML = `
-      <style>${shadowStyles}</style>
-      <slot></slot>
-    `;
-          this._exclusive = this.hasAttribute("exclusive");
-          this._wireDetails();
-          this.addEventListener("toggle", this._onToggle, true);
-          this.addEventListener("keydown", this._onKeydown);
-        }
-        _wireDetails() {
-          let panelIndex = 0;
-          for (const details of this.querySelectorAll("details")) {
-            const summary = details.querySelector("summary");
-            const panel = details.querySelector(":scope > :not(summary)");
-            const panelId = panel?.id || `velin-accordion-panel-${++panelIndex}`;
-            if (panel && !panel.id) panel.id = panelId;
-            if (summary && panel) {
-              summary.setAttribute("aria-controls", panelId);
-              summary.setAttribute("aria-expanded", details.open ? "true" : "false");
-            }
-            if (summary && !summary.hasAttribute("tabindex")) {
-              summary.setAttribute("tabindex", "0");
-            }
-          }
-        }
-        _onToggle(event) {
-          const openedDetail = event.target;
-          if (!(openedDetail instanceof HTMLDetailsElement)) return;
-          const summary = openedDetail.querySelector("summary");
-          if (summary) {
-            summary.setAttribute("aria-expanded", openedDetail.open ? "true" : "false");
-          }
-          if (!this._exclusive || !openedDetail.open) return;
-          const details = [...this.querySelectorAll("details")];
-          details.forEach((d) => {
-            if (d !== openedDetail && d.open) {
-              d.open = false;
-            }
-          });
-        }
-        _onKeydown(event) {
-          const summaries = [...this.querySelectorAll("summary")];
-          const currentIndex = summaries.indexOf(event.target);
-          if (currentIndex === -1) return;
-          let nextIndex;
-          switch (event.key) {
-            case "ArrowDown":
-              event.preventDefault();
-              nextIndex = (currentIndex + 1) % summaries.length;
-              break;
-            case "ArrowUp":
-              event.preventDefault();
-              nextIndex = (currentIndex - 1 + summaries.length) % summaries.length;
-              break;
-            case "Home":
-              event.preventDefault();
-              nextIndex = 0;
-              break;
-            case "End":
-              event.preventDefault();
-              nextIndex = summaries.length - 1;
-              break;
-            case "Enter":
-            case " ":
-              return;
-            default:
-              return;
-          }
-          summaries[nextIndex].focus();
-        }
-        disconnectedCallback() {
-          this.removeEventListener("toggle", this._onToggle, true);
-          this.removeEventListener("keydown", this._onKeydown);
-        }
-      };
-      customElements.define("velin-accordion", VelinAccordion);
-      velin_accordion_default = VelinAccordion;
-    }
-  });
-
-  // components/velin-tabs.js
-  var velin_tabs_exports = {};
-  __export(velin_tabs_exports, {
-    default: () => velin_tabs_default
-  });
-  var styles3, VelinTabs, velin_tabs_default;
-  var init_velin_tabs = __esm({
-    "components/velin-tabs.js"() {
-      init_focus_manager();
-      styles3 = `
-  :host {
-    display: block;
-  }
-  .tablist {
-    display: flex;
-    gap: var(--velin-space-1, 0.25rem);
-    border-bottom: 2px solid var(--velin-color-border, #ddd);
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-  ::slotted([role="tab"]) {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--velin-space-2, 0.5rem);
-    padding: var(--velin-space-3, 0.75rem) var(--velin-space-4, 1rem);
-    min-block-size: 2.75rem;
-    font-size: var(--velin-text-base, 1rem);
-    font-weight: var(--velin-weight-medium, 500);
-    color: var(--velin-color-text-muted, #666);
-    background: none;
-    border: none;
-    border-bottom: 2px solid transparent;
-    margin-bottom: -2px;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: color 150ms ease, border-color 150ms ease;
-  }
-  ::slotted([role="tab"][aria-selected="true"]) {
-    color: var(--velin-color-primary, #2563eb);
-    border-bottom-color: var(--velin-color-primary, #2563eb);
-    font-weight: var(--velin-weight-semibold, 600);
-  }
-  ::slotted([role="tab"]:hover) {
-    color: var(--velin-color-text, #111);
-  }
-  .panels {
-    padding-block-start: var(--velin-space-4, 1rem);
-  }
-  ::slotted([role="tabpanel"][hidden]) {
-    display: none;
-  }
-`;
-      VelinTabs = class extends HTMLElement {
-        constructor() {
-          super();
-          this.attachShadow({ mode: "open", delegatesFocus: true });
-          this._onTabClick = this._onTabClick.bind(this);
-          this._onKeydown = this._onKeydown.bind(this);
-        }
-        connectedCallback() {
-          this.shadowRoot.innerHTML = `
-      <style>${styles3}</style>
-      <div class="tablist" role="tablist" part="tablist">
-        <slot name="tab"></slot>
-      </div>
-      <div class="panels" part="panels">
-        <slot name="panel"></slot>
-      </div>
-    `;
-          this.addEventListener("click", this._onTabClick);
-          this.addEventListener("keydown", this._onKeydown);
-          requestAnimationFrame(() => this._initTabs());
-        }
-        _initTabs() {
-          const tabs = this._getTabs();
-          const panels = this._getPanels();
-          tabs.forEach((tab, i) => {
-            tab.setAttribute("role", "tab");
-            tab.setAttribute("slot", "tab");
-            if (!tab.id) tab.id = `velin-tab-${i}`;
-            const panel = panels[i];
-            if (panel) {
-              panel.setAttribute("role", "tabpanel");
-              panel.setAttribute("slot", "panel");
-              if (!panel.id) panel.id = `velin-panel-${i}`;
-              tab.setAttribute("aria-controls", panel.id);
-              panel.setAttribute("aria-labelledby", tab.id);
-            }
-          });
-          const selectedTab = tabs.find((t) => t.getAttribute("aria-selected") === "true") || tabs[0];
-          if (selectedTab) this._selectTab(selectedTab);
-        }
-        _getTabs() {
-          return [...this.querySelectorAll('[role="tab"], [slot="tab"]')];
-        }
-        _getPanels() {
-          return [...this.querySelectorAll('[role="tabpanel"], [slot="panel"]')];
-        }
-        _onTabClick(event) {
-          const tab = event.target.closest('[role="tab"]');
-          if (tab && this.contains(tab)) {
-            this._selectTab(tab);
-          }
-        }
-        _selectTab(selectedTab) {
-          const tabs = this._getTabs();
-          const panels = this._getPanels();
-          tabs.forEach((tab, i) => {
-            const isSelected = tab === selectedTab;
-            tab.setAttribute("aria-selected", String(isSelected));
-            tab.setAttribute("tabindex", isSelected ? "0" : "-1");
-            if (panels[i]) {
-              panels[i].hidden = !isSelected;
-            }
-          });
-          this.dispatchEvent(
-            new CustomEvent("velin-tab-change", {
-              bubbles: true,
-              detail: { tab: selectedTab }
-            })
-          );
-        }
-        _onKeydown(event) {
-          const tabs = this._getTabs();
-          if (tabs.includes(event.target)) {
-            rovingTabindex(this, tabs, event);
-            if (event.key === "ArrowRight" || event.key === "ArrowLeft" || event.key === "Home" || event.key === "End") {
-              const focused = tabs.find((t) => t.getAttribute("tabindex") === "0");
-              if (focused) this._selectTab(focused);
-            }
-          }
-        }
-        disconnectedCallback() {
-          this.removeEventListener("click", this._onTabClick);
-          this.removeEventListener("keydown", this._onKeydown);
-        }
-      };
-      customElements.define("velin-tabs", VelinTabs);
-      velin_tabs_default = VelinTabs;
-    }
-  });
-
   // components/velin-toast.js
   var velin_toast_exports = {};
   __export(velin_toast_exports, {
@@ -2782,7 +2840,6 @@
   var init_velin_drawer = __esm({
     "components/velin-drawer.js"() {
       init_focus_manager();
-      init_sanitize();
       styles5 = `
   :host { display: contents; }
   .overlay {
@@ -2831,24 +2888,27 @@
 `;
       VelinDrawer = class extends HTMLElement {
         static get observedAttributes() {
-          return ["open"];
+          return ["open", "title"];
         }
         constructor() {
           super();
           this.attachShadow({ mode: "open", delegatesFocus: true });
           this._prev = null;
           this._onKey = this._onKey.bind(this);
+          this._onTitleSlot = this._onTitleSlot.bind(this);
         }
         connectedCallback() {
-          const title = this.getAttribute("title") || "";
-          const safeTitle = escapeHTML(title);
+          if (this.shadowRoot.querySelector(".drawer")) return;
           const titleId = "velin-drawer-title";
           this.shadowRoot.innerHTML = `
       <style>${styles5}</style>
       <div class="overlay" part="overlay"></div>
       <div class="drawer" role="dialog" aria-modal="true" aria-labelledby="${titleId}" part="drawer">
         <div class="header" part="header">
-          <h2 class="title" id="${titleId}">${safeTitle}</h2>
+          <h2 class="title" id="${titleId}" part="title">
+            <slot name="title"></slot>
+            <span class="title-fallback"></span>
+          </h2>
           <button class="close-btn" aria-label="Close" part="close">&#215;</button>
         </div>
         <div class="body" part="body"><slot></slot></div>
@@ -2856,9 +2916,12 @@
     `;
           this.shadowRoot.querySelector(".close-btn").addEventListener("click", () => this.close());
           this.shadowRoot.querySelector(".overlay").addEventListener("click", () => this.close());
+          this.shadowRoot.querySelector('slot[name="title"]').addEventListener("slotchange", this._onTitleSlot);
+          this._syncTitle();
         }
         attributeChangedCallback(name) {
           if (name === "open") this.hasAttribute("open") ? this._open() : this._close();
+          if (name === "title") this._syncTitle();
         }
         open() {
           this.setAttribute("open", "");
@@ -2866,6 +2929,36 @@
         close() {
           this.removeAttribute("open");
           this.dispatchEvent(new CustomEvent("velin-close", { bubbles: true }));
+        }
+        _syncTitle() {
+          const fallback = this.shadowRoot?.querySelector(".title-fallback");
+          if (!fallback) return;
+          fallback.textContent = this.getAttribute("title") || "";
+        }
+        _hasTitleSlot() {
+          const slot = this.shadowRoot?.querySelector('slot[name="title"]');
+          if (!slot) return false;
+          return slot.assignedNodes({ flatten: true }).some((n) => {
+            if (n.nodeType === Node.TEXT_NODE) return Boolean(n.textContent.trim());
+            return n.nodeType === Node.ELEMENT_NODE;
+          });
+        }
+        _onTitleSlot() {
+          const dialog = this.shadowRoot?.querySelector('[role="dialog"]');
+          const fallback = this.shadowRoot?.querySelector(".title-fallback");
+          if (!dialog || !fallback) return;
+          if (this._hasTitleSlot()) {
+            fallback.hidden = true;
+            dialog.removeAttribute("aria-labelledby");
+            const slot = this.shadowRoot.querySelector('slot[name="title"]');
+            const label = slot.assignedNodes({ flatten: true }).map((n) => n.textContent || "").join(" ").trim();
+            if (label) dialog.setAttribute("aria-label", label);
+          } else {
+            fallback.hidden = false;
+            dialog.removeAttribute("aria-label");
+            dialog.setAttribute("aria-labelledby", "velin-drawer-title");
+            this._syncTitle();
+          }
         }
         _open() {
           this._prev = saveFocus();
@@ -5110,7 +5203,6 @@
   var init_velin_sheet = __esm({
     "components/velin-sheet.js"() {
       init_focus_manager();
-      init_sanitize();
       init_shadow_a11y_styles();
       styles20 = `
   ${SHADOW_A11Y_STYLES}
@@ -5141,28 +5233,38 @@
     border-bottom: 1px solid var(--velin-color-border, #ddd);
   }
   .title { font-size: var(--velin-text-lg, 1.25rem); font-weight: 600; margin: 0; }
+  .close-btn {
+    min-width: 2.75rem; min-height: 2.75rem; display: inline-flex; align-items: center; justify-content: center;
+    background: none; border: none; border-radius: var(--velin-radius-md, 0.5rem); cursor: pointer;
+    color: var(--velin-color-text-muted, #666); font-size: 1.5rem; line-height: 1;
+  }
+  .close-btn:hover { background: var(--velin-color-surface-dim, #eee); color: var(--velin-color-text, #111); }
   .body { flex: 1; overflow-y: auto; padding: var(--velin-space-5, 1.25rem); }
   @media (prefers-reduced-motion: reduce) { .overlay, .sheet { transition: none; } }
 `;
       VelinSheet = class extends HTMLElement {
         static get observedAttributes() {
-          return ["open"];
+          return ["open", "title", "label"];
         }
         constructor() {
           super();
           this.attachShadow({ mode: "open", delegatesFocus: true });
           this._prev = null;
           this._onKey = this._onKey.bind(this);
+          this._onTitleSlot = this._onTitleSlot.bind(this);
         }
         connectedCallback() {
-          const title = escapeHTML(this.getAttribute("title") || this.getAttribute("label") || "");
+          if (this.shadowRoot.querySelector(".sheet")) return;
           const titleId = "velin-sheet-title";
           this.shadowRoot.innerHTML = `
       <style>${styles20}</style>
       <div class="overlay" part="overlay"></div>
       <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="${titleId}" part="sheet">
         <div class="header" part="header">
-          <h2 class="title" id="${titleId}">${title}</h2>
+          <h2 class="title" id="${titleId}" part="title">
+            <slot name="title"></slot>
+            <span class="title-fallback"></span>
+          </h2>
           <button class="close-btn" aria-label="Close" part="close">&#215;</button>
         </div>
         <div class="body" part="body"><slot></slot></div>
@@ -5170,10 +5272,13 @@
     `;
           this.shadowRoot.querySelector(".close-btn").addEventListener("click", () => this.close());
           this.shadowRoot.querySelector(".overlay").addEventListener("click", () => this.close());
+          this.shadowRoot.querySelector('slot[name="title"]').addEventListener("slotchange", this._onTitleSlot);
+          this._syncTitle();
           if (this.hasAttribute("open")) this._open();
         }
         attributeChangedCallback(name) {
           if (name === "open") this.hasAttribute("open") ? this._open() : this._close();
+          if (name === "title" || name === "label") this._syncTitle();
         }
         open() {
           this.setAttribute("open", "");
@@ -5181,6 +5286,36 @@
         close() {
           this.removeAttribute("open");
           this.dispatchEvent(new CustomEvent("velin-close", { bubbles: true }));
+        }
+        _syncTitle() {
+          const fallback = this.shadowRoot?.querySelector(".title-fallback");
+          if (!fallback) return;
+          fallback.textContent = this.getAttribute("title") || this.getAttribute("label") || "";
+        }
+        _hasTitleSlot() {
+          const slot = this.shadowRoot?.querySelector('slot[name="title"]');
+          if (!slot) return false;
+          return slot.assignedNodes({ flatten: true }).some((n) => {
+            if (n.nodeType === Node.TEXT_NODE) return Boolean(n.textContent.trim());
+            return n.nodeType === Node.ELEMENT_NODE;
+          });
+        }
+        _onTitleSlot() {
+          const dialog = this.shadowRoot?.querySelector('[role="dialog"]');
+          const fallback = this.shadowRoot?.querySelector(".title-fallback");
+          if (!dialog || !fallback) return;
+          if (this._hasTitleSlot()) {
+            fallback.hidden = true;
+            dialog.removeAttribute("aria-labelledby");
+            const slot = this.shadowRoot.querySelector('slot[name="title"]');
+            const label = slot.assignedNodes({ flatten: true }).map((n) => n.textContent || "").join(" ").trim();
+            if (label) dialog.setAttribute("aria-label", label);
+          } else {
+            fallback.hidden = false;
+            dialog.removeAttribute("aria-label");
+            dialog.setAttribute("aria-labelledby", "velin-sheet-title");
+            this._syncTitle();
+          }
         }
         _open() {
           this._prev = saveFocus();
@@ -7530,16 +7665,104 @@
     }
   });
 
+  // components/velin-empty-state.js
+  var velin_empty_state_exports = {};
+  __export(velin_empty_state_exports, {
+    default: () => velin_empty_state_default
+  });
+  var styles28, VelinEmptyState, velin_empty_state_default;
+  var init_velin_empty_state = __esm({
+    "components/velin-empty-state.js"() {
+      styles28 = `
+  :host {
+    display: block;
+    text-align: center;
+    padding: var(--velin-space-8, 2rem) var(--velin-space-4, 1rem);
+  }
+  .illustration {
+    display: flex;
+    justify-content: center;
+    margin-block-end: var(--velin-space-4, 1rem);
+    color: var(--velin-color-text-muted, #666);
+  }
+  .title {
+    margin: 0 0 var(--velin-space-2, 0.5rem);
+    font-size: var(--velin-text-xl, 1.25rem);
+    font-weight: var(--velin-weight-bold, 700);
+    color: var(--velin-color-text, #111);
+  }
+  .description {
+    margin: 0 0 var(--velin-space-4, 1rem);
+    color: var(--velin-color-text-muted, #666);
+    max-inline-size: 36rem;
+    margin-inline: auto;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--velin-space-3, 0.75rem);
+    justify-content: center;
+  }
+`;
+      VelinEmptyState = class extends HTMLElement {
+        static get observedAttributes() {
+          return ["heading", "description"];
+        }
+        constructor() {
+          super();
+          this.attachShadow({ mode: "open" });
+        }
+        connectedCallback() {
+          if (this.shadowRoot.querySelector(".root")) {
+            this._syncText();
+            return;
+          }
+          const titleId = "velin-empty-title";
+          this.shadowRoot.innerHTML = `
+      <style>${styles28}</style>
+      <section class="root" part="root" role="status" aria-labelledby="${titleId}">
+        <div class="illustration" part="illustration"><slot name="illustration"></slot></div>
+        <h2 class="title" id="${titleId}" part="title">
+          <slot name="title"><span class="heading-fallback"></span></slot>
+        </h2>
+        <div class="description" part="description">
+          <slot name="description"><span class="description-fallback"></span></slot>
+        </div>
+        <div class="actions" part="actions"><slot name="actions"></slot></div>
+        <slot></slot>
+      </section>
+    `;
+          this._syncText();
+        }
+        attributeChangedCallback() {
+          this._syncText();
+        }
+        _syncText() {
+          const heading = this.shadowRoot?.querySelector(".heading-fallback");
+          const description = this.shadowRoot?.querySelector(".description-fallback");
+          if (heading) heading.textContent = this.getAttribute("heading") || "Nothing here yet";
+          if (description) {
+            const text2 = this.getAttribute("description") || "";
+            description.textContent = text2;
+            description.hidden = !text2;
+          }
+        }
+      };
+      customElements.define("velin-empty-state", VelinEmptyState);
+      velin_empty_state_default = VelinEmptyState;
+    }
+  });
+
   // components/velin-file-dropzone.js
   var velin_file_dropzone_exports = {};
   __export(velin_file_dropzone_exports, {
     default: () => velin_file_dropzone_default
   });
-  var styles28, VelinFileDropzone, velin_file_dropzone_default;
+  var styles29, VelinFileDropzone, velin_file_dropzone_default;
   var init_velin_file_dropzone = __esm({
     "components/velin-file-dropzone.js"() {
       init_sanitize();
-      styles28 = `
+      styles29 = `
   :host { display: block; }
   .zone {
     border: 2px dashed var(--velin-color-border, #cbd5e1);
@@ -7645,7 +7868,7 @@
           const multiple = this.hasAttribute("multiple");
           const progress = Math.max(0, Math.min(100, Number(this.getAttribute("progress") || 0)));
           this.shadowRoot.innerHTML = `
-      <style>${styles28}</style>
+      <style>${styles29}</style>
       <div class="zone" role="group" aria-label="${label}">
         <p class="hint">Drag and drop files here, or browse. Client-side only \u2014 wire <code>velin-files</code> to your upload API.</p>
         <button type="button" class="browse">Browse files</button>
@@ -7970,7 +8193,7 @@
   __export(velin_live_dot_exports, {
     default: () => velin_live_dot_default
   });
-  var STATUS_COLORS, styles29, KEYFRAMES_FALLBACK, VelinLiveDot, velin_live_dot_default;
+  var STATUS_COLORS, styles30, KEYFRAMES_FALLBACK, VelinLiveDot, velin_live_dot_default;
   var init_velin_live_dot = __esm({
     "components/velin-live-dot.js"() {
       init_a11y_utils();
@@ -7981,7 +8204,7 @@
         error: "var(--velin-color-danger, oklch(60% 0.2 25))",
         muted: "var(--velin-color-border, oklch(85% 0.01 240))"
       };
-      styles29 = `
+      styles30 = `
   :host {
     display: inline-flex;
     align-items: center;
@@ -8031,7 +8254,7 @@
           this.setAttribute("aria-label", label);
           this.style.setProperty("--velin-live-color", color);
           this.shadowRoot.innerHTML = `
-      <style>${styles29}${KEYFRAMES_FALLBACK}</style>
+      <style>${styles30}${KEYFRAMES_FALLBACK}</style>
       <span class="dot" aria-hidden="true"></span><slot></slot>
     `;
         }
@@ -8040,6 +8263,355 @@
         customElements.define("velin-live-dot", VelinLiveDot);
       }
       velin_live_dot_default = VelinLiveDot;
+    }
+  });
+
+  // components/velin-otp-input.js
+  var velin_otp_input_exports = {};
+  __export(velin_otp_input_exports, {
+    default: () => velin_otp_input_default
+  });
+  function digitsOnly(value) {
+    return String(value || "").replace(/\D/g, "");
+  }
+  var styles31, VelinOtpInput, velin_otp_input_default;
+  var init_velin_otp_input = __esm({
+    "components/velin-otp-input.js"() {
+      init_sanitize();
+      init_shadow_a11y_styles();
+      styles31 = `
+  ${SHADOW_A11Y_STYLES}
+  :host { display: block; }
+  .group {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: var(--velin-space-2, 0.5rem);
+  }
+  input {
+    inline-size: 2.75rem;
+    block-size: 2.75rem;
+    text-align: center;
+    font: inherit;
+    font-size: var(--velin-text-lg, 1.25rem);
+    font-weight: var(--velin-weight-semibold, 600);
+    color: var(--velin-color-text, #111);
+    background: var(--velin-color-surface-bright, #fff);
+    border: 1px solid var(--velin-color-border, #ddd);
+    border-radius: var(--velin-radius-md, 0.5rem);
+    padding: 0;
+  }
+  input:focus-visible {
+    outline: 3px solid var(--velin-color-focus, #2563eb);
+    outline-offset: 2px;
+  }
+  input:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+  @media (forced-colors: active) {
+    input { border: 1px solid ButtonText; }
+  }
+`;
+      VelinOtpInput = class extends HTMLElement {
+        static get observedAttributes() {
+          return ["length", "value", "disabled", "name", "autocomplete", "label"];
+        }
+        constructor() {
+          super();
+          this.attachShadow({ mode: "open" });
+          this._onInput = this._onInput.bind(this);
+          this._onKeydown = this._onKeydown.bind(this);
+          this._onPaste = this._onPaste.bind(this);
+          this._onFocus = this._onFocus.bind(this);
+        }
+        connectedCallback() {
+          if (!this.shadowRoot.querySelector(".group")) this._render();
+        }
+        attributeChangedCallback(name, oldVal, newVal) {
+          if (oldVal === newVal) return;
+          if (!this.shadowRoot.querySelector(".group")) return;
+          if (name === "length") this._render();
+          else if (name === "value") this._applyValue(this.getAttribute("value") || "", false);
+          else if (name === "disabled") this._syncDisabled();
+          else if (name === "label" || name === "autocomplete" || name === "name") this._syncMeta();
+        }
+        get value() {
+          return this._readValue();
+        }
+        set value(v) {
+          this.setAttribute("value", digitsOnly(v).slice(0, this._length()));
+        }
+        focus() {
+          const inputs = this._inputs();
+          const firstEmpty = inputs.find((i) => !i.value) || inputs[0];
+          firstEmpty?.focus();
+        }
+        _length() {
+          const n = parseInt(this.getAttribute("length") || "6", 10);
+          return Number.isFinite(n) && n > 0 ? Math.min(n, 12) : 6;
+        }
+        _inputs() {
+          return [...this.shadowRoot?.querySelectorAll("input") || []];
+        }
+        _readValue() {
+          return this._inputs().map((i) => i.value).join("");
+        }
+        _render() {
+          const len = this._length();
+          const label = escapeHTML(this.getAttribute("label") || "One-time password");
+          this.shadowRoot.innerHTML = `
+      <style>${styles31}</style>
+      <div class="group" role="group" aria-label="${label}" part="group"></div>
+    `;
+          const group = this.shadowRoot.querySelector(".group");
+          for (let i = 0; i < len; i++) {
+            const input = document.createElement("input");
+            input.type = "text";
+            input.inputMode = "numeric";
+            input.pattern = "[0-9]*";
+            input.maxLength = 1;
+            input.setAttribute("aria-label", `Digit ${i + 1} of ${len}`);
+            input.dataset.index = String(i);
+            input.part = "digit";
+            input.addEventListener("input", this._onInput);
+            input.addEventListener("keydown", this._onKeydown);
+            input.addEventListener("paste", this._onPaste);
+            input.addEventListener("focus", this._onFocus);
+            group.appendChild(input);
+          }
+          this._syncMeta();
+          this._syncDisabled();
+          this._applyValue(this.getAttribute("value") || "", false);
+        }
+        _syncMeta() {
+          const group = this.shadowRoot?.querySelector(".group");
+          if (!group) return;
+          group.setAttribute("aria-label", this.getAttribute("label") || "One-time password");
+          const autocomplete = this.getAttribute("autocomplete") || "one-time-code";
+          const name = this.getAttribute("name") || "";
+          this._inputs().forEach((input, i) => {
+            input.autocomplete = i === 0 ? autocomplete : "off";
+            input.name = name ? `${name}-${i + 1}` : "";
+          });
+        }
+        _syncDisabled() {
+          const disabled = this.hasAttribute("disabled");
+          this._inputs().forEach((input) => {
+            input.disabled = disabled;
+          });
+        }
+        _applyValue(raw, emit) {
+          const digits = digitsOnly(raw).slice(0, this._length()).split("");
+          const inputs = this._inputs();
+          inputs.forEach((input, i) => {
+            input.value = digits[i] || "";
+          });
+          if (emit) this._emit();
+        }
+        _emit() {
+          const value = this._readValue();
+          if (this.getAttribute("value") !== value) {
+            this.setAttribute("value", value);
+          }
+          this.dispatchEvent(new CustomEvent("velin-change", {
+            bubbles: true,
+            composed: true,
+            detail: { value }
+          }));
+          if (value.length === this._length()) {
+            this.dispatchEvent(new CustomEvent("velin-complete", {
+              bubbles: true,
+              composed: true,
+              detail: { value }
+            }));
+          }
+        }
+        _onInput(e) {
+          const input = e.target;
+          const cleaned = digitsOnly(input.value).slice(-1);
+          input.value = cleaned;
+          const index = Number(input.dataset.index);
+          const inputs = this._inputs();
+          if (cleaned && index < inputs.length - 1) inputs[index + 1].focus();
+          this._emit();
+        }
+        _onKeydown(e) {
+          const input = e.target;
+          const index = Number(input.dataset.index);
+          const inputs = this._inputs();
+          if (e.key === "Backspace" && !input.value && index > 0) {
+            inputs[index - 1].focus();
+            inputs[index - 1].value = "";
+            this._emit();
+            e.preventDefault();
+          } else if (e.key === "ArrowLeft" && index > 0) {
+            inputs[index - 1].focus();
+            e.preventDefault();
+          } else if (e.key === "ArrowRight" && index < inputs.length - 1) {
+            inputs[index + 1].focus();
+            e.preventDefault();
+          }
+        }
+        _onPaste(e) {
+          e.preventDefault();
+          const text2 = digitsOnly(e.clipboardData?.getData("text") || "");
+          if (!text2) return;
+          const index = Number(e.target.dataset.index);
+          const inputs = this._inputs();
+          const chars = text2.split("");
+          for (let i = 0; i < chars.length && index + i < inputs.length; i++) {
+            inputs[index + i].value = chars[i];
+          }
+          const next = Math.min(index + chars.length, inputs.length - 1);
+          inputs[next]?.focus();
+          this._emit();
+        }
+        _onFocus(e) {
+          e.target.select?.();
+        }
+      };
+      customElements.define("velin-otp-input", VelinOtpInput);
+      velin_otp_input_default = VelinOtpInput;
+    }
+  });
+
+  // components/velin-password-strength.js
+  var velin_password_strength_exports = {};
+  __export(velin_password_strength_exports, {
+    default: () => velin_password_strength_default,
+    scorePassword: () => scorePassword
+  });
+  function scorePassword(pw) {
+    const value = String(pw || "");
+    let score = 0;
+    if (value.length >= 8) score += 1;
+    if (value.length >= 12) score += 1;
+    if (/[A-Z]/.test(value) && /[a-z]/.test(value)) score += 1;
+    if (/\d/.test(value)) score += 1;
+    if (/[^A-Za-z0-9]/.test(value)) score += 1;
+    const labels = ["Too weak", "Weak", "Okay", "Strong", "Excellent", "Excellent"];
+    return {
+      score,
+      label: labels[score] || "Too weak",
+      pct: Math.min(100, score * 20)
+    };
+  }
+  var styles32, VelinPasswordStrength, velin_password_strength_default;
+  var init_velin_password_strength = __esm({
+    "components/velin-password-strength.js"() {
+      init_shadow_a11y_styles();
+      styles32 = `
+  ${SHADOW_A11Y_STYLES}
+  :host { display: block; }
+  .wrap { display: grid; gap: var(--velin-space-2, 0.5rem); }
+  .meter {
+    inline-size: 100%;
+    block-size: 0.5rem;
+    background: var(--velin-color-surface-dim, #eee);
+    border-radius: var(--velin-radius-full, 999px);
+    overflow: hidden;
+  }
+  .bar {
+    block-size: 100%;
+    inline-size: 0%;
+    border-radius: inherit;
+    background: var(--velin-color-danger, #dc2626);
+    transition: inline-size 160ms ease, background-color 160ms ease;
+  }
+  :host([data-score="2"]) .bar,
+  :host([data-score="3"]) .bar { background: var(--velin-color-warning, #f59e0b); }
+  :host([data-score="4"]) .bar,
+  :host([data-score="5"]) .bar { background: var(--velin-color-success, #16a34a); }
+  .label {
+    margin: 0;
+    font-size: var(--velin-text-sm, 0.875rem);
+    color: var(--velin-color-text-muted, #666);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .bar { transition: none; }
+  }
+`;
+      VelinPasswordStrength = class extends HTMLElement {
+        static get observedAttributes() {
+          return ["for", "value", "label"];
+        }
+        constructor() {
+          super();
+          this.attachShadow({ mode: "open" });
+          this._onTargetInput = this._onTargetInput.bind(this);
+          this._target = null;
+        }
+        connectedCallback() {
+          if (!this.shadowRoot.querySelector(".wrap")) {
+            this.shadowRoot.innerHTML = `
+        <style>${styles32}</style>
+        <div class="wrap" part="wrap">
+          <div class="meter" part="meter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+            <div class="bar" part="bar"></div>
+          </div>
+          <p class="label" part="label" aria-live="polite"></p>
+        </div>
+      `;
+          }
+          this._bindTarget();
+          this._render(this._currentValue());
+        }
+        disconnectedCallback() {
+          this._unbindTarget();
+        }
+        attributeChangedCallback(name, oldVal, newVal) {
+          if (oldVal === newVal) return;
+          if (name === "for") {
+            this._bindTarget();
+            this._render(this._currentValue());
+          } else if (name === "value" || name === "label") {
+            this._render(this._currentValue());
+          }
+        }
+        _currentValue() {
+          if (this._target) return this._target.value || "";
+          return this.getAttribute("value") || "";
+        }
+        _unbindTarget() {
+          if (this._target) {
+            this._target.removeEventListener("input", this._onTargetInput);
+            this._target = null;
+          }
+        }
+        _bindTarget() {
+          this._unbindTarget();
+          const id = this.getAttribute("for");
+          if (!id || typeof document === "undefined") return;
+          const el = document.getElementById(id);
+          if (el && "value" in el) {
+            this._target = el;
+            this._target.addEventListener("input", this._onTargetInput);
+          }
+        }
+        _onTargetInput(e) {
+          this._render(e.target.value || "");
+        }
+        _render(pw) {
+          const result = scorePassword(pw);
+          const meter = this.shadowRoot?.querySelector(".meter");
+          const bar = this.shadowRoot?.querySelector(".bar");
+          const label = this.shadowRoot?.querySelector(".label");
+          if (!meter || !bar || !label) return;
+          bar.style.inlineSize = `${result.pct}%`;
+          meter.setAttribute("aria-valuenow", String(result.pct));
+          meter.setAttribute("aria-valuetext", result.label);
+          const prefix = this.getAttribute("label");
+          label.textContent = prefix ? `${prefix}: ${result.label}` : result.label;
+          this.setAttribute("data-score", String(result.score));
+          this.dispatchEvent(new CustomEvent("velin-strength", {
+            bubbles: true,
+            composed: true,
+            detail: result
+          }));
+        }
+      };
+      customElements.define("velin-password-strength", VelinPasswordStrength);
+      velin_password_strength_default = VelinPasswordStrength;
     }
   });
 
@@ -8780,11 +9352,11 @@
       cipher: Array.from(new Uint8Array(cipher))
     });
   }
-  var styles30, VelinSecureField, velin_secure_field_default;
+  var styles33, VelinSecureField, velin_secure_field_default;
   var init_velin_secure_field = __esm({
     "components/velin-secure-field.js"() {
       init_sanitize();
-      styles30 = `
+      styles33 = `
   :host { display: block; }
   label { display: block; font-size: var(--velin-text-sm); margin-block-end: var(--velin-space-1); }
   input {
@@ -8834,7 +9406,7 @@
           const input = this.shadowRoot?.querySelector("input");
           if (input && this._onChange) input.removeEventListener("change", this._onChange);
           this.shadowRoot.innerHTML = `
-      <style>${styles30}</style>
+      <style>${styles33}</style>
       <label for="${id}">${escapeHTML(label)}</label>
       <input id="${id}" type="${type}" autocomplete="${autocomplete}" part="input" />
       <p class="velin-field-help">Demo-only client encoding \u2014 use HTTPS and server-side crypto for real secrets.</p>
@@ -9068,6 +9640,7 @@
         "velin-drawer": () => Promise.resolve().then(() => (init_velin_drawer(), velin_drawer_exports)),
         "velin-dropdown": () => Promise.resolve().then(() => (init_velin_dropdown(), velin_dropdown_exports)),
         "velin-email": () => Promise.resolve().then(() => (init_velin_email(), velin_email_exports)),
+        "velin-empty-state": () => Promise.resolve().then(() => (init_velin_empty_state(), velin_empty_state_exports)),
         "velin-file-dropzone": () => Promise.resolve().then(() => (init_velin_file_dropzone(), velin_file_dropzone_exports)),
         "velin-form-summary": () => Promise.resolve().then(() => (init_velin_form_summary(), velin_form_summary_exports)),
         "velin-icon": () => Promise.resolve().then(() => (init_velin_icon(), velin_icon_exports)),
@@ -9075,6 +9648,8 @@
         "velin-live-dot": () => Promise.resolve().then(() => (init_velin_live_dot(), velin_live_dot_exports)),
         "velin-menubar": () => Promise.resolve().then(() => (init_velin_menubar(), velin_menubar_exports)),
         "velin-modal": () => Promise.resolve().then(() => (init_velin_modal(), velin_modal_exports)),
+        "velin-otp-input": () => Promise.resolve().then(() => (init_velin_otp_input(), velin_otp_input_exports)),
+        "velin-password-strength": () => Promise.resolve().then(() => (init_velin_password_strength(), velin_password_strength_exports)),
         "velin-persist": () => Promise.resolve().then(() => (init_velin_persist(), velin_persist_exports)),
         "velin-popover": () => Promise.resolve().then(() => (init_velin_popover(), velin_popover_exports)),
         "velin-progress-ring": () => Promise.resolve().then(() => (init_velin_progress_ring(), velin_progress_ring_exports)),
@@ -10099,6 +10674,9 @@
   init_velin_calendar();
   init_velin_file_dropzone();
   init_velin_search();
+  init_velin_otp_input();
+  init_velin_password_strength();
+  init_velin_empty_state();
   init_velin_search();
 
   // components/velin-reveal.js

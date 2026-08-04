@@ -29,6 +29,7 @@ declare global {
     'velin-drawer': HTMLElement;
     'velin-dropdown': HTMLElement;
     'velin-email': HTMLElement;
+    'velin-empty-state': HTMLElement;
     'velin-file-dropzone': HTMLElement;
     'velin-form-summary': HTMLElement;
     'velin-icon': HTMLElement;
@@ -36,6 +37,8 @@ declare global {
     'velin-live-dot': HTMLElement;
     'velin-menubar': HTMLElement;
     'velin-modal': HTMLElement;
+    'velin-otp-input': HTMLElement;
+    'velin-password-strength': HTMLElement;
     'velin-persist': HTMLElement;
     'velin-popover': HTMLElement;
     'velin-progress-ring': HTMLElement;

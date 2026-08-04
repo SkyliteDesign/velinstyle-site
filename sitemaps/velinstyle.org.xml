@@ -2,139 +2,157 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://velinstyle.org/</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://velinstyle.org/atelier/index.de.html</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://velinstyle.org/atelier/index.html</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://velinstyle.org/atelier/library/index.html</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.92</priority>
+  </url>
+  <url>
     <loc>https://velinstyle.org/demos/index.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/demos/showcase-crypto.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/demos/showcase-dashboard.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/demos/showcase-ecommerce.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/demos/showcase-forum.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/demos/showcase-interactive.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/demos/showcase-runtime.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/demos/showcase-saas.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/demos/showcase-ui-kit.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/getting-started/a11y-dashboard-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/getting-started/a11y-dashboard.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/getting-started/a11y-muster.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/getting-started/a11y-patterns.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/getting-started/accessibility.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/getting-started/aktualisieren.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/getting-started/barrierefreiheit.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/getting-started/browser-compatibility.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/getting-started/browser-kompatibilitaet.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/getting-started/contents.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/getting-started/download.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/getting-started/editor-einrichtung.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/getting-started/editor-setup.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -143,19 +161,19 @@
     <xhtml:link rel="alternate" hreflang="de" href="https://velinstyle.org/docs/getting-started/einfuehrung.html"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://velinstyle.org/docs/getting-started/introduction.html"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://velinstyle.info/docs/getting-started/introduction.html"/>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/getting-started/herunterladen.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/getting-started/inhalte.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -164,2137 +182,2149 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://velinstyle.org/docs/getting-started/introduction.html"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://velinstyle.org/docs/getting-started/einfuehrung.html"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://velinstyle.info/docs/getting-started/introduction.html"/>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/getting-started/rechts-nach-links.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/getting-started/rtl.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/getting-started/states-and-variants.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/getting-started/upgrading.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/getting-started/zustaende-varianten.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/assets/data/hero-demo.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/assets/data/saas-demo.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/about/brand.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/about/license.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/about/lizenz.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/about/marke.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/about/overview.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/about/ueberblick.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/aenderungsprotokoll.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/animations/attention.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/animations/aufmerksamkeit.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/animations/austritt.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/animations/eintritt.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/animations/entrance.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/animations/exit.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/animations/overview.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/animations/scroll-driven.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/animations/scroll-gesteuert.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/animations/ueberblick.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/animations/view-transitions-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/animations/view-transitions.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/changelog.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/abzeichen.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/accordion.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/akkordion.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/alerts.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/announcer-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/announcer.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/avatar-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/avatar.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/badge.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/befehlspalette.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/bewertung.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/bottom-nav-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/bottom-nav.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/breadcrumb.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/brotkruemel.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/button-group.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/button-gruppe.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/buttons-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/buttons.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/calendar.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/card.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/carousel.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/chip-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/chip.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/close-button.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/collapse.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/combobox-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/combobox.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/command.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/copy.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/countdown-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/countdown.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/counter.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/data-table.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/datei-dropzone.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/datentabelle.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/dialog-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/dialog.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/divider.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/drawer.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/dropdown-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/dropdown.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/einklappen.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/email-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/email.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/file-dropzone.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/form-summary.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/formular-zusammenfassung.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/fortschritt.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/fortschrittsring.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/hinweise.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/kalender.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/karte.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/karussell.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/kopieren.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/ladeanzeigen.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/lightbox-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/lightbox.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/list-group.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/listengruppe.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/live-dot.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/live-punkt.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/menubar.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/menueleiste.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/modal-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/modal.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/nach-oben-scrollen.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/navbar.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/navigation-tabs.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/navigationsleiste.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/navs-tabs.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/pagination-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/pagination.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/persist-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/persist.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/popover-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/popover.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/progress-ring.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/progress.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/rating.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/schliessen-button.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/schrittanzeige.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/schublade.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/scroll-top.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/scrollspy-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/scrollspy.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/secure-field.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/segmented-control.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/segmentsteuerung.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/sheet-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/sheet.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/sicheres-feld.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/sparkline-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/sparkline.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/spinners.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/stat.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/statistik.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/stepper.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/timeline.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/toasts-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/toasts.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/tooltipps.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/tooltips.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/trenner.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/velin-code-block-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/velin-code-block.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/velin-search-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/velin-search.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/zaehler.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/components/zeitleiste.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/content/abbildungen.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/content/bilder.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/content/figures.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/content/images.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/content/reboot-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/content/reboot.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/content/tabellen.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/content/tables.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/content/typografie.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/content/typography.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/customize/color-modes.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/customize/color.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/customize/components.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/customize/css-variablen.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/customize/css-variables.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/customize/farbe.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/customize/farbmodi.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/customize/komponenten.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/customize/optimieren.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/customize/optimize.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/customize/overview.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/customize/ueberblick.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/extend/ansatz.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/extend/approach.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/extend/cli-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/extend/cli.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/extend/core-modules.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/extend/icons-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/extend/icons.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/extend/javascript-api-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/extend/javascript-api.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/extend/kernmodule.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/extend/repo-tools-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/extend/repo-tools.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/extend/security.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/extend/sicherheit.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/extend/utility-abdeckung.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/extend/utility-coverage.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/extend/web-components-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/extend/web-components.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/forms/auswahl.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/forms/checkboxen-radios.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/forms/checks-radios.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/forms/eingabegruppe.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/forms/floating-labels.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/forms/form-control.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/forms/formular-layout.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/forms/formularsteuerung.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/forms/input-group.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/forms/layout.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/forms/overview.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/forms/range.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/forms/schieberegler.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/forms/schwebende-labels.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/forms/select.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/forms/ueberblick.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/forms/validation.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/forms/validierung.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/generated/index.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/ai-skills-leitfaden.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/ai-skills.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/api-reference.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/api-referenz.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/bestehendes-projekt.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/blueprints-leitfaden.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/blueprints.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/cli-ship-surface-leitfaden.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/cli-ship-surface.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/deploy-leitfaden.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/deploy.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/design-intelligence-leitfaden.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/design-intelligence.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/design-tokens-leitfaden.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/design-tokens.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/ecommerce-leitfaden.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/ecommerce.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/existing-project.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/faq-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/faq.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/feature-scope.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/feature-umfang.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/forum-update-leitfaden.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/forum-update.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/html-attribute-leitfaden.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/html-attributes.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/index.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/landing-15-min-leitfaden.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/landing-15-min.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/laravel-leitfaden.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/laravel.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/marketing-lite-css-leitfaden.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/marketing-lite-css.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/motion-attribute-leitfaden.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/motion-attributes.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/neu-search-motion.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/performance-audit-leitfaden.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/performance-audit.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://velinstyle.org/docs/guides/production-build-leitfaden.html</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://velinstyle.org/docs/guides/production-build.html</loc>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/prompt-scaffolding.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/prompt-vorlagen.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/react-vite-starter-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/react-vite-starter.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/responsive-layout-audit.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/responsive-layout.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/syntax-highlight.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/syntax-highlighting-leitfaden.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/transparency-leitfaden.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/transparency.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/troubleshooting-leitfaden.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/troubleshooting.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/uebersicht.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/velin-meta-leitfaden.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/velin-meta.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/velin-search-leitfaden.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/velin-search.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/whats-new-extension.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/wordpress-leitfaden.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/guides/wordpress.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/helpers/clearfix-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/helpers/clearfix.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/helpers/colored-links.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/helpers/farbige-links.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/helpers/focus-ring.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/helpers/fokusring.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/helpers/gestreckter-link.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/helpers/icon-link-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/helpers/icon-link.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/helpers/ratios.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/helpers/seitenverhaeltnisse.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/helpers/stacks-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/helpers/stacks.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/helpers/stretched-link.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/helpers/text-kuerzung.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/helpers/text-truncation.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/helpers/vertical-rule.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/helpers/vertikale-linie.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/helpers/visually-hidden.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/helpers/visuell-verborgen.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/index.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/layout/abstaende.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/layout/breakpoints-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/layout/breakpoints.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/layout/columns.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/layout/container-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/layout/containers.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/layout/grid.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/layout/gutters.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/layout/muster.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/layout/patterns.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/layout/raster.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/layout/spalten.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/layout/utilities-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/layout/utilities.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/layout/z-index-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/layout/z-index.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/migration-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/migration.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/abstaende.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/api-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/api.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/background.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/borders.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/chart-animation-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/chart-animation.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/color-mix.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/colors.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/deckkraft.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/display-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/display.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/divide.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/druck.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/farben.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/farbmischung.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/filter-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/filter-effects.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/filtereffekte.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/filters.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/flex-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/flex.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/float-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/float.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/groessen.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/hintergrund.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/interactions.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/interaktionen.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/motion-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/motion.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/object-fit-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/object-fit.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/opacity.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/overflow-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/overflow.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/position-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/position.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/print.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/rahmen.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/safe-area-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/safe-area.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/schatten.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/scroll-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/scroll.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/shadows.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/sichtbarkeit.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/sizing.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/spacing.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/teiler.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/text-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/text.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/transformationen.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/transforms.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/transitions.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/uebergaenge.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/vertical-align.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/vertikale-ausrichtung.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/visibility.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/z-index-de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/docs/utilities/z-index.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/index.de.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://velinstyle.org/showcase/index.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>

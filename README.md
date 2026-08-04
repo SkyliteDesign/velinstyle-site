@@ -46,7 +46,7 @@ node scripts/build-demo-presets.mjs
 
 ## Consistency with the framework
 
-Keep counts aligned with `dist/velin-agent.json`: **40** canonical Web Components, **42** lazy loaders, **27** attribute bridges. npm/CDN pin: **`@birdapi/velinstyle@1.2.1`**.
+Keep counts aligned with `dist/velin-agent.json`: **43** canonical Web Components, **45** lazy loaders, **27** attribute bridges. npm/CDN pin: **`@birdapi/velinstyle@1.2.2`**.
 
 Homepage narrative: **live Component Expo** — show the framework with real components (80% UI / 20% text), including the **Transparency Framework** (beta) badge on the hero video.
 

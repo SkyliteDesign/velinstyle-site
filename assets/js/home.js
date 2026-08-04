@@ -767,12 +767,12 @@
     const body = qs('#expoTerminalBody');
     if (!root || !body) return;
 
-    const cmd = root.getAttribute('data-cmd') || 'npm i @birdapi/velinstyle@1.2.1';
+    const cmd = root.getAttribute('data-cmd') || 'npm i @birdapi/velinstyle@1.2.2';
     const bootLines = [
       { text: `$ ${cmd}`, cls: 'expo-terminal__line--cmd', type: true },
       { text: 'resolving dependencies…', cls: 'expo-terminal__line--muted expo-terminal__line--spin', delay: 320 },
       { text: 'added 1 package in 1.2s', cls: 'expo-terminal__line--muted', delay: 260 },
-      { text: '✓ @birdapi/velinstyle@1.2.1 installed', cls: 'expo-terminal__line--ok', delay: 220 },
+      { text: '✓ @birdapi/velinstyle@1.2.2 installed', cls: 'expo-terminal__line--ok', delay: 220 },
       { text: '→ registering Web Components…', cls: 'expo-terminal__line--muted', delay: 240 },
       { text: '✓ 38 custom elements ready', cls: 'expo-terminal__line--ok', delay: 220 },
       { text: '✓ bootFromDOM selective load complete', cls: 'expo-terminal__line--ok', delay: 200 },
