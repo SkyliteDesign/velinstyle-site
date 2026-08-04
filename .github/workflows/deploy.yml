@@ -18,10 +18,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      # Paths must match sibling layout: ../velinstyle + ../velinstyle-site
+      # (site package.json build uses `cd ../velinstyle` then `cd ../velinstyle-site`).
       - name: Checkout site
         uses: actions/checkout@v4
         with:
-          path: site
+          path: velinstyle-site
 
       - name: Checkout framework
         uses: actions/checkout@v4
@@ -42,18 +44,18 @@ jobs:
 
       - name: Build site (framework + docs + search index)
         run: npm run build
-        working-directory: site
+        working-directory: velinstyle-site
 
       - name: Verify Velin-Meta artifacts
         run: |
-          test -f site/dist/velin-agent.json
-          test -f site/dist/llms.txt
-          node -e "JSON.parse(require('fs').readFileSync('site/dist/velin-agent.json','utf8'))"
+          test -f velinstyle-site/dist/velin-agent.json
+          test -f velinstyle-site/dist/llms.txt
+          node -e "JSON.parse(require('fs').readFileSync('velinstyle-site/dist/velin-agent.json','utf8'))"
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: site
+          path: velinstyle-site
 
   deploy:
     needs: build
